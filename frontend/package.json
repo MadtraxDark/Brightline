@@ -17,7 +17,13 @@
     "test:metrics": "node --test src/lib/metrics.test.js",
     "test:session": "node --test src/lib/session.test.js",
     "test:evaluate": "node --test src/lib/evaluate.test.js",
-    "test": "npm run test:engine && npm run test:store && npm run test:format && npm run test:selectors && npm run test:evidence && npm run test:metrics && npm run test:session && npm run test:evaluate"
+    "test:groups": "node --test src/lib/groupByUrgency.test.js",
+    "test:sidebar": "node --test src/lib/sidebarPref.test.js",
+    "test:deadline": "node --test src/lib/deadlinePill.test.js",
+    "test:luna": "node --test src/lib/luna.test.js",
+    "test:view": "node --test src/lib/viewState.test.js",
+    "test:sidebar-items": "node --test src/lib/sidebarItems.test.js",
+    "test": "npm run test:engine && npm run test:store && npm run test:format && npm run test:selectors && npm run test:evidence && npm run test:metrics && npm run test:session && npm run test:evaluate && npm run test:groups && npm run test:sidebar && npm run test:deadline && npm run test:luna && npm run test:view && npm run test:sidebar-items"
   },
   "dependencies": {
     "@fontsource/atkinson-hyperlegible-next": "^5.2.8",
