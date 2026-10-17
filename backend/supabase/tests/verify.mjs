@@ -2,7 +2,7 @@
 // Dependência de desenvolvimento: @electric-sql/pglite em .validation/node_modules.
 import { readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
-const { PGlite } = await import('../../.validation/node_modules/@electric-sql/pglite/dist/index.js');
+const { PGlite } = await import('../../../.validation/node_modules/@electric-sql/pglite/dist/index.js');
 const db = new PGlite();
 await db.exec(`
   create role anon;
