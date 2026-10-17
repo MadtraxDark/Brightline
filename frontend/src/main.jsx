@@ -9,13 +9,12 @@ import * as api from "./api.js";
 import App from "./App.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import { store } from "./store/store.js";
-import { isAuthenticated } from "./lib/session.js";
 import "./styles/tokens.css";
 import "./styles/app.css";
 import "./styles/landing.css";
 
 // The public site owns reload behavior; dashboard routes keep their history.
-if (window.location.pathname === "/" && !isAuthenticated(sessionStorage)) {
+if (window.location.pathname === "/") {
   window.history.scrollRestoration = "manual";
   if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
     window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
