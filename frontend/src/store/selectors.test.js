@@ -1,12 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { acknowledge } from "../engine/engine.js";
-import {
-  selectCase,
-  selectCases,
-  selectMissed,
-  selectStats,
-} from "./selectors.js";
+import cache from "../fixtures/extractions_cache.json" with { type: "json" };
+import reports from "../fixtures/reports.json" with { type: "json" };
+import { acknowledge, advance, loadCases, registerAction } from "../engine/engine.js";
+import { selectCase, selectCases, selectLanes, selectMissed, selectNextDeadline, selectReportsWithoutAlert, selectStats } from "./selectors.js";
 
 function caso(overrides) {
   return {
@@ -192,9 +189,92 @@ test("selectCases inclui radiologista e solicitante sem perder os campos atuais"
   const [item] = selectCases(state);
   assert.equal(item.radiologist, "Dra. Ana Luz");
   assert.equal(item.ordering_physician, "Dr. Paulo Mendes");
+  assert.equal(item.modality, "TC");
   assert.equal(item.id, "c1");
   assert.equal(item.finding, "Achado");
   assert.equal(item.current_target, "Dr. Paulo Mendes");
+});
+
+test("selectStats acrescenta sem leitura e críticos em aberto", () => {
+  let state = loadCases(reports, cache);
+  const initial = selectStats(state);
+  assert.equal(state.cases.length, 6);
+  assert.equal(initial.awaitingRead, 6);
+  assert.equal(initial.openCritical, 2);
+  assert.equal(initial.avg_time_to_read_hours, null);
+  assert.equal(initial.status.notified, 6);
+  const critical = state.cases.find((item) => item.urgency === "critical");
+  state = acknowledge(state, critical.id, "Dra. Ana Luz");
+  assert.equal(selectStats(state).awaitingRead, 5);
+  state = registerAction(state, critical.id, "Contato com o solicitante", true);
+  assert.equal(selectStats(state).openCritical, 1);
+});
+
+function exampleState() {
+  return { ...loadCases(reports, cache), reports };
+}
+
+function tick(state, hours) {
+  const result = advance(state, hours);
+  return { ...state, ...result.state, reports: state.reports };
+}
+
+test("selectLanes no exemplo conta abertos, resolvidos e laudos sem alerta", () => {
+  let state = exampleState();
+  const initial = selectLanes(state);
+  assert.equal(initial.critical.open, 2);
+  assert.equal(initial.urgent.open, 2);
+  assert.equal(initial.actionable.open, 2);
+  for (const lane of ["critical", "urgent", "actionable"]) {
+    assert.equal(initial[lane].overdue, 0);
+    assert.equal(initial[lane].resolved, 0);
+  }
+  assert.equal(initial.noAlert.count, 2);
+
+  const critical = state.cases.find((item) => item.urgency === "critical");
+  state = acknowledge(state, critical.id, "Dra. Ana Luz");
+  state = registerAction(state, critical.id, "Contato com o solicitante", true);
+  const closed = selectLanes(state);
+  assert.equal(closed.critical.open, 1);
+  assert.equal(closed.critical.resolved, 1);
+  assert.equal(closed.noAlert.count, 2);
+
+  state = exampleState();
+  state = tick(state, 1);
+  state = tick(state, 1);
+  state = tick(state, 1);
+  state = tick(state, 5);
+  const late = selectLanes(state);
+  assert.equal(late.critical.overdue, 2);
+  assert.equal(late.urgent.overdue, 0);
+});
+
+test("selectNextDeadline segue o menor prazo e some quando não há leitura pendente", () => {
+  let state = exampleState();
+  const first = state.cases.find((item) => item.urgency === "critical");
+  assert.equal(selectNextDeadline(state).id, first.id);
+  state = acknowledge(state, first.id, "Dra. Ana Luz");
+  const second = state.cases.filter((item) => item.urgency === "critical")[1];
+  assert.equal(selectNextDeadline(state).id, second.id);
+  for (const item of [...state.cases]) {
+    if (item.status === "notified" || item.status === "escalated") {
+      state = acknowledge(state, item.id, "Dra. Ana Luz");
+    }
+  }
+  assert.equal(selectNextDeadline(state), null);
+});
+
+test("selectors novos aceitam estado sem reports", () => {
+  const empty = {};
+  assert.deepEqual(selectLanes(empty), {
+    critical: { open: 0, overdue: 0, resolved: 0 },
+    urgent: { open: 0, overdue: 0, resolved: 0 },
+    actionable: { open: 0, overdue: 0, resolved: 0 },
+    noAlert: { count: 0 },
+  });
+  assert.deepEqual(selectReportsWithoutAlert(empty), []);
+  assert.equal(selectNextDeadline(empty), null);
+  assert.deepEqual(selectReportsWithoutAlert(exampleState()).map((item) => item.id), ["R-007", "R-008"]);
 });
 
 test("selectCase de id inexistente devolve null", () => {
