@@ -1,0 +1,530 @@
+[
+  {
+    "report_id": "R-001",
+    "modality": "Radiografia de tórax",
+    "radiologist": "Dra. Helena Valença",
+    "ordering_physician": "Dr. Marcos Alvarenga",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nTécnica: incidência anteroposterior em decúbito.\nAchados: ampla coleção gasosa pleural à direita, sem trama vascular periférica, com colapso pulmonar subtotal, rebaixamento da hemicúpula direita e desvio do mediastino para a esquerda.\nImpressão: pneumotórax hipertensivo à direita.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "pneumotórax hipertensivo à direita",
+        "urgency": "critical"
+      }
+    ]
+  },
+  {
+    "report_id": "R-002",
+    "modality": "TC de crânio",
+    "radiologist": "Dr. Artur Seabra",
+    "ordering_physician": "Dra. Beatriz Lacerda",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nAquisição sem contraste. Foco hiperatenuante intraparenquimatoso nos núcleos da base à esquerda, medindo 3,1 cm, com edema adjacente e discreta compressão do ventrículo lateral ipsilateral. Não se observam fraturas da calota.\nConclusão: hemorragia intraparenquimatosa aguda à esquerda.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "hemorragia intraparenquimatosa aguda à esquerda",
+        "urgency": "critical"
+      }
+    ]
+  },
+  {
+    "report_id": "R-003",
+    "modality": "Angio-TC de aorta",
+    "radiologist": "Dra. Lívia Noronha",
+    "ordering_physician": "Dr. Davi Montelar",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nTécnica: aquisição arterial após contraste endovenoso.\nAchados: flap intimal na aorta ascendente, prolongando-se pelo arco até a aorta descendente, com identificação de luz verdadeira e falsa. Não há extravasamento de contraste.\nConclusão: dissecção aguda da aorta Stanford A.",
+    "flagged_by_radiologist": true,
+    "ground_truth": [
+      {
+        "finding": "dissecção aguda da aorta Stanford A",
+        "urgency": "critical"
+      }
+    ]
+  },
+  {
+    "report_id": "R-004",
+    "modality": "Angio-TC de tórax",
+    "radiologist": "Dr. Nuno Tavares",
+    "ordering_physician": "Dra. Camila Venturini",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nArtérias pulmonares adequadamente opacificadas. Trombos volumosos ocupam o tronco pulmonar e os ramos principais bilateralmente. Ventrículo direito dilatado, com relação VD/VE de 1,5 e retificação do septo interventricular. Pequeno derrame pleural direito.\nImpressão: tromboembolismo pulmonar central extenso com sinais de sobrecarga ventricular direita.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "tromboembolismo pulmonar central extenso com sinais de sobrecarga ventricular direita",
+        "urgency": "critical"
+      }
+    ]
+  },
+  {
+    "report_id": "R-005",
+    "modality": "TC de crânio",
+    "radiologist": "Dra. Elisa Fontoura",
+    "ordering_physician": "Dr. Otávio Figueiral",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nSem contraste. Cisternas da base e fissuras silvianas preenchidas por material espontaneamente hiperdenso. Discreta dilatação dos ventrículos laterais. Ausência de lesão óssea aguda.\nImpressão diagnóstica: hemorragia subaracnóidea aguda com hidrocefalia.",
+    "flagged_by_radiologist": true,
+    "ground_truth": [
+      {
+        "finding": "hemorragia subaracnóidea aguda com hidrocefalia",
+        "urgency": "critical"
+      }
+    ]
+  },
+  {
+    "report_id": "R-006",
+    "modality": "TC de abdome",
+    "radiologist": "Dr. Raul Azevedo",
+    "ordering_physician": "Dra. Marina Castelar",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nTécnica: estudo contrastado nas fases arterial e portal.\nAchados: aneurisma da aorta abdominal infrarrenal de 6,8 cm, associado a volumoso hematoma retroperitoneal e extravasamento ativo de contraste junto à parede posterolateral esquerda. Alças sem dilatação.\nConclusão: ruptura de aneurisma da aorta abdominal com sangramento ativo.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "ruptura de aneurisma da aorta abdominal com sangramento ativo",
+        "urgency": "critical"
+      }
+    ]
+  },
+  {
+    "report_id": "R-007",
+    "modality": "TC de tórax",
+    "radiologist": "Dra. Helena Valença",
+    "ordering_physician": "Dr. Ícaro Vasconcelos",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nExame de controle após procedimento, sem contraste. Pneumotórax volumoso à esquerda, associado a desvio contralateral do mediastino e achatamento do diafragma ipsilateral. Pulmão esquerdo quase totalmente colabado.\nConclusão: pneumotórax hipertensivo à esquerda.",
+    "flagged_by_radiologist": true,
+    "ground_truth": [
+      {
+        "finding": "pneumotórax hipertensivo à esquerda",
+        "urgency": "critical"
+      }
+    ]
+  },
+  {
+    "report_id": "R-008",
+    "modality": "TC de crânio",
+    "radiologist": "Dr. Artur Seabra",
+    "ordering_physician": "Dra. Sofia Amaral",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nTécnica: cortes axiais sem contraste.\nDescrição: coleção extra-axial hiperdensa em crescente na convexidade direita, com espessura máxima de 15 mm, apagamento dos sulcos e desvio da linha média de 9 mm para a esquerda. Cisternas basais parcialmente apagadas.\nImpressão: hematoma subdural agudo à direita com efeito de massa.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "hematoma subdural agudo à direita com efeito de massa",
+        "urgency": "critical"
+      }
+    ]
+  },
+  {
+    "report_id": "R-009",
+    "modality": "TC de abdome",
+    "radiologist": "Dra. Lívia Noronha",
+    "ordering_physician": "Dr. Marcos Alvarenga",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nTécnica: contraste endovenoso, fase portal. Apêndice cecal com 12 mm de diâmetro, paredes espessadas e realçadas, associado a densificação da gordura adjacente. Sem coleção, gás extraluminal ou pneumoperitônio.\nConclusão: apendicite aguda sem sinais de perfuração.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "apendicite aguda",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  {
+    "report_id": "R-010",
+    "modality": "TC de abdome",
+    "radiologist": "Dr. Nuno Tavares",
+    "ordering_physician": "Dra. Beatriz Lacerda",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nEspessamento parietal segmentar do sigmoide, com divertículos e inflamação da gordura pericólica. Coleção perissigmoide de 3,4 cm, com realce periférico e pequenas bolhas gasosas internas. Não há gás livre difuso.\nImpressão: diverticulite aguda do sigmoide complicada por abscesso.",
+    "flagged_by_radiologist": true,
+    "ground_truth": [
+      {
+        "finding": "diverticulite aguda do sigmoide complicada por abscesso",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  {
+    "report_id": "R-011",
+    "modality": "TC de coluna cervical",
+    "radiologist": "Dra. Elisa Fontoura",
+    "ordering_physician": "Dr. Davi Montelar",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nReconstruções multiplanares sem contraste. Fratura bilateral das facetas de C6, com translação anterior de C6 sobre C7 e incongruência facetária bilateral. Redução do canal vertebral nesse nível.\nConclusão: fratura-luxação instável de C6-C7.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "fratura-luxação instável de C6-C7",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  {
+    "report_id": "R-012",
+    "modality": "Ultrassom de abdome",
+    "radiologist": "Dr. Raul Azevedo",
+    "ordering_physician": "Dra. Camila Venturini",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nVesícula biliar distendida, com cálculo impactado no colo, espessamento parietal de 5 mm e pequena quantidade de líquido perivesicular. Dor à compressão dirigida com o transdutor. Colédoco não dilatado.\nConclusão: achados compatíveis com colecistite aguda calculosa.",
+    "flagged_by_radiologist": true,
+    "ground_truth": [
+      {
+        "finding": "colecistite aguda calculosa",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  {
+    "report_id": "R-013",
+    "modality": "TC de abdome",
+    "radiologist": "Dra. Helena Valença",
+    "ordering_physician": "Dr. Otávio Figueiral",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nEstudo sem contraste. Cálculo de 8 mm no ureter proximal esquerdo, com hidroureteronefrose a montante e densificação da gordura perirrenal. Rim direito sem dilatação. Não há coleção perirrenal.\nImpressão: ureterolitíase obstrutiva à esquerda com hidroureteronefrose.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "ureterolitíase obstrutiva à esquerda com hidroureteronefrose",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  {
+    "report_id": "R-014",
+    "modality": "TC de abdome",
+    "radiologist": "Dr. Artur Seabra",
+    "ordering_physician": "Dra. Marina Castelar",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nAlças delgadas dilatadas, com níveis hidroaéreos e ponto de transição na pelve. Segmentos distais colabados. Realce mural preservado, sem pneumatose intestinal ou gás portal.\nConclusão: obstrução mecânica do intestino delgado, sem sinais tomográficos de isquemia.",
+    "flagged_by_radiologist": true,
+    "ground_truth": [
+      {
+        "finding": "obstrução mecânica do intestino delgado",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  {
+    "report_id": "R-015",
+    "modality": "RM de coluna lombar",
+    "radiologist": "Dra. Lívia Noronha",
+    "ordering_physician": "Dr. Ícaro Vasconcelos",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nSequências T1, T2 e STIR. Traço de fratura recente no corpo de L1, com edema medular ósseo e retropulsão do muro posterior. Lesão do complexo ligamentar posterior, com edema e descontinuidade das fibras.\nImpressão: fratura instável de L1 com lesão ligamentar posterior.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "fratura instável de L1 com lesão ligamentar posterior",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  {
+    "report_id": "R-016",
+    "modality": "TC de abdome",
+    "radiologist": "Dr. Nuno Tavares",
+    "ordering_physician": "Dra. Sofia Amaral",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nFase portal após contraste. Rim direito discretamente aumentado, com áreas cuneiformes de menor realce e densificação perirrenal. Coleção intraparenquimatosa de 2,7 cm com realce periférico. Sem cálculo obstrutivo.\nConclusão: pielonefrite direita complicada por abscesso renal.",
+    "flagged_by_radiologist": true,
+    "ground_truth": [
+      {
+        "finding": "pielonefrite direita complicada por abscesso renal",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  {
+    "report_id": "R-017",
+    "modality": "TC de tórax",
+    "radiologist": "Dra. Elisa Fontoura",
+    "ordering_physician": "Dr. Marcos Alvarenga",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nTécnica: cortes finos sem contraste.\nAchados: nódulo sólido espiculado de 14 mm no lobo superior direito, sem calcificação ou gordura macroscópica. Não há estudos anteriores disponíveis para comparação. Sem derrame pleural.\nConclusão: nódulo pulmonar de aspecto suspeito, recomendando-se investigação complementar.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "nódulo pulmonar suspeito no lobo superior direito",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-018",
+    "modality": "TC de abdome",
+    "radiologist": "Dr. Raul Azevedo",
+    "ordering_physician": "Dra. Beatriz Lacerda",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nEstudo em fase portal. Massa adrenal esquerda de 3,2 cm, heterogênea, sem caracterização definitiva neste protocolo. Ausência de exames prévios para comparação. Demais órgãos sem alteração aguda.\nImpressão: massa adrenal esquerda indeterminada; sugerida caracterização por protocolo dedicado.",
+    "flagged_by_radiologist": true,
+    "ground_truth": [
+      {
+        "finding": "massa adrenal esquerda indeterminada",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-019",
+    "modality": "Ultrassom de tireoide",
+    "radiologist": "Dra. Helena Valença",
+    "ordering_physician": "Dr. Davi Montelar",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nLobo direito: nódulo sólido hipoecoico de 16 mm, com margens irregulares e focos ecogênicos puntiformes, mais alto que largo. Não há linfonodos cervicais aumentados.\nConclusão: nódulo tireoidiano direito com características suspeitas; indicada avaliação especializada.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "nódulo tireoidiano suspeito à direita",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-020",
+    "modality": "RM de abdome",
+    "radiologist": "Dr. Artur Seabra",
+    "ordering_physician": "Dra. Camila Venturini",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nSequências antes e após contraste. Lesão cística de 2,8 cm no rim esquerdo, com septos espessados e componente mural que apresenta realce. Não há invasão da veia renal.\nConclusão: lesão cística renal esquerda complexa e suspeita, necessitando avaliação urológica.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "lesão cística renal esquerda suspeita",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-021",
+    "modality": "TC de abdome",
+    "radiologist": "Dra. Lívia Noronha",
+    "ordering_physician": "Dr. Otávio Figueiral",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nAquisição contrastada. Formação cística de 2,4 cm na cabeça pancreática, com comunicação aparente com ramo ductal e nódulo mural com realce. Não há dilatação das vias biliares.\nImpressão: lesão cística pancreática com nódulo mural, recomendando-se investigação especializada.",
+    "flagged_by_radiologist": true,
+    "ground_truth": [
+      {
+        "finding": "lesão cística pancreática com nódulo mural",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-022",
+    "modality": "Ultrassom de pelve",
+    "radiologist": "Dr. Nuno Tavares",
+    "ordering_physician": "Dra. Marina Castelar",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nExame transvaginal. Formação anexial esquerda de 5,1 cm, multiloculada, com componente sólido vascularizado e projeções papilares. Sem líquido livre.\nConclusão: massa anexial esquerda complexa, de aspecto suspeito, para avaliação ginecológica.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "massa anexial esquerda suspeita",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-023",
+    "modality": "TC de tórax",
+    "radiologist": "Dra. Elisa Fontoura",
+    "ordering_physician": "Dr. Ícaro Vasconcelos",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nEstudo sem contraste. Nódulo parcialmente sólido de 18 mm no lobo inferior esquerdo, com componente sólido de 7 mm. Não há exame anterior disponível. Ausência de consolidações ou derrame pleural.\nImpressão: nódulo pulmonar parcialmente sólido que requer investigação complementar.",
+    "flagged_by_radiologist": true,
+    "ground_truth": [
+      {
+        "finding": "nódulo pulmonar parcialmente sólido no lobo inferior esquerdo",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-024",
+    "modality": "Ultrassom de abdome",
+    "radiologist": "Dr. Raul Azevedo",
+    "ordering_physician": "Dra. Sofia Amaral",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nLesão focal hepática sólida de 3,5 cm no segmento VI, heterogênea e com vascularização interna, não caracterizada ao ultrassom. Vias biliares de calibre normal.\nConclusão: lesão focal hepática indeterminada; recomendada caracterização por exame contrastado.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "lesão focal hepática indeterminada",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-025",
+    "modality": "TC de crânio",
+    "radiologist": "Dra. Helena Valença",
+    "ordering_physician": "Dr. Marcos Alvarenga",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nExame sem contraste. Não há hemorragia intracraniana, coleção extra-axial ou efeito de massa. Diferenciação entre substâncias branca e cinzenta preservada. Ventrículos de dimensões habituais.\nConclusão: sem alterações intracranianas agudas.",
+    "flagged_by_radiologist": false,
+    "ground_truth": []
+  },
+  {
+    "report_id": "R-026",
+    "modality": "Radiografia de tórax",
+    "radiologist": "Dr. Artur Seabra",
+    "ordering_physician": "Dra. Beatriz Lacerda",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nRadiografias em PA e perfil. Pulmões bem expandidos, sem opacidades focais. Seios costofrênicos livres. Ausência de pneumotórax. Área cardíaca de dimensões habituais.\nImpressão: exame sem alterações significativas.",
+    "flagged_by_radiologist": false,
+    "ground_truth": []
+  },
+  {
+    "report_id": "R-027",
+    "modality": "TC de tórax",
+    "radiologist": "Dra. Lívia Noronha",
+    "ordering_physician": "Dr. Davi Montelar",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nComparação com exames sintéticos anteriores de 2022 e 2024. Pequeno nódulo pulmonar sólido de 4 mm no lobo médio, conhecido e inalterado em tamanho e morfologia. Sem novos nódulos, consolidações ou derrame pleural.\nConclusão: nódulo conhecido e estável; ausência de novos achados.",
+    "flagged_by_radiologist": false,
+    "ground_truth": []
+  },
+  {
+    "report_id": "R-028",
+    "modality": "Ultrassom de abdome",
+    "radiologist": "Dr. Nuno Tavares",
+    "ordering_physician": "Dra. Camila Venturini",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nFígado com contornos regulares e ecotextura homogênea. Vesícula sem cálculos ou espessamento parietal. Vias biliares não dilatadas. Rins de aspecto habitual, sem hidronefrose.\nConclusão: estudo ultrassonográfico dentro dos limites da normalidade.",
+    "flagged_by_radiologist": false,
+    "ground_truth": []
+  },
+  {
+    "report_id": "R-029",
+    "modality": "TC de abdome",
+    "radiologist": "Dra. Elisa Fontoura",
+    "ordering_physician": "Dr. Otávio Figueiral",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nApêndice cecal de calibre preservado, sem espessamento de parede ou inflamação adjacente. Não há sinais de apendicite, diverticulite, coleção ou pneumoperitônio. Ausência de dilatação intestinal.\nImpressão: sem processo inflamatório abdominal agudo.",
+    "flagged_by_radiologist": false,
+    "ground_truth": []
+  },
+  {
+    "report_id": "R-030",
+    "modality": "RM de crânio",
+    "radiologist": "Dr. Raul Azevedo",
+    "ordering_physician": "Dra. Marina Castelar",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nSequências T1, T2, FLAIR, difusão e suscetibilidade. Não há restrição à difusão ou sinais de sangramento recente. Parênquima encefálico de sinal habitual. Ventrículos e espaços liquóricos preservados.\nImpressão: exame sem alterações significativas.",
+    "flagged_by_radiologist": false,
+    "ground_truth": []
+  },
+  {
+    "report_id": "R-031",
+    "modality": "TC de abdome",
+    "radiologist": "Dra. Helena Valença",
+    "ordering_physician": "Dr. Ícaro Vasconcelos",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nEstudo sem contraste, comparado ao exame sintético anterior. Nódulo adrenal direito de 12 mm, homogêneo, com atenuação de 4 UH, conhecido e inalterado. Sem outras alterações relevantes.\nConclusão: adenoma adrenal direito conhecido e estável; ausência de achados novos.",
+    "flagged_by_radiologist": false,
+    "ground_truth": []
+  },
+  {
+    "report_id": "R-032",
+    "modality": "TC de tórax",
+    "radiologist": "Dr. Artur Seabra",
+    "ordering_physician": "Dra. Sofia Amaral",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nSem contraste. Não se identifica ar no espaço pleural; afastado pneumotórax. Ausência de derrame pleural, consolidação ou lesão expansiva. Vias aéreas centrais pérvias.\nConclusão: exame sem alteração torácica aguda.",
+    "flagged_by_radiologist": false,
+    "ground_truth": []
+  },
+  {
+    "report_id": "R-033",
+    "modality": "TC de crânio",
+    "radiologist": "Dra. Lívia Noronha",
+    "ordering_physician": "Dr. Marcos Alvarenga",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nTécnica: aquisição sem contraste.\nAchados: estruturas ósseas preservadas. Pequena hemorragia intraparenquimatosa aguda no lobo frontal direito, com halo de edema, sem desvio da linha média. Ventrículos de calibre normal. Espessamento mucoso maxilar bilateral.\nImpressão: sinusopatia maxilar bilateral.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "hemorragia intraparenquimatosa aguda frontal direita",
+        "urgency": "critical"
+      }
+    ]
+  },
+  {
+    "report_id": "R-034",
+    "modality": "TC de abdome",
+    "radiologist": "Dr. Nuno Tavares",
+    "ordering_physician": "Dra. Beatriz Lacerda",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nTécnica: contraste endovenoso.\nAchados: apêndice retrocecal com 13 mm, espessamento parietal e importante densificação da gordura adjacente, compatível com apendicite aguda. Sem abscesso. No polo superior renal direito, lesão sólida de 2,6 cm com realce, suspeita para neoplasia.\nConclusão: apendicite aguda e lesão renal sólida suspeita à direita.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "apendicite aguda",
+        "urgency": "urgent"
+      },
+      {
+        "finding": "lesão renal sólida suspeita à direita",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-035",
+    "modality": "TC de abdome",
+    "radiologist": "Dra. Elisa Fontoura",
+    "ordering_physician": "Dr. Davi Montelar",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nSem contraste. Não há sinais de apendicite. Sigmoide com divertículos, espessamento focal e inflamação pericólica, associados a coleção de 2,5 cm com bolhas gasosas. Sem pneumoperitônio difuso.\nImpressão: diverticulite aguda do sigmoide complicada por abscesso; apêndice sem alterações.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "diverticulite aguda do sigmoide complicada por abscesso",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  {
+    "report_id": "R-036",
+    "modality": "Angio-TC de tórax",
+    "radiologist": "Dr. Raul Azevedo",
+    "ordering_physician": "Dra. Camila Venturini",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nOpacificação subótima das artérias pulmonares, com artefatos respiratórios. Possível falha de enchimento em ramo lobar inferior direito, não sendo possível excluir embolia pulmonar. Não há dilatação ventricular direita.\nConclusão: estudo limitado, com suspeita de embolia pulmonar lobar à direita; necessária avaliação complementar.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "suspeita de embolia pulmonar lobar à direita",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  {
+    "report_id": "R-037",
+    "modality": "TC de tórax",
+    "radiologist": "Dra. Helena Valença",
+    "ordering_physician": "Dr. Otávio Figueiral",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nCortes finos com discretos artefatos de movimento. Pequena opacidade nodular de 9 mm no lobo superior esquerdo, de limites parcialmente espiculados, que pode corresponder a nódulo pulmonar suspeito. Sem estudos prévios.\nConclusão: possível nódulo pulmonar suspeito à esquerda, recomendando-se confirmação em exame de melhor qualidade.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "possível nódulo pulmonar suspeito à esquerda",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-038",
+    "modality": "TC de crânio",
+    "radiologist": "Dr. Artur Seabra",
+    "ordering_physician": "Dra. Marina Castelar",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nAquisição sem contraste com artefatos na fossa posterior. Pequeno foco hiperdenso cerebelar esquerdo, não sendo possível excluir hemorragia aguda; o achado não é conclusivo neste estudo. Sem hidrocefalia.\nImpressão: possível hemorragia cerebelar aguda à esquerda; sugerida elucidação imediata.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "possível hemorragia cerebelar aguda à esquerda",
+        "urgency": "critical"
+      }
+    ]
+  },
+  {
+    "report_id": "R-039",
+    "modality": "TC de tórax",
+    "radiologist": "Dra. Lívia Noronha",
+    "ordering_physician": "Dr. Ícaro Vasconcelos",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nComparação com exame sintético anterior. Nódulo calcificado de 5 mm no lobo inferior direito, conhecido e estável. Novo nódulo sólido espiculado de 17 mm no lobo superior esquerdo. Não há pneumotórax ou derrame pleural.\nImpressão: novo nódulo pulmonar suspeito à esquerda; nódulo calcificado à direita sem modificação.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "novo nódulo pulmonar suspeito à esquerda",
+        "urgency": "actionable"
+      }
+    ]
+  },
+  {
+    "report_id": "R-040",
+    "modality": "TC de tórax",
+    "radiologist": "Dr. Nuno Tavares",
+    "ordering_physician": "Dra. Sofia Amaral",
+    "text": "LAUDO SINTÉTICO PARA DEMONSTRAÇÃO — SEM VALIDADE CLÍNICA.\n\nSem contraste. Grande pneumotórax à direita, com colapso subtotal do pulmão, desvio mediastinal para a esquerda e rebaixamento diafragmático. No pulmão esquerdo, nódulo espiculado de 13 mm no lobo superior, sem comparação prévia.\nConclusão: pneumotórax hipertensivo à direita e nódulo pulmonar suspeito à esquerda.",
+    "flagged_by_radiologist": false,
+    "ground_truth": [
+      {
+        "finding": "pneumotórax hipertensivo à direita",
+        "urgency": "critical"
+      },
+      {
+        "finding": "nódulo pulmonar suspeito à esquerda",
+        "urgency": "actionable"
+      }
+    ]
+  }
+]
