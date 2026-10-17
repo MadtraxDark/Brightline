@@ -1,4 +1,25 @@
 :root {
+  --lp-navy: #021837;
+  --lp-navy-soft: #102b49;
+  --lp-ink: #142a3e;
+  --lp-muted: #61717f;
+  --lp-paper: #ffffff;
+  --lp-cream: #f5f4ef;
+  --lp-line: #dfe3e4;
+  --lp-light-ink: #bac9d6;
+  --lp-accent: #d7edb8;
+  --lp-grid: #ffffff05;
+  --lp-dark-line: #ffffff1c;
+  --lp-accent-ink: #38552e;
+  --lp-evidence: #eef2f5;
+  --lp-critical: #a72a32;
+  --lp-critical-bg: #faedef;
+  --lp-urgent: #8b510f;
+  --lp-urgent-bg: #fcf2e5;
+  --lp-actionable: #275d91;
+  --lp-actionable-bg: #eaf1f8;
+  --lp-demo: #586778;
+  --lp-window-dot: #c2ccd4;
   /* superfícies e texto */
   --bg: #F1F4F7;
   --panel: #FFFFFF;

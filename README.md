@@ -6,6 +6,17 @@ Protótipo para identificar achados prioritários em laudos de imagem e acompanh
 
 ## Arquitetura
 
+### Site comercial e demonstração local
+
+O frontend em React/Vite inclui uma landing page em `/` e o painel demonstrativo em `/app`.
+
+```powershell
+npm ci
+npm run dev
+```
+
+Abra o endereço exibido pelo Vite. A landing page apresenta o produto, uma prévia interativa, o fluxo de acompanhamento e perguntas frequentes. O painel usa dados sintéticos locais; esta demonstração não exige conexão com o backend. Para gerar os arquivos de produção, execute `npm run build`. A hospedagem deve servir `index.html` também ao acessar `/app` diretamente.
+
 O **Supabase** fornece Postgres, Auth e Storage privado. A API FastAPI valida sessões no Supabase Auth e encaminha o token do usuário à Data API e ao Storage. As políticas RLS isolam os dados por conta. As transições e o relógio são processados em transações no Postgres.
 
 ```text
