@@ -1,15 +1,11 @@
-import { useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
   Check,
   CheckCheck,
   ChevronDown,
-  ChevronRight,
-  CircleDot,
   Clock3,
   FileText,
-  LayoutDashboard,
   ScanLine,
   ShieldCheck,
   Sparkles,
@@ -23,155 +19,24 @@ import FaqItem from "./components/FaqItem.jsx";
 import reports from "./data/reports.json" with { type: "json" };
 import cache from "./data/extractions_cache.json" with { type: "json" };
 import { getMissed, loadCases } from "./engine/engine.js";
-import { formatRemaining } from "./lib/formatRemaining.js";
+import DashboardShell from "./components/DashboardShell.jsx";
 
 const previewState = loadCases(reports, cache);
-const priorityLabels = { critical: "Crítico", urgent: "Urgente", actionable: "Acionável" };
-const examples = previewState.cases.map((item) => ({
-  id: item.id,
-  reportId: item.report_id,
-  name: item.finding,
-  exam: item.modality,
-  priority: priorityLabels[item.urgency],
-  style: item.urgency,
-  time: formatRemaining(item.deadline_hours),
-  evidence: item.evidence,
-  unflagged: !item.flagged_by_radiologist,
-}));
+const examples = previewState.cases;
 const missedCount = getMissed(previewState).length;
 
 function ProductPreview() {
-  const [selected, setSelected] = useState(0);
-  const [confirmed, setConfirmed] = useState([]);
-  const item = examples[selected];
-  const read = confirmed.includes(selected);
   return (
-    <div
-      className="lp-product"
-      aria-label="Demonstração interativa do Brightline"
-    >
+    <div className="lp-product" role="img" aria-label="Prévia ilustrativa do painel Brightline com indicadores, menu e três laudos fictícios.">
       <div className="lp-product-chrome">
-        <span className="lp-window-dots">
-          <i />
-          <i />
-          <i />
-        </span>
-        <span>
-          <ShieldCheck size={11} /> Brightline · Ambiente demonstrativo
-        </span>
+        <span className="lp-window-dots"><i /><i /><i /></span>
+        <span><ShieldCheck size={11} /> Brightline · Prévia ilustrativa</span>
         <span className="lp-live-dot" />
       </div>
-      <div className="lp-product-body">
-        <aside className="lp-mini-sidebar">
-          <img src={logo} alt="Brightline" width="104" />
-          <span className="lp-mini-label">GESTÃO DE LAUDOS</span>
-          <span className="lp-mini-active">
-            <LayoutDashboard size={14} /> Visão geral
-          </span>
-          <span>
-            <ScanLine size={14} /> Não sinalizados · {missedCount}
-          </span>
-          <span><Sparkles size={14} /> Avaliação da IA</span>
-          <div className="lp-mini-bottom">
-            <ShieldCheck size={16} />
-            <span>
-              IA sugere.
-              <br />
-              Você valida.
-            </span>
-          </div>
-        </aside>
-        <div className="lp-mini-workspace">
-          <div className="lp-mini-breadcrumb">
-            Workspace <ChevronRight size={10} /> Visão geral
-          </div>
-          <div className="lp-mini-title">
-            <div>
-              <h3>O que precisa de atenção.</h3>
-              <p>Clareza para o próximo passo.</p>
-            </div>
-            <span className="lp-demo-label">DEMO</span>
-          </div>
-          <div className="lp-mini-stats">
-            <div>
-              <span>Em acompanhamento</span>
-              <strong>
-                {String(examples.length).padStart(2, "0")} <small>casos demonstrativos</small>
-              </strong>
-            </div>
-            <div>
-              <span>Leituras confirmadas</span>
-              <strong>
-                {String(confirmed.length).padStart(2, "0")}{" "}
-                <CheckCheck size={17} />
-              </strong>
-            </div>
-          </div>
-          <div className="lp-preview-list">
-            <div className="lp-preview-list-head">
-              <span>Achados prioritários</span>
-              <span>Prioridade</span>
-            </div>
-            {examples.map((example, index) => (
-              <button
-                key={example.id}
-                type="button"
-                className={`lp-preview-row ${selected === index ? "is-selected" : ""}`}
-                onClick={() => setSelected(index)}
-                aria-pressed={selected === index}
-              >
-                <span>
-                  <strong>{example.name}</strong>
-                  <small>{example.reportId} · {example.exam}{example.unflagged ? " · Não sinalizado" : ""}</small>
-                </span>
-                <span className={`lp-priority ${example.style}`}>
-                  <CircleDot size={10} />
-                  {example.priority}
-                </span>
-                <ChevronRight size={14} />
-              </button>
-            ))}
-          </div>
-          <div className="lp-evidence" aria-live="polite">
-            <div className="lp-evidence-heading">
-              <span>
-                <Sparkles size={13} /> Evidência no laudo
-              </span>
-              <small>{item.reportId}</small>
-            </div>
-            <p>“{item.evidence}”</p>
-            <div className="lp-evidence-action">
-              <span>
-                <Clock3 size={12} /> Prazo na demonstração: {item.time}
-              </span>
-              <button
-                type="button"
-                disabled={read}
-                onClick={() =>
-                  setConfirmed((previous) => [...previous, selected])
-                }
-              >
-                {read ? (
-                  <>
-                    <CheckCheck size={13} /> Leitura confirmada
-                  </>
-                ) : (
-                  <>
-                    Confirmar leitura <Check size={13} />
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className="lp-dashboard-preview" inert aria-hidden="true"><DashboardShell preview /></div>
       <div className="lp-product-foot">
-        <span>
-          <span className="lp-live-dot" /> {reports.length} laudos sintéticos · {examples.length} casos demonstrativos
-        </span>
-        <span>
-          Selecione um achado para explorar <ArrowUpRight size={12} />
-        </span>
+        <span><span className="lp-live-dot" /> {reports.length} laudos sintéticos · dados da demonstração</span>
+        <span>Prévia visual · dados fictícios</span>
       </div>
     </div>
   );
@@ -247,7 +112,7 @@ export default function LandingPage() {
           <div className="lp-preview-wrap" id="demonstracao">
             <div className="lp-preview-caption">
               <h2>Do achado à ação, em um só lugar.</h2>
-              <p>Explore {examples.length} casos de {reports.length} laudos sintéticos e confirme uma leitura.</p>
+              <p>Uma prévia de como seus laudos ficam organizados.</p>
             </div>
             <ProductPreview />
           </div>

@@ -14,7 +14,7 @@ export default function useTitleAnimation(rootRef) {
       let observer;
       const splits = [];
       const tweens = [];
-      const titles = [...root.querySelectorAll("h1, h2")];
+      const titles = [...root.querySelectorAll("h1, h2")].filter((title) => !title.closest(".lp-dashboard-preview"));
       const labels = new Map(titles.map((title) => [title, title.innerText.replace(/\s+/g, " ").trim()]));
       const revealPending = () => titles.forEach((title) => title.removeAttribute("data-title-pending"));
 
