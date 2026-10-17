@@ -6,10 +6,10 @@
     "semantic_hash": "5ebef3dd159986e465ab65e4014107ec"
   },
   ".vscode/settings.json": {
-    "mtime": 1792245434.3005345,
-    "seen": 1792262376.284114,
-    "ast_hash": "d2360b133bc0dde34d126692fe28056f",
-    "semantic_hash": "d2360b133bc0dde34d126692fe28056f"
+    "mtime": 1792272840.3462443,
+    "seen": 1792273070.1514263,
+    "ast_hash": "09795aa4b7927a7cdf220f60d6b7a3b4",
+    "semantic_hash": ""
   },
   "backend/.vscode/settings.json": {
     "mtime": 1792245434.3025358,
@@ -54,10 +54,10 @@
     "semantic_hash": ""
   },
   "backend/.github/commit-message-instructions.md": {
-    "mtime": 1792245434.3025358,
-    "seen": 1792262376.284114,
-    "ast_hash": "343ce32bd2c3298aee38b7f4f9de888d",
-    "semantic_hash": "343ce32bd2c3298aee38b7f4f9de888d"
+    "mtime": 1792272839.987414,
+    "seen": 1792273070.1929293,
+    "ast_hash": "9042b0816f02d5fc1d7cdcdc9dfd6d93",
+    "semantic_hash": ""
   },
   "backend/README.md": {
     "mtime": 1792272279.3608649,
@@ -210,9 +210,9 @@
     "semantic_hash": ""
   },
   "frontend/src/LandingPage.jsx": {
-    "mtime": 1792272403.004235,
-    "seen": 1792272474.5642798,
-    "ast_hash": "d93359c19d01cd9148d50e0724d691ab",
+    "mtime": 1792273053.5999663,
+    "seen": 1792273070.1598272,
+    "ast_hash": "e79544feb95e20760a4d5fe79a613134",
     "semantic_hash": ""
   },
   "frontend/src/api.js": {

@@ -8,6 +8,7 @@ import {
   FileText,
   ScanLine,
   ShieldCheck,
+  Smartphone,
   Sparkles,
 } from "lucide-react";
 import logo from "./public/logo/logo-text.svg";
@@ -194,6 +195,11 @@ export default function LandingPage() {
           </div>
           <div className="lp-benefits">
             {[
+              [
+                "Interface responsiva",
+                "O site se adapta à tela do seu celular, tablet ou computador, com navegação e conteúdo ajustados a cada dispositivo.",
+                Smartphone,
+              ],
               [
                 "Prioridade que orienta",
                 "Casos organizados por urgência e prazo para facilitar a revisão do que precisa de atenção primeiro.",
