@@ -1,5 +1,5 @@
 from typing import Literal
-from pydantic import BaseModel, ConfigDict, Field, SecretStr, model_validator
+from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator, model_validator
 
 Urgency = Literal["critical", "urgent", "actionable"]
 Status = Literal["detected", "notified", "read", "action_taken", "closed", "escalated"]
@@ -69,7 +69,22 @@ class ImportInput(StrictModel):
 
 class Credentials(StrictModel):
     email: str = Field(min_length=3, max_length=254, pattern=r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
-    password: SecretStr = Field(min_length=6, max_length=256)
+    password: SecretStr = Field(min_length=1, max_length=256)
+
+    @field_validator("email", mode="before")
+    @classmethod
+    def normalize_email(cls, value):
+        return value.strip().lower() if isinstance(value, str) else value
+
+
+class SignupInput(Credentials):
+    name: str = Field(min_length=2, max_length=80)
+    password: SecretStr = Field(min_length=9, max_length=256)
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def normalize_name(cls, value):
+        return value.strip() if isinstance(value, str) else value
 
 
 class RefreshInput(StrictModel):
