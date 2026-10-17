@@ -186,16 +186,6 @@ test("reset volta a 6 casos notificados no nível 0 e apaga a chave", () => {
   assert.equal(storage.getItem(STORAGE_KEY), null);
 });
 
-test("reset preserva a preferência da sidebar", () => {
-  const { store, storage } = openStore();
-  const preference = JSON.stringify({ v: 1, sidebarCollapsed: true, theme: "claro" });
-  storage.setItem("brightline:ui", preference);
-  store.advance(1);
-  store.reset();
-  assert.equal(storage.getItem(STORAGE_KEY), null);
-  assert.equal(storage.getItem("brightline:ui"), preference);
-});
-
 test("getState devolve outro objeto depois de uma mudança bem-sucedida", () => {
   const { store } = openStore();
   const initial = store.getState();

@@ -31,6 +31,3 @@ O repositório não trazia o contrato do backend. Os nomes abaixo são o mock at
 Campos de caso: `id`, `finding_name`, `urgency`, `current_target`, `time_remaining_hours`, `flagged_by_radiologist`, `status`, `times_escalated`. No detalhe, também `confidence` (`alta` | `media` | `baixa`), `modality`, `radiologist`, `requesting_physician`, `report_text`, `evidence`, `timeline[]` com `label` e `offset_hours`.
 
 `status`: `detected`, `notified`, `read`, `action_recorded`, `closed`, `escalated`.
-
-### Lista clínica de casos
-Na visão geral, cada caso apresenta achado e prazo, modalidade e identificação do laudo, texto original, médico solicitante, radiologista e clínica de origem. O responsável pelo acompanhamento fica separado da autoria e da solicitação. A clínica é lida do campo opcional `source_clinic` do laudo; dados ausentes aparecem como “Não informada”, sem criar identidades fictícias. Em telas pequenas, o acompanhamento passa para abaixo do conteúdo clínico.
