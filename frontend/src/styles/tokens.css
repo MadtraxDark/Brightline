@@ -8,7 +8,6 @@
   --lp-line: #dfe3e4;
   --lp-light-ink: #bac9d6;
   --lp-accent: #d7edb8;
-  --lp-grid: #ffffff05;
   --lp-dark-line: #ffffff1c;
   --lp-accent-ink: #38552e;
   --lp-evidence: #eef2f5;
@@ -20,6 +19,8 @@
   --lp-actionable-bg: #eaf1f8;
   --lp-demo: #586778;
   --lp-window-dot: #c2ccd4;
+  --lp-floating-header: #021837;
+  --lp-header-shadow: #020b191f;
   /* superfícies e texto */
   --bg: #F1F4F7;
   --panel: #FFFFFF;
@@ -91,4 +92,13 @@
   --table-hover: #F8F9FC;
   --focus: #596D93;
   --overlay-shadow: #101A2D26;
+}
+
+:root { --brand-gold: #F5C434; }
+
+:root {
+  --scrollbar-size: 10px;
+  --scrollbar-track: var(--bg);
+  --scrollbar-thumb: #7D899B;
+  --scrollbar-thumb-hover: #526078;
 }
