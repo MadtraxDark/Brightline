@@ -25,11 +25,11 @@ export default function Login({ mode = "login" }) {
   useEffect(() => {
     const previous = document.title;
     document.title = registering ? "Criar conta | Brightline" : "Entrar | Brightline";
-    if (authedOnLoad.current) navigate("/", { replace: true });
+    if (authedOnLoad.current) navigate(safeRedirectPath(location.state?.from), { replace: true });
     return () => {
       document.title = previous;
     };
-  }, [navigate, registering]);
+  }, [navigate, registering, location.state?.from]);
 
   function onSubmit(event) {
     event.preventDefault();
@@ -136,6 +136,7 @@ export default function Login({ mode = "login" }) {
           <button type="submit" className="login-submit">{registering ? "Criar conta de demonstração" : "Entrar no Brightline"} <ArrowRight size={17} aria-hidden="true" /></button>
         </form>
         <p className="auth-switch">{registering ? "Já tem uma conta?" : "Ainda não tem uma conta?"} <Link to={registering ? "/login" : "/cadastro"} state={location.state}>{registering ? "Entrar" : "Criar conta"}</Link></p>
+        <p className="auth-switch"><Link to="/">Voltar ao site</Link></p>
         <div className="login-demo-note"><FlaskConical size={18} aria-hidden="true" /><div><h2>{registering ? "Cadastro de demonstração" : "Conheça o Brightline"}</h2><p>{registering ? "Ao continuar, você acessa a demonstração com laudos sintéticos. Nenhuma conta real é criada e seus dados não são enviados nem armazenados." : "Use um e-mail válido e qualquer senha para explorar. Os laudos são sintéticos; suas credenciais não são enviadas nem armazenadas."}</p></div></div>
       </main>
       <footer className="login-footer">
