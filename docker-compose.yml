@@ -1,12 +1,33 @@
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-brightline}
+      POSTGRES_USER: ${POSTGRES_USER:-brightline}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-REMOVED_CREDENTIAL}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/001-brightline.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+    networks:
+      - brightline
   api:
     build:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      SUPABASE_URL: ${SUPABASE_URL:?Configure SUPABASE_URL em backend/.env e use --env-file backend/.env}
-      SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:?Configure SUPABASE_PUBLISHABLE_KEY em backend/.env e use --env-file backend/.env}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-brightline}:${POSTGRES_PASSWORD:-REMOVED_CREDENTIAL}@db:5432/${POSTGRES_DB:-brightline}
       BRIGHTLINE_CORS_ORIGINS: ${BRIGHTLINE_CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - brightline
@@ -27,3 +48,6 @@ services:
 networks:
   brightline:
     driver: bridge
+
+volumes:
+  postgres_data:
