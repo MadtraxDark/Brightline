@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 
 // Retract into the content edge, change row while hidden, then reopen.
-export default function NavigationHighlight({ section, menuOpen, collapsed = false }) {
+export default function NavigationHighlight({ section, menuOpen }) {
   const indicatorRef = useRef(null);
   const initialized = useRef(false);
   const previousSection = useRef(section);
@@ -14,7 +14,6 @@ export default function NavigationHighlight({ section, menuOpen, collapsed = fal
     let cancelled = false;
     const row = nav.querySelector(`[data-section="${section}"]`);
     const y = row?.offsetTop ?? 0;
-    if (row) indicator.style.setProperty("--nav-row-height", `${row.offsetHeight}px`);
     const width = indicator.getBoundingClientRect().width;
     const changed = previousSection.current !== section;
     previousSection.current = section;
@@ -31,7 +30,6 @@ export default function NavigationHighlight({ section, menuOpen, collapsed = fal
     function snap() {
       cancelled = true;
       stop();
-      if (row) indicator.style.setProperty("--nav-row-height", `${row.offsetHeight}px`);
       indicator.style.transform = transform(0, row?.offsetTop ?? 0);
       indicator.style.opacity = row && nav.offsetWidth ? "1" : "0";
       nav.dataset.highlight = section;
@@ -105,8 +103,11 @@ export default function NavigationHighlight({ section, menuOpen, collapsed = fal
         nav.dataset.phase = "idle";
     }
     transition();
-    return () => { cancelled = true; stop(); };
-  }, [section, menuOpen, collapsed]);
+    return () => {
+      cancelled = true;
+      stop();
+    };
+  }, [section, menuOpen]);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
