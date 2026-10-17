@@ -13,6 +13,8 @@ O visual mantém a identidade existente: azul-marinho, branco e verde suave; log
 
 A landing page não altera o painel nem conecta sua demonstração local ao backend.
 
+A raiz `/` mostra a LP sem sessão e o painel após a autenticação. Os botões de acesso levam a `/login`; login e cadastro retornam a `/` ou ao caso solicitado. Não há uma rota separada `/app` para o painel.
+
 Recarregar a landing page volta ao topo e remove a seção da URL. Links diretos para seções continuam funcionando na primeira abertura.
 
 Os títulos h1 e h2 usam GSAP SplitText, seguindo o movimento da referência Lime Ag: palavras no hero e linhas nas seções sobem de dentro de máscaras por linha, com entrada sequencial e desaceleração suave, uma vez ao entrar na tela. O texto original é restaurado ao terminar; movimento reduzido mantém os títulos estáticos. A medição aguarda as fontes e preserva as ênfases existentes.

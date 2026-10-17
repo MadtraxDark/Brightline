@@ -97,3 +97,11 @@ test("cadastro exige confirmação e aceita dados válidos", () => {
 test("redirecionamento após cadastro não retorna à tela de autenticação", () => {
   assert.equal(safeRedirectPath("/cadastro?from=login"), "/");
 });
+
+test("login leva ao painel e preserva o destino de um caso", () => {
+  assert.equal(safeRedirectPath("/"), "/");
+  assert.equal(safeRedirectPath("/login/"), "/");
+  assert.equal(safeRedirectPath("/cadastro/?from=login"), "/");
+  assert.equal(safeRedirectPath("/app"), "/");
+  assert.equal(safeRedirectPath("/caso/R-001?tab=historico"), "/caso/R-001?tab=historico");
+});
