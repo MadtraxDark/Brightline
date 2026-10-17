@@ -1,11 +1,11 @@
 services:
   api:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     environment:
-      SUPABASE_URL: ${SUPABASE_URL:?Configure SUPABASE_URL no arquivo .env}
-      SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:?Configure SUPABASE_PUBLISHABLE_KEY no arquivo .env}
+      SUPABASE_URL: ${SUPABASE_URL:?Configure SUPABASE_URL em backend/.env e use --env-file backend/.env}
+      SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY:?Configure SUPABASE_PUBLISHABLE_KEY em backend/.env e use --env-file backend/.env}
       BRIGHTLINE_CORS_ORIGINS: ${BRIGHTLINE_CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
     restart: unless-stopped
     networks:
@@ -19,7 +19,7 @@ services:
     ports:
       - "${BRIGHTLINE_HTTP_PORT:-8080}:80"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     restart: unless-stopped
     networks:
       - brightline

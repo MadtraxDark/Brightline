@@ -1,6 +1,6 @@
 async page => {
   const check = (condition, message) => { if (!condition) throw new Error(message); };
-  await page.goto('http://localhost:5173/');
+  await page.goto('http://localhost:5173/app');
   await page.setViewportSize({width:1440,height:1000});
   const caseButton = page.getByRole('button', {name:'Nódulo pulmonar suspeito', exact:true});
   await caseButton.waitFor();

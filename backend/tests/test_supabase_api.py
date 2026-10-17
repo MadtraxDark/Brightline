@@ -9,9 +9,9 @@ from uuid import uuid4
 
 import httpx
 
-from backend.app.config import Settings, get_settings
-from backend.app.main import app, get_gateway
-from backend.app.supabase import SupabaseGateway
+from app.config import Settings, get_settings
+from app.main import app, get_gateway
+from app.supabase import SupabaseGateway
 
 
 USER = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"

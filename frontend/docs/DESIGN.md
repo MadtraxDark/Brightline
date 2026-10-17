@@ -17,4 +17,4 @@ Logo original fornecida pelo usuário. Navegação em azul-marinho, superfícies
 Interface em Atkinson Hyperlegible Next; laudo em Source Serif 4, até 70ch. Página com margens de 40px no desktop, 24px em telas intermediárias e 16px no celular. Abaixo de 700px, navegação lateral vira navegação superior; tabela conserva laudo e prioridade, e informações completas ficam no detalhe. Controles principais de toque com pelo menos 44px. Bordas discretas e sem sombras decorativas; sombra apenas no painel flutuante de simulação.
 
 ## Referências
-A imagem SaaS fornecida pelo usuário governa a composição atual. Impeccable orienta clareza, estados e organização; Web Design Guidelines orienta acessibilidade; Playwright CLI verifica o fluxo. A referência Cal.com em docs/design-references é secundária.
+A imagem SaaS fornecida pelo usuário governa a composição atual. Impeccable orienta clareza, estados e organização; Web Design Guidelines orienta acessibilidade; Playwright CLI verifica o fluxo. A referência Cal.com em ../../docs/design-references é secundária.
