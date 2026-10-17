@@ -41,7 +41,8 @@ function actionableCase(state) {
 }
 
 function deepFreeze(value) {
-  if (value === null || typeof value !== "object" || Object.isFrozen(value)) return value;
+  if (value === null || typeof value !== "object" || Object.isFrozen(value))
+    return value;
   for (const key of Object.keys(value)) deepFreeze(value[key]);
   return Object.freeze(value);
 }
@@ -146,7 +147,10 @@ test("acknowledge em caso escalado muda para lido e impede nova escalação", ()
 test("registerAction exige leitura e fecha o caso quando close é verdadeiro", () => {
   const state = fresh();
   const id = state.cases[0].id;
-  assert.throws(() => registerAction(state, id, "Encaminhar ao plantão", false), Error);
+  assert.throws(
+    () => registerAction(state, id, "Encaminhar ao plantão", false),
+    Error,
+  );
 
   const read = acknowledge(state, id, "Dr. Paulo Mendes");
   const recorded = registerAction(read, id, "Encaminhar ao plantão", false);
@@ -167,7 +171,8 @@ test("acknowledge em caso fechado lança erro de caso fechado", () => {
   const closed = registerAction(read, id, "Alta da fila", true);
   assert.throws(
     () => acknowledge(closed, id, "Dr. Paulo Mendes"),
-    (error) => error instanceof Error && error.message === "O caso já está fechado.",
+    (error) =>
+      error instanceof Error && error.message === "O caso já está fechado.",
   );
 });
 

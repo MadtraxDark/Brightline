@@ -1,16 +1,25 @@
 import { PROFILE_KEY } from "./profile.js";
 export const SESSION_KEY = "brightline:session";
-const AUTH_BASE = (import.meta.env?.VITE_AUTH_API_URL || "/api").replace(/\/$/, "");
+const AUTH_BASE = (import.meta.env?.VITE_AUTH_API_URL || "/api").replace(
+  /\/$/,
+  "",
+);
 let memorySession = null;
 const validations = new WeakMap();
 
-export function resetSessionMemoryForTests() { memorySession = null; }
+export function resetSessionMemoryForTests() {
+  memorySession = null;
+}
 
 function readSession(storage) {
   try {
     const value = JSON.parse(storage.getItem(SESSION_KEY) || "null");
-    return value?.access_token && value?.refresh_token && value?.user?.id ? value : null;
-  } catch { return memorySession; }
+    return value?.access_token && value?.refresh_token && value?.user?.id
+      ? value
+      : null;
+  } catch {
+    return memorySession;
+  }
 }
 
 function saveSession(storage, session) {
@@ -19,20 +28,37 @@ function saveSession(storage, session) {
   }
   try {
     const previous = readSession(storage);
-    const profile = previous?.user?.id === session.user.id
-      ? JSON.parse(storage.getItem(PROFILE_KEY) || "null") : null;
+    const profile =
+      previous?.user?.id === session.user.id
+        ? JSON.parse(storage.getItem(PROFILE_KEY) || "null")
+        : null;
     storage.setItem(SESSION_KEY, JSON.stringify(session));
-    storage.setItem(PROFILE_KEY, JSON.stringify({ name: profile?.name || session.user.name || "", photo: profile?.photo || "" }));
-  } catch { memorySession = session; }
+    storage.setItem(
+      PROFILE_KEY,
+      JSON.stringify({
+        name: profile?.name || session.user.name || "",
+        photo: profile?.photo || "",
+      }),
+    );
+  } catch {
+    memorySession = session;
+  }
   return session.user;
 }
 
 function clearSession(storage) {
   memorySession = null;
-  try { storage.removeItem(SESSION_KEY); storage.removeItem(PROFILE_KEY); } catch { /* Storage indisponível. */ }
+  try {
+    storage.removeItem(SESSION_KEY);
+    storage.removeItem(PROFILE_KEY);
+  } catch {
+    /* Storage indisponível. */
+  }
 }
 
-export function isAuthenticated(storage) { return Boolean(readSession(storage)); }
+export function isAuthenticated(storage) {
+  return Boolean(readSession(storage));
+}
 
 async function authRequest(path, { body, token, method = "POST" } = {}) {
   const controller = new AbortController();
@@ -40,17 +66,26 @@ async function authRequest(path, { body, token, method = "POST" } = {}) {
   try {
     const response = await fetch(`${AUTH_BASE}/auth/${path}`, {
       method,
-      headers: { Accept: "application/json", ...(body ? { "Content-Type": "application/json" } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+      headers: {
+        Accept: "application/json",
+        ...(body ? { "Content-Type": "application/json" } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: body ? JSON.stringify(body) : undefined,
       signal: controller.signal,
       cache: "no-store",
     });
-    const data = response.status === 204 ? null : await response.json().catch(() => null);
+    const data =
+      response.status === 204 ? null : await response.json().catch(() => null);
     if (!response.ok) {
-      const message = typeof data?.detail === "string" ? data.detail
-        : response.status === 422 ? "Confira os dados. A senha do cadastro deve ter pelo menos 9 caracteres."
-        : response.status === 401 ? "E-mail ou senha inválidos."
-        : "Não foi possível acessar o serviço de autenticação. Tente novamente.";
+      const message =
+        typeof data?.detail === "string"
+          ? data.detail
+          : response.status === 422
+            ? "Confira os dados. A senha do cadastro deve ter pelo menos 9 caracteres."
+            : response.status === 401
+              ? "E-mail ou senha inválidos."
+              : "Não foi possível acessar o serviço de autenticação. Tente novamente.";
       const error = new Error(message);
       error.status = response.status;
       throw error;
@@ -58,17 +93,25 @@ async function authRequest(path, { body, token, method = "POST" } = {}) {
     return data;
   } catch (error) {
     if (error.status) throw error;
-    throw new Error("Não foi possível conectar ao servidor. Tente novamente em instantes.");
-  } finally { clearTimeout(timeout); }
+    throw new Error(
+      "Não foi possível conectar ao servidor. Tente novamente em instantes.",
+    );
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 export async function login(storage, { email, password }) {
-  const session = await authRequest("login", { body: { email: email.trim().toLowerCase(), password } });
+  const session = await authRequest("login", {
+    body: { email: email.trim().toLowerCase(), password },
+  });
   return saveSession(storage, session);
 }
 
 export async function register({ name, email, password }) {
-  return authRequest("signup", { body: { name: name.trim(), email: email.trim().toLowerCase(), password } });
+  return authRequest("signup", {
+    body: { name: name.trim(), email: email.trim().toLowerCase(), password },
+  });
 }
 
 async function verifyStoredSession(storage) {
@@ -77,7 +120,10 @@ async function verifyStoredSession(storage) {
   const originalToken = session.access_token;
   const isCurrent = () => readSession(storage)?.access_token === originalToken;
   try {
-    const user = await authRequest("me", { method: "GET", token: session.access_token });
+    const user = await authRequest("me", {
+      method: "GET",
+      token: session.access_token,
+    });
     if (!isCurrent()) return readSession(storage)?.user || null;
     saveSession(storage, { ...session, user });
     return user;
@@ -86,18 +132,25 @@ async function verifyStoredSession(storage) {
   }
   if (!isCurrent()) return readSession(storage)?.user || null;
   try {
-    session = await authRequest("refresh", { body: { refresh_token: session.refresh_token } });
+    session = await authRequest("refresh", {
+      body: { refresh_token: session.refresh_token },
+    });
     if (!isCurrent()) return readSession(storage)?.user || null;
     return saveSession(storage, session);
   } catch (error) {
-    if (error.status === 401) { if (isCurrent()) clearSession(storage); return null; }
+    if (error.status === 401) {
+      if (isCurrent()) clearSession(storage);
+      return null;
+    }
     throw error;
   }
 }
 
 export function validateSession(storage) {
   if (validations.has(storage)) return validations.get(storage);
-  const validation = verifyStoredSession(storage).finally(() => validations.delete(storage));
+  const validation = verifyStoredSession(storage).finally(() =>
+    validations.delete(storage),
+  );
   validations.set(storage, validation);
   return validation;
 }
@@ -107,14 +160,28 @@ export async function logout(storage) {
   clearSession(storage);
   try {
     if (session) await authRequest("logout", { token: session.access_token });
-  } catch { /* A sessão local ainda é encerrada se o servidor estiver indisponível. */ }
-  finally { clearSession(storage); }
+  } catch {
+    /* A sessão local ainda é encerrada se o servidor estiver indisponível. */
+  } finally {
+    clearSession(storage);
+  }
 }
 
 export function safeRedirectPath(from) {
-  if (typeof from !== "string" || !from.startsWith("/") || from.startsWith("//")) return "/home";
+  if (
+    typeof from !== "string" ||
+    !from.startsWith("/") ||
+    from.startsWith("//")
+  )
+    return "/home";
   const path = from.split(/[?#]/, 1)[0].replace(/\/+$/, "") || "/";
-  if (path === "/" || path === "/app" || path === "/login" || path === "/cadastro") return "/home";
+  if (
+    path === "/" ||
+    path === "/app" ||
+    path === "/login" ||
+    path === "/cadastro"
+  )
+    return "/home";
   return from;
 }
 
@@ -132,9 +199,12 @@ export function validateLogin(email, password) {
 
 export function validateRegistration(name, email, password, confirmation) {
   const errors = validateLogin(email, password);
-  if (String(name ?? "").trim().length < 2) errors.name = "Informe seu nome completo.";
-  if (String(password ?? "").length < 9) errors.password = "A senha deve ter pelo menos 9 caracteres.";
+  if (String(name ?? "").trim().length < 2)
+    errors.name = "Informe seu nome completo.";
+  if (String(password ?? "").length < 9)
+    errors.password = "A senha deve ter pelo menos 9 caracteres.";
   if (!confirmation) errors.confirmation = "Confirme sua senha.";
-  else if (password !== confirmation) errors.confirmation = "As senhas não coincidem.";
+  else if (password !== confirmation)
+    errors.confirmation = "As senhas não coincidem.";
   return errors;
 }

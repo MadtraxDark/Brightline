@@ -7,16 +7,23 @@ function dashboardCase(item) {
     finding_name: item.finding,
     requesting_physician: item.ordering_physician,
     report_text: item.text,
-    confidence: { high: "alta", medium: "media", low: "baixa" }[item.confidence] ?? item.confidence,
+    confidence:
+      { high: "alta", medium: "media", low: "baixa" }[item.confidence] ??
+      item.confidence,
     status: item.status === "action_taken" ? "action_recorded" : item.status,
-    timeline: item.events.map(({ at, ...event }) => ({ ...event, offset_hours: at })),
+    timeline: item.events.map(({ at, ...event }) => ({
+      ...event,
+      offset_hours: at,
+    })),
   };
 }
 
-export const NETWORK_ERROR = "Não foi possível carregar os dados da demonstração. Tente novamente.";
+export const NETWORK_ERROR =
+  "Não foi possível carregar os dados da demonstração. Tente novamente.";
 
 export async function getCases(view = "queue") {
-  const cases = view === "unflagged" ? await api.listMissed() : await api.listCases();
+  const cases =
+    view === "unflagged" ? await api.listMissed() : await api.listCases();
   return cases.map(dashboardCase);
 }
 
@@ -28,13 +35,17 @@ export async function getCase(id) {
 export async function getStats() {
   const stats = await api.getStats();
   return {
-    open: Object.entries(stats.status).reduce((sum, [status, count]) => status === "closed" ? sum : sum + count, 0),
+    open: Object.entries(stats.status).reduce(
+      (sum, [status, count]) => (status === "closed" ? sum : sum + count),
+      0,
+    ),
     critical: stats.urgency.critical,
     escalated: stats.status.escalated,
     avg_time_to_read_hours: stats.avg_time_to_read_hours,
   };
 }
 
-export const confirmRead = (id) => api.acknowledge(id, "Profissional demonstrador");
+export const confirmRead = (id) =>
+  api.acknowledge(id, "Profissional demonstrador");
 export const registerAction = (id, text) => api.registerAction(id, text, false);
 export const closeCase = (id) => api.registerAction(id, "", true);

@@ -6,7 +6,10 @@ import UrgencyBadge from "./UrgencyBadge.jsx";
 
 const recallCritical = recall(evaluation.critical.tp, evaluation.critical.fn);
 const recallOverall = recall(evaluation.overall.tp, evaluation.overall.fn);
-const precisionOverall = precision(evaluation.overall.tp, evaluation.overall.fp);
+const precisionOverall = precision(
+  evaluation.overall.tp,
+  evaluation.overall.fp,
+);
 
 const cards = [
   {
@@ -51,14 +54,18 @@ function FindingList({ title, items }) {
   return (
     <section className="panel eval-list">
       <h2>{title}</h2>
-      {items.length === 0 ? <p>Nenhum.</p> : (
+      {items.length === 0 ? (
+        <p>Nenhum.</p>
+      ) : (
         <ul>
           {items.map((item) => (
             <li key={`${item.report_id}-${item.finding}-${item.urgency}`}>
               <span>{item.report_id}</span>
               <span>{item.finding}</span>
               <UrgencyBadge level={item.urgency} />
-              {swapped.has(swappedKey(item)) ? <span>Urgência trocada</span> : null}
+              {swapped.has(swappedKey(item)) ? (
+                <span>Urgência trocada</span>
+              ) : null}
             </li>
           ))}
         </ul>
@@ -74,13 +81,19 @@ export default function Evaluation() {
         <h1>Avaliação da IA</h1>
       </div>
       <p className="eval-banner">
-        Avaliação em conjunto sintético pequeno, ilustrativa. Não é desempenho clínico.
+        Avaliação em conjunto sintético pequeno, ilustrativa. Não é desempenho
+        clínico.
         {evaluation.example ? " Dados de exemplo." : ""}
       </p>
       <section className="summary summary-metrics" aria-label="Métricas">
         {cards.map((item) => (
-          <div className={item.lead ? "summary-item summary-lead" : "summary-item"} key={item.key}>
-            <span className="summary-icon" aria-hidden="true">{item.icon}</span>
+          <div
+            className={item.lead ? "summary-item summary-lead" : "summary-item"}
+            key={item.key}
+          >
+            <span className="summary-icon" aria-hidden="true">
+              {item.icon}
+            </span>
             <div>
               <p className="summary-label">{item.label}</p>
               <div className="metric-line">
@@ -93,13 +106,26 @@ export default function Evaluation() {
         ))}
       </section>
       {evaluation.overall.wrong_urgency > 0 ? (
-        <p className="eval-context">Achados com urgência classificada errada: {evaluation.overall.wrong_urgency}</p>
+        <p className="eval-context">
+          Achados com urgência classificada errada:{" "}
+          {evaluation.overall.wrong_urgency}
+        </p>
       ) : null}
       <div className="eval-lists">
-        <FindingList title="Achados que a IA não encontrou (falsos negativos)" items={evaluation.false_negatives} />
-        <FindingList title="Alertas que não eram achados (falsos positivos)" items={evaluation.false_positives} />
+        <FindingList
+          title="Achados que a IA não encontrou (falsos negativos)"
+          items={evaluation.false_negatives}
+        />
+        <FindingList
+          title="Alertas que não eram achados (falsos positivos)"
+          items={evaluation.false_positives}
+        />
       </div>
-      <p className="eval-priority">O Brightline é ajustado para não perder achados graves, mesmo que gere alguns alertas a mais. Por isso o recall dos críticos é a métrica principal.</p>
+      <p className="eval-priority">
+        O Brightline é ajustado para não perder achados graves, mesmo que gere
+        alguns alertas a mais. Por isso o recall dos críticos é a métrica
+        principal.
+      </p>
     </>
   );
 }

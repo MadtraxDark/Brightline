@@ -134,7 +134,11 @@ export function acknowledge(state, id, by) {
 export function registerAction(state, id, action, close) {
   const item = requireCase(state, id);
   if (item.status === "closed") throw new Error("O caso já está fechado.");
-  if (item.status === "notified" || item.status === "escalated" || item.status === "detected") {
+  if (
+    item.status === "notified" ||
+    item.status === "escalated" ||
+    item.status === "detected"
+  ) {
     throw new Error("Confirme a leitura antes.");
   }
   const note = (action ?? "").trim();

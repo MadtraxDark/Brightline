@@ -1,1 +1,826 @@
-{"nodes": [{"id": "$graphify-root$_backend_tests_test_auth_py", "label": "test_auth.py", "file_type": "code", "source_file": "backend/tests/test_auth.py", "source_location": "L1"}, {"id": "$graphify-root$_backend_tests_test_auth_authpolicytests", "label": "AuthPolicyTests", "file_type": "code", "source_file": "backend/tests/test_auth.py", "source_location": "L14", "metadata": {"python_opaque_bases": true}, "_callable": true, "_callable_class": true}, {"id": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization", "label": ".test_password_policy_and_normalization()", "file_type": "code", "source_file": "backend/tests/test_auth.py", "source_location": "L15", "_callable": true}, {"id": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "label": ".test_password_hash_is_salted_and_verified()", "file_type": "code", "source_file": "backend/tests/test_auth.py", "source_location": "L22", "_callable": true}, {"id": "skipunless", "label": "skipUnless", "file_type": "code", "source_file": "", "source_location": "", "origin_file": "$graphify-root$/backend/tests/test_auth.py"}, {"id": "$graphify-root$_backend_tests_test_auth_authdatabasetests", "label": "AuthDatabaseTests", "file_type": "code", "source_file": "backend/tests/test_auth.py", "source_location": "L31", "metadata": {"python_opaque_bases": true}, "_callable": true, "_callable_class": true}, {"id": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "label": ".test_complete_account_lifecycle()", "file_type": "code", "source_file": "backend/tests/test_auth.py", "source_location": "L32", "_callable": true}, {"id": "$graphify-root$_backend_tests_test_auth_rationale_1", "label": "Auth policy and opt-in integration against the configured PostgreSQL.", "file_type": "rationale", "source_file": "backend/tests/test_auth.py", "source_location": "L1"}], "edges": [{"source": "$graphify-root$_backend_tests_test_auth_py", "target": "os", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L2", "weight": 1.0, "_python_import_module": "os", "_python_import_bindings": [["os", "os"]], "_python_import_module_binding": true}, {"source": "$graphify-root$_backend_tests_test_auth_py", "target": "secrets", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L3", "weight": 1.0, "_python_import_module": "secrets", "_python_import_bindings": [["secrets", "secrets"]], "_python_import_module_binding": true}, {"source": "$graphify-root$_backend_tests_test_auth_py", "target": "unittest", "relation": "imports", "context": "import", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L4", "weight": 1.0, "_python_import_module": "unittest", "_python_import_bindings": [["unittest", "unittest"]], "_python_import_module_binding": true}, {"source": "$graphify-root$_backend_tests_test_auth_py", "target": "uuid", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L5", "weight": 1.0, "_python_import_module": "uuid", "_python_import_bindings": [["uuid4", "uuid4"]]}, {"source": "$graphify-root$_backend_tests_test_auth_py", "target": "fastapi_testclient", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L7", "weight": 1.0, "_python_import_module": "fastapi.testclient", "_python_import_bindings": [["TestClient", "TestClient"]]}, {"source": "$graphify-root$_backend_tests_test_auth_py", "target": "pydantic", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L8", "weight": 1.0, "_python_import_module": "pydantic", "_python_import_bindings": [["ValidationError", "ValidationError"]]}, {"source": "$graphify-root$_backend_tests_test_auth_py", "target": "$graphify-root$_backend_app_main_py", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L10", "weight": 1.0, "_python_import_module": "app.main", "_python_import_bindings": [["app", "app"], ["db", "db"], ["password_hash", "password_hash"], ["verify_password", "verify_password"]], "target_file": "$graphify-root$/backend/app/main.py"}, {"source": "$graphify-root$_backend_tests_test_auth_py", "target": "$graphify-root$_backend_app_models_py", "relation": "imports_from", "context": "import", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L11", "weight": 1.0, "_python_import_module": "app.models", "_python_import_bindings": [["SignupInput", "SignupInput"]], "target_file": "$graphify-root$/backend/app/models.py"}, {"source": "$graphify-root$_backend_tests_test_auth_py", "target": "$graphify-root$_backend_tests_test_auth_authpolicytests", "relation": "contains", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L14", "weight": 1.0}, {"source": "$graphify-root$_backend_tests_test_auth_authpolicytests", "target": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization", "relation": "method", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L15", "weight": 1.0}, {"source": "$graphify-root$_backend_tests_test_auth_authpolicytests", "target": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "relation": "method", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L22", "weight": 1.0}, {"source": "$graphify-root$_backend_tests_test_auth_authdatabasetests", "target": "skipunless", "relation": "references", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L30", "weight": 1.0, "context": "decorator"}, {"source": "$graphify-root$_backend_tests_test_auth_py", "target": "$graphify-root$_backend_tests_test_auth_authdatabasetests", "relation": "contains", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L31", "weight": 1.0}, {"source": "$graphify-root$_backend_tests_test_auth_authdatabasetests", "target": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "relation": "method", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L32", "weight": 1.0}, {"source": "$graphify-root$_backend_tests_test_auth_rationale_1", "target": "$graphify-root$_backend_tests_test_auth_py", "relation": "rationale_for", "confidence": "EXTRACTED", "source_file": "backend/tests/test_auth.py", "source_location": "L1", "weight": 1.0}], "raw_calls": [{"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization", "callee": "assertRaises", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L16", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization", "callee": "ValidationError", "is_member_call": false, "indirect": true, "context": "argument", "source_file": "backend/tests/test_auth.py", "source_location": "L16"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization", "callee": "SignupInput", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L17", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization", "callee": "SignupInput", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L18", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L19", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L20", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "callee": "password_hash", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L23", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "callee": "assertNotEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L24", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "callee": "password_hash", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L24", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "callee": "assertTrue", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L25", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "callee": "verify_password", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L25", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "callee": "assertFalse", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L26", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "callee": "verify_password", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L26", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "callee": "assertFalse", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L27", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified", "callee": "verify_password", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L27", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "uuid4", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L33", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "token_urlsafe", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L34", "receiver": "secrets", "_python_receiver_shadowed": false}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "TestClient", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L37", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "app", "is_member_call": false, "indirect": true, "context": "argument", "source_file": "backend/tests/test_auth.py", "source_location": "L37"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L39", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "post", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L39", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "post", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L40", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L41", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "json", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L42", "receiver": "signup", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertNotIn", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L44", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertNotIn", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L45", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "db", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L46", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L47", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "fetchone", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L47", "receiver": null, "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "execute", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L47", "receiver": "conn", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "fetchone", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L48", "receiver": null, "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "execute", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L48", "receiver": "conn", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L49", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertNotEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L50", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertTrue", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L51", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "verify_password", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L51", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L52", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "post", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L52", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "upper", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L53", "receiver": "email", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L54", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "post", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L54", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "post", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L55", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L56", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "json", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L57", "receiver": "login", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L59", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "json", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L59", "receiver": null, "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "get", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L59", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "post", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L60", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L61", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L62", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "get", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L62", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L63", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "post", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L63", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "json", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L64", "receiver": "refreshed", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L66", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "post", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L66", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L67", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "get", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L67", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "assertEqual", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L68", "receiver": "self", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "post", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L68", "receiver": "client", "_python_receiver_shadowed": true, "receiver_type": "TestClient"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "db", "is_member_call": false, "source_file": "backend/tests/test_auth.py", "source_location": "L71", "receiver": null}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle", "callee": "execute", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L72", "receiver": "conn", "_python_receiver_shadowed": true}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization", "callee": "email", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L20", "_python_attr_read": true, "receiver": "body", "receiver_type": "SignupInput"}, {"caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization", "callee": "name", "is_member_call": true, "source_file": "backend/tests/test_auth.py", "source_location": "L19", "_python_attr_read": true, "receiver": "body", "receiver_type": "SignupInput"}], "_cached_target_files": ["$graphify-root$/backend/app/main.py", "$graphify-root$/backend/app/models.py"]}
+{
+  "nodes": [
+    {
+      "id": "$graphify-root$_backend_tests_test_auth_py",
+      "label": "test_auth.py",
+      "file_type": "code",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "$graphify-root$_backend_tests_test_auth_authpolicytests",
+      "label": "AuthPolicyTests",
+      "file_type": "code",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L14",
+      "metadata": { "python_opaque_bases": true },
+      "_callable": true,
+      "_callable_class": true
+    },
+    {
+      "id": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization",
+      "label": ".test_password_policy_and_normalization()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L15",
+      "_callable": true
+    },
+    {
+      "id": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "label": ".test_password_hash_is_salted_and_verified()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L22",
+      "_callable": true
+    },
+    {
+      "id": "skipunless",
+      "label": "skipUnless",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "origin_file": "$graphify-root$/backend/tests/test_auth.py"
+    },
+    {
+      "id": "$graphify-root$_backend_tests_test_auth_authdatabasetests",
+      "label": "AuthDatabaseTests",
+      "file_type": "code",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L31",
+      "metadata": { "python_opaque_bases": true },
+      "_callable": true,
+      "_callable_class": true
+    },
+    {
+      "id": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "label": ".test_complete_account_lifecycle()",
+      "file_type": "code",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L32",
+      "_callable": true
+    },
+    {
+      "id": "$graphify-root$_backend_tests_test_auth_rationale_1",
+      "label": "Auth policy and opt-in integration against the configured PostgreSQL.",
+      "file_type": "rationale",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L1"
+    }
+  ],
+  "edges": [
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_py",
+      "target": "os",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_python_import_module": "os",
+      "_python_import_bindings": [["os", "os"]],
+      "_python_import_module_binding": true
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_py",
+      "target": "secrets",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_python_import_module": "secrets",
+      "_python_import_bindings": [["secrets", "secrets"]],
+      "_python_import_module_binding": true
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_py",
+      "target": "unittest",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_python_import_module": "unittest",
+      "_python_import_bindings": [["unittest", "unittest"]],
+      "_python_import_module_binding": true
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_py",
+      "target": "uuid",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_python_import_module": "uuid",
+      "_python_import_bindings": [["uuid4", "uuid4"]]
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_py",
+      "target": "fastapi_testclient",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_python_import_module": "fastapi.testclient",
+      "_python_import_bindings": [["TestClient", "TestClient"]]
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_py",
+      "target": "pydantic",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_python_import_module": "pydantic",
+      "_python_import_bindings": [["ValidationError", "ValidationError"]]
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_py",
+      "target": "$graphify-root$_backend_app_main_py",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_python_import_module": "app.main",
+      "_python_import_bindings": [
+        ["app", "app"],
+        ["db", "db"],
+        ["password_hash", "password_hash"],
+        ["verify_password", "verify_password"]
+      ],
+      "target_file": "$graphify-root$/backend/app/main.py"
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_py",
+      "target": "$graphify-root$_backend_app_models_py",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_python_import_module": "app.models",
+      "_python_import_bindings": [["SignupInput", "SignupInput"]],
+      "target_file": "$graphify-root$/backend/app/models.py"
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_py",
+      "target": "$graphify-root$_backend_tests_test_auth_authpolicytests",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_authpolicytests",
+      "target": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_authpolicytests",
+      "target": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_authdatabasetests",
+      "target": "skipunless",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "context": "decorator"
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_py",
+      "target": "$graphify-root$_backend_tests_test_auth_authdatabasetests",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_authdatabasetests",
+      "target": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "$graphify-root$_backend_tests_test_auth_rationale_1",
+      "target": "$graphify-root$_backend_tests_test_auth_py",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ],
+  "raw_calls": [
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization",
+      "callee": "assertRaises",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L16",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization",
+      "callee": "ValidationError",
+      "is_member_call": false,
+      "indirect": true,
+      "context": "argument",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L16"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization",
+      "callee": "SignupInput",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L17",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization",
+      "callee": "SignupInput",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L18",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L19",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L20",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "callee": "password_hash",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L23",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "callee": "assertNotEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L24",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "callee": "password_hash",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L24",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "callee": "assertTrue",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L25",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "callee": "verify_password",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L25",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "callee": "assertFalse",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L26",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "callee": "verify_password",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L26",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "callee": "assertFalse",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L27",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_hash_is_salted_and_verified",
+      "callee": "verify_password",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L27",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "uuid4",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L33",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "token_urlsafe",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L34",
+      "receiver": "secrets",
+      "_python_receiver_shadowed": false
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "TestClient",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L37",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "app",
+      "is_member_call": false,
+      "indirect": true,
+      "context": "argument",
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L37"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L39",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L39",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L40",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L41",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L42",
+      "receiver": "signup",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertNotIn",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L44",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertNotIn",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L45",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "db",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L46",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L47",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "fetchone",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L47",
+      "receiver": null,
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "execute",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L47",
+      "receiver": "conn",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "fetchone",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L48",
+      "receiver": null,
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "execute",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L48",
+      "receiver": "conn",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L49",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertNotEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L50",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertTrue",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L51",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "verify_password",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L51",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L52",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L52",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "upper",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L53",
+      "receiver": "email",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L54",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L54",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L55",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L56",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L57",
+      "receiver": "login",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L59",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L59",
+      "receiver": null,
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L59",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L60",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L61",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L62",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L62",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L63",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L63",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "json",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L64",
+      "receiver": "refreshed",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L66",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L66",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L67",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "get",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L67",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "assertEqual",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L68",
+      "receiver": "self",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "post",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L68",
+      "receiver": "client",
+      "_python_receiver_shadowed": true,
+      "receiver_type": "TestClient"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "db",
+      "is_member_call": false,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L71",
+      "receiver": null
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authdatabasetests_test_complete_account_lifecycle",
+      "callee": "execute",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L72",
+      "receiver": "conn",
+      "_python_receiver_shadowed": true
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization",
+      "callee": "email",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L20",
+      "_python_attr_read": true,
+      "receiver": "body",
+      "receiver_type": "SignupInput"
+    },
+    {
+      "caller_nid": "$graphify-root$_backend_tests_test_auth_authpolicytests_test_password_policy_and_normalization",
+      "callee": "name",
+      "is_member_call": true,
+      "source_file": "backend/tests/test_auth.py",
+      "source_location": "L19",
+      "_python_attr_read": true,
+      "receiver": "body",
+      "receiver_type": "SignupInput"
+    }
+  ],
+  "_cached_target_files": [
+    "$graphify-root$/backend/app/main.py",
+    "$graphify-root$/backend/app/models.py"
+  ]
+}
