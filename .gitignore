@@ -1,3 +1,8 @@
+node_modules/
+dist/
+.playwright-cli/
+.impeccable/
+
 # Python bytecode and caches
 __pycache__/
 *.py[cod]
