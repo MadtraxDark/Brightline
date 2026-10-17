@@ -78,7 +78,7 @@ function Shell() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const activeSection = pathname === "/" || pathname.startsWith("/caso/") ? "0"
+  const activeSection = pathname === "/home" || pathname.startsWith("/caso/") ? "0"
     : pathname.startsWith("/nao-sinalizados") ? "1"
     : pathname.startsWith("/avaliacao") ? "2" : "none";
   const cases = useStore((state) => state.cases);
@@ -118,7 +118,7 @@ function Shell() {
         <div id="sidebar-menu" className={`sidebar-body${menuOpen ? " is-open" : ""}`}>
           <nav className="sidebar-primary" data-active={activeSection} aria-label="Navegação principal">
             <NavigationHighlight section={activeSection} menuOpen={menuOpen} />
-            <NavLink data-section="0" to="/" end className={pathname.startsWith("/caso/") ? "is-current-section" : undefined} onClick={() => setMenuOpen(false)}><LayoutDashboard size={18} aria-hidden="true" /><span>Visão geral</span></NavLink>
+            <NavLink data-section="0" to="/home" end className={pathname.startsWith("/caso/") ? "is-current-section" : undefined} onClick={() => setMenuOpen(false)}><LayoutDashboard size={18} aria-hidden="true" /><span>Visão geral</span></NavLink>
             <NavLink data-section="1" to="/nao-sinalizados" onClick={() => setMenuOpen(false)}><EyeOff size={18} aria-hidden="true" /><span>Não sinalizados</span><span className="sidebar-count" aria-label={`${missedCount} não sinalizados`}>{missedCount}</span></NavLink>
             <NavLink data-section="2" to="/avaliacao" onClick={() => setMenuOpen(false)}><Sparkles size={18} aria-hidden="true" /><span>Avaliação da IA</span></NavLink>
           </nav>
@@ -133,12 +133,12 @@ function Shell() {
         <header className="topbar"><div className="breadcrumb">Workspace <ChevronRight size={14} aria-hidden="true" /><span>{crumb(pathname)}</span></div><ProfileMenu profile={profile} onLogout={() => { logout(sessionStorage); navigate("/login"); }} /></header>
         <main className="workspace" id="workspace" tabIndex={-1}>
           <Routes>
-            <Route path="/" element={<Overview />} />
+            <Route path="/home" element={<Overview />} />
             <Route path="/caso/:id" element={<CaseDetail />} />
             <Route path="/nao-sinalizados" element={<Missed />} />
             <Route path="/avaliacao" element={<Evaluation />} />
             <Route path="/configuracoes" element={<Settings profile={profile} onSave={next => { saveProfile(sessionStorage, next); setProfile(next); }} />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/home" replace />} />
           </Routes>
           <footer className="workspace-footer"><span>Brightline · Inteligência clínica</span><span>Decisões com acompanhamento humano</span></footer>
         </main>
@@ -150,7 +150,7 @@ function Shell() {
 export default function App() {
   const { pathname } = useLocation();
   const path = pathname.replace(/\/+$/, "") || "/";
-  if (path === "/" && !isAuthenticated(sessionStorage)) return <LandingPage />;
+  if (path === "/") return <LandingPage />;
   if (path === "/login") return <Login />;
   if (path === "/cadastro") return <Register />;
   return (
