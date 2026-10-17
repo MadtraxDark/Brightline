@@ -90,6 +90,25 @@ Veja o [guia do Supabase](supabase/README.md) para detalhes das políticas e val
 - [Documentação interativa](http://localhost:8000/docs)
 - [Health check](http://localhost:8000/health)
 
+### Executar com Docker e Nginx
+
+Requisito: Docker Desktop com Docker Compose. Copie o arquivo de exemplo e preencha as credenciais publicáveis do Supabase no `.env` da raiz:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Depois, na raiz do projeto:
+
+```powershell
+docker compose up --build -d
+docker compose logs -f
+```
+
+A API ficará disponível por meio do Nginx em `http://localhost:8080`; abra `http://localhost:8080/docs` para o Swagger. Para encerrar, use `docker compose down`. O Nginx é o único serviço publicado no host; a API fica na rede interna do Compose. Os valores `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` são passados ao container pela configuração local e não são copiados para a imagem.
+
+Outros computadores na mesma rede podem acessar `http://IP-DA-MAQUINA:8080`, desde que o firewall permita conexões nessa porta. Para acesso público pela internet, use um servidor público e configure HTTPS no Nginx antes de compartilhar o endereço. Se o frontend estiver em outra origem, atualize `BRIGHTLINE_CORS_ORIGINS` no `.env` com a origem exata e recrie os serviços com `docker compose up -d`.
+
 No Swagger, use `POST /auth/signup` para cadastrar e `POST /auth/login` para entrar. Copie o `access_token`, clique em **Authorize** e informe o token sem o prefixo `Bearer`. Não compartilhe tokens ou senhas. `GET /auth/me` confirma a sessão; `GET /ready` também verifica o acesso às tabelas.
 
 O cadastro pode retornar um usuário sem sessão enquanto aguarda confirmação de e-mail. Ao renovar uma sessão, o cliente deve substituir tanto o access token quanto o refresh token pelos novos valores. Logout revoga o refresh token da sessão; um access token já emitido pode permanecer válido até expirar.
