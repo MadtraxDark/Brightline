@@ -1,17 +1,17 @@
 # Graph Report - Brightline  (2026-10-17)
 
 ## Corpus Check
-- 104 files · ~89,314 words
+- 104 files · ~88,831 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 17 file(s) not represented in the graph (top: .css 5, (none) 4, .keras 2)
 
 ## Summary
-- 692 nodes · 1379 edges · 39 communities (23 shown, 16 thin omitted)
+- 691 nodes · 1376 edges · 38 communities (21 shown, 17 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a9b8a51d`
+- Built from commit: `bf0a62f8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -45,7 +45,6 @@
 - NIH_TENSORFLOW.md
 - lib/evaluate.js
 - LANDING.md
-- RadiographClassifier.jsx
 - dashboardApi.js
 
 ## God Nodes (most connected - your core abstractions)
@@ -75,7 +74,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (39 total, 16 thin omitted)
+## Communities (38 total, 17 thin omitted)
 
 ### Community 0 - "engine.test.js"
 Cohesion: 0.09
@@ -107,19 +106,15 @@ Nodes (45): acknowledge(), action(), advance(), analyze_report(), authenticated(
 
 ### Community 7 - "App.jsx"
 Cohesion: 0.06
-Nodes (65): acknowledge(), advance(), getCase(), getStats(), listCases(), listMissed(), registerAction(), reset() (+57 more)
+Nodes (61): acknowledge(), advance(), getCase(), getStats(), listCases(), listMissed(), registerAction(), reset() (+53 more)
 
 ### Community 8 - "frontend/package.json"
 Cohesion: 0.04
-Nodes (38): dependencies, @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, gsap, lenis, lucide-react, react, react-dom (+30 more)
+Nodes (39): dependencies, @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, gsap, lenis, lucide-react, react, react-dom (+31 more)
 
 ### Community 11 - "report_analysis.py"
 Cohesion: 0.07
 Nodes (12): compare(), find_text_classes(), infer(), initialize_model(), laterality(), load_model(), _model(), read_metrics() (+4 more)
-
-### Community 13 - "ref_node_assert"
-Cohesion: 0.23
-Nodes (3): cases, splitEvidence(), joined()
 
 ### Community 14 - "init.sql"
 Cohesion: 0.21
@@ -130,7 +125,7 @@ Cohesion: 0.18
 Nodes (10): name, private, scripts, build, dev, dev:backend, dev:frontend, install:frontend (+2 more)
 
 ### Community 16 - "dev.mjs"
-Cohesion: 0.22
+Cohesion: 0.25
 Nodes (6): children, localPython, root, start(), stop(), vite
 
 ### Community 17 - "Brightline — sistema visual"
@@ -146,8 +141,8 @@ Cohesion: 0.29
 Nodes (6): Cobertura dos casos difíceis, Composição, Inventário para revisão do gabarito, Referências consultadas, Revisão dos laudos sintéticos Brightline, Semelhanças para revisar com Bruno
 
 ### Community 20 - "LandingPage.jsx"
-Cohesion: 0.15
-Nodes (13): benefits, BenefitsCarousel(), LandingHeader(), links, examples, LandingPage(), ProductPreview(), questions (+5 more)
+Cohesion: 0.09
+Nodes (25): benefits, BenefitsCarousel(), LandingHeader(), links, NavigationHighlight(), move(), snap(), stop() (+17 more)
 
 ### Community 21 - "scripts/evaluate.js"
 Cohesion: 0.18
@@ -155,15 +150,11 @@ Nodes (8): cache, computed, current, dataDir, found, next, reports, write
 
 ### Community 22 - "store.test.js"
 Cohesion: 0.25
-Nodes (5): STORAGE_KEY, fakeTimers(), fixtureData, fixtureDir, openStore()
+Nodes (4): fakeTimers(), fixtureData, fixtureDir, openStore()
 
 ### Community 29 - "lib/evaluate.js"
 Cohesion: 0.60
 Nodes (5): byReportId(), computeEvaluation(), listItem(), normalizeName(), sameFinding()
-
-### Community 37 - "RadiographClassifier.jsx"
-Cohesion: 0.28
-Nodes (7): API_URL, LABELS, PT, RadiographClassifier(), classify(), login(), readError()
 
 ### Community 39 - "dashboardApi.js"
 Cohesion: 0.32
@@ -172,7 +163,7 @@ Nodes (7): closeCase(), confirmRead(), dashboardCase(), getCase(), getStats(), N
 ## Knowledge Gaps
 - **7 isolated node(s):** `Graphify workflow instructions`, `Commit message instructions`, `FastAPI dependency`, `HTTPX dependency`, `python-dotenv dependency` (+2 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 282 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -185,9 +176,9 @@ _Questions this graph is uniquely positioned to answer:_
   _7 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `engine.test.js` be split into smaller, more focused modules?**
   _Cohesion score 0.08961593172119488 - nodes in this community are weakly interconnected._
-- **Why does `lucide-react` connect `App.jsx` to `RadiographClassifier.jsx`, `session.js`, `frontend/package.json`, `Evaluation.jsx`, `LandingPage.jsx`?**
+- **Why does `Extração, privacidade e fila` connect `Extração e avaliação do Brightline` to `main.py`?**
   _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Should `cal.DESIGN.md` be split into smaller, more focused modules?**
   _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
-- **Why does `Extração, privacidade e fila` connect `Extração e avaliação do Brightline` to `main.py`?**
+- **Why does `lucide-react` connect `LandingPage.jsx` to `frontend/package.json`, `Evaluation.jsx`, `session.js`, `App.jsx`?**
   _High betweenness centrality (0.025) - this node is a cross-community bridge._
