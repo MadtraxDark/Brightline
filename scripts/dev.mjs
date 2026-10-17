@@ -23,7 +23,7 @@ if (mode !== "backend" && !existsSync(vite)) {
   process.exit(1);
 }
 if (mode !== "frontend") {
-  const check = spawnSync(python, ["-c", "import uvicorn, fastapi, httpx, dotenv"], {
+  const check = spawnSync(python, ["-c", "import uvicorn, fastapi, httpx, dotenv, psycopg"], {
     cwd: join(root, "backend"), stdio: "ignore", windowsHide: true,
   });
   if (check.error || check.status !== 0) {

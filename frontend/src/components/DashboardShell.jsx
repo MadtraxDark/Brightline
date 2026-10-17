@@ -125,7 +125,7 @@ export default function DashboardShell({ preview = false }) {
       </aside>
 
       <div className="app-content">
-        <header className="topbar"><div className="breadcrumb">Workspace <ChevronRight size={14} aria-hidden="true" /><span>{crumb(pathname)}</span></div>{preview ? <span className="lp-preview-profile">Demonstração</span> : <ProfileMenu profile={profile} onLogout={() => { logout(sessionStorage); navigate("/login"); }} />}</header>
+        <header className="topbar"><div className="breadcrumb">Workspace <ChevronRight size={14} aria-hidden="true" /><span>{crumb(pathname)}</span></div>{preview ? <span className="lp-preview-profile">Demonstração</span> : <ProfileMenu profile={profile} onLogout={async () => { await logout(sessionStorage); navigate("/login", { replace: true }); }} />}</header>
         <Workspace className="workspace" id={preview ? "preview-workspace" : "workspace"} tabIndex={-1}>
           {preview ? <Overview preview /> : <Routes>
             <Route path="/home" element={<Overview />} />

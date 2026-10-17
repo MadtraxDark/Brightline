@@ -13,6 +13,7 @@ h1, h2, h3 { text-wrap: balance; }
 .skip-link { position: fixed; z-index: 20; top: -80px; left: 16px; padding: 12px; background: var(--panel); color: var(--text); }
 .skip-link:focus { top: 12px; }
 .app { min-height: 100vh; display: grid; grid-template-columns: 224px minmax(0, 1fr); }
+.session-state { min-height: 100svh; display: grid; align-content: center; justify-items: center; gap: 16px; padding: 24px; }
 .sidebar { background: var(--sidebar-bg); color: var(--sidebar-text); position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; padding: 28px 18px 20px; }
 .brand { width: 156px; margin: 0 auto; }
 .brand-image { display: block; width: 156px; }
