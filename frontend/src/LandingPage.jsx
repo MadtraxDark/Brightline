@@ -193,13 +193,29 @@ export default function LandingPage() {
               Veja isso na prática <ArrowUpRight size={17} />
             </a>
           </div>
-          <div className="lp-benefits">
+          <div className="lp-difference-details">
+            <div className="lp-mobile-showcase" role="img" aria-label="Prévia ilustrativa do painel Brightline em um celular, com indicadores, lista de casos e navegação inferior.">
+              <div className="lp-phone">
+                <div className="lp-phone-island" />
+                <div className="lp-phone-screen">
+                  <div className="lp-phone-status"><span>9:41</span><span>●●●　▰</span></div>
+                  <div className="lp-phone-header"><span className="lp-phone-brand"><ShieldCheck size={15} /> Brightline</span><span className="lp-phone-avatar">DR</span></div>
+                  <div className="lp-phone-content">
+                    <span className="lp-phone-eyebrow">VISÃO GERAL</span>
+                    <h3>Bom dia, Dra. Ana</h3>
+                    <p>Veja o que precisa da sua atenção.</p>
+                    <div className="lp-phone-metrics"><div><strong>08</strong><span>Em aberto</span></div><div><strong>03</strong><span>Urgentes</span></div></div>
+                    <div className="lp-phone-list-title"><strong>Prioridade</strong><span>Ver todos</span></div>
+                    <div className="lp-phone-case"><i /><div><strong>Nódulo pulmonar</strong><span>TC de tórax · há 12 min</span></div><ArrowRight size={14} /></div>
+                    <div className="lp-phone-case"><i /><div><strong>Achado hepático</strong><span>RM abdome · há 38 min</span></div><ArrowRight size={14} /></div>
+                  </div>
+                  <div className="lp-phone-nav"><span>⌂<small>Início</small></span><span>▤<small>Casos</small></span><span>◷<small>Prazos</small></span><span>◎<small>Perfil</small></span></div>
+                </div>
+              </div>
+              <div className="lp-mobile-note"><Smartphone size={17} /><span>Uma experiência pensada para telas pequenas</span></div>
+            </div>
+            <div className="lp-benefits">
             {[
-              [
-                "Interface responsiva",
-                "O site se adapta à tela do seu celular, tablet ou computador, com navegação e conteúdo ajustados a cada dispositivo.",
-                Smartphone,
-              ],
               [
                 "Prioridade que orienta",
                 "Casos organizados por urgência e prazo para facilitar a revisão do que precisa de atenção primeiro.",
@@ -241,6 +257,7 @@ export default function LandingPage() {
                 </div>
               </article>
             ))}
+            </div>
           </div>
         </section>
         <section className="lp-human">
