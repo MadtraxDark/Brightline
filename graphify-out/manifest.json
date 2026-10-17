@@ -114,10 +114,10 @@
     "semantic_hash": "f45286ed90fce4127d07dd2cb05dccb3"
   },
   "README.md": {
-    "mtime": 1792249166.066884,
-    "seen": 1792249573.9815435,
-    "ast_hash": "35ee7070c347749f6f547bd51605a891",
-    "semantic_hash": "35ee7070c347749f6f547bd51605a891"
+    "mtime": 1792249959.9698422,
+    "seen": 1792249978.8938322,
+    "ast_hash": "97600736141a9b9afbc17dac0503d1b7",
+    "semantic_hash": ""
   },
   "backend/.github/commit-message-instructions.md": {
     "mtime": 1792247436.6804874,
@@ -160,5 +160,11 @@
     "seen": 1792249573.9815435,
     "ast_hash": "027b26ce53f46477cc6d008f915b6992",
     "semantic_hash": "027b26ce53f46477cc6d008f915b6992"
+  },
+  "docker-compose.yml": {
+    "mtime": 1792249946.6401596,
+    "seen": 1792249978.8938322,
+    "ast_hash": "fd40f5ab88f526eb058f678fdc43aa6d",
+    "semantic_hash": ""
   }
 }
