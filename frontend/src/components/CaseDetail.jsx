@@ -12,7 +12,7 @@ import UrgencyBadge from "./UrgencyBadge.jsx";
 function goBack(navigate) {
   const idx = window.history.state?.idx;
   if (typeof idx === "number" && idx > 0) navigate(-1);
-  else navigate("/");
+  else navigate("/home");
 }
 
 export default function CaseDetail() {
@@ -47,7 +47,7 @@ export default function CaseDetail() {
     return (
       <article className="panel detail">
         <p>Caso não encontrado.</p>
-        <Link className="back-button" to="/">
+        <Link className="back-button" to="/home">
           <ArrowLeft size={17} aria-hidden="true" /> Voltar à fila
         </Link>
       </article>
