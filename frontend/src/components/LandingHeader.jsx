@@ -6,7 +6,7 @@ import "../styles/header.css";
 const links = [
   ["Início", "#produto"], ["O produto", "#demonstracao"],
   ["Como funciona", "#como-funciona"], ["Diferenciais", "#diferenciais"],
-  ["Dúvidas", "#duvidas"], ["Acessar painel", "/app"],
+  ["Dúvidas", "#duvidas"], ["Acessar painel", "/login"],
 ];
 
 export default function LandingHeader() {
@@ -63,11 +63,11 @@ export default function LandingHeader() {
     <div className="bl-header-bar">
       <a className="bl-header-logo" href="/" aria-label="Brightline — início"><img src={logo} alt="Brightline" width="146" /></a>
       <nav className="bl-desktop-nav" aria-label="Navegação do site">
-        {links.map(([label, href]) => <a key={href} href={href} className={href === "/app" ? "bl-panel-link" : undefined} aria-current={activeSection === href ? "location" : undefined}>
-          {href === "/app" ? <>{label}<ArrowUpRight size={15} aria-hidden="true" /></> : <><span className="bl-nav-dot" aria-hidden="true" /><span className="bl-nav-roll"><span>{label}</span><span aria-hidden="true">{label}</span></span></>}
+        {links.map(([label, href]) => <a key={href} href={href} className={href === "/login" ? "bl-panel-link" : undefined} aria-current={activeSection === href ? "location" : undefined}>
+          {href === "/login" ? <>{label}<ArrowUpRight size={15} aria-hidden="true" /></> : <><span className="bl-nav-dot" aria-hidden="true" /><span className="bl-nav-roll"><span>{label}</span><span aria-hidden="true">{label}</span></span></>}
         </a>)}
       </nav>
-      <a className="bl-panel-link bl-mobile-panel" href="/app" aria-label="Acessar painel">Painel <ArrowUpRight size={14} aria-hidden="true" /></a>
+      <a className="bl-panel-link bl-mobile-panel" href="/login" aria-label="Acessar painel">Painel <ArrowUpRight size={14} aria-hidden="true" /></a>
       <button className="bl-menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="site-menu" aria-label="Abrir menu" onClick={() => setMenuOpen(true)}><span>Menu</span><Plus size={18} aria-hidden="true" /></button>
     </div>
     <dialog id="site-menu" className="bl-menu-dialog" ref={dialogRef} aria-label="Menu de navegação" data-lenis-prevent onClose={() => setMenuOpen(false)}>
