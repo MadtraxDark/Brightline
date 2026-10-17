@@ -93,3 +93,12 @@
   --focus: #596D93;
   --overlay-shadow: #101A2D26;
 }
+
+:root { --brand-gold: #F5C434; }
+
+:root {
+  --scrollbar-size: 10px;
+  --scrollbar-track: var(--bg);
+  --scrollbar-thumb: #7D899B;
+  --scrollbar-thumb-hover: #526078;
+}

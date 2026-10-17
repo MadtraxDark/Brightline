@@ -12,6 +12,7 @@ A direção visual vigente está em DESIGN.md. O pedido de 17/10/2026, acompanha
 - Não inventar séries históricas, gráficos ou dados clínicos.
 - Não adicionar dependências de componentes ou gráficos para alterações visuais.
 - Controles com foco visível, nomes acessíveis e estados de envio e erro.
+- Barras de rolagem seguem o padrão global: discretas, com indicador arredondado, trilho neutro e realce no hover. Usar os tokens `--scrollbar-*`; não criar estilos isolados por componente. Em superfícies escuras, ajustar apenas os tokens locais. Preservar rolagem nativa no toque, navegação por teclado e alto contraste. Nunca ocultar barras necessárias; a lateral continua sem rolagem horizontal.
 
 ## Contrato assumido em `src/api.js`
 
