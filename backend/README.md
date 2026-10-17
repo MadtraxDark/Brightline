@@ -1,40 +1,26 @@
 # Backend Brightline
 
-API FastAPI com **Supabase Postgres, Auth e Storage**. O backend usa a chave publicável e o JWT de cada usuário; não usa banco local nem chave administrativa.
+API FastAPI com PostgreSQL local em Docker. Cadastro, login e sessões são gerenciados pela própria API; os dados ficam no banco `brightline` e os arquivos binários são armazenados em tabelas PostgreSQL.
 
-## Configuração
+## Executar
 
-Na raiz do repositório, copie `.env.example` para `.env` se ainda não houver configuração e preencha `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`. As variáveis `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` também são aceitas. O `.env` sempre é carregado a partir da raiz, independentemente do diretório de execução.
-
-Aplique a migração descrita no [guia do Supabase](../supabase/README.md) antes de usar as rotas de dados. A inicialização da API não executa DDL nem cria usuários.
-
-## Executar no PowerShell
-
-A partir da raiz:
+Na raiz do repositório:
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --reload
+docker compose up --build -d
+docker compose exec api python -m backend.migrate
 ```
 
-Caso esteja dentro de `backend`, use o mesmo ambiente da raiz:
+A API fica em `http://localhost:8080`; Swagger em `/docs`. Cadastre um usuário por `/auth/signup` e faça login por `/auth/login`. Envie `Authorization: Bearer <access_token>` nas rotas protegidas.
 
-```powershell
-..\.venv\Scripts\python.exe -m uvicorn app.main:app --reload
-```
-
-Abra [Swagger](http://localhost:8000/docs). Cadastre-se por `/auth/signup`, confirme o e-mail se necessário e faça login em `/auth/login`. Informe o `access_token` no botão **Authorize**. `/auth/me` consulta o usuário; `/ready` verifica também as tabelas.
+Para desenvolvimento local fora do Docker, configure `DATABASE_URL` para um PostgreSQL acessível e instale `requirements.txt` antes de iniciar Uvicorn.
 
 ## Persistência e autorização
 
-- Cada conta possui seus laudos, extrações, casos, eventos e relógio.
-- RLS restringe leitura à conta dona dos dados. Escritas de domínio passam por uma RPC transacional, que verifica `auth.uid()` e as transições permitidas.
-- O schema privado não deve ser exposto na Data API.
-- Arquivos ficam no bucket privado `brightline-files`, na pasta do ID do usuário, com limite de 10 MB. A API gera nomes e URLs de leitura com validade de 60 segundos.
-- O reset usa os dados persistidos no Supabase; a importação substitui somente o conjunto da conta autenticada.
-- As notificações são eventos simulados. Nenhuma mensagem real é enviada.
+- Laudos, extrações, casos, eventos e relógio pertencem à conta local autenticada.
+- Arquivos JSON, PNG, JPEG e PDF ficam no PostgreSQL; links de leitura expiram em 60 segundos.
+- A tabela `dataset_images` guarda o conjunto NIH ChestX-ray14 usado pelo treinador TensorFlow.
+- `docker compose down` mantém os dados; `docker compose down -v` apaga o volume PostgreSQL.
+- Notificações são eventos simulados. Nenhuma mensagem real é enviada.
 
-O frontend deve guardar e renovar a sessão com Supabase Auth. OAuth, MFA e recuperação de senha são recursos do provedor, mas seus fluxos de interface ainda não foram implementados. Não existe frontend neste repositório.
-
-Rotas, comandos de importação e instruções de testes estão no [README principal](../README.md).
+Veja o [README principal](../README.md) para rotas, importação e execução do modelo.

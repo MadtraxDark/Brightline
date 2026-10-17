@@ -9,6 +9,9 @@ COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/app ./backend/app
+COPY backend/migrations ./backend/migrations
+COPY backend/migrate.py ./backend/migrate.py
+COPY backend/import_nih_images.py ./backend/import_nih_images.py
 
 EXPOSE 8000
 
