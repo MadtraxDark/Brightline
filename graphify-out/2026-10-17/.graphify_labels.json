@@ -1,5 +1,8 @@
 {
-  "0": "Backend API routes",
+  "1": "Data processing pipeline",
+  "4": "Product architecture and safeguards",
+  "5": "AI pipeline evaluation",
+  "6": "API models and schemas",
   "10": "Graphify project instructions",
   "11": "Backend package",
   "12": "Commit conventions"
