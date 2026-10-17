@@ -1,13 +1,29 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import LandingPage from "./LandingPage.jsx";
 import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
 import DashboardShell from "./components/DashboardShell.jsx";
-import { isAuthenticated } from "./lib/session.js";
+import { validateSession } from "./lib/session.js";
 
 function RequireAuth({ children }) {
   const location = useLocation();
-  if (!isAuthenticated(sessionStorage)) {
+  const [status, setStatus] = useState("loading");
+  const [error, setError] = useState("");
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    let active = true;
+    setStatus("loading");
+    validateSession(sessionStorage).then((user) => {
+      if (active) setStatus(user ? "authenticated" : "anonymous");
+    }).catch((reason) => {
+      if (active) { setError(reason.message); setStatus("error"); }
+    });
+    return () => { active = false; };
+  }, [attempt]);
+  if (status === "loading") return <div className="session-state" role="status">Verificando sua sessão…</div>;
+  if (status === "error") return <div className="session-state"><p role="alert">{error}</p><button className="btn-primary" onClick={() => setAttempt((value) => value + 1)}>Tentar novamente</button></div>;
+  if (status === "anonymous") {
     return <Navigate to="/login" replace state={{ from: `${location.pathname}${location.search}` }} />;
   }
   return children;

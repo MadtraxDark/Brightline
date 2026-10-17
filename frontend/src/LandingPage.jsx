@@ -53,7 +53,7 @@ const questions = [
   ],
   [
     "Posso experimentar o produto?",
-    `Sim. O botão “Explorar a demonstração” leva ao login, com opção de cadastro demonstrativo. Você encontra ${reports.length} laudos sintéticos e ${examples.length} casos para revisar evidências, confirmar leituras e registrar condutas. Nenhuma conta real é criada e seus dados não são enviados.`,
+    `Sim. O botão “Explorar a demonstração” leva ao login, com opção de criar sua conta. Você encontra ${reports.length} laudos sintéticos e ${examples.length} casos para revisar evidências, confirmar leituras e registrar condutas. O cadastro salva sua conta para os próximos acessos; os laudos da demonstração continuam fictícios.`,
   ],
   [
     "O que aparece em Não sinalizados?",

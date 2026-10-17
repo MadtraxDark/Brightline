@@ -2,6 +2,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE TABLE IF NOT EXISTS users (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   email text NOT NULL UNIQUE,
+  name text NOT NULL DEFAULT '',
   password_hash text NOT NULL,
   created_at timestamptz NOT NULL DEFAULT now()
 );
@@ -10,7 +11,8 @@ CREATE TABLE IF NOT EXISTS sessions (
   user_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   access_hash text NOT NULL UNIQUE,
   refresh_hash text NOT NULL UNIQUE,
-  expires_at timestamptz NOT NULL
+  expires_at timestamptz NOT NULL,
+  refresh_expires_at timestamptz NOT NULL DEFAULT (now() + interval '7 days')
 );
 CREATE TABLE IF NOT EXISTS reports (
   owner_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
