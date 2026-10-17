@@ -1,12 +1,19 @@
 # Graph Report - Brightline  (2026-10-17)
 
 ## Corpus Check
-- Corpus is ~12,605 words - fits in a single context window. You may not need a graph.
+- 24 files · ~12,819 words
+- Verdict: corpus is large enough that graph structure adds value.
+- Unclassified: 5 file(s) not represented in the graph (top: (none) 3, .example 1, .conf 1)
 
 ## Summary
-- 226 nodes · 476 edges · 13 communities (10 shown, 3 thin omitted)
+- 226 nodes · 480 edges · 12 communities (9 shown, 3 thin omitted)
 - Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 32 edges (avg confidence: 0.88)
-- Token cost: unavailable (agent usage counts were not exposed)
+- Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `d06807d1`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Backend API routes
@@ -18,7 +25,6 @@
 - API models and schemas
 - Supabase schema and commands
 - Migration verification
-- Runtime dependencies
 - Graphify project instructions
 - Commit conventions
 
@@ -50,10 +56,10 @@
 - None detected.
 
 ## Hyperedges (group relationships)
-- **Offline data preparation pipeline** — ia_dados_offline_cache, prompts_extraction_rules, data_revisao_laudos_synthetic_reports, ia_dados_supabase_import [INFERRED 0.85]
 - **Supabase account security model** — supabase_readme_rls_isolation, supabase_readme_private_storage, supabase_readme_supabase_auth [EXTRACTED 1.00]
+- **Offline data preparation pipeline** — ia_dados_offline_cache, prompts_extraction_rules, data_revisao_laudos_synthetic_reports, ia_dados_supabase_import [INFERRED 0.85]
 
-## Communities (13 total, 3 thin omitted)
+## Communities (12 total, 3 thin omitted)
 
 ### Community 0 - "Backend API routes"
 Cohesion: 0.09
@@ -72,8 +78,8 @@ Cohesion: 0.15
 Nodes (4): ApiClient, SupabaseApiTests, transport(), handler()
 
 ### Community 4 - "Product architecture and safeguards"
-Cohesion: 0.12
-Nodes (14): Eurorad educational case references, Radiologia Brasileira educational reference, Synthetic imaging report review dataset, Extraction evidence validation, Offline extraction and evaluation cache, Import prepared data into Supabase, Literal evidence requirement, Radiology finding extraction rules (+6 more)
+Cohesion: 0.11
+Nodes (20): FastAPI backend, FastAPI dependency, HTTPX dependency, python-dotenv dependency, Uvicorn dependency, Eurorad educational case references, Radiologia Brasileira educational reference, Synthetic imaging report review dataset (+12 more)
 
 ### Community 5 - "AI pipeline evaluation"
 Cohesion: 0.25
@@ -91,12 +97,8 @@ Nodes (8): brightline_private.build_cases(), cases_owner_order, events_case_orde
 Cohesion: 0.18
 Nodes (5): data, db, invalid, report, ../../.validation/node_modules/@electric-sql/pglite/dist/index.js
 
-### Community 9 - "Runtime dependencies"
-Cohesion: 0.53
-Nodes (6): FastAPI backend, FastAPI dependency, HTTPX dependency, python-dotenv dependency, Uvicorn dependency, Project runtime dependencies
-
 ## Knowledge Gaps
-- **9 isolated node(s):** `../../.validation/node_modules/@electric-sql/pglite/dist/index.js`, `Graphify workflow instructions`, `Extraction evidence validation`, `Commit message instructions`, `Eurorad educational case references` (+4 more)
+- **9 isolated node(s):** `../../.validation/node_modules/@electric-sql/pglite/dist/index.js`, `Graphify workflow instructions`, `Commit message instructions`, `Eurorad educational case references`, `Radiologia Brasileira educational reference` (+4 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 65 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -107,7 +109,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.090) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `SupabaseApiTests` (e.g. with `Settings` and `SupabaseGateway`) actually correct?**
   _`SupabaseApiTests` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `../../.validation/node_modules/@electric-sql/pglite/dist/index.js`, `Graphify workflow instructions`, `Extraction evidence validation` to the rest of the system?**
+- **What connects `../../.validation/node_modules/@electric-sql/pglite/dist/index.js`, `Graphify workflow instructions`, `Commit message instructions` to the rest of the system?**
   _9 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Backend API routes` be split into smaller, more focused modules?**
   _Cohesion score 0.09098639455782313 - nodes in this community are weakly interconnected._
