@@ -7,10 +7,10 @@
   "5": "session.js",
   "6": "main.py",
   "7": "App.jsx",
-  "8": "scripts",
+  "8": "frontend/package.json",
   "9": "002_dataset_images.sql",
   "11": "report_analysis.py",
-  "13": "reset",
+  "13": "ref_node_assert",
   "14": "init.sql",
   "15": "scripts",
   "16": "dev.mjs",
@@ -34,8 +34,6 @@
   "34": "verify-profile.js",
   "35": "verify-registration.js",
   "36": "verify-sidebar.js",
-  "37": "frontend/package.json",
-  "38": "dependencies",
-  "39": "dashboardApi.js",
-  "40": "main.jsx"
+  "37": "RadiographClassifier.jsx",
+  "39": "dashboardApi.js"
 }

@@ -1,17 +1,17 @@
 # Graph Report - Brightline  (2026-10-17)
 
 ## Corpus Check
-- 103 files · ~88,527 words
+- 104 files · ~89,314 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 16 file(s) not represented in the graph (top: (none) 4, .css 4, .keras 2)
+- Unclassified: 17 file(s) not represented in the graph (top: .css 5, (none) 4, .keras 2)
 
 ## Summary
-- 680 nodes · 1355 edges · 41 communities (25 shown, 16 thin omitted)
+- 692 nodes · 1379 edges · 39 communities (23 shown, 16 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `54aad549`
+- Built from commit: `a9b8a51d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -24,12 +24,12 @@
 - session.js
 - main.py
 - App.jsx
-- scripts
+- frontend/package.json
 - 002_dataset_images.sql
 - Graphify project instructions
 - report_analysis.py
 - Commit conventions
-- reset
+- ref_node_assert
 - init.sql
 - scripts
 - dev.mjs
@@ -45,21 +45,19 @@
 - NIH_TENSORFLOW.md
 - lib/evaluate.js
 - LANDING.md
-- frontend/package.json
-- dependencies
+- RadiographClassifier.jsx
 - dashboardApi.js
-- main.jsx
 
 ## God Nodes (most connected - your core abstractions)
 1. `db()` - 23 edges
-2. `react` - 18 edges
+2. `react` - 19 edges
 3. `Shell()` - 18 edges
 4. `CaseDetail()` - 18 edges
 5. `analyze_report()` - 17 edges
 6. `scripts` - 15 edges
 7. `createStore()` - 15 edges
 8. `PipelineTests` - 14 edges
-9. `lucide-react` - 13 edges
+9. `lucide-react` - 14 edges
 10. `selectCases()` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -77,11 +75,11 @@
 ## Import Cycles
 - None detected.
 
-## Communities (41 total, 16 thin omitted)
+## Communities (39 total, 16 thin omitted)
 
 ### Community 0 - "engine.test.js"
-Cohesion: 0.07
-Nodes (41): getStats(), listCases(), listMissed(), acknowledge(), advance(), clone(), currentTarget(), getMissed() (+33 more)
+Cohesion: 0.09
+Nodes (27): acknowledge(), advance(), clone(), loadCases(), OPEN_FOR_ESCALATION, registerAction(), replaceCase(), requireCase() (+19 more)
 
 ### Community 1 - "cal.DESIGN.md"
 Cohesion: 0.05
@@ -97,31 +95,31 @@ Nodes (33): get_settings(), Settings, _extract_report(), lifespan(), load_report
 
 ### Community 4 - "Extração e avaliação do Brightline"
 Cohesion: 0.08
-Nodes (22): API Brightline, Executar, Persistência, Análise de laudos, Extração, privacidade e fila, Requisição, Resposta, Arquivos (+14 more)
+Nodes (23): API Brightline, Executar, Persistência, Análise de laudos, Classificação de imagem independente, Extração, privacidade e fila, Requisição, Resposta (+15 more)
 
 ### Community 5 - "session.js"
-Cohesion: 0.12
-Nodes (17): App(), RequireAuth(), Login(), onSubmit(), Register(), cases, PROFILE_KEY, isAuthenticated() (+9 more)
+Cohesion: 0.21
+Nodes (14): App(), RequireAuth(), Login(), onSubmit(), Register(), PROFILE_KEY, isAuthenticated(), login() (+6 more)
 
 ### Community 6 - "main.py"
 Cohesion: 0.06
-Nodes (44): acknowledge(), action(), advance(), analyze_report(), authenticated(), case_detail(), cases(), clock() (+36 more)
+Nodes (45): acknowledge(), action(), advance(), analyze_report(), authenticated(), case_detail(), cases(), classify_radiograph() (+37 more)
 
 ### Community 7 - "App.jsx"
-Cohesion: 0.07
-Nodes (47): acknowledge(), advance(), getCase(), registerAction(), crumb(), Overview(), Shell(), SUMMARY (+39 more)
+Cohesion: 0.06
+Nodes (65): acknowledge(), advance(), getCase(), getStats(), listCases(), listMissed(), registerAction(), reset() (+57 more)
 
-### Community 8 - "scripts"
-Cohesion: 0.13
-Nodes (15): scripts, build, check:data, dev, prebuild, preview, test, test:engine (+7 more)
+### Community 8 - "frontend/package.json"
+Cohesion: 0.04
+Nodes (38): dependencies, @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, gsap, lenis, lucide-react, react, react-dom (+30 more)
 
 ### Community 11 - "report_analysis.py"
 Cohesion: 0.07
 Nodes (12): compare(), find_text_classes(), infer(), initialize_model(), laterality(), load_model(), _model(), read_metrics() (+4 more)
 
-### Community 13 - "reset"
-Cohesion: 0.24
-Nodes (4): reset(), ErrorBoundary, ErrorFallback(), resetDemo()
+### Community 13 - "ref_node_assert"
+Cohesion: 0.23
+Nodes (3): cases, splitEvidence(), joined()
 
 ### Community 14 - "init.sql"
 Cohesion: 0.21
@@ -148,8 +146,8 @@ Cohesion: 0.29
 Nodes (6): Cobertura dos casos difíceis, Composição, Inventário para revisão do gabarito, Referências consultadas, Revisão dos laudos sintéticos Brightline, Semelhanças para revisar com Bruno
 
 ### Community 20 - "LandingPage.jsx"
-Cohesion: 0.14
-Nodes (14): benefits, BenefitsCarousel(), LandingHeader(), links, examples, LandingPage(), ProductPreview(), questions (+6 more)
+Cohesion: 0.15
+Nodes (13): benefits, BenefitsCarousel(), LandingHeader(), links, examples, LandingPage(), ProductPreview(), questions (+5 more)
 
 ### Community 21 - "scripts/evaluate.js"
 Cohesion: 0.18
@@ -163,25 +161,17 @@ Nodes (5): STORAGE_KEY, fakeTimers(), fixtureData, fixtureDir, openStore()
 Cohesion: 0.60
 Nodes (5): byReportId(), computeEvaluation(), listItem(), normalizeName(), sameFinding()
 
-### Community 37 - "frontend/package.json"
-Cohesion: 0.20
-Nodes (9): devDependencies, vite, @vitejs/plugin-react, name, private, type, version, vite (+1 more)
-
-### Community 38 - "dependencies"
-Cohesion: 0.22
-Nodes (9): dependencies, @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, gsap, lenis, lucide-react, react, react-dom (+1 more)
+### Community 37 - "RadiographClassifier.jsx"
+Cohesion: 0.28
+Nodes (7): API_URL, LABELS, PT, RadiographClassifier(), classify(), login(), readError()
 
 ### Community 39 - "dashboardApi.js"
-Cohesion: 0.31
-Nodes (8): closeCase(), confirmRead(), dashboardCase(), getCase(), getCases(), getStats(), NETWORK_ERROR, registerAction()
-
-### Community 40 - "main.jsx"
-Cohesion: 0.29
-Nodes (3): @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, react-dom
+Cohesion: 0.32
+Nodes (7): closeCase(), confirmRead(), dashboardCase(), getCase(), getStats(), NETWORK_ERROR, registerAction()
 
 ## Knowledge Gaps
 - **7 isolated node(s):** `Graphify workflow instructions`, `Commit message instructions`, `FastAPI dependency`, `HTTPX dependency`, `python-dotenv dependency` (+2 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 279 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 282 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
@@ -194,10 +184,10 @@ _Questions this graph is uniquely positioned to answer:_
 - **What connects `Graphify workflow instructions`, `Commit message instructions`, `FastAPI dependency` to the rest of the system?**
   _7 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `engine.test.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._
-- **Why does `Extração, privacidade e fila` connect `Extração e avaliação do Brightline` to `main.py`?**
+  _Cohesion score 0.08961593172119488 - nodes in this community are weakly interconnected._
+- **Why does `lucide-react` connect `App.jsx` to `RadiographClassifier.jsx`, `session.js`, `frontend/package.json`, `Evaluation.jsx`, `LandingPage.jsx`?**
   _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Should `cal.DESIGN.md` be split into smaller, more focused modules?**
   _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
-- **Why does `lucide-react` connect `App.jsx` to `Evaluation.jsx`, `session.js`, `LandingPage.jsx`, `frontend/package.json`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Why does `Extração, privacidade e fila` connect `Extração e avaliação do Brightline` to `main.py`?**
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._

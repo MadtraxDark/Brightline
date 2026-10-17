@@ -1,166 +1,33 @@
-# Instruções para mensagens de commit
+﻿# Instruções para mensagens de commit
 
-Gere mensagens de commit em português do Brasil, com linguagem profissional,
-objetiva e tecnicamente precisa.
+Gere uma única mensagem de commit em português do Brasil, profissional, objetiva e tecnicamente precisa. Responda somente com a mensagem pronta para uso, sem aspas, explicações ou bloco de código.
 
-Baseie a mensagem exclusivamente nas alterações apresentadas e no contexto
-fornecido pelo repositório. Não invente comportamento, motivação, requisitos,
-testes executados, resultados, issues ou informações que não possam ser
-inferidas com segurança.
+Analise todo o diff disponível (arquivos adicionados, modificados e removidos) e o contexto do repositório. Primeiro identifique a capacidade ou comportamento principal que foi adicionado, corrigido ou alterado; depois considere refatorações, remoções e limpeza como mudanças secundárias. O cabeçalho deve descrever o objetivo principal e seu efeito para o usuário ou sistema. Não resuma um commit funcional como simples limpeza, remoção de código ou manutenção.
 
-Antes de escolher o tipo e o resumo, analise o diff completo disponível, incluindo
-arquivos adicionados, modificados e removidos. Para alterações em vários arquivos,
-identifique a capacidade ou objetivo central que conecta as mudanças e descreva
-esse resultado no commit. Não reduza uma mudança funcional ou de infraestrutura a
-`chore` apenas porque ela envolve configuração, dependências ou vários arquivos.
-Use `chore` somente quando não houver um tipo mais específico aplicável.
+## Formato e nível de detalhe
 
-Quando o diff tiver mais de um arquivo ou incluir uma nova funcionalidade, gere um
-corpo conciso com 2 a 5 itens explicando as principais mudanças e seus efeitos.
-Nunca use resumos genéricos como `remove seções vazias de alterações de código`,
-`faz ajustes diversos` ou equivalentes se o diff permitir identificar o objetivo
-real.
+Use Conventional Commits:
 
-## Formato
+- `tipo(escopo): resumo` (escopo opcional)
+- `tipo(escopo)!: resumo` para mudanças incompatíveis
 
-Siga Conventional Commits:
+Escolha o tipo pelo propósito principal: `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `style`, `build`, `ci`, `chore` ou `revert`. Use `feat` para funcionalidade nova e `fix` para corrigir comportamento incorreto. Não classifique automaticamente mudanças de configuração ou dependências como `chore`; considere o efeito real.
 
-`tipo(escopo): resumo`
+Para qualquer mudança funcional, alteração em mais de um arquivo ou mudança que atravesse frontend, backend e documentação, escreva um corpo detalhado com 3 a 6 itens. Não entregue só o cabeçalho nesses casos. Explique as capacidades adicionadas, como o fluxo funciona, validações e tratamento de erros, impactos observáveis, documentação e limitações relevantes, quando estiverem presentes no diff. Cada item deve trazer informação concreta; agrupe por intenção e não faça uma lista arquivo por arquivo. Para mudanças realmente triviais em um único arquivo, o corpo pode ser omitido.
 
-O escopo é opcional:
+Exemplo de nível de detalhe esperado para uma funcionalidade que adiciona classificação de radiografias:
 
-`tipo: resumo`
+feat(radiografias): adiciona classificação exploratória de imagens
 
-Para breaking changes:
+- Cria uma tela para autenticar, selecionar uma radiografia e consultar as probabilidades das 14 classes do modelo NIH
+- Adiciona uma rota protegida que valida formato e tamanho da imagem e executa a inferência sem persistir o arquivo
+- Apresenta probabilidades, corte exploratório, versão do modelo e aviso de revisão profissional
+- Documenta a chamada da API e esclarece que o resultado é experimental e não constitui diagnóstico
 
-`tipo(escopo)!: resumo`
+Use o exemplo apenas como referência de estrutura e detalhe. Nunca copie fatos dele se o diff não os comprovar.
 
-## Tipo
+Use um escopo curto quando o componente afetado estiver claro. O resumo deve começar com um verbo de ação, explicar a mudança principal, ficar abaixo de 72 caracteres sempre que possível e não terminar com ponto. Evite resumos vagos e emojis.
 
-Escolha o tipo de acordo com o propósito principal da alteração, e não apenas
-com os arquivos modificados:
+Não invente comportamento, motivação, requisitos, testes executados, resultados ou informações ausentes. Mencione testes alterados quando isso fizer parte do diff, mas nunca afirme que testes foram executados ou passaram sem evidência. Para breaking changes, acrescente `BREAKING CHANGE:` e descreva o impacto somente quando puder ser determinado pelo diff.
 
-* `feat`: adiciona ou expande uma funcionalidade
-* `fix`: corrige comportamento incorreto ou defeito
-* `refactor`: reorganiza o código sem alterar seu comportamento observável
-* `perf`: altera o código especificamente para melhorar desempenho
-* `test`: adiciona, corrige ou reorganiza exclusivamente testes
-* `docs`: altera exclusivamente documentação
-* `style`: altera apenas formatação ou estilo sem mudar comportamento
-* `build`: altera sistema de build, empacotamento ou dependências de build
-* `ci`: altera pipelines, workflows ou automações de CI/CD
-* `chore`: manutenção que não se enquadra melhor nos tipos anteriores
-* `revert`: reverte uma alteração anterior
-
-Quando houver diferentes tipos de mudança no mesmo diff, escolha aquele que
-melhor representa a intenção e o impacto principal do commit.
-
-Não classifique automaticamente alterações em arquivos de configuração como
-`chore`; considere o efeito real da mudança.
-
-## Escopo
-
-Use um escopo somente quando ele puder ser identificado com clareza e tornar
-a mensagem mais informativa.
-
-Prefira nomes curtos, estáveis e relacionados ao domínio, módulo ou componente
-afetado, como `auth`, `api`, `crawler`, `config`, `docker` ou `tests`.
-
-Considere os escopos usados recentemente pelo repositório para manter
-consistência.
-
-Não invente um escopo quando a mudança atingir várias áreas sem um componente
-principal claro.
-
-## Resumo
-
-O resumo deve:
-
-* estar em português do Brasil
-* começar com um verbo de ação, como `adiciona`, `corrige`, `remove`, `ajusta`,
-  `atualiza`, `impede`, `simplifica` ou `refatora`
-* descrever a intenção principal e o efeito concreto da alteração
-* ser específico e compreensível sem consultar imediatamente o diff
-* ter no máximo 72 caracteres sempre que possível
-* não terminar com ponto
-* não usar emojis
-* evitar termos vagos como `melhora`, `ajustes`, `mudanças`, `atualizações`,
-  `correções diversas` ou `melhorias gerais` sem explicar o objeto da mudança
-
-Prefira:
-
-`fix(auth): impede renovação de sessão com token expirado`
-
-em vez de:
-
-`fix(auth): melhora autenticação`
-
-## Corpo
-
-Use corpo somente quando ele acrescentar informação relevante que não cabe no
-resumo.
-
-Para mudanças pequenas e autoexplicativas, gere apenas o cabeçalho.
-
-Para mudanças não triviais, explique de forma concisa:
-
-* as alterações funcionais ou técnicas mais relevantes
-* impactos observáveis no comportamento
-* regras de negócio afetadas
-* mudanças de compatibilidade, configuração ou infraestrutura
-* riscos ou efeitos colaterais relevantes quando forem evidentes
-* o motivo da alteração somente quando puder ser inferido com segurança
-
-Agrupe alterações relacionadas pela intenção ou impacto. Não descreva o diff
-arquivo por arquivo e não narre detalhes de implementação sem relevância para
-o histórico.
-
-Quando itens forem mais claros que parágrafos, use no máximo 5 itens iniciados
-por `-`.
-
-Não repita no corpo o que já está suficientemente explicado no resumo.
-
-## Testes e validações
-
-Mencione testes adicionados, removidos ou modificados quando isso fizer parte
-das alterações.
-
-Não afirme que testes foram executados, passaram, falharam ou que uma
-validação foi realizada apenas porque existem arquivos de teste no diff.
-
-Não invente resultados de execução.
-
-## Breaking changes
-
-Quando houver incompatibilidade observável, use `!` antes de `:`:
-
-`feat(api)!: altera contrato de autenticação`
-
-Inclua também um footer quando houver informação suficiente para explicar o
-impacto:
-
-`BREAKING CHANGE: descreva objetivamente o que deixou de ser compatível`
-
-Descreva a migração necessária somente quando ela puder ser determinada a
-partir das alterações. Não invente procedimentos de migração.
-
-## Consistência e precisão
-
-Use commits recentes do repositório como referência para nomenclatura de
-escopos e estilo, mas não copie seu conteúdo nem preserve padrões que
-conflitem com estas instruções.
-
-Priorize o significado da mudança sobre a lista de arquivos modificados.
-
-Não inclua números de issue, tickets, pull requests, autores, coautores,
-revisores ou outras metainformações.
-
-Não invente contexto ausente para tornar a mensagem aparentemente mais
-completa.
-
-## Saída
-
-Retorne somente uma única mensagem de commit pronta para uso.
-
-Não inclua aspas, explicações sobre a análise, alternativas, comentários ou
-blocos de código Markdown.
+Consulte commits recentes para manter consistência de escopos, formato e nível de detalhe, sem copiar seu conteúdo nem repetir padrões que conflitem com estas regras. Não inclua issues, tickets, autores, coautores ou revisores.
