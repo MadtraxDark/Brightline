@@ -20,11 +20,13 @@ services:
       - brightline
   api:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-brightline}:${POSTGRES_PASSWORD:-REMOVED_CREDENTIAL}@db:5432/${POSTGRES_DB:-brightline}
       BRIGHTLINE_CORS_ORIGINS: ${BRIGHTLINE_CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash-lite}
     depends_on:
       db:
         condition: service_healthy
