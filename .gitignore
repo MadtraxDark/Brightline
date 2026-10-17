@@ -27,9 +27,15 @@ ENV/
 # Local source data and generated extraction cache
 /data/reports.json
 /data/extractions_cache.json
+/backend/data/reports.json
+/backend/data/extractions_cache.json
 
 # Editor and operating system files
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+!.vscode/
+!.vscode/settings.json
+!backend/.vscode/
+!backend/.vscode/settings.json
