@@ -1,0 +1,51 @@
+async page => {
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  await page.goto('http://localhost:5173/app');
+  await page.setViewportSize({width:1440,height:1000});
+  const caseButton = page.getByRole('button', {name:'Nódulo pulmonar suspeito', exact:true});
+  await caseButton.waitFor();
+  check(await page.getByRole('article').count() === 0, 'O detalhe não deve ocupar a visão geral');
+  await page.getByRole('searchbox').fill('nodulo');
+  check(await page.locator('tbody tr').count() === 2, 'Busca sem acentos');
+  await page.getByRole('button', {name:'Limpar busca'}).click();
+  await page.getByRole('combobox', {name:'Filtrar por prioridade'}).selectOption('critical');
+  check(await page.locator('tbody tr').count() === 2, 'Filtro de prioridade');
+  await page.getByRole('searchbox').fill('inexistente');
+  await page.getByRole('heading', {name:'Nenhum laudo encontrado'}).waitFor();
+  await page.getByRole('button', {name:'Limpar filtros'}).click();
+  await caseButton.focus();
+  await page.keyboard.press('Enter');
+  await page.getByRole('heading', {name:'Nódulo pulmonar suspeito'}).waitFor();
+  check(!await page.getByRole('textbox', {name:'Ação realizada'}).isVisible(), 'Conduta deve ficar recolhida');
+  await page.getByRole('button', {name:/^Histórico/}).click();
+  await page.getByRole('heading', {name:'Histórico do caso'}).waitFor();
+  await page.getByRole('button', {name:'Conduta', exact:true}).click();
+  await page.getByRole('button', {name:'Confirmar leitura',exact:true}).click();
+  await page.getByRole('button', {name:'Leitura confirmada',exact:true}).waitFor();
+  await page.getByRole('textbox', {name:'Ação realizada'}).fill('Verificação da interface na demonstração.');
+  await page.getByRole('button', {name:'Registrar ação',exact:true}).click();
+  await page.waitForFunction(() => [...document.querySelectorAll('button')].some(b => b.textContent.trim() === 'Fechar caso' && !b.disabled));
+  await page.getByRole('button', {name:'Fechar caso',exact:true}).click();
+  await page.getByRole('button', {name:'Caso fechado',exact:true}).waitFor();
+  await page.getByRole('button', {name:/Simulação/}).click();
+  await page.getByRole('button', {name:'Resetar demo'}).click();
+  await caseButton.waitFor();
+  await page.getByRole('button', {name:'Fechar simulação'}).click();
+  await page.getByRole('button', {name:'Não sinalizados',exact:true}).click();
+  await page.waitForFunction(() => document.querySelectorAll('tbody tr').length === 1);
+  await page.getByRole('button', {name:'Visão geral',exact:true}).click();
+  await page.waitForFunction(() => document.querySelectorAll('tbody tr').length === 6);
+  for (const width of [1440,1024,390]) {
+    await page.setViewportSize({width,height:1000});
+    check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Overflow em ${width}`);
+    await page.screenshot({path:`artifacts/ui/saas-${width}.png`,fullPage:true});
+  }
+  await caseButton.click();
+  await page.getByRole('heading', {name:'Nódulo pulmonar suspeito'}).waitFor();
+  check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Overflow no detalhe mobile');
+  await page.screenshot({path:'artifacts/ui/saas-detail-mobile.png',fullPage:true});
+  await page.setViewportSize({width:1440,height:1000});
+  await page.screenshot({path:'artifacts/ui/saas-detail-desktop.png',fullPage:true});
+  await page.getByRole('button', {name:'Voltar aos laudos'}).click();
+  console.log('PASS: visão geral, busca, filtros, abertura por teclado, abas, fluxo clínico, simulação e layouts 1440/1024/390.');
+}
