@@ -32,10 +32,6 @@ ENV/
 # Local dependency validation sandbox
 .validation/
 
-# Local source data and generated extraction cache
-/backend/data/reports.json
-/backend/data/extractions_cache.json
-
 # Editor and operating system files
 .DS_Store
 Thumbs.db
