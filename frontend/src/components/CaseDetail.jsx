@@ -1,82 +1,138 @@
-import { useState } from "react";
-import { FileText, Sparkles, History, ClipboardCheck, ScanLine } from "lucide-react";
-import {
-  confidenceLabel,
-  formatOffset,
-  formatRemaining,
-  splitEvidence,
-  statusLabel,
-} from "../format.js";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowLeft, EyeOff } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { acknowledge, registerAction } from "../api.js";
+import { confidenceLabel, formatOffset, statusLabel } from "../format.js";
+import { formatRemaining } from "../lib/formatRemaining.js";
+import { splitEvidence } from "../lib/splitEvidence.js";
+import { selectCase } from "../store/selectors.js";
+import { useStore } from "../store/useStore.js";
 import UrgencyBadge from "./UrgencyBadge.jsx";
 
-export default function CaseDetail({ caseData, onRead, onRegister, onClose, onUpdated }) {
-  const [tab, setTab] = useState("report");
-  const [note, setNote] = useState("");
-  const [pending, setPending] = useState("");
-  const [formError, setFormError] = useState("");
+function goBack(navigate) {
+  const idx = window.history.state?.idx;
+  if (typeof idx === "number" && idx > 0) navigate(-1);
+  else navigate("/");
+}
 
-  if (!caseData) {
+export default function CaseDetail() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const cases = useStore((state) => state.cases);
+  const simNow = useStore((state) => state.simNow);
+  const reports = useStore((state) => state.reports);
+  const detail = useMemo(
+    () => selectCase({ cases, simNow, reports }, id),
+    [cases, simNow, reports, id],
+  );
+  const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
+  const [actionOpen, setActionOpen] = useState(false);
+  const [note, setNote] = useState("");
+  const [closeCase, setCloseCase] = useState(true);
+  const noteRef = useRef(null);
+  const openActionRef = useRef(null);
+
+  const status = detail?.case.status;
+
+  useEffect(() => {
+    if (status !== "read") setActionOpen(false);
+  }, [status]);
+
+  useEffect(() => {
+    if (actionOpen) noteRef.current?.focus();
+  }, [actionOpen]);
+
+  if (!detail) {
     return (
-      <div className="panel">
-        <div className="state-block">
-          <p className="empty">Selecione um caso na fila.</p>
-        </div>
-      </div>
+      <article className="panel detail">
+        <p>Caso não encontrado.</p>
+        <Link className="back-button" to="/">
+          <ArrowLeft size={17} aria-hidden="true" /> Voltar à fila
+        </Link>
+      </article>
     );
   }
 
-  const closed = caseData.status === "closed";
-  const read =
-    caseData.status === "read" || caseData.status === "action_recorded" || closed;
-  const acted = caseData.status === "action_recorded" || closed;
-  const evidence = splitEvidence(caseData.report_text, caseData.evidence);
+  const item = detail.case;
+  const reportText = detail.report?.text ?? item.text ?? "";
+  const evidence = splitEvidence(reportText, item.evidence);
+  const canConfirm = item.status === "notified" || item.status === "escalated";
+  const canRegister = item.status === "read";
+  const canClose = item.status === "action_taken";
+  const confirmReason = canConfirm
+    ? `Confirmando como ${item.current_target}`
+    : item.status === "closed"
+      ? "O caso já está fechado."
+      : "A leitura já foi confirmada.";
+  const registerReason = canRegister
+    ? ""
+    : item.status === "closed"
+      ? "O caso já está fechado."
+      : item.status === "action_taken"
+        ? "A ação já foi registrada."
+        : "Confirme a leitura antes de registrar a ação.";
 
-  async function run(name, action) {
-    setPending(name);
-    setFormError("");
+  async function run(action) {
+    setError("");
+    setPending(true);
     try {
       await action();
-      if (name === "action") setNote("");
-      await onUpdated(caseData.id);
-    } catch (error) {
-      setFormError(error.message || "A ação não foi registrada.");
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "A ação não foi registrada.");
     } finally {
-      setPending("");
+      setPending(false);
     }
   }
 
-  let readHint = "";
-  if (closed) readHint = "O caso já está fechado";
-  else if (read) readHint = "A leitura já foi confirmada";
+  function openAction() {
+    setNote("");
+    setCloseCase(true);
+    setError("");
+    setActionOpen(true);
+  }
 
-  let actionHint = "";
-  if (closed) actionHint = "O caso já está fechado";
-  else if (!read) actionHint = "Confirme a leitura antes";
-  else if (!note.trim()) actionHint = "Descreva a ação";
+  function submitAction(event) {
+    event.preventDefault();
+    if (!note.trim()) {
+      setError("Descreva a ação tomada.");
+      return;
+    }
+    run(async () => {
+      await registerAction(item.id, note, closeCase);
+      setNote("");
+      setActionOpen(false);
+    });
+  }
 
-  let closeHint = "";
-  if (closed) closeHint = "O caso já está fechado";
-  else if (!acted) closeHint = "Registre a ação antes";
+  function onActionKeyDown(event) {
+    if (event.key !== "Escape") return;
+    event.preventDefault();
+    setActionOpen(false);
+    openActionRef.current?.focus();
+  }
 
   return (
-    <article className="panel detail" aria-label="Detalhes do caso">
-      <div className="detail-topline"><span><FileText size={16} aria-hidden="true" /> Detalhes do achado</span><span>Laudo {caseData.id.toUpperCase().padStart(4, "0")}</span></div>
+    <article className="panel detail" aria-label="Detalhe do caso">
+      <button className="back-button" type="button" onClick={() => goBack(navigate)}>
+        <ArrowLeft size={17} aria-hidden="true" /> Voltar
+      </button>
       <header className="detail-title">
-        <h2>{caseData.finding_name}</h2>
-        <UrgencyBadge level={caseData.urgency} />
-        <p className="confidence">
-          Confiança da IA: {confidenceLabel(caseData.confidence)} · Prazo: {formatRemaining(caseData.time_remaining_hours).text}
-        </p>
+        <h2>{item.finding}</h2>
+        <UrgencyBadge level={item.urgency} />
+        <p className="confidence">Confiança da IA: {confidenceLabel(item.confidence)}</p>
       </header>
-      <div className="detail-tabs" role="group" aria-label="Seções do laudo">
-        <button type="button" aria-pressed={tab === "report"} onClick={() => setTab("report")}>Laudo</button>
-        <button type="button" aria-pressed={tab === "history"} onClick={() => setTab("history")}>Histórico <span className="count">{caseData.timeline.length}</span></button>
-        <button type="button" aria-pressed={tab === "action"} onClick={() => setTab("action")}>Conduta</button>
-      </div>
-      <div hidden={tab !== "report"}>
-      <div className="people"><div><span>Exame</span><strong><ScanLine size={15} aria-hidden="true" />{caseData.modality}</strong></div><div><span>Radiologista</span><strong>{caseData.radiologist}</strong></div><div><span>Solicitante</span><strong>{caseData.requesting_physician}</strong></div><div><span>Situação</span><strong>{statusLabel(caseData.status)}</strong></div></div>
+      <p className="detail-validate">A IA sugere. O médico valida.</p>
+      <p className="detail-meta">
+        {item.modality} · {item.radiologist} · {item.ordering_physician} · {formatRemaining(item.time_remaining_hours)} · {statusLabel(item.status)}
+      </p>
+      {item.flagged_by_radiologist ? null : (
+        <p className="detail-flag">
+          <EyeOff size={16} aria-hidden="true" /> Não sinalizado pelo radiologista
+        </p>
+      )}
 
-      <section className="report-section"><div className="section-heading"><h3><FileText size={17} aria-hidden="true" /> Laudo do exame</h3><span>Trecho em destaque: evidência da IA</span></div>
+      <h3 className="section-title">Laudo</h3>
       <p className="report">
         {evidence.found ? (
           <>
@@ -85,93 +141,90 @@ export default function CaseDetail({ caseData, onRead, onRegister, onClose, onUp
             {evidence.after}
           </>
         ) : (
-          caseData.report_text
+          reportText
         )}
       </p>
       {evidence.found ? null : (
         <p className="missing-evidence">Trecho de evidência não localizado no laudo</p>
       )}
-      </section>
 
-      <div className="report-footer"><p><Sparkles size={14} aria-hidden="true" /> A IA sugere. O médico valida.</p><button type="button" className="btn-primary" onClick={() => setTab("action")}>Revisar conduta</button></div>
-      </div>
-      <div hidden={tab !== "history"}>
-      <h3 className="section-title"><History size={17} aria-hidden="true" /> Histórico do caso</h3>
+      <h3 className="section-title">Linha do tempo</h3>
       <ol className="timeline">
-        {caseData.timeline.map((event, index) => (
-          <li key={`${event.label}-${index}`}>
-            <span>
-              {event.label}
-              {event.note ? <span className="hint"> · {event.note}</span> : null}
-            </span>
-            <time dateTime={`PT${event.offset_hours}H`}>
-              {formatOffset(event.offset_hours)}
-            </time>
+        {detail.events.map((event, index) => (
+          <li key={`${event.at}-${index}`}>
+            <span>{event.label}</span>
+            <time dateTime={`PT${event.at}H`}>{formatOffset(event.at)}</time>
           </li>
         ))}
       </ol>
 
-      </div>
-      <div hidden={tab !== "action"}>
-      <h3 className="section-title"><ClipboardCheck size={17} aria-hidden="true" /> Conduta e acompanhamento</h3>
-      <form
-        className="action-block"
-        aria-busy={Boolean(pending)}
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (actionHint || pending) return;
-          run("action", () => onRegister(caseData.id, note));
-        }}
-      >
-        <label>
-          Ação realizada
-          <textarea
-            name="clinical-action"
-            autoComplete="off"
-            placeholder="Descreva a conduta, o encaminhamento ou o contato realizado…"
-            value={note}
-            disabled={closed || pending !== ""}
-            onChange={(event) => setNote(event.target.value)}
-          />
-        </label>
-        <div className="workflow-actions"><div className="action-row">
+      <div className="detail-actions">
+        {error ? <p className="form-error" role="alert">{error}</p> : null}
+        <div className="detail-action">
           <button
-            type="button"
             className="btn-primary"
-            disabled={Boolean(readHint) || pending !== ""}
-            onClick={() => run("read", () => onRead(caseData.id))}
-          >
-            {pending === "read" ? "Confirmando…" : read ? "Leitura confirmada" : "Confirmar leitura"}
-          </button>
-          {readHint ? <p className="hint">{readHint}</p> : null}
-        </div>
-        <div className="action-row">
-          <button
-            type="submit"
-            className="btn-primary"
-            disabled={Boolean(actionHint) || pending !== ""}
-          >
-            {pending === "action" ? "Registrando…" : "Registrar ação"}
-          </button>
-          {actionHint ? <p className="hint">{actionHint}</p> : null}
-        </div>
-        <div className="action-row">
-          <button
             type="button"
-            className="btn-secondary"
-            disabled={Boolean(closeHint) || pending !== ""}
-            onClick={() => run("close", () => onClose(caseData.id))}
+            disabled={!canConfirm || pending}
+            onClick={() => run(() => acknowledge(item.id, item.current_target))}
           >
-            {pending === "close" ? "Fechando…" : closed ? "Caso fechado" : "Fechar caso"}
+            Confirmar leitura
           </button>
-          {closeHint ? <p className="hint">{closeHint}</p> : null}
+          <p className="hint">{confirmReason}</p>
         </div>
-        </div>
-        {formError ? <p className="form-error" role="alert">{formError}</p> : null}
-        <p className="sr-only" role="status">{pending ? "Salvando alteração…" : statusLabel(caseData.status)}</p>
-      </form>
+        {actionOpen ? null : (
+          <div className="detail-action">
+            <button
+              ref={openActionRef}
+              className="btn-primary"
+              type="button"
+              disabled={!canRegister || pending}
+              onClick={openAction}
+            >
+              Registrar ação
+            </button>
+            {registerReason ? <p className="hint">{registerReason}</p> : null}
+          </div>
+        )}
+        {actionOpen ? (
+          <form className="action-block" onSubmit={submitAction} onKeyDown={onActionKeyDown}>
+            <label>
+              Ação tomada
+              <textarea
+                ref={noteRef}
+                name="clinical-action"
+                autoComplete="off"
+                value={note}
+                disabled={pending}
+                onChange={(event) => setNote(event.target.value)}
+              />
+            </label>
+            <label className="detail-check">
+              <input
+                type="checkbox"
+                checked={closeCase}
+                disabled={pending}
+                onChange={(event) => setCloseCase(event.target.checked)}
+              />
+              Fechar caso
+            </label>
+            <button className="btn-primary" type="submit" disabled={pending}>
+              Registrar ação
+            </button>
+          </form>
+        ) : null}
+        {canClose ? (
+          <div className="detail-action">
+            <button
+              className="btn-secondary"
+              type="button"
+              disabled={pending}
+              onClick={() => run(() => registerAction(item.id, "", true))}
+            >
+              Fechar caso
+            </button>
+          </div>
+        ) : null}
       </div>
     </article>
   );
 }
-

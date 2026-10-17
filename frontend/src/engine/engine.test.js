@@ -13,14 +13,16 @@ import {
   registerAction,
 } from "./engine.js";
 
-const dataDir = join(dirname(fileURLToPath(import.meta.url)), "../data");
+const rootDir = dirname(fileURLToPath(import.meta.url));
+const fixtureDir = join(rootDir, "../fixtures");
+const dataDir = join(rootDir, "../data");
 
-function readJson(name) {
-  return JSON.parse(readFileSync(join(dataDir, name), "utf8"));
+function readJson(dir, name) {
+  return JSON.parse(readFileSync(join(dir, name), "utf8"));
 }
 
-const reports = readJson("reports.json");
-const cache = readJson("extractions_cache.json");
+const reports = readJson(fixtureDir, "reports.json");
+const cache = readJson(fixtureDir, "extractions_cache.json");
 
 function fresh() {
   return loadCases(reports, cache);
@@ -219,8 +221,10 @@ test("advance, acknowledge e registerAction não mutam o estado recebido", () =>
 });
 
 test("toda evidência do cache é substring do laudo", () => {
-  for (const report of reports) {
-    for (const finding of cache[report.report_id]?.findings ?? []) {
+  const liveReports = readJson(dataDir, "reports.json");
+  const liveCache = readJson(dataDir, "extractions_cache.json");
+  for (const report of liveReports) {
+    for (const finding of liveCache[report.report_id]?.findings ?? []) {
       assert.equal(
         report.text.includes(finding.evidence),
         true,
