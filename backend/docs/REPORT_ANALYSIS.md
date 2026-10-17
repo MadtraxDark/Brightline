@@ -2,11 +2,10 @@
 
 ## Classificação de imagem independente
 
-`POST /radiographs/classify` exige `Authorization: Bearer <access_token>` e recebe `multipart/form-data` com o campo obrigatório `radiograph` (PNG/JPEG, até 10 MB). A rota usa o mesmo modelo NIH carregado pelo serviço e retorna as 14 probabilidades, classes acima do corte exploratório, versão do modelo e limitações. A imagem é processada em memória e não é persistida por essa rota.
+`POST /radiographs/classify` não exige login e recebe `multipart/form-data` com o campo obrigatório `radiograph` (PNG/JPEG, até 10 MB). A rota usa o mesmo modelo NIH carregado pelo serviço e retorna as 14 probabilidades, classes acima do corte exploratório, versão do modelo e limitações. A imagem é processada em memória e não é persistida por essa rota.
 
 ```bash
 curl -X POST http://localhost:8080/radiographs/classify \
-  -H "Authorization: Bearer $TOKEN" \
   -F 'radiograph=@chest.png;type=image/png'
 ```
 

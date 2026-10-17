@@ -435,7 +435,6 @@ async def analyze_report(
 
 @app.post("/radiographs/classify", summary="Classifica uma radiografia de tórax")
 async def classify_radiograph(
-    session: Session,
     radiograph: Annotated[UploadFile, File(description="Radiografia torácica PNG/JPEG para o modelo NIH")],
 ):
     """Return exploratory NIH class probabilities without persisting the uploaded image."""
