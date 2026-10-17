@@ -7,16 +7,26 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "check:data": "node scripts/check-data.js",
+    "prebuild": "npm run check:data",
     "test:engine": "node --test src/engine/engine.test.js",
     "test:store": "node --test src/store/store.test.js",
-    "test": "npm run test:engine && npm run test:store"
+    "test:format": "node --test src/lib/formatRemaining.test.js",
+    "test:selectors": "node --test src/store/selectors.test.js",
+    "test:evidence": "node --test src/lib/splitEvidence.test.js",
+    "test:metrics": "node --test src/lib/metrics.test.js",
+    "test:session": "node --test src/lib/session.test.js",
+    "test:evaluate": "node --test src/lib/evaluate.test.js",
+    "evaluate:data": "node scripts/evaluate.js --write",
+    "test": "npm run test:engine && npm run test:store && npm run test:format && npm run test:selectors && npm run test:evidence && npm run test:metrics && npm run test:session && npm run test:evaluate"
   },
   "dependencies": {
     "@fontsource/atkinson-hyperlegible-next": "^5.2.8",
     "@fontsource/source-serif-4": "^5.2.8",
     "lucide-react": "^0.545.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.4",

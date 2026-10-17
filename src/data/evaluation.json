@@ -1,12 +1,20 @@
 {
   "example": true,
-  "precision": 0.8,
-  "recall": 0.75,
-  "recall_critical": 0.5,
-  "false_negatives": [
-    { "report_id": "R-002", "finding": "Hemorragia subaracnóidea aguda", "urgency": "critical" }
-  ],
-  "false_positives": [
-    { "report_id": "R-008", "finding": "Hemorragia subaracnóidea", "urgency": "critical" }
-  ]
+  "dataset": {
+    "reports": 8,
+    "description": "Oito laudos sintéticos: seis com achado e dois sem achado."
+  },
+  "overall": {
+    "tp": 6,
+    "fp": 0,
+    "fn": 0,
+    "wrong_urgency": 0
+  },
+  "critical": {
+    "tp": 2,
+    "fp": 0,
+    "fn": 0
+  },
+  "false_negatives": [],
+  "false_positives": []
 }
