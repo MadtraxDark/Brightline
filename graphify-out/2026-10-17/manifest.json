@@ -204,15 +204,15 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1792262405.7299824,
-    "seen": 1792262451.9937682,
-    "ast_hash": "0ae92ec8a2216cfd07cd6170945a767a",
+    "mtime": 1792265002.141314,
+    "seen": 1792265086.1786292,
+    "ast_hash": "3a2930283f324822c17a1e095de7b0ed",
     "semantic_hash": ""
   },
   "frontend/src/LandingPage.jsx": {
-    "mtime": 1792263632.1024988,
-    "seen": 1792263677.4821386,
-    "ast_hash": "0666181e3f69064a8ab8164d638c0329",
+    "mtime": 1792266406.8708777,
+    "seen": 1792266498.7507665,
+    "ast_hash": "c0387f0b73a1609c230cdaedf01bd9fa",
     "semantic_hash": ""
   },
   "frontend/src/api.js": {
@@ -222,15 +222,15 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CaseDetail.jsx": {
-    "mtime": 1792262406.349483,
-    "seen": 1792262451.9947658,
-    "ast_hash": "c021ee9e00e733f08cb5f14c2622924c",
+    "mtime": 1792264555.569029,
+    "seen": 1792265086.1786292,
+    "ast_hash": "b98455b95c4b0aeb28c9501a8ba821ea",
     "semantic_hash": ""
   },
   "frontend/src/components/CaseList.jsx": {
-    "mtime": 1792262080.0321717,
-    "seen": 1792262376.284114,
-    "ast_hash": "328f131c6ce19c034f6558b8dfc15cfb",
+    "mtime": 1792266455.98145,
+    "seen": 1792266498.7527618,
+    "ast_hash": "b4aace4e09652e24afebbeb3df2060fa",
     "semantic_hash": ""
   },
   "frontend/src/components/UrgencyBadge.jsx": {
@@ -282,9 +282,9 @@
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
-    "mtime": 1792262406.648381,
-    "seen": 1792262451.999476,
-    "ast_hash": "7906b28b8813d7ec02cfe7904f94d44c",
+    "mtime": 1792264555.5735502,
+    "seen": 1792265086.187534,
+    "ast_hash": "1af4b8d9944657f9f0bcb34607d488c5",
     "semantic_hash": ""
   },
   "frontend/src/store/store.js": {
@@ -432,9 +432,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ErrorBoundary.jsx": {
-    "mtime": 1792262080.04274,
-    "seen": 1792262376.284114,
-    "ast_hash": "70bbf1c5c48044ff2ce7b187d866732e",
+    "mtime": 1792264555.570031,
+    "seen": 1792265086.1801653,
+    "ast_hash": "e8f469f49667b80fd05a31fe5403ec29",
     "semantic_hash": ""
   },
   "frontend/src/components/Evaluation.jsx": {
@@ -546,15 +546,15 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/session.js": {
-    "mtime": 1792262406.0464466,
-    "seen": 1792262451.999476,
-    "ast_hash": "4fe7a107dcab3c9243389cfa074ede5f",
+    "mtime": 1792264555.571033,
+    "seen": 1792265086.187534,
+    "ast_hash": "b2e2e65c80c5fa102e095ecc255ed011",
     "semantic_hash": ""
   },
   "frontend/src/lib/session.test.js": {
-    "mtime": 1792262407.9469516,
-    "seen": 1792262451.999476,
-    "ast_hash": "51a7063e2699b0c98e5890ff05f19994",
+    "mtime": 1792264555.5725417,
+    "seen": 1792265086.187534,
+    "ast_hash": "ba72cd95b3356d5fd215f9153374ac8a",
     "semantic_hash": ""
   },
   "frontend/src/lib/splitEvidence.js": {
@@ -582,9 +582,9 @@
     "semantic_hash": ""
   },
   "frontend/src/useTitleAnimation.js": {
-    "mtime": 1792258946.5591648,
-    "seen": 1792262376.284114,
-    "ast_hash": "9408455a4e7c876ebd30380f6445925f",
+    "mtime": 1792265002.520517,
+    "seen": 1792265086.197075,
+    "ast_hash": "2622a98cf31ac9037df112165edc0dc2",
     "semantic_hash": ""
   },
   "scripts/check-data.js": {
@@ -636,9 +636,9 @@
     "semantic_hash": ""
   },
   "frontend/docs/LANDING.md": {
-    "mtime": 1792263612.5849319,
-    "seen": 1792263677.52855,
-    "ast_hash": "9547143fbadab88020253a0b1213cfb1",
+    "mtime": 1792266474.8626354,
+    "seen": 1792266498.7916267,
+    "ast_hash": "461669db154242b2f8262f0c2c60f457",
     "semantic_hash": ""
   },
   "artifacts/ui/cadastro-1024.png": {
@@ -759,6 +759,18 @@
     "mtime": 1792262080.0321717,
     "seen": 1792262376.284114,
     "ast_hash": "f93e56d4f08421d025ca8697b3615f2b",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/FaqItem.jsx": {
+    "mtime": 1792264082.100028,
+    "seen": 1792264135.5586066,
+    "ast_hash": "3ad9b267577626cec401d6366f1dccfe",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/DashboardShell.jsx": {
+    "mtime": 1792266406.8698747,
+    "seen": 1792266498.7527618,
+    "ast_hash": "e0cf81ca3f7e0e603c4d287cc47ad423",
     "semantic_hash": ""
   }
 }
