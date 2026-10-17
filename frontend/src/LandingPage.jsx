@@ -28,15 +28,30 @@ const missedCount = getMissed(previewState).length;
 
 function ProductPreview() {
   return (
-    <div className="lp-product" role="img" aria-label="Prévia ilustrativa do painel Brightline com indicadores, menu e três laudos fictícios.">
+    <div
+      className="lp-product"
+      role="img"
+      aria-label="Prévia ilustrativa do painel Brightline com indicadores, menu e três laudos fictícios."
+    >
       <div className="lp-product-chrome">
-        <span className="lp-window-dots"><i /><i /><i /></span>
-        <span><ShieldCheck size={11} /> Brightline · Prévia ilustrativa</span>
+        <span className="lp-window-dots">
+          <i />
+          <i />
+          <i />
+        </span>
+        <span>
+          <ShieldCheck size={11} /> Brightline · Prévia ilustrativa
+        </span>
         <span className="lp-live-dot" />
       </div>
-      <div className="lp-dashboard-preview" inert aria-hidden="true"><DashboardShell preview /></div>
+      <div className="lp-dashboard-preview" inert aria-hidden="true">
+        <DashboardShell preview />
+      </div>
       <div className="lp-product-foot">
-        <span><span className="lp-live-dot" /> {reports.length} laudos sintéticos · dados da demonstração</span>
+        <span>
+          <span className="lp-live-dot" /> {reports.length} laudos sintéticos ·
+          dados da demonstração
+        </span>
         <span>Prévia visual · dados fictícios</span>
       </div>
     </div>
@@ -85,7 +100,6 @@ export default function LandingPage() {
       <LandingHeader />
       <main id="conteudo">
         <section className="lp-hero" id="produto">
-
           <div className="lp-hero-copy">
             <h1>
               Um achado importante
@@ -93,9 +107,9 @@ export default function LandingPage() {
               merece um <em>próximo passo.</em>
             </h1>
             <p>
-              Revise achados críticos, urgentes e acionáveis com a evidência
-              do laudo. Acompanhe responsáveis, prazos, leitura e conduta
-              até o encerramento de cada caso.
+              Revise achados críticos, urgentes e acionáveis com a evidência do
+              laudo. Acompanhe responsáveis, prazos, leitura e conduta até o
+              encerramento de cada caso.
             </p>
             <div className="lp-hero-actions">
               <a className="lp-button lp-button-primary" href="/login">
@@ -127,7 +141,6 @@ export default function LandingPage() {
         <section className="lp-flow lp-section" id="como-funciona">
           <div className="lp-section-heading">
             <div>
-
               <h2>
                 O laudo é o começo.
                 <br />
@@ -179,7 +192,6 @@ export default function LandingPage() {
         </section>
         <section className="lp-difference lp-section" id="diferenciais">
           <div className="lp-difference-copy">
-
             <h2>
               Visibilidade para a equipe.
               <br />
@@ -194,69 +206,153 @@ export default function LandingPage() {
             </a>
           </div>
           <div className="lp-difference-details">
-            <div className="lp-mobile-showcase" role="img" aria-label="Prévia ilustrativa do painel Brightline em um celular, com indicadores, lista de casos e navegação inferior.">
-              <div className="lp-phone">
-                <div className="lp-phone-island" />
-                <div className="lp-phone-screen">
-                  <div className="lp-phone-status"><span>9:41</span><span>●●●　▰</span></div>
-                  <div className="lp-phone-header"><span className="lp-phone-brand"><ShieldCheck size={15} /> Brightline</span><span className="lp-phone-avatar">DR</span></div>
-                  <div className="lp-phone-content">
-                    <span className="lp-phone-eyebrow">VISÃO GERAL</span>
-                    <h3>Bom dia, Dra. Ana</h3>
-                    <p>Veja o que precisa da sua atenção.</p>
-                    <div className="lp-phone-metrics"><div><strong>08</strong><span>Em aberto</span></div><div><strong>03</strong><span>Urgentes</span></div></div>
-                    <div className="lp-phone-list-title"><strong>Prioridade</strong><span>Ver todos</span></div>
-                    <div className="lp-phone-case"><i /><div><strong>Nódulo pulmonar</strong><span>TC de tórax · há 12 min</span></div><ArrowRight size={14} /></div>
-                    <div className="lp-phone-case"><i /><div><strong>Achado hepático</strong><span>RM abdome · há 38 min</span></div><ArrowRight size={14} /></div>
+            <div
+              className="lp-mobile-showcase"
+              role="img"
+              aria-label="Prévia ilustrativa do painel Brightline em um celular, com indicadores, lista de casos e navegação inferior."
+            >
+              <div className="relative w-[224px] rounded-[34px] border-2 border-phone-shell bg-phone-shell p-2 shadow-[0_18px_38px_#1b272a26,0_4px_10px_#1b272a1a]">
+                <div className="absolute left-1/2 top-[13px] z-10 h-4 w-16 -translate-x-1/2 rounded-xl bg-phone-shell" />
+                <div className="min-h-[382px] overflow-hidden rounded-[26px] bg-phone-surface text-phone-ink">
+                  <div className="flex h-[34px] items-center justify-between px-[14px] pt-1 text-[8px] font-bold">
+                    <span>9:41</span>
+                    <span>●●●　▰</span>
                   </div>
-                  <div className="lp-phone-nav"><span>⌂<small>Início</small></span><span>▤<small>Casos</small></span><span>◷<small>Prazos</small></span><span>◎<small>Perfil</small></span></div>
+                  <div className="flex h-11 items-center justify-between border-b border-phone-border px-[13px]">
+                    <span className="flex items-center gap-[5px] text-[11px] font-semibold tracking-[-.03em]">
+                      <ShieldCheck size={15} /> Brightline
+                    </span>
+                    <span className="grid size-6 place-items-center rounded-full bg-phone-tint text-[8px] font-bold">
+                      DR
+                    </span>
+                  </div>
+                  <div className="px-[13px] pb-3 pt-[18px]">
+                    <span className="text-[7px] font-bold tracking-[.1em] text-phone-muted">
+                      VISÃO GERAL
+                    </span>
+                    <h3 className="mt-[5px]! text-[15px] font-semibold tracking-[-.035em]">
+                      Bom dia, Dra. Ana
+                    </h3>
+                    <p className="mt-[3px]! text-[8px] text-phone-muted">
+                      Veja o que precisa da sua atenção.
+                    </p>
+                    <div className="mt-[14px] grid grid-cols-2 gap-[7px]">
+                      <div className="flex flex-col gap-0.5 rounded-lg border border-phone-border bg-white p-2">
+                        <strong className="text-base leading-none">08</strong>
+                        <span className="text-[7px] text-phone-muted">
+                          Em aberto
+                        </span>
+                      </div>
+                      <div className="flex flex-col gap-0.5 rounded-lg border border-phone-border bg-white p-2">
+                        <strong className="text-base leading-none">03</strong>
+                        <span className="text-[7px] text-phone-muted">
+                          Urgentes
+                        </span>
+                      </div>
+                    </div>
+                    <div className="mb-[7px] mt-4 flex justify-between text-[9px]">
+                      <strong>Prioridade</strong>
+                      <span className="text-[7px] text-phone-accent">
+                        Ver todos
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-[7px] rounded-lg border border-phone-border bg-white px-[7px] py-2">
+                      <i className="h-[25px] w-1 shrink-0 rounded-sm bg-phone-urgent" />
+                      <div className="flex min-w-0 flex-1 flex-col gap-[3px]">
+                        <strong className="truncate text-[8px] font-semibold">
+                          Nódulo pulmonar
+                        </strong>
+                        <span className="text-[7px] text-phone-muted">
+                          TC de tórax · há 12 min
+                        </span>
+                      </div>
+                      <ArrowRight
+                        size={14}
+                        className="shrink-0 text-phone-muted"
+                      />
+                    </div>
+                    <div className="mt-1.5 flex items-center gap-[7px] rounded-lg border border-phone-border bg-white px-[7px] py-2">
+                      <i className="h-[25px] w-1 shrink-0 rounded-sm bg-phone-normal" />
+                      <div className="flex min-w-0 flex-1 flex-col gap-[3px]">
+                        <strong className="truncate text-[8px] font-semibold">
+                          Achado hepático
+                        </strong>
+                        <span className="text-[7px] text-phone-muted">
+                          RM abdome · há 38 min
+                        </span>
+                      </div>
+                      <ArrowRight
+                        size={14}
+                        className="shrink-0 text-phone-muted"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between border-t border-phone-border px-[13px] py-2 text-center text-phone-accent">
+                    {[
+                      ["⌂", "Início"],
+                      ["▤", "Casos"],
+                      ["◷", "Prazos"],
+                      ["◎", "Perfil"],
+                    ].map(([icon, label]) => (
+                      <span
+                        className="flex flex-col items-center gap-0.5 text-xs"
+                        key={label}
+                      >
+                        {icon}
+                        <small className="text-[6px]">{label}</small>
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="lp-mobile-note"><Smartphone size={17} /><span>Uma experiência pensada para telas pequenas</span></div>
+              <div className="lp-mobile-note">
+                <Smartphone size={17} />
+                <span>Uma experiência pensada para telas pequenas</span>
+              </div>
             </div>
             <div className="lp-benefits">
-            {[
-              [
-                "Prioridade que orienta",
-                "Casos organizados por urgência e prazo para facilitar a revisão do que precisa de atenção primeiro.",
-                Clock3,
-              ],
-              [
-                "Evidência, não uma caixa-preta",
-                "O trecho do laudo acompanha o achado sugerido. Mais contexto para uma revisão consciente.",
-                FileText,
-              ],
-              [
-                "Achados que merecem uma segunda revisão",
-                "Uma fila dedicada aos críticos e urgentes não sinalizados pelo radiologista, com o trecho que sustenta cada sugestão.",
-                ScanLine,
-              ],
-              [
-                "Prazos e responsáveis à vista",
-                "Simule a passagem do tempo e acompanhe a escalação entre solicitante, radiologista e coordenação, até confirmar a leitura.",
-                Clock3,
-              ],
-              [
-                "Avaliação que você pode consultar",
-                "Recall, precisão e falsos positivos e negativos disponíveis no painel. Os resultados da demonstração são ilustrativos.",
-                Sparkles,
-              ],
-              [
-                "Um histórico que faz sentido",
-                "Leitura, conduta, escalações e encerramento reunidos na linha do tempo do caso, com cada etapa registrada para consulta.",
-                CheckCheck,
-              ],
-            ].map(([title, text, Icon]) => (
-              <article key={title}>
-                <span className="lp-benefit-icon">
-                  <Icon size={21} strokeWidth={1.5} />
-                </span>
-                <div>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                </div>
-              </article>
-            ))}
+              {[
+                [
+                  "Prioridade que orienta",
+                  "Casos organizados por urgência e prazo para facilitar a revisão do que precisa de atenção primeiro.",
+                  Clock3,
+                ],
+                [
+                  "Evidência, não uma caixa-preta",
+                  "O trecho do laudo acompanha o achado sugerido. Mais contexto para uma revisão consciente.",
+                  FileText,
+                ],
+                [
+                  "Achados que merecem uma segunda revisão",
+                  "Uma fila dedicada aos críticos e urgentes não sinalizados pelo radiologista, com o trecho que sustenta cada sugestão.",
+                  ScanLine,
+                ],
+                [
+                  "Prazos e responsáveis à vista",
+                  "Simule a passagem do tempo e acompanhe a escalação entre solicitante, radiologista e coordenação, até confirmar a leitura.",
+                  Clock3,
+                ],
+                [
+                  "Avaliação que você pode consultar",
+                  "Recall, precisão e falsos positivos e negativos disponíveis no painel. Os resultados da demonstração são ilustrativos.",
+                  Sparkles,
+                ],
+                [
+                  "Um histórico que faz sentido",
+                  "Leitura, conduta, escalações e encerramento reunidos na linha do tempo do caso, com cada etapa registrada para consulta.",
+                  CheckCheck,
+                ],
+              ].map(([title, text, Icon]) => (
+                <article key={title}>
+                  <span className="lp-benefit-icon">
+                    <Icon size={21} strokeWidth={1.5} />
+                  </span>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
@@ -281,7 +377,6 @@ export default function LandingPage() {
         </section>
         <section className="lp-faq lp-section" id="duvidas">
           <div>
-
             <h2>
               Um pouco mais
               <br />
@@ -300,13 +395,15 @@ export default function LandingPage() {
         </section>
         <section className="lp-final-cta">
           <div>
-
             <h2>
               Veja o próximo passo.
               <br />
               <em>Antes de dar o seu.</em>
             </h2>
-            <p>Entre na demonstração: {reports.length} laudos sintéticos, {examples.length} casos e um fluxo completo de acompanhamento.</p>
+            <p>
+              Entre na demonstração: {reports.length} laudos sintéticos,{" "}
+              {examples.length} casos e um fluxo completo de acompanhamento.
+            </p>
           </div>
           <a className="lp-button lp-button-primary" href="/login">
             Explorar a demonstração <ArrowUpRight size={18} />

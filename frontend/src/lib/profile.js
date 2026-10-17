@@ -5,7 +5,11 @@ export function readProfile(storage) {
     const value = JSON.parse(storage.getItem(PROFILE_KEY) || "{}");
     return {
       name: typeof value?.name === "string" ? value.name.slice(0, 80) : "",
-      photo: typeof value?.photo === "string" && /^data:image\/(png|jpeg|webp);base64,/.test(value.photo) ? value.photo : "",
+      photo:
+        typeof value?.photo === "string" &&
+        /^data:image\/(png|jpeg|webp);base64,/.test(value.photo)
+          ? value.photo
+          : "",
     };
   } catch {
     return { name: "", photo: "" };

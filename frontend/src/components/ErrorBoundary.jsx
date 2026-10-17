@@ -44,8 +44,20 @@ function ErrorFallback({ onClear }) {
     <div className="error-boundary">
       <h1>Algo deu errado nesta tela.</h1>
       <div className="error-boundary-actions">
-        <button type="button" className="error-boundary-primary" onClick={backToQueue}>Voltar à fila</button>
-        <button type="button" className="error-boundary-secondary" onClick={resetDemo}>Resetar demo</button>
+        <button
+          type="button"
+          className="error-boundary-primary"
+          onClick={backToQueue}
+        >
+          Voltar à fila
+        </button>
+        <button
+          type="button"
+          className="error-boundary-secondary"
+          onClick={resetDemo}
+        >
+          Resetar demo
+        </button>
       </div>
     </div>
   );

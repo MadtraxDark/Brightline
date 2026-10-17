@@ -1,1 +1,17 @@
-{"nodes": [{"id": "backend_github_commit_message_instructions", "label": "Commit message instructions", "file_type": "document", "source_file": "backend/.github/commit-message-instructions.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [], "hyperedges": []}
+{
+  "nodes": [
+    {
+      "id": "backend_github_commit_message_instructions",
+      "label": "Commit message instructions",
+      "file_type": "document",
+      "source_file": "backend/.github/commit-message-instructions.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [],
+  "hyperedges": []
+}
