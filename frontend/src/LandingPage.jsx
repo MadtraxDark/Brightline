@@ -233,7 +233,7 @@ export default function LandingPage() {
               atenção.
             </p>
             <div className="lp-hero-actions">
-              <a className="lp-button lp-button-primary" href="/app">
+              <a className="lp-button lp-button-primary" href="/login">
                 Explorar a demonstração <ArrowUpRight size={18} />
               </a>
               <a className="lp-text-link" href="#como-funciona">
@@ -322,7 +322,7 @@ export default function LandingPage() {
               Um achado não termina quando o laudo é emitido. O Brightline
               organiza o que vem depois.
             </p>
-            <a className="lp-text-link" href="/app">
+            <a className="lp-text-link" href="/login">
               Veja isso na prática <ArrowUpRight size={17} />
             </a>
           </div>
@@ -410,7 +410,7 @@ export default function LandingPage() {
             </h2>
             <p>Explore o produto com laudos e casos demonstrativos.</p>
           </div>
-          <a className="lp-button lp-button-primary" href="/app">
+          <a className="lp-button lp-button-primary" href="/login">
             Explorar a demonstração <ArrowUpRight size={18} />
           </a>
         </section>
