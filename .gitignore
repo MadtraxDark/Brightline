@@ -2,3 +2,45 @@ node_modules/
 dist/
 .playwright-cli/
 .impeccable/
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Local source data and generated extraction cache
+/data/reports.json
+/data/extractions_cache.json
+/backend/data/reports.json
+/backend/data/extractions_cache.json
+
+# Editor and operating system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+!.vscode/
+!.vscode/settings.json
+!backend/.vscode/
+!backend/.vscode/settings.json
