@@ -1,7 +1,7 @@
 # Graph Report - Brightline  (2026-10-17)
 
 ## Corpus Check
-- 103 files · ~88,471 words
+- 103 files · ~88,145 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 15 file(s) not represented in the graph (top: .css 4, (none) 3, .keras 2)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b2745cca`
+- Built from commit: `d09a01b8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
