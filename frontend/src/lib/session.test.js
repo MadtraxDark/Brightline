@@ -61,12 +61,12 @@ test("storage que lança erro usa a memória e não propaga", () => {
 test("safeRedirectPath só aceita caminho interno", () => {
   assert.equal(safeRedirectPath("/caso/R-001"), "/caso/R-001");
   assert.equal(safeRedirectPath("/nao-sinalizados?x=1"), "/nao-sinalizados?x=1");
-  assert.equal(safeRedirectPath("//evil.com"), "/");
-  assert.equal(safeRedirectPath("https://evil.com"), "/");
-  assert.equal(safeRedirectPath("/login"), "/");
-  assert.equal(safeRedirectPath(""), "/");
-  assert.equal(safeRedirectPath(null), "/");
-  assert.equal(safeRedirectPath(undefined), "/");
+  assert.equal(safeRedirectPath("//evil.com"), "/home");
+  assert.equal(safeRedirectPath("https://evil.com"), "/home");
+  assert.equal(safeRedirectPath("/login"), "/home");
+  assert.equal(safeRedirectPath(""), "/home");
+  assert.equal(safeRedirectPath(null), "/home");
+  assert.equal(safeRedirectPath(undefined), "/home");
 });
 
 test("validateLogin aponta e-mail e senha", () => {
@@ -95,13 +95,13 @@ test("cadastro exige confirmação e aceita dados válidos", () => {
 });
 
 test("redirecionamento após cadastro não retorna à tela de autenticação", () => {
-  assert.equal(safeRedirectPath("/cadastro?from=login"), "/");
+  assert.equal(safeRedirectPath("/cadastro?from=login"), "/home");
 });
 
 test("login leva ao painel e preserva o destino de um caso", () => {
-  assert.equal(safeRedirectPath("/"), "/");
-  assert.equal(safeRedirectPath("/login/"), "/");
-  assert.equal(safeRedirectPath("/cadastro/?from=login"), "/");
-  assert.equal(safeRedirectPath("/app"), "/");
+  assert.equal(safeRedirectPath("/"), "/home");
+  assert.equal(safeRedirectPath("/login/"), "/home");
+  assert.equal(safeRedirectPath("/cadastro/?from=login"), "/home");
+  assert.equal(safeRedirectPath("/app"), "/home");
   assert.equal(safeRedirectPath("/caso/R-001?tab=historico"), "/caso/R-001?tab=historico");
 });

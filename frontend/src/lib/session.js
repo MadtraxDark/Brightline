@@ -33,9 +33,9 @@ export function logout(storage) {
 }
 
 export function safeRedirectPath(from) {
-  if (typeof from !== "string" || !from.startsWith("/") || from.startsWith("//")) return "/";
+  if (typeof from !== "string" || !from.startsWith("/") || from.startsWith("//")) return "/home";
   const path = from.split(/[?#]/, 1)[0].replace(/\/+$/, "") || "/";
-  if (path === "/app" || path === "/login" || path === "/cadastro") return "/";
+  if (path === "/" || path === "/app" || path === "/login" || path === "/cadastro") return "/home";
   return from;
 }
 
