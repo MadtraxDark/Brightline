@@ -10,7 +10,9 @@ Com Node.js e Python instalados, na raiz do projeto:
 npm run dev
 ```
 
-Frontend: `http://localhost:5173`; painel demonstrativo: `http://localhost:5173/app`; API: `http://localhost:8000/docs`.
+Painel: `http://localhost:5173` (login de demonstração em `/login`); API: `http://localhost:8000/docs`.
+
+A tela `/login` aceita qualquer e-mail e senha. Nada é enviado ou armazenado; a sessão dura até fechar a aba. Para ver o login de novo, use Sair.
 
 Para iniciar os serviços separadamente, use `npm run dev:frontend` ou `npm run dev:backend`. Instale dependências com `npm run install:frontend` e `python -m pip install -r backend/requirements.txt`.
 
@@ -38,3 +40,13 @@ O conjunto NIH ChestX-ray14 foi importado para `dataset_images` no PostgreSQL; o
 - [Frontend](frontend/README.md)
 
 O frontend demonstrativo usa fixtures locais e ainda não está conectado à API. Não há integração PACS/HL7/FHIR nem envio real de mensagens.
+
+## Trocar os dados
+
+- `frontend/src/data/reports.json`: laudos.
+- `frontend/src/data/extractions_cache.json`: achados extraídos de cada laudo.
+- `frontend/src/data/evaluation.json`: números e listas da tela Avaliação da IA. Enquanto forem dados de exemplo, mantenha `"example": true`.
+
+## Zerar a demo
+
+Use o botão **Resetar demo** no relógio da barra lateral, ou apague a chave `brightline:v1` do localStorage e recarregue a página.
