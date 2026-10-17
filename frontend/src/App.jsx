@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { Activity, Files, ShieldCheck, Timer, LayoutDashboard, EyeOff, ChevronRight, ChevronDown, Sparkles, FlaskConical, Menu, X } from "lucide-react";
+import { Activity, ArrowUpRight, Files, ShieldCheck, Timer, LayoutDashboard, EyeOff, ChevronRight, ChevronDown, Sparkles, FlaskConical, Menu, X } from "lucide-react";
+import LandingPage from "./LandingPage.jsx";
 import logo from "./public/logo/logo-text.svg";
 import CaseDetail from "./components/CaseDetail.jsx";
 import CaseList from "./components/CaseList.jsx";
@@ -148,8 +149,10 @@ function Shell() {
 
 export default function App() {
   const { pathname } = useLocation();
-  if (pathname === "/login") return <Login />;
-  if (pathname === "/cadastro") return <Register />;
+  const path = pathname.replace(/\/+$/, "") || "/";
+  if (path === "/" && !isAuthenticated(sessionStorage)) return <LandingPage />;
+  if (path === "/login") return <Login />;
+  if (path === "/cadastro") return <Register />;
   return (
     <RequireAuth>
       <Shell />
