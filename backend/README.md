@@ -37,3 +37,4 @@ Configure `DATABASE_URL` em `backend/.env` para apontar a um PostgreSQL acessív
 - Notificações são eventos simulados. Nenhuma mensagem real é enviada.
 
 Consulte a [documentação da API](docs/API.md) e o [README principal](../README.md).
+Consulte também o guia de [análise de laudos e radiografias](docs/REPORT_ANALYSIS.md) para requisições, respostas e limites do protótipo.
