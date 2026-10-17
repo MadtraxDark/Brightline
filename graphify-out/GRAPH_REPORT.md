@@ -1,121 +1,172 @@
 # Graph Report - Brightline  (2026-10-17)
 
 ## Corpus Check
-- 24 files · ~12,819 words
+- 60 files · ~71,081 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 5 file(s) not represented in the graph (top: (none) 3, .example 1, .conf 1)
+- Unclassified: 13 file(s) not represented in the graph (top: (none) 3, .keras 2, .csv 2)
 
 ## Summary
-- 226 nodes · 480 edges · 12 communities (9 shown, 3 thin omitted)
-- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 32 edges (avg confidence: 0.88)
+- 447 nodes · 863 edges · 29 communities (19 shown, 10 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 17 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d06807d1`
+- Built from commit: `a5db7c44`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- Backend API routes
-- Data processing pipeline
-- Backend services
-- API test harness
-- Product architecture and safeguards
-- AI pipeline evaluation
-- API models and schemas
-- Supabase schema and commands
-- Migration verification
+- engine.test.js
+- cal.DESIGN.md
+- config.py
+- test_ai_pipeline.py
+- Extração e avaliação do Brightline
+- PipelineTests
+- main.py
+- App.jsx
+- frontend/package.json
+- 002_dataset_images.sql
 - Graphify project instructions
 - Commit conventions
+- LandingPage.jsx
+- init.sql
+- scripts
+- dev.mjs
+- Brightline — sistema visual
+- main.jsx
+- Revisão dos laudos sintéticos Brightline
+- dependencies
+- scripts
+- react
+- Brightline: regras de design
+- design-tools.md
+- PRODUCT.md
+- NIH_TENSORFLOW.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `SupabaseApiTests` - 16 edges
+1. `db()` - 22 edges
 2. `PipelineTests` - 14 edges
-3. `read_json()` - 12 edges
-4. `write_json()` - 12 edges
-5. `sample()` - 12 edges
-6. `StrictModel` - 11 edges
-7. `SupabaseGateway` - 11 edges
+3. `createStore()` - 13 edges
+4. `read_json()` - 12 edges
+5. `write_json()` - 12 edges
+6. `sample()` - 12 edges
+7. `StrictModel` - 11 edges
 8. `validate_extraction()` - 11 edges
 9. `get_settings()` - 10 edges
 10. `load_reports()` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Supabase-backed application architecture` --semantically_similar_to--> `Per-account row-level security isolation`  [INFERRED] [semantically similar]
-  README.md → supabase/README.md
-- `Human validates AI suggestions` --semantically_similar_to--> `Human review of labels and difficult cases`  [INFERRED] [semantically similar]
-  README.md → data/revisao_laudos.md
-- `SupabaseApiTests` --uses--> `Settings`  [INFERRED]
-  tests/test_supabase_api.py → backend/app/config.py
-- `SupabaseApiTests` --uses--> `SupabaseGateway`  [INFERRED]
-  tests/test_supabase_api.py → backend/app/supabase.py
-- `Import prepared data into Supabase` --references--> `Supabase setup and migration guide`  [EXTRACTED]
-  IA_DADOS.md → supabase/README.md
+- `FastAPI backend` --conceptually_related_to--> `FastAPI dependency`  [INFERRED]
+  backend/README.md → backend/requirements.txt
+- `FastAPI backend` --conceptually_related_to--> `HTTPX dependency`  [INFERRED]
+  backend/README.md → backend/requirements.txt
+- `FastAPI backend` --conceptually_related_to--> `python-dotenv dependency`  [INFERRED]
+  backend/README.md → backend/requirements.txt
+- `FastAPI backend` --conceptually_related_to--> `Uvicorn dependency`  [INFERRED]
+  backend/README.md → backend/requirements.txt
+- `FastAPI backend` --references--> `Brightline prototype`  [EXTRACTED]
+  backend/README.md → README.md
 
 ## Import Cycles
 - None detected.
 
-## Hyperedges (group relationships)
-- **Supabase account security model** — supabase_readme_rls_isolation, supabase_readme_private_storage, supabase_readme_supabase_auth [EXTRACTED 1.00]
-- **Offline data preparation pipeline** — ia_dados_offline_cache, prompts_extraction_rules, data_revisao_laudos_synthetic_reports, ia_dados_supabase_import [INFERRED 0.85]
+## Communities (29 total, 10 thin omitted)
 
-## Communities (12 total, 3 thin omitted)
+### Community 0 - "engine.test.js"
+Cohesion: 0.07
+Nodes (41): acknowledge(), advance(), getCase(), getStats(), listCases(), listMissed(), matches(), presentCase() (+33 more)
 
-### Community 0 - "Backend API routes"
-Cohesion: 0.09
-Nodes (25): acknowledge(), action(), advance(), authenticated(), case_detail(), cases(), clock(), current_hour() (+17 more)
+### Community 1 - "cal.DESIGN.md"
+Cohesion: 0.05
+Nodes (38): Border Radius Scale, Brand & Accent, Breakpoints, Buttons, Cards & Containers, Collapsing Strategy, Colors, Components (+30 more)
 
-### Community 1 - "Data processing pipeline"
-Cohesion: 0.13
-Nodes (13): load_reports(), read_json(), validate_extraction(), write_json(), identity(), load_aliases(), main(), normalize() (+5 more)
+### Community 2 - "config.py"
+Cohesion: 0.22
+Nodes (4): get_settings(), Settings, lifespan(), main()
 
-### Community 2 - "Backend services"
-Cohesion: 0.11
-Nodes (5): get_settings(), Settings, get_gateway(), lifespan(), SupabaseGateway
+### Community 3 - "test_ai_pipeline.py"
+Cohesion: 0.08
+Nodes (23): load_reports(), read_json(), validate_extraction(), write_json(), identity(), load_aliases(), main(), normalize() (+15 more)
 
-### Community 3 - "API test harness"
-Cohesion: 0.15
-Nodes (4): ApiClient, SupabaseApiTests, transport(), handler()
+### Community 4 - "Extração e avaliação do Brightline"
+Cohesion: 0.10
+Nodes (18): API Brightline, Executar, Persistência, Arquivos, Executar no PowerShell, Extração e avaliação do Brightline, Importar no PostgreSQL local, Interpretar a avaliação (+10 more)
 
-### Community 4 - "Product architecture and safeguards"
-Cohesion: 0.11
-Nodes (20): FastAPI backend, FastAPI dependency, HTTPX dependency, python-dotenv dependency, Uvicorn dependency, Eurorad educational case references, Radiologia Brasileira educational reference, Synthetic imaging report review dataset (+12 more)
-
-### Community 5 - "AI pipeline evaluation"
+### Community 5 - "PipelineTests"
 Cohesion: 0.25
 Nodes (5): evaluate(), extraction(), PipelineTests, caller(), sample()
 
-### Community 6 - "API models and schemas"
-Cohesion: 0.21
-Nodes (10): AcknowledgeInput, ActionInput, Credentials, ExtractionInput, FindingInput, GroundTruth, ImportInput, RefreshInput (+2 more)
+### Community 6 - "main.py"
+Cohesion: 0.06
+Nodes (42): acknowledge(), action(), advance(), authenticated(), case_detail(), cases(), clock(), command() (+34 more)
 
-### Community 7 - "Supabase schema and commands"
-Cohesion: 0.27
-Nodes (8): brightline_private.build_cases(), cases_owner_order, events_case_order, public.cases, public.events, public.extractions, public.reports, public.sim_state
+### Community 7 - "App.jsx"
+Cohesion: 0.13
+Nodes (26): App(), afterMutation(), SUMMARY, CaseDetail(), CaseList(), normalize(), urgencyOrder, LEVELS (+18 more)
 
-### Community 8 - "Migration verification"
+### Community 8 - "frontend/package.json"
+Cohesion: 0.20
+Nodes (9): devDependencies, vite, @vitejs/plugin-react, name, private, type, version, vite (+1 more)
+
+### Community 13 - "LandingPage.jsx"
+Cohesion: 0.25
+Nodes (8): examples, LandingPage(), ProductPreview(), questions, easeOutCubic(), useLenisScroll(), navigateToAnchor(), lenis
+
+### Community 14 - "init.sql"
+Cohesion: 0.29
+Nodes (13): cases, cases_owner_order, dataset_images, dataset_images_labels_gin, events, events_case_order, extractions, file_links (+5 more)
+
+### Community 15 - "scripts"
 Cohesion: 0.18
-Nodes (5): data, db, invalid, report, ../../.validation/node_modules/@electric-sql/pglite/dist/index.js
+Nodes (10): name, private, scripts, build, dev, dev:backend, dev:frontend, install:frontend (+2 more)
+
+### Community 16 - "dev.mjs"
+Cohesion: 0.20
+Nodes (6): children, localPython, root, start(), stop(), vite
+
+### Community 17 - "Brightline — sistema visual"
+Cohesion: 0.22
+Nodes (7): Referência visual, Brightline — sistema visual, Direção aprovada, Hierarquia, Identidade, Referências, Tipografia e layout
+
+### Community 18 - "main.jsx"
+Cohesion: 0.25
+Nodes (4): App, @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, react-dom
+
+### Community 19 - "Revisão dos laudos sintéticos Brightline"
+Cohesion: 0.29
+Nodes (6): Cobertura dos casos difíceis, Composição, Inventário para revisão do gabarito, Referências consultadas, Revisão dos laudos sintéticos Brightline, Semelhanças para revisar com Bruno
+
+### Community 20 - "dependencies"
+Cohesion: 0.29
+Nodes (7): dependencies, @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, lenis, lucide-react, react, react-dom
+
+### Community 21 - "scripts"
+Cohesion: 0.29
+Nodes (7): scripts, build, dev, preview, test, test:engine, test:store
+
+### Community 22 - "react"
+Cohesion: 0.33
+Nodes (5): store, escalatedSet, getRecentlyEscalated(), useRecentlyEscalated(), react
 
 ## Knowledge Gaps
-- **9 isolated node(s):** `../../.validation/node_modules/@electric-sql/pglite/dist/index.js`, `Graphify workflow instructions`, `Commit message instructions`, `Eurorad educational case references`, `Radiologia Brasileira educational reference` (+4 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 65 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **7 isolated node(s):** `Graphify workflow instructions`, `Commit message instructions`, `FastAPI dependency`, `HTTPX dependency`, `python-dotenv dependency` (+2 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 175 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `SupabaseApiTests` connect `API test harness` to `Backend services`?**
-  _High betweenness centrality (0.090) - this node is a cross-community bridge._
-- **Are the 2 inferred relationships involving `SupabaseApiTests` (e.g. with `Settings` and `SupabaseGateway`) actually correct?**
-  _`SupabaseApiTests` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `../../.validation/node_modules/@electric-sql/pglite/dist/index.js`, `Graphify workflow instructions`, `Commit message instructions` to the rest of the system?**
-  _9 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Backend API routes` be split into smaller, more focused modules?**
-  _Cohesion score 0.09098639455782313 - nodes in this community are weakly interconnected._
-- **Why does `SupabaseGateway` connect `Backend services` to `Backend API routes`, `API test harness`?**
-  _High betweenness centrality (0.061) - this node is a cross-community bridge._
-- **Should `Data processing pipeline` be split into smaller, more focused modules?**
-  _Cohesion score 0.1329268292682927 - nodes in this community are weakly interconnected._
-- **Why does `get_settings()` connect `Backend services` to `Backend API routes`, `Data processing pipeline`?**
-  _High betweenness centrality (0.047) - this node is a cross-community bridge._
+- **Why does `react` connect `react` to `frontend/package.json`, `main.jsx`, `LandingPage.jsx`, `App.jsx`?**
+  _High betweenness centrality (0.043) - this node is a cross-community bridge._
+- **What connects `Graphify workflow instructions`, `Commit message instructions`, `FastAPI dependency` to the rest of the system?**
+  _7 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `engine.test.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.06829573934837092 - nodes in this community are weakly interconnected._
+- **Why does `scripts` connect `scripts` to `frontend/package.json`?**
+  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+- **Should `cal.DESIGN.md` be split into smaller, more focused modules?**
+  _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
+- **Why does `dependencies` connect `dependencies` to `frontend/package.json`?**
+  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+- **Should `test_ai_pipeline.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.0777928539122569 - nodes in this community are weakly interconnected._
