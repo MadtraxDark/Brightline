@@ -1,0 +1,20 @@
+{
+  "example": true,
+  "dataset": {
+    "reports": 8,
+    "description": "Oito laudos sintéticos: seis com achado e dois sem achado."
+  },
+  "overall": {
+    "tp": 6,
+    "fp": 0,
+    "fn": 0,
+    "wrong_urgency": 0
+  },
+  "critical": {
+    "tp": 2,
+    "fp": 0,
+    "fn": 0
+  },
+  "false_negatives": [],
+  "false_positives": []
+}

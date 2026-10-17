@@ -9,6 +9,15 @@ import {
 
 export const STORAGE_KEY = "brightline:v1";
 
+function dataSignature(sourceReports, sourceCache) {
+  const text = JSON.stringify([sourceReports, sourceCache]);
+  let hash = 5381;
+  for (let i = 0; i < text.length; i += 1) {
+    hash = ((hash << 5) + hash + text.charCodeAt(i)) >>> 0;
+  }
+  return hash.toString(16);
+}
+
 const defaultTimers = {
   setTimeout(fn, ms) {
     return setTimeout(fn, ms);
@@ -41,43 +50,50 @@ function browserStorage() {
   }
 }
 
-function freshState() {
-  const loaded = loadCases(reports, cache);
-  return {
-    v: 1,
-    simNow: loaded.simNow,
-    cases: loaded.cases,
-    reports,
-    recentlyEscalated: [],
-  };
-}
+export function createStore({ storage, timers = defaultTimers, data } = {}) {
+  const sourceReports = data?.reports ?? reports;
+  const sourceCache = data?.cache ?? cache;
+  const sig = dataSignature(sourceReports, sourceCache);
 
-function readState(storage) {
-  try {
-    const raw = storage.getItem(STORAGE_KEY);
-    if (raw == null || raw === "") return freshState();
-    const parsed = JSON.parse(raw);
-    if (
-      !parsed ||
-      parsed.v !== 1 ||
-      !Array.isArray(parsed.cases) ||
-      typeof parsed.simNow !== "number"
-    ) {
-      return freshState();
-    }
+  function freshState() {
+    const loaded = loadCases(sourceReports, sourceCache);
     return {
       v: 1,
-      simNow: parsed.simNow,
-      cases: parsed.cases,
-      reports: Array.isArray(parsed.reports) ? parsed.reports : reports,
+      sig,
+      simNow: loaded.simNow,
+      cases: loaded.cases,
+      reports: sourceReports,
       recentlyEscalated: [],
     };
-  } catch {
-    return freshState();
   }
-}
 
-export function createStore({ storage, timers = defaultTimers }) {
+  function readState(currentStorage) {
+    try {
+      const raw = currentStorage.getItem(STORAGE_KEY);
+      if (raw == null || raw === "") return freshState();
+      const parsed = JSON.parse(raw);
+      if (
+        !parsed ||
+        parsed.v !== 1 ||
+        parsed.sig !== sig ||
+        !Array.isArray(parsed.cases) ||
+        typeof parsed.simNow !== "number"
+      ) {
+        return freshState();
+      }
+      return {
+        v: 1,
+        sig,
+        simNow: parsed.simNow,
+        cases: parsed.cases,
+        reports: Array.isArray(parsed.reports) ? parsed.reports : sourceReports,
+        recentlyEscalated: [],
+      };
+    } catch {
+      return freshState();
+    }
+  }
+
   let state = readState(storage);
   let timerId = null;
   let timerGeneration = 0;
@@ -89,6 +105,7 @@ export function createStore({ storage, timers = defaultTimers }) {
         STORAGE_KEY,
         JSON.stringify({
           v: current.v,
+          sig: current.sig,
           simNow: current.simNow,
           cases: current.cases,
           reports: current.reports,
@@ -140,6 +157,7 @@ export function createStore({ storage, timers = defaultTimers }) {
       const generation = timerGeneration;
       commit({
         v: 1,
+        sig,
         simNow: result.state.simNow,
         cases: result.state.cases,
         reports: state.reports,
@@ -150,6 +168,7 @@ export function createStore({ storage, timers = defaultTimers }) {
         timerId = null;
         state = {
           v: state.v,
+          sig: state.sig,
           simNow: state.simNow,
           cases: state.cases,
           reports: state.reports,
@@ -162,6 +181,7 @@ export function createStore({ storage, timers = defaultTimers }) {
       const next = runEngine(() => acknowledgeCase(state, id, by));
       commit({
         v: 1,
+        sig,
         simNow: next.simNow,
         cases: next.cases,
         reports: state.reports,
@@ -172,6 +192,7 @@ export function createStore({ storage, timers = defaultTimers }) {
       const next = runEngine(() => registerCaseAction(state, id, action, close));
       commit({
         v: 1,
+        sig,
         simNow: next.simNow,
         cases: next.cases,
         reports: state.reports,
@@ -185,12 +206,13 @@ export function createStore({ storage, timers = defaultTimers }) {
       } catch {
         /* falha de gravação é ignorada */
       }
-      const loaded = runEngine(() => loadCases(reports, cache));
+      const loaded = runEngine(() => loadCases(sourceReports, sourceCache));
       state = {
         v: 1,
+        sig,
         simNow: loaded.simNow,
         cases: loaded.cases,
-        reports,
+        reports: sourceReports,
         recentlyEscalated: [],
       };
       emit();

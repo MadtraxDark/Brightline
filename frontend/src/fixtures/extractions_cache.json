@@ -1,0 +1,82 @@
+{
+  "R-001": {
+    "report_id": "R-001",
+    "findings": [
+      {
+        "finding": "Pneumotórax hipertensivo",
+        "evidence": "pneumotórax hipertensivo à direita, com desvio do mediastino",
+        "urgency": "critical",
+        "deadline_hours": 1,
+        "confidence": "high"
+      }
+    ]
+  },
+  "R-002": {
+    "report_id": "R-002",
+    "findings": [
+      {
+        "finding": "Hemorragia subaracnóidea aguda",
+        "evidence": "hemorragia subaracnóidea aguda",
+        "urgency": "critical",
+        "deadline_hours": 1,
+        "confidence": "high"
+      }
+    ]
+  },
+  "R-003": {
+    "report_id": "R-003",
+    "findings": [
+      {
+        "finding": "Apendicite aguda",
+        "evidence": "compatível com apendicite aguda",
+        "urgency": "urgent",
+        "deadline_hours": 24,
+        "confidence": "medium"
+      }
+    ]
+  },
+  "R-004": {
+    "report_id": "R-004",
+    "findings": [
+      {
+        "finding": "Derrame pleural volumoso",
+        "evidence": "Derrame pleural volumoso à esquerda",
+        "urgency": "urgent",
+        "deadline_hours": 24,
+        "confidence": "high"
+      }
+    ]
+  },
+  "R-005": {
+    "report_id": "R-005",
+    "findings": [
+      {
+        "finding": "Nódulo pulmonar suspeito",
+        "evidence": "Nódulo pulmonar suspeito no lobo superior direito",
+        "urgency": "actionable",
+        "deadline_hours": 720,
+        "confidence": "medium"
+      }
+    ]
+  },
+  "R-006": {
+    "report_id": "R-006",
+    "findings": [
+      {
+        "finding": "Massa renal indeterminada",
+        "evidence": "Massa renal indeterminada no polo superior do rim esquerdo",
+        "urgency": "actionable",
+        "deadline_hours": 720,
+        "confidence": "low"
+      }
+    ]
+  },
+  "R-007": {
+    "report_id": "R-007",
+    "findings": []
+  },
+  "R-008": {
+    "report_id": "R-008",
+    "findings": []
+  }
+}
