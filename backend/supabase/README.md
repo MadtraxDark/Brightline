@@ -17,7 +17,7 @@ URL e chave publicável não concedem permissão para DDL. É necessário execut
 
 ## Configuração da aplicação
 
-O `.env` da raiz usa:
+O arquivo `backend/.env` usa:
 
 ```dotenv
 SUPABASE_URL=https://SEU-PROJETO.supabase.co
@@ -45,15 +45,15 @@ Esse modelo é individual. Compartilhamento por equipe, organização ou hospita
 
 O backend expõe cadastro, login, renovação, consulta e logout usando Supabase Auth. Quando confirmação de e-mail está habilitada, signup pode retornar somente o usuário; login requer confirmação. O cliente deve substituir os dois tokens quando renovar a sessão. Logout local revoga a renovação da sessão, mas o JWT emitido pode continuar válido até expirar.
 
-O frontend ainda não existe. Quando for implementado, prefira o SDK oficial Supabase para persistência e renovação da sessão e envie o access token nas requisições FastAPI. Recursos como OAuth, MFA e recuperação de senha precisam de configuração do provedor e fluxos de interface adicionais.
+O frontend demonstrativo usa dados locais. Ao conectar a autenticação à API, prefira o SDK oficial Supabase para persistência e renovação da sessão e envie o access token nas requisições FastAPI. Recursos como OAuth, MFA e recuperação de senha precisam de configuração do provedor e fluxos de interface adicionais.
 
 ## Verificação local do SQL
 
-Além dos testes Python, a migração pode ser executada em Postgres embarcado, sem acessar um projeto remoto:
+Além dos testes Python, a migração pode ser executada em Postgres embarcado, sem acessar um projeto remoto. Execute na raiz do repositório:
 
 ```powershell
 pnpm --dir .validation add @electric-sql/pglite@0.5.10
-node supabase/tests/verify.mjs
+node backend/supabase/tests/verify.mjs
 ```
 
 O teste cria um banco em memória e substitutos mínimos dos schemas `auth` e `storage`. Aplica a migração e verifica importação, evidência inválida, transições, escalonamento até coordenação, leitura, fechamento, reset, acesso anônimo negado e isolamento entre duas contas, inclusive no Storage. A pasta `.validation` está ignorada pelo Git.
@@ -64,7 +64,7 @@ Isso valida o SQL e suas políticas em Postgres. Não substitui a verificação 
 
 1. Cadastre duas contas de teste e confirme os e-mails quando exigido.
 2. Faça login, use o token no Swagger e confira `/ready`.
-3. Importe os laudos/cache completos na primeira conta com `import_supabase.py --email ... --replace`.
+3. Importe os laudos/cache completos na primeira conta executando `python import_supabase.py --email ... --replace` dentro de `backend/`.
 4. Confira os casos e eventos; avance o relógio, confirme leitura e feche um caso.
 5. Na segunda conta, confira que a lista de casos está vazia e o ID de um caso da primeira retorna 404.
 6. Envie um arquivo JSON, gere uma URL assinada e confira a leitura durante a validade.
