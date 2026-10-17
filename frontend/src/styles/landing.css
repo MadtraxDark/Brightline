@@ -119,9 +119,9 @@ html:has(.landing) { scrollbar-color: var(--lp-demo) var(--lp-cream); }
 .lp-questions summary { display: flex; justify-content: space-between; align-items: center; gap: 20px; cursor: pointer; list-style: none; padding: 24px 0; font-size: 16px; line-height: 1.6; }
 .lp-questions summary::-webkit-details-marker { display: none; }
 .lp-questions summary:hover { color: var(--lp-actionable); }
-.lp-questions summary svg { flex-shrink: 0; transition: transform .2s; }
-.lp-questions details[open] svg { transform: rotate(180deg); }
-.lp-questions details > p { padding: 0 28px 24px 0; font-size: 15px; color: var(--lp-muted); line-height: 1.85; max-width: 70ch; }
+.lp-questions summary svg { flex-shrink: 0; transition: transform .3s cubic-bezier(.22,1,.36,1); }
+.lp-questions details[data-expanded="true"] summary svg { transform: rotate(180deg); }
+.lp-faq-answer > p { padding: 0 28px 24px 0; font-size: 15px; color: var(--lp-muted); line-height: 1.85; max-width: 70ch; }
 .lp-final-cta { display: flex; justify-content: space-between; align-items: center; gap: 40px; padding: 72px max(5vw, calc((100vw - 1160px) / 2)); background: var(--lp-navy); color: var(--lp-paper); }
 .lp-final-cta h2 em { color: var(--lp-accent); }
 .lp-final-cta p { color: var(--lp-light-ink); font-size: 16px; line-height: 1.7; margin-top: 20px; }
@@ -227,7 +227,7 @@ html:has(.landing) { scrollbar-color: var(--lp-demo) var(--lp-cream); }
   .lp-human-note { margin-top: 24px; gap: 8px; font-size: 12px; }
   .lp-human-note > svg { display: none; }
   .lp-questions summary { font-size: 16px; padding-block: 22px; }
-  .lp-questions details > p { padding-right: 0; font-size: 16px; }
+  .lp-faq-answer > p { padding-right: 0; font-size: 16px; }
   .lp-final-cta { padding: 48px 24px; gap: 28px; }
   .lp-final-cta > a { width: 100%; }
   .lp-footer { padding-inline: 24px; }

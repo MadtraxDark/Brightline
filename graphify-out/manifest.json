@@ -210,9 +210,9 @@
     "semantic_hash": ""
   },
   "frontend/src/LandingPage.jsx": {
-    "mtime": 1792262407.9301887,
-    "seen": 1792262451.9937682,
-    "ast_hash": "919dee021938e9c90b75d9a823aab7f8",
+    "mtime": 1792264082.3813279,
+    "seen": 1792264135.555601,
+    "ast_hash": "37904ae24de966f65af0c8530447c1bc",
     "semantic_hash": ""
   },
   "frontend/src/api.js": {
@@ -420,9 +420,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/BenefitsCarousel.jsx": {
-    "mtime": 1792257782.0367742,
-    "seen": 1792262376.284114,
-    "ast_hash": "8d7b2bdbabf0181453efaff0b364ef6f",
+    "mtime": 1792263612.3038774,
+    "seen": 1792263677.4821386,
+    "ast_hash": "a761340927cdbb16529cb7b10afcf777",
     "semantic_hash": ""
   },
   "frontend/src/components/DemoClock.jsx": {
@@ -636,9 +636,9 @@
     "semantic_hash": ""
   },
   "frontend/docs/LANDING.md": {
-    "mtime": 1792262407.0248666,
-    "seen": 1792262452.030078,
-    "ast_hash": "1a83aa5bad099227727f8d919bb8e724",
+    "mtime": 1792264090.0569575,
+    "seen": 1792264135.593639,
+    "ast_hash": "1b272dad6f168258382e2ad474ccc632",
     "semantic_hash": ""
   },
   "artifacts/ui/cadastro-1024.png": {
@@ -759,6 +759,12 @@
     "mtime": 1792262080.0321717,
     "seen": 1792262376.284114,
     "ast_hash": "f93e56d4f08421d025ca8697b3615f2b",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/FaqItem.jsx": {
+    "mtime": 1792264082.100028,
+    "seen": 1792264135.5586066,
+    "ast_hash": "3ad9b267577626cec401d6366f1dccfe",
     "semantic_hash": ""
   }
 }

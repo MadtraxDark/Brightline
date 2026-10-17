@@ -19,39 +19,26 @@ import useLenisScroll from "./useLenisScroll.js";
 import useTitleAnimation from "./useTitleAnimation.js";
 import LandingHeader from "./components/LandingHeader.jsx";
 import BenefitsCarousel from "./components/BenefitsCarousel.jsx";
+import FaqItem from "./components/FaqItem.jsx";
+import reports from "./data/reports.json" with { type: "json" };
+import cache from "./data/extractions_cache.json" with { type: "json" };
+import { getMissed, loadCases } from "./engine/engine.js";
+import { formatRemaining } from "./lib/formatRemaining.js";
 
-const examples = [
-  {
-    name: "Tromboembolismo pulmonar",
-    exam: "Angiotomografia de tórax",
-    priority: "Crítico",
-    style: "critical",
-    time: "1 hora",
-    evidence:
-      "Falhas de enchimento em ramos das artérias pulmonares, compatíveis com tromboembolismo pulmonar.",
-    id: "BL-001",
-  },
-  {
-    name: "Pneumotórax",
-    exam: "Radiografia de tórax",
-    priority: "Urgente",
-    style: "urgent",
-    time: "24 horas",
-    evidence:
-      "Pneumotórax à direita, com retração parcial do parênquima pulmonar.",
-    id: "BL-002",
-  },
-  {
-    name: "Nódulo pulmonar",
-    exam: "Tomografia de tórax",
-    priority: "Acionável",
-    style: "actionable",
-    time: "30 dias",
-    evidence:
-      "Nódulo pulmonar sólido no lobo superior direito, com recomendação de acompanhamento.",
-    id: "BL-003",
-  },
-];
+const previewState = loadCases(reports, cache);
+const priorityLabels = { critical: "Crítico", urgent: "Urgente", actionable: "Acionável" };
+const examples = previewState.cases.map((item) => ({
+  id: item.id,
+  reportId: item.report_id,
+  name: item.finding,
+  exam: item.modality,
+  priority: priorityLabels[item.urgency],
+  style: item.urgency,
+  time: formatRemaining(item.deadline_hours),
+  evidence: item.evidence,
+  unflagged: !item.flagged_by_radiologist,
+}));
+const missedCount = getMissed(previewState).length;
 
 function ProductPreview() {
   const [selected, setSelected] = useState(0);
@@ -82,8 +69,9 @@ function ProductPreview() {
             <LayoutDashboard size={14} /> Visão geral
           </span>
           <span>
-            <ScanLine size={14} /> Não sinalizados
+            <ScanLine size={14} /> Não sinalizados · {missedCount}
           </span>
+          <span><Sparkles size={14} /> Avaliação da IA</span>
           <div className="lp-mini-bottom">
             <ShieldCheck size={16} />
             <span>
@@ -108,7 +96,7 @@ function ProductPreview() {
             <div>
               <span>Em acompanhamento</span>
               <strong>
-                03 <small>casos ilustrativos</small>
+                {String(examples.length).padStart(2, "0")} <small>casos demonstrativos</small>
               </strong>
             </div>
             <div>
@@ -134,7 +122,7 @@ function ProductPreview() {
               >
                 <span>
                   <strong>{example.name}</strong>
-                  <small>{example.exam}</small>
+                  <small>{example.reportId} · {example.exam}{example.unflagged ? " · Não sinalizado" : ""}</small>
                 </span>
                 <span className={`lp-priority ${example.style}`}>
                   <CircleDot size={10} />
@@ -149,12 +137,12 @@ function ProductPreview() {
               <span>
                 <Sparkles size={13} /> Evidência no laudo
               </span>
-              <small>{item.id}</small>
+              <small>{item.reportId}</small>
             </div>
             <p>“{item.evidence}”</p>
             <div className="lp-evidence-action">
               <span>
-                <Clock3 size={12} /> Prazo ilustrativo: {item.time}
+                <Clock3 size={12} /> Prazo na demonstração: {item.time}
               </span>
               <button
                 type="button"
@@ -179,8 +167,7 @@ function ProductPreview() {
       </div>
       <div className="lp-product-foot">
         <span>
-          <span className="lp-live-dot" /> Exemplos fictícios · sem dados de
-          pacientes
+          <span className="lp-live-dot" /> {reports.length} laudos sintéticos · {examples.length} casos demonstrativos
         </span>
         <span>
           Selecione um achado para explorar <ArrowUpRight size={12} />
@@ -201,7 +188,19 @@ const questions = [
   ],
   [
     "Posso experimentar o produto?",
-    "Sim. O botão “Explorar a demonstração” abre o painel do protótipo com dados sintéticos. Você pode navegar pelos laudos e experimentar o fluxo de acompanhamento sem inserir dados reais de pacientes.",
+    `Sim. O botão “Explorar a demonstração” leva ao login, com opção de cadastro demonstrativo. Você encontra ${reports.length} laudos sintéticos e ${examples.length} casos para revisar evidências, confirmar leituras e registrar condutas. Nenhuma conta real é criada e seus dados não são enviados.`,
+  ],
+  [
+    "O que aparece em Não sinalizados?",
+    `A fila reúne achados críticos e urgentes detectados pelo Brightline que não estavam sinalizados pelo radiologista. A base demonstrativa atual contém ${missedCount} desses casos, com a evidência para revisão humana.`,
+  ],
+  [
+    "Como posso testar os prazos e as escalações?",
+    "No painel, abra Demonstração e avance o relógio em 1, 6 ou 24 horas. Casos sem leitura confirmada podem escalar do médico solicitante ao radiologista e à coordenação. As mudanças ficam na linha do tempo; o reset permite recomeçar. Os prazos e as notificações são simulados.",
+  ],
+  [
+    "Como a IA é avaliada?",
+    "A página Avaliação da IA mostra recall dos críticos, recall geral, precisão e listas de falsos positivos e negativos. Os resultados atuais são de exemplo, em um conjunto pequeno de laudos sintéticos, e não representam desempenho clínico validado.",
   ],
   [
     "O produto já está pronto para uso clínico?",
@@ -228,9 +227,9 @@ export default function LandingPage() {
               merece um <em>próximo passo.</em>
             </h1>
             <p>
-              Do laudo à confirmação de leitura. O Brightline dá visibilidade
-              aos achados prioritários e ajuda a acompanhar o que precisa de
-              atenção.
+              Revise achados críticos, urgentes e acionáveis com a evidência
+              do laudo. Acompanhe responsáveis, prazos, leitura e conduta
+              até o encerramento de cada caso.
             </p>
             <div className="lp-hero-actions">
               <a className="lp-button lp-button-primary" href="/login">
@@ -248,7 +247,7 @@ export default function LandingPage() {
           <div className="lp-preview-wrap" id="demonstracao">
             <div className="lp-preview-caption">
               <h2>Do achado à ação, em um só lugar.</h2>
-              <p>Selecione um achado e experimente confirmar a leitura.</p>
+              <p>Explore {examples.length} casos de {reports.length} laudos sintéticos e confirme uma leitura.</p>
             </div>
             <ProductPreview />
           </div>
@@ -278,21 +277,21 @@ export default function LandingPage() {
                 number: "01",
                 icon: ScanLine,
                 title: "Identifique o que importa",
-                text: "A IA analisa o texto do laudo e sugere achados que merecem atenção, com a evidência em destaque.",
+                text: "Consulte achados críticos, urgentes e acionáveis, incluindo os não sinalizados pelo radiologista, com a evidência em destaque.",
                 label: "Do texto ao contexto",
               },
               {
                 number: "02",
                 icon: ShieldCheck,
                 title: "Revise com clareza",
-                text: "O profissional revisa o achado, consulta o laudo e confirma a leitura. A decisão continua humana.",
+                text: "Compare a sugestão com o laudo, veja o responsável e o prazo e confirme a leitura. A decisão continua humana.",
                 label: "Da sinalização à validação",
               },
               {
                 number: "03",
                 icon: CheckCheck,
                 title: "Acompanhe o próximo passo",
-                text: "Registre a conduta e acompanhe o histórico do caso até o encerramento, sem perder o contexto.",
+                text: "Registre a conduta e encerre o caso. Na demonstração, avance o relógio para acompanhar prazos e escalações na linha do tempo.",
                 label: "Da leitura à ação",
               },
             ].map(({ number, icon: Icon, title, text, label }) => (
@@ -339,8 +338,23 @@ export default function LandingPage() {
                 FileText,
               ],
               [
+                "Achados que merecem uma segunda revisão",
+                "Uma fila dedicada aos críticos e urgentes não sinalizados pelo radiologista, com o trecho que sustenta cada sugestão.",
+                ScanLine,
+              ],
+              [
+                "Prazos e responsáveis à vista",
+                "Simule a passagem do tempo e acompanhe a escalação entre solicitante, radiologista e coordenação, até confirmar a leitura.",
+                Clock3,
+              ],
+              [
+                "Avaliação que você pode consultar",
+                "Recall, precisão e falsos positivos e negativos disponíveis no painel. Os resultados da demonstração são ilustrativos.",
+                Sparkles,
+              ],
+              [
                 "Um histórico que faz sentido",
-                "Leitura, conduta e encerramento reunidos no caso. Cada etapa registrada para consulta.",
+                "Leitura, conduta, escalações e encerramento reunidos na linha do tempo do caso, com cada etapa registrada para consulta.",
                 CheckCheck,
               ],
             ].map(([title, text, Icon]) => (
@@ -390,13 +404,7 @@ export default function LandingPage() {
           </div>
           <div className="lp-questions">
             {questions.map(([question, answer]) => (
-              <details key={question}>
-                <summary>
-                  {question}
-                  <ChevronDown size={18} />
-                </summary>
-                <p>{answer}</p>
-              </details>
+              <FaqItem key={question} question={question} answer={answer} />
             ))}
           </div>
         </section>
@@ -408,7 +416,7 @@ export default function LandingPage() {
               <br />
               <em>Antes de dar o seu.</em>
             </h2>
-            <p>Explore o produto com laudos e casos demonstrativos.</p>
+            <p>Entre na demonstração: {reports.length} laudos sintéticos, {examples.length} casos e um fluxo completo de acompanhamento.</p>
           </div>
           <a className="lp-button lp-button-primary" href="/login">
             Explorar a demonstração <ArrowUpRight size={18} />
