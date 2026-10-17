@@ -10,9 +10,9 @@ Com Node.js e Python instalados, na raiz do projeto:
 npm run dev
 ```
 
-Painel: `http://localhost:5173` (login de demonstração em `/login`); API: `http://localhost:8000/docs`.
+Site: `http://localhost:5173`; login em `/login`, cadastro em `/cadastro` e painel em `/home`. API: `http://localhost:8000/docs`.
 
-A tela `/login` aceita qualquer e-mail e senha. Nada é enviado ou armazenado; a sessão dura até fechar a aba. Para ver o login de novo, use Sair.
+O cadastro salva nome, e-mail e hash da senha no PostgreSQL. A senha deve ter pelo menos 9 caracteres. O login valida as credenciais na API; Sair revoga a sessão. Configure `DATABASE_URL` em `backend/.env` para o banco acessível (inclusive Docker em outro host). O Vite encaminha `/api` à API local na porta 8000; `BRIGHTLINE_API_TARGET` permite usar outra API atualizada.
 
 Para iniciar os serviços separadamente, use `npm run dev:frontend` ou `npm run dev:backend`. Instale dependências com `npm run install:frontend` e `python -m pip install -r backend/requirements.txt`.
 
@@ -39,7 +39,7 @@ O conjunto NIH ChestX-ray14 foi importado para `dataset_images` no PostgreSQL; o
 - [Documentação da API](backend/docs/API.md)
 - [Frontend](frontend/README.md)
 
-O frontend demonstrativo usa fixtures locais e ainda não está conectado à API. Não há integração PACS/HL7/FHIR nem envio real de mensagens.
+A autenticação do frontend está conectada à API. Os laudos e casos da demonstração continuam usando fixtures locais. Não há integração PACS/HL7/FHIR nem envio real de mensagens.
 
 ## Trocar os dados
 
