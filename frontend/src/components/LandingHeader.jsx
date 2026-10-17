@@ -69,30 +69,25 @@ export default function LandingHeader() {
           <img src={logo} alt="Brightline" width="146" />
         </a>
         <nav className="bl-desktop-nav" aria-label="Navegação do site">
-          {links.map(([label, href]) => (
-            <a
-              key={href}
-              href={href}
-              className={href === "/login" ? "bl-panel-link" : undefined}
-              aria-current={activeSection === href ? "location" : undefined}
-            >
-              {href === "/login" ? (
-                <>
-                  {label}
-                  <ArrowUpRight size={15} aria-hidden="true" />
-                </>
-              ) : (
-                <>
-                  <span className="bl-nav-dot" aria-hidden="true" />
-                  <span className="bl-nav-roll">
-                    <span>{label}</span>
-                    <span aria-hidden="true">{label}</span>
-                  </span>
-                </>
-              )}
-            </a>
-          ))}
+          {links
+            .filter(([, href]) => href !== "/login")
+            .map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                aria-current={activeSection === href ? "location" : undefined}
+              >
+                <span className="bl-nav-dot" aria-hidden="true" />
+                <span className="bl-nav-roll">
+                  <span>{label}</span>
+                  <span aria-hidden="true">{label}</span>
+                </span>
+              </a>
+            ))}
         </nav>
+        <a className="bl-panel-link bl-desktop-panel" href="/login">
+          Acessar painel <ArrowUpRight size={15} aria-hidden="true" />
+        </a>
         <a
           className="bl-panel-link bl-mobile-panel"
           href="/login"
