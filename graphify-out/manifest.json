@@ -204,15 +204,15 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1792265002.141314,
-    "seen": 1792265086.1786292,
-    "ast_hash": "3a2930283f324822c17a1e095de7b0ed",
+    "mtime": 1792270657.1435049,
+    "seen": 1792270688.0847058,
+    "ast_hash": "b6519ff0c3efe1fa66d9ff8c65e50324",
     "semantic_hash": ""
   },
   "frontend/src/LandingPage.jsx": {
-    "mtime": 1792266603.3551576,
-    "seen": 1792266647.0493643,
-    "ast_hash": "ed23f3b827ae5d006102960e06ff973d",
+    "mtime": 1792270657.214635,
+    "seen": 1792270688.0847058,
+    "ast_hash": "c56a9dbdb3e3102369a4654486388abb",
     "semantic_hash": ""
   },
   "frontend/src/api.js": {
@@ -582,9 +582,9 @@
     "semantic_hash": ""
   },
   "frontend/src/useTitleAnimation.js": {
-    "mtime": 1792265002.520517,
-    "seen": 1792265086.197075,
-    "ast_hash": "2622a98cf31ac9037df112165edc0dc2",
+    "mtime": 1792270657.428357,
+    "seen": 1792270688.1018367,
+    "ast_hash": "cf8247f371662857fdec5c9d7ebf95c8",
     "semantic_hash": ""
   },
   "scripts/check-data.js": {
@@ -636,9 +636,9 @@
     "semantic_hash": ""
   },
   "frontend/docs/LANDING.md": {
-    "mtime": 1792266604.1873832,
-    "seen": 1792266647.0880716,
-    "ast_hash": "dea024166d774ea865c37a1cc10bf333",
+    "mtime": 1792270657.0771754,
+    "seen": 1792270688.1233559,
+    "ast_hash": "93f7b06605917774dc4b0b58637cf358",
     "semantic_hash": ""
   },
   "artifacts/ui/cadastro-1024.png": {
@@ -768,9 +768,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/DashboardShell.jsx": {
-    "mtime": 1792266604.1873832,
-    "seen": 1792266647.0513642,
-    "ast_hash": "b7605af45f5a756d3e46d11adfaf2696",
+    "mtime": 1792270681.553506,
+    "seen": 1792270688.0869908,
+    "ast_hash": "579c15282945a57383c4c7a91c1a962d",
     "semantic_hash": ""
   },
   "frontend/src/data/preview.js": {
