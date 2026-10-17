@@ -1,6 +1,6 @@
 # Extração e avaliação do Brightline
 
-Esta parte produz o cache offline importado no PostgreSQL local pelo backend. Os scripts de extração e avaliação usam Python 3.10 ou superior e somente a biblioteca padrão. O importador e a API usam as dependências de `requirements.txt`. Execute os comandos na raiz do projeto. Os dados são sintéticos e os resultados precisam de revisão humana.
+Esta parte produz o cache offline importado no PostgreSQL local pelo backend. Os scripts de extração e avaliação usam Python 3.10 ou superior e somente a biblioteca padrão. O importador e a API usam as dependências de `requirements.txt`. Execute os comandos dentro de `backend/`. Os dados são sintéticos e os resultados precisam de revisão humana.
 
 ## Arquivos
 
