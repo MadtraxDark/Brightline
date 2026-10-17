@@ -31,13 +31,13 @@ function ErrorFallback({ onClear }) {
 
   function backToQueue() {
     onClear();
-    navigate("/");
+    navigate("/home");
   }
 
   async function resetDemo() {
     await reset();
     onClear();
-    navigate("/");
+    navigate("/home");
   }
 
   return (
