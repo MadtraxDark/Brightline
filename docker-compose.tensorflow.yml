@@ -1,0 +1,26 @@
+services:
+  tensorflow-train:
+    build:
+      context: .
+      dockerfile: Dockerfile.tensorflow
+    image: brightline-tensorflow-trainer:latest
+    container_name: brightline-tensorflow-trainer
+    environment:
+      NIH_DATA_DIR: /data/nih
+      MODEL_OUTPUT_DIR: /output
+      EPOCHS: ${NIH_EPOCHS:-3}
+      BATCH_SIZE: ${NIH_BATCH_SIZE:-16}
+      IMAGE_SIZE: ${NIH_IMAGE_SIZE:-224}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-brightline}:${POSTGRES_PASSWORD:-REMOVED_CREDENTIAL}@db:5432/${POSTGRES_DB:-brightline}
+    volumes:
+      - ./data/nih-chestxray14:/data/nih:ro
+      - ./artifacts/nih-chestxray14:/output
+    shm_size: 2gb
+    restart: "no"
+    networks:
+      - brightline
+
+networks:
+  brightline:
+    external: true
+    name: brightline_brightline

@@ -24,16 +24,16 @@
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
   },
   "backend/app/config.py": {
-    "mtime": 1792249166.0769453,
-    "seen": 1792249573.9815435,
-    "ast_hash": "6cbfba9e5586644acc1e943d50765faa",
-    "semantic_hash": "6cbfba9e5586644acc1e943d50765faa"
+    "mtime": 1792258548.0593271,
+    "seen": 1792258670.9971805,
+    "ast_hash": "10c73c5ff2536e3f79c2a2c619642d62",
+    "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1792249166.0769453,
-    "seen": 1792249573.9815435,
-    "ast_hash": "073b33498bd16b9ddceb391812113608",
-    "semantic_hash": "073b33498bd16b9ddceb391812113608"
+    "mtime": 1792258646.1046388,
+    "seen": 1792258670.9971805,
+    "ast_hash": "42d7d3ed4664cc427845af31df8f8708",
+    "semantic_hash": ""
   },
   "backend/app/models.py": {
     "mtime": 1792249166.0769453,
@@ -72,10 +72,10 @@
     "semantic_hash": "d3e65e9ca5871a356bd21082f6b90806"
   },
   "import_supabase.py": {
-    "mtime": 1792249166.0769453,
-    "seen": 1792249573.9815435,
-    "ast_hash": "5acb06a98a3e37c76488e20e0997c438",
-    "semantic_hash": "5acb06a98a3e37c76488e20e0997c438"
+    "mtime": 1792258607.263639,
+    "seen": 1792258670.9971805,
+    "ast_hash": "1a49f41a1b1ec4d7bbcef5f21e8c0fcc",
+    "semantic_hash": ""
   },
   "supabase/migrations/202610170001_brightline.sql": {
     "mtime": 1792249166.085203,
@@ -114,10 +114,10 @@
     "semantic_hash": "f45286ed90fce4127d07dd2cb05dccb3"
   },
   "README.md": {
-    "mtime": 1792249166.066884,
-    "seen": 1792249573.9815435,
-    "ast_hash": "35ee7070c347749f6f547bd51605a891",
-    "semantic_hash": "35ee7070c347749f6f547bd51605a891"
+    "mtime": 1792259089.6930802,
+    "seen": 1792259106.7157016,
+    "ast_hash": "cd12110d21f705d52d04cc83bbbffe23",
+    "semantic_hash": ""
   },
   "backend/.github/commit-message-instructions.md": {
     "mtime": 1792247436.6804874,
@@ -150,15 +150,93 @@
     "semantic_hash": "9053b437af1689eeedded819491603cb"
   },
   "requirements.txt": {
-    "mtime": 1792249166.083193,
-    "seen": 1792249573.9815435,
-    "ast_hash": "5783054071fed29614a9d8710f7c3f73",
-    "semantic_hash": "5783054071fed29614a9d8710f7c3f73"
+    "mtime": 1792258600.2327967,
+    "seen": 1792258670.9981809,
+    "ast_hash": "a3af6a401180801bedbcad263f771151",
+    "semantic_hash": ""
   },
   "supabase/README.md": {
     "mtime": 1792249166.0842352,
     "seen": 1792249573.9815435,
     "ast_hash": "027b26ce53f46477cc6d008f915b6992",
     "semantic_hash": "027b26ce53f46477cc6d008f915b6992"
+  },
+  "docker-compose.yml": {
+    "mtime": 1792258743.4710052,
+    "seen": 1792259004.668836,
+    "ast_hash": "d4fffce7c926c26befb080910cac4c64",
+    "semantic_hash": ""
+  },
+  "train_nih.py": {
+    "mtime": 1792259076.8353395,
+    "seen": 1792259106.7157016,
+    "ast_hash": "27cebd19ea46ef06b1164594e96443a3",
+    "semantic_hash": ""
+  },
+  "NIH_TENSORFLOW.md": {
+    "mtime": 1792259090.4761386,
+    "seen": 1792259106.7157016,
+    "ast_hash": "cedd552e91d0e34e56c97d1b3cb278f0",
+    "semantic_hash": ""
+  },
+  "docker-compose.tensorflow.yml": {
+    "mtime": 1792258900.7402847,
+    "seen": 1792259004.668836,
+    "ast_hash": "72940a549bc9d6292e11815a487e3ce7",
+    "semantic_hash": ""
+  },
+  "data/nih-chestxray14/sample_manifest.json": {
+    "mtime": 1792257117.50994,
+    "seen": 1792257140.4381597,
+    "ast_hash": "93879cbfea824c1b7f48133d0bbe2cb6",
+    "semantic_hash": ""
+  },
+  "download_nih_sample.py": {
+    "mtime": 1792256898.0911298,
+    "seen": 1792257140.4381597,
+    "ast_hash": "81afcbf738244bffbf972e6189510df7",
+    "semantic_hash": ""
+  },
+  "data/nih-chestxray14/test_list.txt": {
+    "mtime": 1792257117.5089345,
+    "seen": 1792257140.4381597,
+    "ast_hash": "f4ada94c6f1b01099bb4de7adb22a4df",
+    "semantic_hash": ""
+  },
+  "data/nih-chestxray14/train_val_list.txt": {
+    "mtime": 1792257117.5089345,
+    "seen": 1792257140.4381597,
+    "ast_hash": "436ed3e4d0fc7ec68954b31e1d7aea5e",
+    "semantic_hash": ""
+  },
+  "artifacts/nih-chestxray14/metrics.json": {
+    "mtime": 1792257512.093114,
+    "seen": 1792258670.9971805,
+    "ast_hash": "577d9bd80c6069d3d6990ab6bffe3112",
+    "semantic_hash": ""
+  },
+  "backend/init.sql": {
+    "mtime": 1792258884.8577623,
+    "seen": 1792259004.668836,
+    "ast_hash": "dd5c4e54cc75e2d154d69e35fb3eb146",
+    "semantic_hash": ""
+  },
+  "backend/import_nih_images.py": {
+    "mtime": 1792258930.6238074,
+    "seen": 1792259004.668836,
+    "ast_hash": "66a68affb02f9bc4448065447861dd8c",
+    "semantic_hash": ""
+  },
+  "backend/migrate.py": {
+    "mtime": 1792258922.85697,
+    "seen": 1792259004.668836,
+    "ast_hash": "12e70499515c09d88f330355af406bce",
+    "semantic_hash": ""
+  },
+  "backend/migrations/002_dataset_images.sql": {
+    "mtime": 1792258882.482296,
+    "seen": 1792259004.668836,
+    "ast_hash": "eff2ffc6ab7de22e83fa35648b2f08b9",
+    "semantic_hash": ""
   }
 }
