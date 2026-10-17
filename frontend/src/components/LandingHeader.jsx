@@ -23,16 +23,34 @@ export default function LandingHeader() {
   }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) if (entry.isIntersecting) setActiveSection(`#${entry.target.id}`);
-    }, { rootMargin: "-15% 0px -55% 0px" });
-    for (const [, href] of links) {
-      if (href.startsWith("#")) {
-        const section = document.getElementById(href.slice(1));
-        if (section) observer.observe(section);
+    const sections = links.filter(([, href]) => href.startsWith("#"))
+      .map(([, href]) => [href, document.getElementById(href.slice(1))])
+      .filter(([, section]) => section);
+    let disposed = false;
+    const updateActive = () => {
+      if (disposed) return;
+      // Nested sections can be visible together. Activate only after their
+      // beginning reaches the reading line below the fixed header.
+      let current = "#produto";
+      if (window.scrollY > 24) {
+        for (const [href, section] of sections) {
+          if (section.getBoundingClientRect().top <= 112) current = href;
+        }
       }
-    }
-    return () => observer.disconnect();
+      setActiveSection(current);
+    };
+    updateActive();
+    window.addEventListener("scroll", updateActive, { passive: true });
+    window.addEventListener("resize", updateActive);
+    const observer = new ResizeObserver(updateActive);
+    observer.observe(document.querySelector(".landing"));
+    document.fonts.ready.then(updateActive);
+    return () => {
+      disposed = true;
+      observer.disconnect();
+      window.removeEventListener("scroll", updateActive);
+      window.removeEventListener("resize", updateActive);
+    };
   }, []);
 
   useEffect(() => {
