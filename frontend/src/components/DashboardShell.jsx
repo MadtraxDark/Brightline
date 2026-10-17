@@ -1,6 +1,28 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, NavLink, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { Activity, ArrowUpRight, Files, ShieldCheck, Timer, LayoutDashboard, EyeOff, ChevronRight, ChevronDown, Sparkles, FlaskConical, Menu, X } from "lucide-react";
+import {
+  Link,
+  NavLink,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import {
+  Activity,
+  ArrowUpRight,
+  Files,
+  ShieldCheck,
+  Timer,
+  LayoutDashboard,
+  EyeOff,
+  ChevronRight,
+  ChevronDown,
+  Sparkles,
+  FlaskConical,
+  Menu,
+  X,
+} from "lucide-react";
 import logo from "../public/logo/logo-text.svg";
 import CaseDetail from "./CaseDetail.jsx";
 import CaseList from "./CaseList.jsx";
@@ -25,11 +47,18 @@ const SUMMARY = [
 ];
 
 function summaryValue(stats, key) {
-  if (key === "avg_time_to_read_hours") return formatAverage(stats.avg_time_to_read_hours);
+  if (key === "avg_time_to_read_hours")
+    return formatAverage(stats.avg_time_to_read_hours);
   if (key === "critical") return stats.urgency.critical;
   if (key === "escalated") return stats.status.escalated;
   const status = stats.status;
-  return status.detected + status.notified + status.read + status.action_taken + status.escalated;
+  return (
+    status.detected +
+    status.notified +
+    status.read +
+    status.action_taken +
+    status.escalated
+  );
 }
 
 function crumb(pathname) {
@@ -41,9 +70,15 @@ function crumb(pathname) {
 }
 
 function Overview({ preview = false }) {
-  const cases = useStore((state) => preview ? previewData.cases : state.cases);
-  const simNow = useStore((state) => preview ? previewData.simNow : state.simNow);
-  const reports = useStore((state) => preview ? previewData.reports : state.reports);
+  const cases = useStore((state) =>
+    preview ? previewData.cases : state.cases,
+  );
+  const simNow = useStore((state) =>
+    preview ? previewData.simNow : state.simNow,
+  );
+  const reports = useStore((state) =>
+    preview ? previewData.reports : state.reports,
+  );
   const stats = useMemo(
     () => selectStats({ cases, simNow, reports }),
     [cases, simNow, reports],
@@ -53,12 +88,34 @@ function Overview({ preview = false }) {
 
   return (
     <>
-      <div className="page-intro">{preview ? <h3>Visão geral</h3> : <h1>Visão geral</h1>}<p>Seus laudos, organizados por prioridade.</p></div>
+      <div className="page-intro">
+        {preview ? <h3>Visão geral</h3> : <h1>Visão geral</h1>}
+        <p>Seus laudos, organizados por prioridade.</p>
+      </div>
       <section className="summary" aria-label="Resumo">
-        {SUMMARY.map((item) => <SummaryItem className="summary-item" key={item.key} {...(preview ? { to: "/home" } : {})}>
-          <span className="summary-icon" aria-hidden="true">{item.key === "open" ? <Files size={20} /> : item.key === "critical" ? <Activity size={20} /> : item.key === "escalated" ? <ArrowUpRight size={20} /> : <Timer size={20} />}</span>
-          <div><p className="summary-label">{item.label}</p><p className="summary-value">{summaryValue(stats, item.key)}</p></div>
-        </SummaryItem>)}
+        {SUMMARY.map((item) => (
+          <SummaryItem
+            className="summary-item"
+            key={item.key}
+            {...(preview ? { to: "/home" } : {})}
+          >
+            <span className="summary-icon" aria-hidden="true">
+              {item.key === "open" ? (
+                <Files size={20} />
+              ) : item.key === "critical" ? (
+                <Activity size={20} />
+              ) : item.key === "escalated" ? (
+                <ArrowUpRight size={20} />
+              ) : (
+                <Timer size={20} />
+              )}
+            </span>
+            <div>
+              <p className="summary-label">{item.label}</p>
+              <p className="summary-value">{summaryValue(stats, item.key)}</p>
+            </div>
+          </SummaryItem>
+        ))}
       </section>
       <CaseList preview={preview} />
     </>
@@ -71,12 +128,23 @@ export default function DashboardShell({ preview = false }) {
   const { pathname: routePath } = useLocation();
   const pathname = preview ? "/home" : routePath;
   const navigate = useNavigate();
-  const activeSection = pathname === "/home" || pathname.startsWith("/caso/") ? "0"
-    : pathname.startsWith("/nao-sinalizados") ? "1"
-    : pathname.startsWith("/avaliacao") ? "2" : "none";
-  const cases = useStore((state) => preview ? previewData.cases : state.cases);
-  const reports = useStore((state) => preview ? previewData.reports : state.reports);
-  const simNow = useStore((state) => preview ? previewData.simNow : state.simNow);
+  const activeSection =
+    pathname === "/home" || pathname.startsWith("/caso/")
+      ? "0"
+      : pathname.startsWith("/nao-sinalizados")
+        ? "1"
+        : pathname.startsWith("/avaliacao")
+          ? "2"
+          : "none";
+  const cases = useStore((state) =>
+    preview ? previewData.cases : state.cases,
+  );
+  const reports = useStore((state) =>
+    preview ? previewData.reports : state.reports,
+  );
+  const simNow = useStore((state) =>
+    preview ? previewData.simNow : state.simNow,
+  );
   const demoRef = useRef(null);
   useEffect(() => {
     function closeOnOutside(event) {
@@ -104,38 +172,151 @@ export default function DashboardShell({ preview = false }) {
 
   return (
     <div className="app">
-      {!preview && <a className="skip-link" href="#workspace">Ir para os laudos</a>}
+      {!preview && (
+        <a className="skip-link" href="#workspace">
+          Ir para os laudos
+        </a>
+      )}
       <aside className="sidebar">
         <div className="sidebar-header">
-          <div className="brand" translate="no"><span className="brand-image"><img src={logo} alt="Brightline" width="156" height="59" /></span></div>
-          <button type="button" className="sidebar-menu-toggle" aria-label={menuOpen ? "Fechar menu" : "Abrir menu"} aria-expanded={menuOpen} aria-controls="sidebar-menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}</button>
+          <div className="brand" translate="no">
+            <span className="brand-image">
+              <img src={logo} alt="Brightline" width="156" height="59" />
+            </span>
+          </div>
+          <button
+            type="button"
+            className="sidebar-menu-toggle"
+            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={menuOpen}
+            aria-controls="sidebar-menu"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? (
+              <X size={20} aria-hidden="true" />
+            ) : (
+              <Menu size={20} aria-hidden="true" />
+            )}
+          </button>
         </div>
-        <div id="sidebar-menu" className={`sidebar-body${menuOpen ? " is-open" : ""}`}>
-          <nav className="sidebar-primary" data-active={activeSection} aria-label="Navegação principal">
+        <div
+          id="sidebar-menu"
+          className={`sidebar-body${menuOpen ? " is-open" : ""}`}
+        >
+          <nav
+            className="sidebar-primary"
+            data-active={activeSection}
+            aria-label="Navegação principal"
+          >
             <NavigationHighlight section={activeSection} menuOpen={menuOpen} />
-            <NavLink data-section="0" to="/home" end className={pathname.startsWith("/caso/") ? "is-current-section" : undefined} onClick={() => setMenuOpen(false)}><LayoutDashboard size={18} aria-hidden="true" /><span>Visão geral</span></NavLink>
-            <NavLink data-section="1" to="/nao-sinalizados" onClick={() => setMenuOpen(false)}><EyeOff size={18} aria-hidden="true" /><span>Não sinalizados</span><span className="sidebar-count" aria-label={`${missedCount} não sinalizados`}>{missedCount}</span></NavLink>
-            <NavLink data-section="2" to="/avaliacao" onClick={() => setMenuOpen(false)}><Sparkles size={18} aria-hidden="true" /><span>Avaliação da IA</span></NavLink>
+            <NavLink
+              data-section="0"
+              to="/home"
+              end
+              className={
+                pathname.startsWith("/caso/") ? "is-current-section" : undefined
+              }
+              onClick={() => setMenuOpen(false)}
+            >
+              <LayoutDashboard size={18} aria-hidden="true" />
+              <span>Visão geral</span>
+            </NavLink>
+            <NavLink
+              data-section="1"
+              to="/nao-sinalizados"
+              onClick={() => setMenuOpen(false)}
+            >
+              <EyeOff size={18} aria-hidden="true" />
+              <span>Não sinalizados</span>
+              <span
+                className="sidebar-count"
+                aria-label={`${missedCount} não sinalizados`}
+              >
+                {missedCount}
+              </span>
+            </NavLink>
+            <NavLink
+              data-section="2"
+              to="/avaliacao"
+              onClick={() => setMenuOpen(false)}
+            >
+              <Sparkles size={18} aria-hidden="true" />
+              <span>Avaliação da IA</span>
+            </NavLink>
           </nav>
           <div className="sidebar-bottom">
-            <details className="sidebar-demo" ref={demoRef}><summary><FlaskConical size={17} aria-hidden="true" /><span>Demonstração · +{simNow}h</span><ChevronDown size={15} aria-hidden="true" /></summary>{preview ? <p className="lp-preview-demo-link"><a href="/login">Entrar para simular prazos</a></p> : <DemoClock />}</details>
-            <div className="clinical-note"><ShieldCheck size={15} aria-hidden="true" /><span>IA sugere. Você valida.</span></div>
+            <details className="sidebar-demo" ref={demoRef}>
+              <summary>
+                <FlaskConical size={17} aria-hidden="true" />
+                <span>Demonstração · +{simNow}h</span>
+                <ChevronDown size={15} aria-hidden="true" />
+              </summary>
+              {preview ? (
+                <p className="lp-preview-demo-link">
+                  <a href="/login">Entrar para simular prazos</a>
+                </p>
+              ) : (
+                <DemoClock />
+              )}
+            </details>
+            <div className="clinical-note">
+              <ShieldCheck size={15} aria-hidden="true" />
+              <span>IA sugere. Você valida.</span>
+            </div>
           </div>
         </div>
       </aside>
 
       <div className="app-content">
-        <header className="topbar"><div className="breadcrumb">Workspace <ChevronRight size={14} aria-hidden="true" /><span>{crumb(pathname)}</span></div>{preview ? <span className="lp-preview-profile">Demonstração</span> : <ProfileMenu profile={profile} onLogout={async () => { await logout(sessionStorage); navigate("/login", { replace: true }); }} />}</header>
-        <Workspace className="workspace" id={preview ? "preview-workspace" : "workspace"} tabIndex={-1}>
-          {preview ? <Overview preview /> : <Routes>
-            <Route path="/home" element={<Overview />} />
-            <Route path="/caso/:id" element={<CaseDetail />} />
-            <Route path="/nao-sinalizados" element={<Missed />} />
-            <Route path="/avaliacao" element={<Evaluation />} />
-            <Route path="/configuracoes" element={<Settings profile={profile} onSave={next => { saveProfile(sessionStorage, next); setProfile(next); }} />} />
-            <Route path="*" element={<Navigate to="/home" replace />} />
-          </Routes>}
-          <footer className="workspace-footer"><span>Brightline · Inteligência clínica</span><span>Decisões com acompanhamento humano</span></footer>
+        <header className="topbar">
+          <div className="breadcrumb">
+            Workspace <ChevronRight size={14} aria-hidden="true" />
+            <span>{crumb(pathname)}</span>
+          </div>
+          {preview ? (
+            <span className="lp-preview-profile">Demonstração</span>
+          ) : (
+            <ProfileMenu
+              profile={profile}
+              onLogout={async () => {
+                await logout(sessionStorage);
+                navigate("/login", { replace: true });
+              }}
+            />
+          )}
+        </header>
+        <Workspace
+          className="workspace"
+          id={preview ? "preview-workspace" : "workspace"}
+          tabIndex={-1}
+        >
+          {preview ? (
+            <Overview preview />
+          ) : (
+            <Routes>
+              <Route path="/home" element={<Overview />} />
+              <Route path="/caso/:id" element={<CaseDetail />} />
+              <Route path="/nao-sinalizados" element={<Missed />} />
+              <Route path="/avaliacao" element={<Evaluation />} />
+              <Route
+                path="/configuracoes"
+                element={
+                  <Settings
+                    profile={profile}
+                    onSave={(next) => {
+                      saveProfile(sessionStorage, next);
+                      setProfile(next);
+                    }}
+                  />
+                }
+              />
+              <Route path="*" element={<Navigate to="/home" replace />} />
+            </Routes>
+          )}
+          <footer className="workspace-footer">
+            <span>Brightline · Inteligência clínica</span>
+            <span>Decisões com acompanhamento humano</span>
+          </footer>
         </Workspace>
       </div>
     </div>

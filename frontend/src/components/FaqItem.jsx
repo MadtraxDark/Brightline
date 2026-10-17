@@ -24,7 +24,9 @@ export default function FaqItem({ question, answer }) {
     event.preventDefault();
     const details = detailsRef.current;
     const content = answerRef.current;
-    const opening = !(animationRef.current?.isActive() ? expanded : details.open);
+    const opening = !(animationRef.current?.isActive()
+      ? expanded
+      : details.open);
     const height = details.open ? content.getBoundingClientRect().height : 0;
     animationRef.current?.kill();
     setExpanded(opening);
@@ -52,14 +54,21 @@ export default function FaqItem({ question, answer }) {
   }
 
   return (
-    <details ref={detailsRef} data-expanded={expanded} onToggle={() => {
-      if (!animationRef.current?.isActive()) setExpanded(detailsRef.current.open);
-    }}>
+    <details
+      ref={detailsRef}
+      data-expanded={expanded}
+      onToggle={() => {
+        if (!animationRef.current?.isActive())
+          setExpanded(detailsRef.current.open);
+      }}
+    >
       <summary onClick={toggle} aria-expanded={expanded}>
         {question}
         <ChevronDown size={18} aria-hidden="true" />
       </summary>
-      <div className="lp-faq-answer" ref={answerRef}><p>{answer}</p></div>
+      <div className="lp-faq-answer" ref={answerRef}>
+        <p>{answer}</p>
+      </div>
     </details>
   );
 }

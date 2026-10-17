@@ -43,11 +43,19 @@ test("evaluation.json tem fp e fn iguais ao tamanho das listas", () => {
 test("a avaliação de exemplo é consistente com os laudos", () => {
   const data = readJson("evaluation.json");
   const reports = readJson("reports.json");
-  const criticalFn = data.false_negatives.filter((item) => item.urgency === "critical").length;
-  const criticalFp = data.false_positives.filter((item) => item.urgency === "critical").length;
+  const criticalFn = data.false_negatives.filter(
+    (item) => item.urgency === "critical",
+  ).length;
+  const criticalFp = data.false_positives.filter(
+    (item) => item.urgency === "critical",
+  ).length;
   assert.equal(data.critical.fn, criticalFn);
   assert.equal(data.critical.fp, criticalFp);
-  assert.ok(data.overall.wrong_urgency <= Math.min(data.overall.fn, data.overall.fp));
+  assert.ok(
+    data.overall.wrong_urgency <= Math.min(data.overall.fn, data.overall.fp),
+  );
   assert.equal(data.dataset.reports, reports.length);
-  assert.ok(data.critical.tp + data.critical.fn <= data.overall.tp + data.overall.fn);
+  assert.ok(
+    data.critical.tp + data.critical.fn <= data.overall.tp + data.overall.fn,
+  );
 });

@@ -189,7 +189,9 @@ export function createStore({ storage, timers = defaultTimers, data } = {}) {
       });
     },
     registerAction(id, action, close) {
-      const next = runEngine(() => registerCaseAction(state, id, action, close));
+      const next = runEngine(() =>
+        registerCaseAction(state, id, action, close),
+      );
       commit({
         v: 1,
         sig,

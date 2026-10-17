@@ -1,1 +1,105 @@
-{"nodes": [{"id": "supabase_readme_migration_guide", "label": "Supabase setup and migration guide", "file_type": "document", "source_file": "supabase/README.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "supabase_readme_rls_isolation", "label": "Per-account row-level security isolation", "file_type": "concept", "source_file": "supabase/README.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "supabase_readme_private_storage", "label": "Private file storage", "file_type": "concept", "source_file": "supabase/README.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}, {"id": "supabase_readme_supabase_auth", "label": "Supabase Auth sessions", "file_type": "concept", "source_file": "supabase/README.md", "source_location": null, "source_url": null, "captured_at": null, "author": null, "contributor": null}], "edges": [{"source": "supabase_readme_migration_guide", "target": "supabase_readme_rls_isolation", "relation": "implements", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "supabase/README.md", "source_location": null, "weight": 1.0}, {"source": "supabase_readme_migration_guide", "target": "supabase_readme_private_storage", "relation": "implements", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "supabase/README.md", "source_location": null, "weight": 1.0}, {"source": "supabase_readme_migration_guide", "target": "supabase_readme_supabase_auth", "relation": "implements", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "supabase/README.md", "source_location": null, "weight": 1.0}, {"source": "readme_supabase_architecture", "target": "supabase_readme_rls_isolation", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "supabase/README.md", "source_location": null, "weight": 1.0}], "hyperedges": [{"id": "brightline_supabase_security", "label": "Supabase account security model", "nodes": ["supabase_readme_rls_isolation", "supabase_readme_private_storage", "supabase_readme_supabase_auth"], "relation": "form", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "supabase/README.md"}]}
+{
+  "nodes": [
+    {
+      "id": "supabase_readme_migration_guide",
+      "label": "Supabase setup and migration guide",
+      "file_type": "document",
+      "source_file": "supabase/README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "supabase_readme_rls_isolation",
+      "label": "Per-account row-level security isolation",
+      "file_type": "concept",
+      "source_file": "supabase/README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "supabase_readme_private_storage",
+      "label": "Private file storage",
+      "file_type": "concept",
+      "source_file": "supabase/README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "supabase_readme_supabase_auth",
+      "label": "Supabase Auth sessions",
+      "file_type": "concept",
+      "source_file": "supabase/README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "supabase_readme_migration_guide",
+      "target": "supabase_readme_rls_isolation",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "supabase/README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "supabase_readme_migration_guide",
+      "target": "supabase_readme_private_storage",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "supabase/README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "supabase_readme_migration_guide",
+      "target": "supabase_readme_supabase_auth",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "supabase/README.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "readme_supabase_architecture",
+      "target": "supabase_readme_rls_isolation",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "supabase/README.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "brightline_supabase_security",
+      "label": "Supabase account security model",
+      "nodes": [
+        "supabase_readme_rls_isolation",
+        "supabase_readme_private_storage",
+        "supabase_readme_supabase_auth"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "supabase/README.md"
+    }
+  ]
+}

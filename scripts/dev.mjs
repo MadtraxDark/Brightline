@@ -10,11 +10,15 @@ if (!["all", "frontend", "backend"].includes(mode)) {
   process.exit(1);
 }
 
-const pythonCandidates = process.platform === "win32"
-  ? ["backend/.venv/Scripts/python.exe", ".venv/Scripts/python.exe"]
-  : ["backend/.venv/bin/python", ".venv/bin/python"];
-const localPython = pythonCandidates.map((path) => join(root, path)).find(existsSync);
-const python = localPython ?? (process.platform === "win32" ? "python" : "python3");
+const pythonCandidates =
+  process.platform === "win32"
+    ? ["backend/.venv/Scripts/python.exe", ".venv/Scripts/python.exe"]
+    : ["backend/.venv/bin/python", ".venv/bin/python"];
+const localPython = pythonCandidates
+  .map((path) => join(root, path))
+  .find(existsSync);
+const python =
+  localPython ?? (process.platform === "win32" ? "python" : "python3");
 const vite = join(root, "frontend/node_modules/vite/bin/vite.js");
 
 // Validate both services before starting either one.
@@ -23,11 +27,19 @@ if (mode !== "backend" && !existsSync(vite)) {
   process.exit(1);
 }
 if (mode !== "frontend") {
-  const check = spawnSync(python, ["-c", "import uvicorn, fastapi, httpx, dotenv, psycopg"], {
-    cwd: join(root, "backend"), stdio: "ignore", windowsHide: true,
-  });
+  const check = spawnSync(
+    python,
+    ["-c", "import uvicorn, fastapi, httpx, dotenv, psycopg"],
+    {
+      cwd: join(root, "backend"),
+      stdio: "ignore",
+      windowsHide: true,
+    },
+  );
   if (check.error || check.status !== 0) {
-    console.error("Configure o ambiente Python e instale backend/requirements.txt. Veja o README na raiz.");
+    console.error(
+      "Configure o ambiente Python e instale backend/requirements.txt. Veja o README na raiz.",
+    );
     process.exit(1);
   }
 }
@@ -43,10 +55,13 @@ function stop(code = 0) {
     // Uvicorn's reload worker must stop with its parent on Windows.
     if (process.platform === "win32") {
       spawnSync("taskkill", ["/PID", String(child.pid), "/T", "/F"], {
-        stdio: "ignore", windowsHide: true,
+        stdio: "ignore",
+        windowsHide: true,
       });
     } else {
-      try { process.kill(-child.pid, "SIGTERM"); } catch (error) {
+      try {
+        process.kill(-child.pid, "SIGTERM");
+      } catch (error) {
         if (error.code !== "ESRCH") console.error(error.message);
       }
     }
@@ -55,7 +70,9 @@ function stop(code = 0) {
 
 function start(name, command, args, folder) {
   const child = spawn(command, args, {
-    cwd: join(root, folder), stdio: "inherit", windowsHide: true,
+    cwd: join(root, folder),
+    stdio: "inherit",
+    windowsHide: true,
     detached: process.platform !== "win32",
   });
   children.add(child);
@@ -67,7 +84,9 @@ function start(name, command, args, folder) {
   child.once("exit", (code, signal) => {
     children.delete(child);
     if (!stopping) {
-      console.error(`[${name}] Serviço encerrado${signal ? ` (${signal})` : ` (código ${code})`}.`);
+      console.error(
+        `[${name}] Serviço encerrado${signal ? ` (${signal})` : ` (código ${code})`}.`,
+      );
       stop(code || 1);
     }
   });
@@ -78,8 +97,27 @@ process.on("SIGTERM", () => stop());
 
 console.log("Brightline · Ctrl+C para encerrar os serviços.");
 if (mode !== "frontend") {
-  start("backend", python, ["-m", "uvicorn", "app.main:app", "--reload", "--host", "127.0.0.1", "--port", "8000"], "backend");
+  start(
+    "backend",
+    python,
+    [
+      "-m",
+      "uvicorn",
+      "app.main:app",
+      "--reload",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "8000",
+    ],
+    "backend",
+  );
 }
 if (mode !== "backend") {
-  start("frontend", process.execPath, [vite, "--host", "127.0.0.1", "--port", "5173", "--strictPort"], "frontend");
+  start(
+    "frontend",
+    process.execPath,
+    [vite, "--host", "127.0.0.1", "--port", "5173", "--strictPort"],
+    "frontend",
+  );
 }
