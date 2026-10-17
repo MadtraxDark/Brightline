@@ -12,6 +12,7 @@ npm run build
 ```
 
 - `/`: landing page com demonstração interativa, perguntas frequentes e Lenis.
+- O header fica fixo e sempre inteiro: transparente e integrado ao hero no topo, com fundo azul-marinho ao rolar. No celular, o botão Menu abre navegação em tela cheia; Escape fecha o menu.
 - `/app`: painel com laudos sintéticos, revisão e acompanhamento.
 - `src/components/`: componentes do painel.
 - `src/styles/`: estilos e tokens visuais.
