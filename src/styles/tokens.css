@@ -1,0 +1,73 @@
+:root {
+  /* superfícies e texto */
+  --bg: #F1F4F7;
+  --panel: #FFFFFF;
+  --border: #D5DCE3;
+  --border-strong: #8A96A3;     /* campos de texto, bordas que precisam ser vistas */
+  --text: #161B20;
+  --text-muted: #5A6673;
+  --control-hover: #E7EBEF;
+  --action-hover: #303B45;
+
+  /* urgência (única cor da interface) */
+  --critical: #B71C1C;
+  --critical-tint: #FDECEC;
+  --urgent: #9E4D00;
+  --urgent-tint: #FFF1E0;
+  --actionable: #1F5FBF;
+  --actionable-tint: #E8F0FD;
+
+  /* evidência no laudo */
+  --evidence-bg: #12161B;
+  --evidence-text: #F2F6F9;
+
+  /* ação principal (neutra) */
+  --action-bg: #161B20;
+  --action-text: #FFFFFF;
+
+  /* forma: raios diferentes por papel, não um só */
+  --radius-panel: 8px;
+  --radius-control: 6px;
+  --radius-badge: 4px;
+  --radius-mark: 2px;
+
+  /* espaçamento: usar só estes valores */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
+}
+
+/* Tema escuro: só ativar se for testado no projetor. Mesmo conjunto de nomes. */
+[data-theme="dark"] {
+  --bg: #12161B;
+  --panel: #1A2027;
+  --border: #2B343E;
+  --border-strong: #55616E;
+  --text: #E8ECF0;
+  --text-muted: #93A0AD;
+  --critical: #FF5A5F;
+  --urgent: #FFA94D;
+  --actionable: #6FA8F7;
+  --critical-tint: color-mix(in srgb, var(--critical) 16%, var(--panel));
+  --urgent-tint: color-mix(in srgb, var(--urgent) 16%, var(--panel));
+  --actionable-tint: color-mix(in srgb, var(--actionable) 16%, var(--panel));
+  --evidence-bg: #EAF2F7;
+  --evidence-text: #12161B;
+  --action-bg: #E8ECF0;
+  --action-text: #12161B;
+}
+
+:root {
+  --bg: #F7F8FA;
+  --border: #E5E7EB;
+  --sidebar-bg: #021837;
+  --sidebar-hover: #19263D;
+  --sidebar-active: #2D3E5B;
+  --sidebar-text: #FFFFFF;
+  --sidebar-muted: #B4BFD1;
+  --sidebar-border: #2A3850;
+  --icon-bg: #F0F2F7;
+  --icon-ink: #526078;
+  --table-head: #FAFBFC;
+  --table-hover: #F8F9FC;
+  --focus: #596D93;
+  --overlay-shadow: #101A2D26;
+}

@@ -1,0 +1,12 @@
+{
+  "example": true,
+  "precision": 0.8,
+  "recall": 0.75,
+  "recall_critical": 0.5,
+  "false_negatives": [
+    { "report_id": "R-002", "finding": "Hemorragia subaracnóidea aguda", "urgency": "critical" }
+  ],
+  "false_positives": [
+    { "report_id": "R-008", "finding": "Hemorragia subaracnóidea", "urgency": "critical" }
+  ]
+}
