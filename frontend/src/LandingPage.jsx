@@ -114,7 +114,9 @@ export default function LandingPage() {
               <h2>Do achado à ação, em um só lugar.</h2>
               <p>Uma prévia de como seus laudos ficam organizados.</p>
             </div>
-            <ProductPreview />
+            <div className="lp-preview-stage">
+              <ProductPreview />
+            </div>
           </div>
           <a className="lp-scroll" href="#como-funciona">
             Um caminho mais claro para cada achado <ChevronDown size={16} />

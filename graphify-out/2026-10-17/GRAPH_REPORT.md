@@ -1,12 +1,12 @@
 # Graph Report - Brightline  (2026-10-17)
 
 ## Corpus Check
-- 103 files · ~88,079 words
+- 103 files · ~88,165 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 15 file(s) not represented in the graph (top: .css 4, (none) 3, .keras 2)
 
 ## Summary
-- 636 nodes · 1304 edges · 36 communities (20 shown, 16 thin omitted)
+- 636 nodes · 1302 edges · 36 communities (20 shown, 16 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 23 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 

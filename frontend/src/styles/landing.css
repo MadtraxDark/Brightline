@@ -26,8 +26,9 @@ html:has(.landing) { scrollbar-color: var(--lp-demo) var(--lp-cream); }
 .lp-text-link:hover { text-decoration: underline; }
 .lp-hero-assurance { grid-column: 2; display: flex; align-items: center; gap: 8px; color: var(--lp-light-ink); font-size: 12px; line-height: 1.6; margin-top: 14px; }
 .lp-hero-assurance svg { flex-shrink: 0; }
-.lp-preview-wrap { position: relative; width: 100%; max-width: 1160px; margin: 58px auto 0; }
+.lp-preview-wrap { position: relative; width: 100%; max-width: 1048px; margin: 58px auto 0; }
 .lp-preview-wrap[id] { scroll-margin-top: 100px; }
+.lp-preview-stage { padding: 24px; background: var(--lp-preview-stage); border-radius: 20px; }
 .lp-preview-caption { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
 .lp-preview-caption h2 { font-size: 20px; font-weight: 500; letter-spacing: -.02em; }
 .lp-preview-caption p { color: var(--lp-light-ink); font-size: 13px; }
@@ -131,6 +132,7 @@ html:has(.landing) { scrollbar-color: var(--lp-demo) var(--lp-cream); }
   .lp-hero-assurance { align-items: flex-start; font-size: 12px; }
   .lp-hero-assurance svg { margin-top: 3px; }
   .lp-preview-wrap { margin-top: 36px; }
+  .lp-preview-stage { padding: 10px; border-radius: 16px; }
   .lp-preview-caption h2 { font-size: 21px; max-width: 25ch; }
   .lp-preview-caption p { font-size: 13px; line-height: 1.7; }
   .lp-product-chrome { justify-content: center; padding-inline: 8px; font-size: 10px; }
