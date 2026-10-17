@@ -1,5 +1,9 @@
 ## graphify
 
+## Stack
+
+- This project is not using Supabase. Do not add Supabase dependencies, integrations, or instructions unless the user explicitly changes this decision.
+
 This project can have a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
 
 When the user invokes `$graphify`, use the installed graphify skill or instructions before doing anything else.
