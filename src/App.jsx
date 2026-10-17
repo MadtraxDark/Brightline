@@ -9,7 +9,7 @@ import {
   getStats,
   NETWORK_ERROR,
   registerAction,
-} from "./api.js";
+} from "./dashboardApi.js";
 import CaseDetail from "./components/CaseDetail.jsx";
 import CaseList from "./components/CaseList.jsx";
 import { formatAverage } from "./format.js";
@@ -118,7 +118,7 @@ export default function App() {
       </aside>
 
       <div className="app-content">
-        <header className="topbar"><div className="breadcrumb">Workspace <ChevronRight size={14} aria-hidden="true" /><span>{view === "queue" ? "Visão geral" : "Não sinalizados"}</span>{detailOpen ? <><ChevronRight size={14} aria-hidden="true" /><span>Laudo</span></> : null}</div></header>
+        <header className="topbar"><div className="breadcrumb">Workspace <ChevronRight size={14} aria-hidden="true" /><span>{view === "queue" ? "Visão geral" : "Não sinalizados"}</span>{detailOpen ? <><ChevronRight size={14} aria-hidden="true" /><span>Laudo</span></> : null}</div><a className="back-button" href="/">Conheça o Brightline <ArrowUpRight size={15} aria-hidden="true" /></a></header>
         <main className="workspace" id="workspace" tabIndex={-1}>
           {detailOpen ? <div className="detail-navigation"><button className="back-button" type="button" onClick={() => setDetailOpen(false)}><ArrowLeft size={17} aria-hidden="true" /> Voltar aos laudos</button><span>Laudo {selectedId?.toUpperCase()}</span></div> : <>
             <div className="page-intro"><h1>{view === "queue" ? "Visão geral" : "Não sinalizados"}</h1><p>{view === "queue" ? "Seus laudos, organizados por prioridade." : "Achados identificados pela IA para sua revisão."}</p></div>
