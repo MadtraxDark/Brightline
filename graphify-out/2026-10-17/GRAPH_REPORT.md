@@ -1,7 +1,7 @@
 # Graph Report - Brightline  (2026-10-17)
 
 ## Corpus Check
-- 103 files · ~88,512 words
+- 103 files · ~88,527 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 16 file(s) not represented in the graph (top: (none) 4, .css 4, .keras 2)
 

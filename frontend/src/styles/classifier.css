@@ -1,0 +1,30 @@
+.classifier-page { min-height: 100vh; padding: 28px 20px 40px; background: var(--bg); color: var(--text); }
+.classifier-top { max-width: 880px; margin: 0 auto 28px; display: flex; justify-content: space-between; align-items: center; color: var(--text-muted); font-size: 14px; }
+.classifier-back { display: inline-flex; gap: 8px; align-items: center; color: inherit; text-decoration: none; }
+.classifier-card { max-width: 880px; margin: auto; padding: 32px; border: 1px solid var(--border); border-radius: 10px; background: var(--panel); }
+.classifier-heading { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 28px; }
+.classifier-icon { display: grid; place-items: center; width: 48px; height: 48px; flex: 0 0 auto; border-radius: 8px; background: var(--action-bg); color: var(--action-text); }
+.classifier-eyebrow { margin: 2px 0 6px; color: var(--text-muted); font-size: 11px; letter-spacing: .1em; }
+.classifier-heading h1 { margin: 0 0 8px; font-size: 28px; }
+.classifier-heading p:last-child { margin: 0; color: var(--text-muted); line-height: 1.5; }
+.classifier-form { display: grid; gap: 16px; max-width: 540px; }
+.classifier-form label:not(.classifier-upload) { display: grid; gap: 7px; font-size: 14px; font-weight: 600; }
+.classifier-form input:not([type=file]) { min-height: 44px; padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: 6px; background: var(--panel); color: var(--text); font: inherit; }
+.classifier-button { min-height: 46px; padding: 10px 18px; border: 0; border-radius: 6px; background: var(--action-bg); color: var(--action-text); font: inherit; font-weight: 700; cursor: pointer; }
+.classifier-button:disabled { opacity: .55; cursor: wait; }
+.classifier-form small, .classifier-results small { color: var(--text-muted); }
+.classifier-upload { min-height: 100px; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 20px; border: 1px dashed var(--border-strong); border-radius: 8px; color: var(--text-muted); cursor: pointer; }
+.classifier-upload input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+.classifier-preview { display: block; max-width: 100%; max-height: 380px; margin: 0 auto; object-fit: contain; background: #111; }
+.classifier-text-button { justify-self: start; border: 0; background: none; color: var(--text-muted); text-decoration: underline; cursor: pointer; font: inherit; }
+.classifier-error { padding: 12px 14px; border-radius: 6px; background: var(--critical-tint); color: var(--critical); }
+.classifier-results { margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--border); }
+.classifier-results h2 { margin: 0 0 8px; font-size: 20px; }
+.classifier-results > p { margin: 0 0 20px; color: var(--text-muted); line-height: 1.5; }
+.classifier-score { display: grid; grid-template-columns: 190px minmax(80px, 1fr) 54px; gap: 12px; align-items: center; min-height: 34px; font-size: 13px; }
+.classifier-score > div { height: 8px; overflow: hidden; border-radius: 8px; background: var(--border); }
+.classifier-score i { display: block; height: 100%; border-radius: inherit; background: var(--action-bg); }
+.classifier-score strong { text-align: right; font-variant-numeric: tabular-nums; }
+.classifier-results small { display: block; margin-top: 18px; }
+.classifier-disclaimer { max-width: 880px; margin: 16px auto; color: var(--text-muted); font-size: 13px; line-height: 1.5; }
+@media (max-width: 600px) { .classifier-page { padding: 18px 14px 28px; } .classifier-top { margin-bottom: 18px; } .classifier-card { padding: 22px 18px; } .classifier-heading h1 { font-size: 23px; } .classifier-heading { gap: 12px; } .classifier-score { grid-template-columns: 120px minmax(40px, 1fr) 48px; gap: 8px; font-size: 12px; } }

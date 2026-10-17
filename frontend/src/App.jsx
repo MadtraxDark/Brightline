@@ -14,6 +14,7 @@ import Settings from "./components/Settings.jsx";
 import NavigationHighlight from "./components/NavigationHighlight.jsx";
 import { readProfile, saveProfile } from "./lib/profile.js";
 import Missed from "./components/Missed.jsx";
+import RadiographClassifier from "./components/RadiographClassifier.jsx";
 import { isAuthenticated, logout } from "./lib/session.js";
 import { formatAverage } from "./format.js";
 import { selectMissed, selectStats } from "./store/selectors.js";
@@ -150,6 +151,7 @@ function Shell() {
 export default function App() {
   const { pathname } = useLocation();
   const path = pathname.replace(/\/+$/, "") || "/";
+  if (path === "/classificar") return <RadiographClassifier />;
   if (path === "/" && !isAuthenticated(sessionStorage)) return <LandingPage />;
   if (path === "/login") return <Login />;
   if (path === "/cadastro") return <Register />;

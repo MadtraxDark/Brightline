@@ -432,6 +432,42 @@ async def analyze_report(
                          (owner,case["id"],now,owner,owner,case["id"],now,owner))
     return analysis
 
+
+@app.post("/radiographs/classify", summary="Classifica uma radiografia de tórax")
+async def classify_radiograph(
+    session: Session,
+    radiograph: Annotated[UploadFile, File(description="Radiografia torácica PNG/JPEG para o modelo NIH")],
+):
+    """Return exploratory NIH class probabilities without persisting the uploaded image."""
+    if radiograph.content_type not in {"image/png", "image/jpeg"}:
+        raise HTTPException(415, "Envie uma radiografia PNG ou JPEG.")
+    image_bytes = await radiograph.read(report_analysis.MAX_IMAGE_BYTES + 1)
+    if len(image_bytes) > report_analysis.MAX_IMAGE_BYTES:
+        raise HTTPException(413, "Radiografia acima do limite de 10 MB.")
+    try:
+        probabilities, model_version = await run_in_threadpool(report_analysis.infer, image_bytes)
+    except FileNotFoundError:
+        raise HTTPException(503, "Modelo NIH EfficientNetB0 indisponível no servidor.") from None
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from None
+    except (ImportError, OSError, RuntimeError):
+        raise HTTPException(503, "Serviço do modelo NIH indisponível.") from None
+    threshold = report_analysis.EXPLORATORY_THRESHOLD
+    return {
+        "probabilities": probabilities,
+        "predictions": sorted(label for label, score in probabilities.items() if score >= threshold),
+        "threshold": threshold,
+        "threshold_status": "exploratory_unvalidated",
+        "model_version": model_version,
+        "status": "review_required",
+        "human_review_required": True,
+        "limitations": [
+            "Modelo de pesquisa treinado apenas com radiografias de tórax NIH ChestX-ray14.",
+            "Probabilidades e corte não foram validados nem calibrados para uso clínico.",
+            "O resultado não é diagnóstico e requer avaliação por profissional qualificado.",
+        ],
+    }
+
 @app.post("/files",status_code=201)
 async def upload_file(request:Request,session:Session):
     types={"application/json":"json","image/png":"png","image/jpeg":"jpg","application/pdf":"pdf"}
