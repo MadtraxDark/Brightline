@@ -2,65 +2,107 @@
 
 **Critical findings, never lost in the report.**
 
-Protótipo para identificar achados prioritários em laudos de imagem e acompanhar sua comunicação até a confirmação de leitura. A proposta combina uma segunda leitura por IA com uma fila de casos, prazos e escalonamento quando o responsável não confirma a leitura.
+Protótipo para identificar achados prioritários em laudos de imagem e acompanhar a comunicação até a confirmação de leitura. A IA sugere e uma pessoa valida. Os laudos são sintéticos; os resultados são ilustrativos e não representam desempenho clínico.
 
-O projeto trabalha com **laudos sintéticos em português**. A IA sugere e uma pessoa valida. As métricas deste conjunto são ilustrativas e não representam desempenho clínico.
+## Arquitetura
 
-## Estado atual
-
-| Componente | Disponível neste repositório |
-|---|---|
-| Dados | 40 laudos sintéticos com gabaritos e casos difíceis |
-| Prompt | Regras de extração e seis exemplos fixos |
-| Extração | Script que chama Claude, valida as evidências e salva o cache |
-| Avaliação | Precisão, recall, recall crítico e detalhamento de erros |
-| Backend | Estrutura FastAPI, modelos, criação das tabelas SQLite e `GET /health` |
-| Fluxo operacional | Carga dos laudos, casos, confirmação, escalonamento e relógio simulado ainda pendentes |
-| Frontend | Ainda não implementado |
-
-O cache real e as métricas são gerados após executar a extração com uma chave de API. Os testes automatizados usam respostas simuladas.
-
-## Como as partes se conectam
-
-Fluxo planejado:
+O **Supabase** fornece Postgres, Auth e Storage privado. A API FastAPI valida sessões no Supabase Auth e encaminha o token do usuário à Data API e ao Storage. As políticas RLS isolam os dados por conta. As transições e o relógio são processados em transações no Postgres.
 
 ```text
 reports.json → extract.py + Claude → extractions_cache.json
      │                                       │
      └──────────── evaluate.py ────────────────┘
                                              │
-                                             ▼
-                                   Backend FastAPI + SQLite
+                               import_supabase.py + API
                                              │
-                                             ▼
-                                      Frontend React
+                        Supabase Postgres + Auth + Storage
+                                             │
+                              API FastAPI → futuro frontend
 ```
 
-A chamada ao modelo acontece na preparação dos dados. A demonstração deve consumir o cache salvo, sem depender de chamadas ao modelo ao vivo. A importação desse cache pelo backend ainda precisa ser implementada.
+Os arquivos JSON continuam como material de preparação e avaliação offline. Depois da importação, laudos, extrações, casos, eventos e relógio são persistidos no Supabase. A demo não faz chamadas ao LLM ao vivo. A conexão com o Supabase exige rede.
+
+## O que já existe
+
+| Componente | Implementação |
+|---|---|
+| Dados | 40 laudos sintéticos, gabaritos e casos difíceis |
+| IA | Prompt com seis exemplos; extração com validação de evidência e retomada |
+| Avaliação | Precisão, recall, recall crítico e lista de erros |
+| Auth | Cadastro, login por e-mail/senha, renovação, usuário atual e logout |
+| Banco | Migração Postgres, RLS e funções transacionais |
+| Casos | Lista, detalhe, confirmação, ação, encerramento, não sinalizados e estatísticas |
+| Simulação | Relógio persistido, escalonamento e reset dos dados da conta |
+| Arquivos | Upload para bucket privado e URL assinada por 60 segundos |
+| Frontend | Ainda não implementado |
+
+**A migração SQL precisa ser aplicada ao projeto antes de usar os dados.** Iniciar o servidor não executa migrações nem importa arquivos automaticamente.
 
 ## Começar no Windows
 
-Requisito: **Python 3.10 ou superior**. Execute os comandos a partir da raiz do projeto, no PowerShell.
-
-Crie um ambiente virtual:
+Requisito: **Python 3.10 ou superior**, um projeto Supabase e acesso à API Anthropic para gerar extrações. Execute os comandos na raiz, pelo PowerShell.
 
 ```powershell
 python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-Os exemplos usam o executável do ambiente diretamente, sem precisar ativá-lo. Os scripts de IA usam apenas a biblioteca padrão do Python; as dependências de `requirements.txt` são necessárias para o backend.
+Os comandos usam o Python do ambiente diretamente, sem precisar ativá-lo.
 
-### 1. Conferir os dados
+### 1. Configurar o Supabase
+
+Se ainda não existe `.env`, copie o exemplo:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Preencha no `.env`:
+
+```dotenv
+SUPABASE_URL=https://SEU-PROJETO.supabase.co
+SUPABASE_PUBLISHABLE_KEY=sb_publishable_SUBSTITUA
+BRIGHTLINE_CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+```
+
+Também são aceitas `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY`. A chave publicável identifica o projeto; ela não é uma sessão de usuário. A API requer `Authorization: Bearer <access_token>` nas rotas de dados. Não configure chave `service_role` ou `sb_secret_` nestas variáveis.
+
+O backend e o importador carregam o `.env` da raiz. Os scripts offline `extract.py` e `evaluate.py` mantêm seu funcionamento independente; para extração, configure as variáveis Anthropic na sessão do terminal.
+
+### 2. Aplicar a migração
+
+No **SQL Editor** do projeto Supabase, execute o conteúdo de:
+
+[`supabase/migrations/202610170001_brightline.sql`](supabase/migrations/202610170001_brightline.sql)
+
+A migração cria tabelas, políticas de acesso, uma RPC e o bucket privado `brightline-files`. É transacional e deve ser executada uma única vez; se objetos homônimos já existirem, revise o conflito antes de aplicar. Não exponha o schema `brightline_private` na Data API.
+
+Em **Authentication**, habilite o provedor Email e configure a URL do site e redirecionamentos para o endereço do frontend quando ele existir. Se a confirmação de e-mail estiver habilitada, o cadastro precisa ser confirmado antes do login.
+
+Veja o [guia do Supabase](supabase/README.md) para detalhes das políticas e validação.
+
+### 3. Iniciar a API e criar uma sessão
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --reload
+```
+
+- [Documentação interativa](http://localhost:8000/docs)
+- [Health check](http://localhost:8000/health)
+
+No Swagger, use `POST /auth/signup` para cadastrar e `POST /auth/login` para entrar. Copie o `access_token`, clique em **Authorize** e informe o token sem o prefixo `Bearer`. Não compartilhe tokens ou senhas. `GET /auth/me` confirma a sessão; `GET /ready` também verifica o acesso às tabelas.
+
+O cadastro pode retornar um usuário sem sessão enquanto aguarda confirmação de e-mail. Ao renovar uma sessão, o cliente deve substituir tanto o access token quanto o refresh token pelos novos valores. Logout revoga o refresh token da sessão; um access token já emitido pode permanecer válido até expirar.
+
+### 4. Gerar e avaliar as extrações
+
+Valide os laudos sem acessar a API de IA:
 
 ```powershell
 .\.venv\Scripts\python.exe extract.py --validate-only
 ```
 
-Na primeira execução, o esperado é encontrar 40 laudos válidos e 40 extrações pendentes. Código de saída `2` indica cache incompleto; não significa que os laudos sejam inválidos.
-
-### 2. Gerar as extrações
-
-É necessário acesso à API Anthropic e um modelo disponível na sua conta. As chamadas são cobradas pelo provedor. Informe a chave no prompt abaixo; ela não será exibida nem gravada em arquivo pelo comando.
+Configure a chave Anthropic sem escrevê-la em arquivo:
 
 ```powershell
 $secureKey = Read-Host 'Chave da API Anthropic' -AsSecureString
@@ -69,65 +111,72 @@ $env:ANTHROPIC_MODEL = Read-Host 'ID do modelo Claude disponível na sua conta'
 
 .\.venv\Scripts\python.exe extract.py
 .\.venv\Scripts\python.exe extract.py --validate-only
-```
-
-A configuração vale para a sessão atual do PowerShell. O script lê as variáveis de ambiente; não carrega arquivos `.env` automaticamente.
-
-Cada resposta precisa respeitar o contrato e conter evidências copiadas literalmente do laudo. O script faz até três tentativas por laudo, salva o progresso e continua quando um item falha. O gabarito não é enviado ao modelo.
-
-### 3. Avaliar os resultados
-
-```powershell
 .\.venv\Scripts\python.exe evaluate.py
 ```
 
-A avaliação imprime precisão, recall geral, **recall da classe crítica**, falsos positivos, falsos negativos e trocas de urgência. O relatório completo fica em `data/evaluation.json`.
+As chamadas Anthropic são cobradas pelo provedor. O script não envia gabarito nem sinalização do radiologista ao modelo. Faz até três tentativas por laudo e exige que cada evidência apareça literalmente no texto.
 
-O pareamento exige o mesmo achado e a mesma urgência dentro do mesmo laudo. Diferenças de caixa, acentos e pontuação são normalizadas; sinônimos exigem revisão e equivalências explícitas em `data/finding_aliases.json`. Uma urgência errada conta como falso positivo e falso negativo, além de ser listada separadamente.
+A avaliação produz `data/evaluation.json`, com precisão, recall, **recall crítico**, falsos positivos, falsos negativos e trocas de urgência. Pareia nome normalizado e urgência no mesmo laudo; equivalências semânticas exigem revisão em `data/finding_aliases.json`. Urgência errada conta como FP e FN. Extrações ausentes contam como falsos negativos e marcam a avaliação como incompleta.
 
-Laudos ausentes no cache não são descartados da avaliação: seus achados contam como falsos negativos e o resultado fica marcado como incompleto. Denominadores iguais a zero aparecem como `N/A`, em vez de uma porcentagem inventada.
+### 5. Importar no Supabase
 
-## Retomar e comparar versões
+Com a API em execução e o cache completo:
 
 ```powershell
-# Retoma os laudos pendentes, preservando extrações válidas
+.\.venv\Scripts\python.exe import_supabase.py --validate-only
+.\.venv\Scripts\python.exe import_supabase.py --email seu-email@exemplo.com --replace
+```
+
+O importador solicita a senha sem eco. Como alternativa, configure `BRIGHTLINE_ACCESS_TOKEN` e omita `--email`.
+
+**`--replace` substitui os laudos e extrações da conta autenticada, recria seus casos e reinicia seu relógio e eventos.** A operação é atômica e não afeta outras contas. `POST /simulate/reset` repete a demo usando os dados já importados no Supabase, sem reler os arquivos locais.
+
+## Rotas da API
+
+Todas as rotas de dados exigem sessão válida. `/health`, cadastro, login e renovação são públicos; o serviço Supabase aplica suas regras de Auth.
+
+| Método | Rota | Finalidade |
+|---|---|---|
+| GET | `/health` | Verificar o processo da API |
+| GET | `/ready` | Verificar sessão e acesso ao banco |
+| POST | `/auth/signup` | Cadastro com e-mail e senha |
+| POST | `/auth/login` | Criar sessão |
+| POST | `/auth/refresh` | Renovar sessão |
+| GET | `/auth/me` | Consultar usuário autenticado |
+| POST | `/auth/logout` | Encerrar a sessão atual |
+| POST | `/imports` | Substituir o conjunto da conta e criar casos |
+| GET | `/cases?urgency=&status=` | Listar casos por prioridade e prazo |
+| GET | `/cases/{id}` | Consultar laudo, caso e eventos |
+| POST | `/cases/{id}/acknowledge` | Confirmar leitura, corpo `{"by":"nome"}` |
+| POST | `/cases/{id}/action` | Registrar ação, corpo `{"action":"texto","close":true}` |
+| GET | `/simulate` | Consultar `sim_now` |
+| POST | `/simulate/advance?hours=N` | Avançar o relógio; retorna `sim_now` e `changed_cases` |
+| POST | `/simulate/reset` | Recriar os casos a partir dos dados importados |
+| GET | `/missed` | Casos críticos/urgentes não sinalizados |
+| GET | `/stats` | Contagens e tempo médio até confirmação |
+| POST | `/files` | Upload binário JSON, PNG, JPEG ou PDF, até 10 MB |
+| POST | `/files/{file_id}/signed-url` | Obter URL de leitura válida por 60 segundos |
+
+Cada avanço do relógio escala no máximo um nível: solicitante → radiologista → coordenação. Casos lidos ou encerrados não escalam. Os prazos do protótipo são crítico 1h, urgente 24h e acionável 720h; não são protocolos clínicos.
+
+## Retomar extrações e comparar iterações
+
+```powershell
+# Retoma pendências sem repetir resultados válidos da mesma configuração
 .\.venv\Scripts\python.exe extract.py
 
-# Tenta novamente apenas os IDs registrados como falhos
+# Repete somente falhas registradas
 .\.venv\Scripts\python.exe extract.py --retry-failed
 
-# Executa novamente todos os laudos
+# Força nova extração de todos os laudos
 .\.venv\Scripts\python.exe extract.py --force
 
-# Salva uma iteração separada
+# Preserva os resultados de uma iteração
 .\.venv\Scripts\python.exe extract.py --cache data/iteracao_01/extractions_cache.json
 .\.venv\Scripts\python.exe evaluate.py --cache data/iteracao_01/extractions_cache.json --output data/iteracao_01/evaluation.json
 ```
 
-Alterar o texto de um laudo, o prompt ou o modelo invalida o cache correspondente. Depois dessas mudanças, use a execução normal para recompor as pendências. Arquive também o prompt e os aliases usados em cada avaliação para comparar as versões.
-
-| Arquivo gerado | Conteúdo |
-|---|---|
-| `data/extractions_cache.json` | Extrações válidas, indexadas por `report_id` |
-| `data/extractions_cache.errors.json` | Falhas que precisam de nova tentativa ou revisão |
-| `data/extractions_cache.meta.json` | Hashes usados para identificar resultados desatualizados |
-| `data/evaluation.json` | Métricas, cobertura e lista de erros |
-
-Os comandos de extração e avaliação retornam `0` quando completos, `2` quando há extrações pendentes e `1` para erros de configuração, arquivo ou formato.
-
-## Rodar o backend
-
-Na raiz do projeto:
-
-```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --reload
-```
-
-- Verificação de funcionamento: [localhost:8000/health](http://localhost:8000/health), com resposta `{"status":"ok"}`.
-- Documentação da API: [localhost:8000/docs](http://localhost:8000/docs).
-
-Na inicialização, o backend cria `backend/brightline.db` e as tabelas vazias. A API atual não importa os JSONs nem disponibiliza endpoints de casos ou simulação. O caminho do banco é definido no código; variáveis como `BRIGHTLINE_DATA_DIR` e `BRIGHTLINE_DB_PATH` ainda não são suportadas.
+Alterações de laudo, prompt ou modelo invalidam o cache correspondente. Arquive também o prompt e os aliases de cada avaliação. Extração/avaliação retornam `0` quando completas, `2` quando há extrações pendentes e `1` em erro.
 
 ## Testes
 
@@ -135,32 +184,33 @@ Na inicialização, o backend cria `backend/brightline.db` e as tabelas vazias. 
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-Os testes cobrem o contrato dos dados, evidência literal, novas tentativas, retomada do lote, invalidação do cache e cálculo das métricas. Usam arquivos temporários e respostas simuladas, sem consumir a API ou gerar resultados para a demonstração.
+Os testes Python usam respostas simuladas do Claude e do Supabase; não criam contas nem consomem APIs externas. O [guia do Supabase](supabase/README.md) explica como verificar também a migração em Postgres embarcado.
 
-## Estrutura do projeto
+## Estrutura
 
 ```text
 Brightline/
-├── data/
-│   ├── reports.json             # Laudos sintéticos e gabaritos
-│   ├── revisao_laudos.md        # Inventário e pontos para revisão humana
-│   └── finding_aliases.json     # Equivalências de nomes revisadas
-├── prompts/extraction.txt      # Instruções e exemplos fixos
-├── extract.py                  # Extração e cache
-├── evaluate.py                 # Avaliação e análise de erros
-├── brightline_data.py          # Contrato e persistência compartilhados
-├── tests/test_ai_pipeline.py   # Testes dos scripts de IA e dados
-├── backend/app/main.py         # Estrutura inicial da API
-├── requirements.txt           # Dependências do backend
-└── IA_DADOS.md                 # Guia detalhado de extração e avaliação
+├── backend/app/                # API, configuração, modelos e cliente Supabase
+├── supabase/migrations/        # Tabelas, RPC, RLS e Storage
+├── supabase/tests/             # Verificação da migração em Postgres
+├── data/reports.json           # 40 laudos sintéticos e gabaritos
+├── data/finding_aliases.json    # Equivalências revisadas para avaliação
+├── prompts/extraction.txt      # Prompt e seis exemplos fixos
+├── extract.py                  # Extração offline
+├── evaluate.py                 # Avaliação
+├── import_supabase.py          # Importação autenticada
+├── brightline_data.py          # Contrato dos arquivos
+├── tests/                      # Testes Python
+├── .env.example                # Configuração de referência
+└── IA_DADOS.md                 # Guia detalhado da preparação dos dados
 ```
 
-`data/reports.json` e `data/extractions_cache.json` estão ignorados pelo Git na configuração atual. Ao compartilhar um clone com a equipe, disponibilize esses arquivos separadamente.
+O `.env`, os laudos e o cache local estão ignorados pelo Git. Ao compartilhar um clone, disponibilize os dados sintéticos à equipe separadamente.
 
-## Dados e revisão humana
+## Escopo e revisão
 
-O conjunto contém oito laudos críticos, oito urgentes, oito acionáveis, oito controles sem alerta e oito casos adicionais de dificuldade. Há negações, achados conhecidos e estáveis, suspeitas, achados omitidos na conclusão e múltiplos achados no mesmo laudo. Os textos não possuem imagens reais associadas.
+O conjunto inclui negações, achados conhecidos e estáveis, suspeitas, achados omitidos na conclusão e múltiplos achados. Não há imagens reais associadas. Revise gabaritos, evidências e erros antes de apresentar as métricas.
 
-Antes de fechar uma versão, revise os gabaritos, os falsos positivos e negativos e as evidências. Os prazos do protótipo são `critical = 1h`, `urgent = 24h` e `actionable = 720h`; são parâmetros da demonstração, não protocolos clínicos. Apresente os resultados como **avaliação em conjunto sintético pequeno, ilustrativa**.
+A autorização inicial é **por conta**: usuários diferentes não compartilham casos. Colaboração por hospital/equipe requer um modelo explícito de membros e permissões. Não há frontend, análise de imagens, integração PACS/HL7/FHIR ou envio real de mensagens. O LLM permanece externo ao Supabase.
 
-Detalhes adicionais: [guia de IA e dados](IA_DADOS.md) e [revisão dos laudos](data/revisao_laudos.md).
+Referências locais: [guia de IA](IA_DADOS.md), [revisão dos laudos](data/revisao_laudos.md) e [backend](backend/README.md).

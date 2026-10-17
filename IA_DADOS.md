@@ -1,6 +1,6 @@
 # Extração e avaliação do Brightline
 
-Esta parte produz o cache offline consumido pelo backend. Usa Python 3.10 ou superior e somente a biblioteca padrão, sem instalação adicional. Execute os comandos na raiz do projeto. Os dados são sintéticos e os resultados precisam de revisão humana.
+Esta parte produz o cache offline importado no Supabase pelo backend. Os scripts de extração e avaliação usam Python 3.10 ou superior e somente a biblioteca padrão. O importador e a API usam as dependências de `requirements.txt`. Execute os comandos na raiz do projeto. Os dados são sintéticos e os resultados precisam de revisão humana.
 
 ## Arquivos
 
@@ -90,4 +90,17 @@ python extract.py --validate-only
 python evaluate.py
 ```
 
-Os testes usam respostas simuladas e diretórios temporários, sem API e sem preencher o cache da demonstração. Antes da demo, exija 40/40 extrações válidas, nenhuma evidência inválida e revisão dos casos difíceis e das suspeitas de R-036 a R-038. Entregue ao Thyago `reports.json` e `extractions_cache.json`. Estes scripts não modificam o backend.
+Os testes usam respostas simuladas e diretórios temporários, sem API externa e sem preencher o cache da demonstração. A suíte completa inclui testes do backend e requer instalar `requirements.txt`. Antes da demo, exija 40/40 extrações válidas, nenhuma evidência inválida e revisão dos casos difíceis e das suspeitas de R-036 a R-038.
+
+## Importar no Supabase
+
+Depois de aplicar a migração do [guia do Supabase](supabase/README.md), iniciar a API e cadastrar sua conta:
+
+```powershell
+python import_supabase.py --validate-only
+python import_supabase.py --email seu-email@exemplo.com --replace
+```
+
+O importador valida o conjunto completo, solicita a senha sem eco e envia os dados autenticados para `POST /imports`. Como alternativa, configure `BRIGHTLINE_ACCESS_TOKEN` e omita `--email`. `--replace` substitui os laudos/cache e recria os casos, eventos e relógio apenas da sua conta, em uma transação.
+
+Os JSONs são o material de preparação; a fonte de dados da aplicação após a importação é o Supabase Postgres. O reset usa os laudos e extrações persistidos, sem reler arquivos locais. O Storage privado recebe arquivos pela rota `/files`, quando necessário. O modelo de acesso atual isola cada conta; colegas com logins diferentes não compartilham casos automaticamente.
