@@ -1,6 +1,7 @@
 .landing { background: var(--lp-paper); color: var(--lp-ink); --focus: var(--lp-actionable); }
 .landing a { color: inherit; text-decoration: none; }
 .landing button { font-family: inherit; }
+.landing [data-title-pending] { visibility: hidden; }
 .landing section[id] { scroll-margin-top: 104px; }
 .landing ::selection { background: var(--lp-accent); color: var(--lp-navy); }
 html:has(.landing) { scrollbar-color: var(--lp-demo) var(--lp-cream); }
