@@ -1,15 +1,11 @@
-import { useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
   Check,
   CheckCheck,
   ChevronDown,
-  ChevronRight,
-  CircleDot,
   Clock3,
   FileText,
-  LayoutDashboard,
   ScanLine,
   ShieldCheck,
   Sparkles,
@@ -19,172 +15,28 @@ import useLenisScroll from "./useLenisScroll.js";
 import useTitleAnimation from "./useTitleAnimation.js";
 import LandingHeader from "./components/LandingHeader.jsx";
 import BenefitsCarousel from "./components/BenefitsCarousel.jsx";
+import FaqItem from "./components/FaqItem.jsx";
+import reports from "./data/reports.json" with { type: "json" };
+import cache from "./data/extractions_cache.json" with { type: "json" };
+import { getMissed, loadCases } from "./engine/engine.js";
+import DashboardShell from "./components/DashboardShell.jsx";
 
-const examples = [
-  {
-    name: "Tromboembolismo pulmonar",
-    exam: "Angiotomografia de tórax",
-    priority: "Crítico",
-    style: "critical",
-    time: "1 hora",
-    evidence:
-      "Falhas de enchimento em ramos das artérias pulmonares, compatíveis com tromboembolismo pulmonar.",
-    id: "BL-001",
-  },
-  {
-    name: "Pneumotórax",
-    exam: "Radiografia de tórax",
-    priority: "Urgente",
-    style: "urgent",
-    time: "24 horas",
-    evidence:
-      "Pneumotórax à direita, com retração parcial do parênquima pulmonar.",
-    id: "BL-002",
-  },
-  {
-    name: "Nódulo pulmonar",
-    exam: "Tomografia de tórax",
-    priority: "Acionável",
-    style: "actionable",
-    time: "30 dias",
-    evidence:
-      "Nódulo pulmonar sólido no lobo superior direito, com recomendação de acompanhamento.",
-    id: "BL-003",
-  },
-];
+const previewState = loadCases(reports, cache);
+const examples = previewState.cases;
+const missedCount = getMissed(previewState).length;
 
 function ProductPreview() {
-  const [selected, setSelected] = useState(0);
-  const [confirmed, setConfirmed] = useState([]);
-  const item = examples[selected];
-  const read = confirmed.includes(selected);
   return (
-    <div
-      className="lp-product"
-      aria-label="Demonstração interativa do Brightline"
-    >
+    <div className="lp-product" role="img" aria-label="Prévia ilustrativa do painel Brightline com indicadores, menu e três laudos fictícios.">
       <div className="lp-product-chrome">
-        <span className="lp-window-dots">
-          <i />
-          <i />
-          <i />
-        </span>
-        <span>
-          <ShieldCheck size={11} /> Brightline · Ambiente demonstrativo
-        </span>
+        <span className="lp-window-dots"><i /><i /><i /></span>
+        <span><ShieldCheck size={11} /> Brightline · Prévia ilustrativa</span>
         <span className="lp-live-dot" />
       </div>
-      <div className="lp-product-body">
-        <aside className="lp-mini-sidebar">
-          <img src={logo} alt="Brightline" width="104" />
-          <span className="lp-mini-label">GESTÃO DE LAUDOS</span>
-          <span className="lp-mini-active">
-            <LayoutDashboard size={14} /> Visão geral
-          </span>
-          <span>
-            <ScanLine size={14} /> Não sinalizados
-          </span>
-          <div className="lp-mini-bottom">
-            <ShieldCheck size={16} />
-            <span>
-              IA sugere.
-              <br />
-              Você valida.
-            </span>
-          </div>
-        </aside>
-        <div className="lp-mini-workspace">
-          <div className="lp-mini-breadcrumb">
-            Workspace <ChevronRight size={10} /> Visão geral
-          </div>
-          <div className="lp-mini-title">
-            <div>
-              <h3>O que precisa de atenção.</h3>
-              <p>Clareza para o próximo passo.</p>
-            </div>
-            <span className="lp-demo-label">DEMO</span>
-          </div>
-          <div className="lp-mini-stats">
-            <div>
-              <span>Em acompanhamento</span>
-              <strong>
-                03 <small>casos ilustrativos</small>
-              </strong>
-            </div>
-            <div>
-              <span>Leituras confirmadas</span>
-              <strong>
-                {String(confirmed.length).padStart(2, "0")}{" "}
-                <CheckCheck size={17} />
-              </strong>
-            </div>
-          </div>
-          <div className="lp-preview-list">
-            <div className="lp-preview-list-head">
-              <span>Achados prioritários</span>
-              <span>Prioridade</span>
-            </div>
-            {examples.map((example, index) => (
-              <button
-                key={example.id}
-                type="button"
-                className={`lp-preview-row ${selected === index ? "is-selected" : ""}`}
-                onClick={() => setSelected(index)}
-                aria-pressed={selected === index}
-              >
-                <span>
-                  <strong>{example.name}</strong>
-                  <small>{example.exam}</small>
-                </span>
-                <span className={`lp-priority ${example.style}`}>
-                  <CircleDot size={10} />
-                  {example.priority}
-                </span>
-                <ChevronRight size={14} />
-              </button>
-            ))}
-          </div>
-          <div className="lp-evidence" aria-live="polite">
-            <div className="lp-evidence-heading">
-              <span>
-                <Sparkles size={13} /> Evidência no laudo
-              </span>
-              <small>{item.id}</small>
-            </div>
-            <p>“{item.evidence}”</p>
-            <div className="lp-evidence-action">
-              <span>
-                <Clock3 size={12} /> Prazo ilustrativo: {item.time}
-              </span>
-              <button
-                type="button"
-                disabled={read}
-                onClick={() =>
-                  setConfirmed((previous) => [...previous, selected])
-                }
-              >
-                {read ? (
-                  <>
-                    <CheckCheck size={13} /> Leitura confirmada
-                  </>
-                ) : (
-                  <>
-                    Confirmar leitura <Check size={13} />
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className="lp-dashboard-preview" inert aria-hidden="true"><DashboardShell preview /></div>
       <div className="lp-product-foot">
-        <span>
-          <span className="lp-live-dot" /> Exemplos fictícios · sem dados de
-          pacientes
-        </span>
-        <span>
-          Selecione um achado para explorar <ArrowUpRight size={12} />
-        </span>
+        <span><span className="lp-live-dot" /> {reports.length} laudos sintéticos · dados da demonstração</span>
+        <span>Prévia visual · dados fictícios</span>
       </div>
     </div>
   );
@@ -201,7 +53,19 @@ const questions = [
   ],
   [
     "Posso experimentar o produto?",
-    "Sim. O botão “Explorar a demonstração” abre o painel do protótipo com dados sintéticos. Você pode navegar pelos laudos e experimentar o fluxo de acompanhamento sem inserir dados reais de pacientes.",
+    `Sim. O botão “Explorar a demonstração” leva ao login, com opção de cadastro demonstrativo. Você encontra ${reports.length} laudos sintéticos e ${examples.length} casos para revisar evidências, confirmar leituras e registrar condutas. Nenhuma conta real é criada e seus dados não são enviados.`,
+  ],
+  [
+    "O que aparece em Não sinalizados?",
+    `A fila reúne achados críticos e urgentes detectados pelo Brightline que não estavam sinalizados pelo radiologista. A base demonstrativa atual contém ${missedCount} desses casos, com a evidência para revisão humana.`,
+  ],
+  [
+    "Como posso testar os prazos e as escalações?",
+    "No painel, abra Demonstração e avance o relógio em 1, 6 ou 24 horas. Casos sem leitura confirmada podem escalar do médico solicitante ao radiologista e à coordenação. As mudanças ficam na linha do tempo; o reset permite recomeçar. Os prazos e as notificações são simulados.",
+  ],
+  [
+    "Como a IA é avaliada?",
+    "A página Avaliação da IA mostra recall dos críticos, recall geral, precisão e listas de falsos positivos e negativos. Os resultados atuais são de exemplo, em um conjunto pequeno de laudos sintéticos, e não representam desempenho clínico validado.",
   ],
   [
     "O produto já está pronto para uso clínico?",
@@ -228,9 +92,9 @@ export default function LandingPage() {
               merece um <em>próximo passo.</em>
             </h1>
             <p>
-              Do laudo à confirmação de leitura. O Brightline dá visibilidade
-              aos achados prioritários e ajuda a acompanhar o que precisa de
-              atenção.
+              Revise achados críticos, urgentes e acionáveis com a evidência
+              do laudo. Acompanhe responsáveis, prazos, leitura e conduta
+              até o encerramento de cada caso.
             </p>
             <div className="lp-hero-actions">
               <a className="lp-button lp-button-primary" href="/login">
@@ -248,7 +112,7 @@ export default function LandingPage() {
           <div className="lp-preview-wrap" id="demonstracao">
             <div className="lp-preview-caption">
               <h2>Do achado à ação, em um só lugar.</h2>
-              <p>Selecione um achado e experimente confirmar a leitura.</p>
+              <p>Uma prévia de como seus laudos ficam organizados.</p>
             </div>
             <ProductPreview />
           </div>
@@ -278,21 +142,21 @@ export default function LandingPage() {
                 number: "01",
                 icon: ScanLine,
                 title: "Identifique o que importa",
-                text: "A IA analisa o texto do laudo e sugere achados que merecem atenção, com a evidência em destaque.",
+                text: "Consulte achados críticos, urgentes e acionáveis, incluindo os não sinalizados pelo radiologista, com a evidência em destaque.",
                 label: "Do texto ao contexto",
               },
               {
                 number: "02",
                 icon: ShieldCheck,
                 title: "Revise com clareza",
-                text: "O profissional revisa o achado, consulta o laudo e confirma a leitura. A decisão continua humana.",
+                text: "Compare a sugestão com o laudo, veja o responsável e o prazo e confirme a leitura. A decisão continua humana.",
                 label: "Da sinalização à validação",
               },
               {
                 number: "03",
                 icon: CheckCheck,
                 title: "Acompanhe o próximo passo",
-                text: "Registre a conduta e acompanhe o histórico do caso até o encerramento, sem perder o contexto.",
+                text: "Registre a conduta e encerre o caso. Na demonstração, avance o relógio para acompanhar prazos e escalações na linha do tempo.",
                 label: "Da leitura à ação",
               },
             ].map(({ number, icon: Icon, title, text, label }) => (
@@ -339,8 +203,23 @@ export default function LandingPage() {
                 FileText,
               ],
               [
+                "Achados que merecem uma segunda revisão",
+                "Uma fila dedicada aos críticos e urgentes não sinalizados pelo radiologista, com o trecho que sustenta cada sugestão.",
+                ScanLine,
+              ],
+              [
+                "Prazos e responsáveis à vista",
+                "Simule a passagem do tempo e acompanhe a escalação entre solicitante, radiologista e coordenação, até confirmar a leitura.",
+                Clock3,
+              ],
+              [
+                "Avaliação que você pode consultar",
+                "Recall, precisão e falsos positivos e negativos disponíveis no painel. Os resultados da demonstração são ilustrativos.",
+                Sparkles,
+              ],
+              [
                 "Um histórico que faz sentido",
-                "Leitura, conduta e encerramento reunidos no caso. Cada etapa registrada para consulta.",
+                "Leitura, conduta, escalações e encerramento reunidos na linha do tempo do caso, com cada etapa registrada para consulta.",
                 CheckCheck,
               ],
             ].map(([title, text, Icon]) => (
@@ -390,13 +269,7 @@ export default function LandingPage() {
           </div>
           <div className="lp-questions">
             {questions.map(([question, answer]) => (
-              <details key={question}>
-                <summary>
-                  {question}
-                  <ChevronDown size={18} />
-                </summary>
-                <p>{answer}</p>
-              </details>
+              <FaqItem key={question} question={question} answer={answer} />
             ))}
           </div>
         </section>
@@ -408,7 +281,7 @@ export default function LandingPage() {
               <br />
               <em>Antes de dar o seu.</em>
             </h2>
-            <p>Explore o produto com laudos e casos demonstrativos.</p>
+            <p>Entre na demonstração: {reports.length} laudos sintéticos, {examples.length} casos e um fluxo completo de acompanhamento.</p>
           </div>
           <a className="lp-button lp-button-primary" href="/login">
             Explorar a demonstração <ArrowUpRight size={18} />
