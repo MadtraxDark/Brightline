@@ -20,7 +20,7 @@ services:
       - brightline
   api:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-brightline}:${POSTGRES_PASSWORD:-REMOVED_CREDENTIAL}@db:5432/${POSTGRES_DB:-brightline}
@@ -40,7 +40,7 @@ services:
     ports:
       - "${BRIGHTLINE_HTTP_PORT:-8080}:80"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     restart: unless-stopped
     networks:
       - brightline

@@ -1,3 +1,8 @@
+node_modules/
+dist/
+.playwright-cli/
+.impeccable/
+
 # Python bytecode and caches
 __pycache__/
 *.py[cod]
@@ -28,8 +33,6 @@ ENV/
 .validation/
 
 # Local source data and generated extraction cache
-/data/reports.json
-/data/extractions_cache.json
 /backend/data/reports.json
 /backend/data/extractions_cache.json
 
