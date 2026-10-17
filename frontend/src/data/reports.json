@@ -6,7 +6,9 @@
     "ordering_physician": "Dr. Paulo Mendes",
     "text": "Radiografia de tórax em inspiração. Há pneumotórax hipertensivo à direita, com desvio do mediastino para a esquerda. O pulmão esquerdo está expandido.",
     "flagged_by_radiologist": false,
-    "ground_truth": [{ "finding": "Pneumotórax hipertensivo", "urgency": "critical" }]
+    "ground_truth": [
+      { "finding": "Pneumotórax hipertensivo", "urgency": "critical" }
+    ]
   },
   {
     "report_id": "R-002",
@@ -15,7 +17,9 @@
     "ordering_physician": "Dra. Marina Lopes",
     "text": "TC de crânio sem contraste. Hiperdensidade nos sulcos da convexidade, compatível com hemorragia subaracnóidea aguda. Ventrículos de tamanho habitual.",
     "flagged_by_radiologist": false,
-    "ground_truth": [{ "finding": "Hemorragia subaracnóidea aguda", "urgency": "critical" }]
+    "ground_truth": [
+      { "finding": "Hemorragia subaracnóidea aguda", "urgency": "critical" }
+    ]
   },
   {
     "report_id": "R-003",
@@ -33,7 +37,9 @@
     "ordering_physician": "Dr. Paulo Mendes",
     "text": "Radiografia de tórax. Derrame pleural volumoso à esquerda, com opacificação da base. O mediastino está centrado.",
     "flagged_by_radiologist": true,
-    "ground_truth": [{ "finding": "Derrame pleural volumoso", "urgency": "urgent" }]
+    "ground_truth": [
+      { "finding": "Derrame pleural volumoso", "urgency": "urgent" }
+    ]
   },
   {
     "report_id": "R-005",
@@ -42,7 +48,9 @@
     "ordering_physician": "Dra. Marina Lopes",
     "text": "TC de tórax. Nódulo pulmonar suspeito no lobo superior direito, de contornos espiculados, medindo 1,8 cm. Sem linfonodomegalia.",
     "flagged_by_radiologist": true,
-    "ground_truth": [{ "finding": "Nódulo pulmonar suspeito", "urgency": "actionable" }]
+    "ground_truth": [
+      { "finding": "Nódulo pulmonar suspeito", "urgency": "actionable" }
+    ]
   },
   {
     "report_id": "R-006",
@@ -51,7 +59,9 @@
     "ordering_physician": "Dra. Helena Costa",
     "text": "TC de abdome. Massa renal indeterminada no polo superior do rim esquerdo, medindo 3,2 cm. A via excretora não está dilatada.",
     "flagged_by_radiologist": true,
-    "ground_truth": [{ "finding": "Massa renal indeterminada", "urgency": "actionable" }]
+    "ground_truth": [
+      { "finding": "Massa renal indeterminada", "urgency": "actionable" }
+    ]
   },
   {
     "report_id": "R-007",

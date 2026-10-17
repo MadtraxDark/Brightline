@@ -14,17 +14,46 @@ function RequireAuth({ children }) {
   useEffect(() => {
     let active = true;
     setStatus("loading");
-    validateSession(sessionStorage).then((user) => {
-      if (active) setStatus(user ? "authenticated" : "anonymous");
-    }).catch((reason) => {
-      if (active) { setError(reason.message); setStatus("error"); }
-    });
-    return () => { active = false; };
+    validateSession(sessionStorage)
+      .then((user) => {
+        if (active) setStatus(user ? "authenticated" : "anonymous");
+      })
+      .catch((reason) => {
+        if (active) {
+          setError(reason.message);
+          setStatus("error");
+        }
+      });
+    return () => {
+      active = false;
+    };
   }, [attempt]);
-  if (status === "loading") return <div className="session-state" role="status">Verificando sua sessão…</div>;
-  if (status === "error") return <div className="session-state"><p role="alert">{error}</p><button className="btn-primary" onClick={() => setAttempt((value) => value + 1)}>Tentar novamente</button></div>;
+  if (status === "loading")
+    return (
+      <div className="session-state" role="status">
+        Verificando sua sessão…
+      </div>
+    );
+  if (status === "error")
+    return (
+      <div className="session-state">
+        <p role="alert">{error}</p>
+        <button
+          className="btn-primary"
+          onClick={() => setAttempt((value) => value + 1)}
+        >
+          Tentar novamente
+        </button>
+      </div>
+    );
   if (status === "anonymous") {
-    return <Navigate to="/login" replace state={{ from: `${location.pathname}${location.search}` }} />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ from: `${location.pathname}${location.search}` }}
+      />
+    );
   }
   return children;
 }

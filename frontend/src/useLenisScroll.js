@@ -21,7 +21,9 @@ export default function useLenisScroll() {
     // Reload anchors have already been cleared by main.jsx.
     if (window.location.hash) {
       try {
-        const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+        const target = document.getElementById(
+          decodeURIComponent(window.location.hash.slice(1)),
+        );
         if (target) lenis.scrollTo(target, { immediate: true, offset: -104 });
       } catch {
         // Ignore malformed fragment identifiers, as with in-page navigation.
@@ -29,9 +31,22 @@ export default function useLenisScroll() {
     }
 
     function navigateToAnchor(event) {
-      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
       const link = event.target.closest?.('a[href^="#"]');
-      if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
+      if (
+        !link ||
+        link.hasAttribute("download") ||
+        (link.target && link.target !== "_self")
+      )
+        return;
 
       const hash = link.getAttribute("href");
       let target;
@@ -43,7 +58,8 @@ export default function useLenisScroll() {
       if (!target) return;
 
       event.preventDefault();
-      if (window.location.hash !== hash) window.history.pushState(window.history.state, "", hash);
+      if (window.location.hash !== hash)
+        window.history.pushState(window.history.state, "", hash);
       lenis.scrollTo(target, {
         duration: 1.2,
         lerp: 0,

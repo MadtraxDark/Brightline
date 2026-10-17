@@ -9,15 +9,17 @@ import * as api from "./api.js";
 import App from "./App.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import { store } from "./store/store.js";
-import "./styles/tokens.css";
-import "./styles/app.css";
-import "./styles/landing.css";
+import "./styles/tailwind.css";
 
 // The public site owns reload behavior; dashboard routes keep their history.
 if (window.location.pathname === "/") {
   window.history.scrollRestoration = "manual";
   if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
-    window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
+    window.history.replaceState(
+      window.history.state,
+      "",
+      window.location.pathname + window.location.search,
+    );
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }
 }

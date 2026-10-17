@@ -1,4 +1,9 @@
-import { selectCase, selectCases, selectMissed, selectStats } from "./store/selectors.js";
+import {
+  selectCase,
+  selectCases,
+  selectMissed,
+  selectStats,
+} from "./store/selectors.js";
 import { store } from "./store/store.js";
 
 export async function listCases(filters) {
