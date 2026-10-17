@@ -211,32 +211,32 @@ export default function LandingPage() {
               role="img"
               aria-label="Prévia ilustrativa do painel Brightline em um celular, com indicadores, lista de casos e navegação inferior."
             >
-              <div className="relative w-[224px] rounded-[34px] border-2 border-phone-shell bg-phone-shell p-2 shadow-[0_18px_38px_#1b272a26,0_4px_10px_#1b272a1a]">
-                <div className="absolute left-1/2 top-[13px] z-10 h-4 w-16 -translate-x-1/2 rounded-xl bg-phone-shell" />
-                <div className="min-h-[382px] overflow-hidden rounded-[26px] bg-phone-surface text-phone-ink">
-                  <div className="flex h-[34px] items-center justify-between px-[14px] pt-1 text-[8px] font-bold">
+              <div className="relative w-56 rounded-[34px] border-2 border-phone-shell bg-phone-shell p-2 shadow-[0_18px_38px_#1b272a26,0_4px_10px_#1b272a1a]">
+                <div className="absolute left-1/2 top-3.25 z-10 h-4 w-16 -translate-x-1/2 rounded-xl bg-phone-shell" />
+                <div className="min-h-95.5 overflow-hidden rounded-[26px] bg-phone-surface text-phone-ink">
+                  <div className="flex h-8.5 items-center justify-between px-3.5 pt-1 text-[8px] font-bold">
                     <span>9:41</span>
                     <span>●●●　▰</span>
                   </div>
-                  <div className="flex h-11 items-center justify-between border-b border-phone-border px-[13px]">
-                    <span className="flex items-center gap-[5px] text-[11px] font-semibold tracking-[-.03em]">
+                  <div className="flex h-11 items-center justify-between border-b border-phone-border px-3.25">
+                    <span className="flex items-center gap-1.25 text-[11px] font-semibold tracking-[-.03em]">
                       <ShieldCheck size={15} /> Brightline
                     </span>
                     <span className="grid size-6 place-items-center rounded-full bg-phone-tint text-[8px] font-bold">
                       DR
                     </span>
                   </div>
-                  <div className="px-[13px] pb-3 pt-[18px]">
-                    <span className="text-[7px] font-bold tracking-[.1em] text-phone-muted">
+                  <div className="px-3.25 pb-3 pt-4.5">
+                    <span className="text-[7px] font-bold tracking-widest text-phone-muted">
                       VISÃO GERAL
                     </span>
-                    <h3 className="mt-[5px]! text-[15px] font-semibold tracking-[-.035em]">
+                    <h3 className="mt-1.25! text-[15px] font-semibold tracking-[-.035em]">
                       Bom dia, Dra. Ana
                     </h3>
-                    <p className="mt-[3px]! text-[8px] text-phone-muted">
+                    <p className="mt-0.75! text-[8px] text-phone-muted">
                       Veja o que precisa da sua atenção.
                     </p>
-                    <div className="mt-[14px] grid grid-cols-2 gap-[7px]">
+                    <div className="mt-3.5 grid grid-cols-2 gap-1.75">
                       <div className="flex flex-col gap-0.5 rounded-lg border border-phone-border bg-white p-2">
                         <strong className="text-base leading-none">08</strong>
                         <span className="text-[7px] text-phone-muted">
@@ -250,15 +250,15 @@ export default function LandingPage() {
                         </span>
                       </div>
                     </div>
-                    <div className="mb-[7px] mt-4 flex justify-between text-[9px]">
+                    <div className="mb-1.75 mt-4 flex justify-between text-[9px]">
                       <strong>Prioridade</strong>
                       <span className="text-[7px] text-phone-accent">
                         Ver todos
                       </span>
                     </div>
-                    <div className="flex items-center gap-[7px] rounded-lg border border-phone-border bg-white px-[7px] py-2">
-                      <i className="h-[25px] w-1 shrink-0 rounded-sm bg-phone-urgent" />
-                      <div className="flex min-w-0 flex-1 flex-col gap-[3px]">
+                    <div className="flex items-center gap-1.75 rounded-lg border border-phone-border bg-white px-1.75 py-2">
+                      <i className="h-6.25 w-1 shrink-0 rounded-sm bg-phone-urgent" />
+                      <div className="flex min-w-0 flex-1 flex-col gap-0.75">
                         <strong className="truncate text-[8px] font-semibold">
                           Nódulo pulmonar
                         </strong>
@@ -271,9 +271,9 @@ export default function LandingPage() {
                         className="shrink-0 text-phone-muted"
                       />
                     </div>
-                    <div className="mt-1.5 flex items-center gap-[7px] rounded-lg border border-phone-border bg-white px-[7px] py-2">
-                      <i className="h-[25px] w-1 shrink-0 rounded-sm bg-phone-normal" />
-                      <div className="flex min-w-0 flex-1 flex-col gap-[3px]">
+                    <div className="mt-1.5 flex items-center gap-1.75 rounded-lg border border-phone-border bg-white px-1.75 py-2">
+                      <i className="h-6.25 w-1 shrink-0 rounded-sm bg-phone-normal" />
+                      <div className="flex min-w-0 flex-1 flex-col gap-0.75">
                         <strong className="truncate text-[8px] font-semibold">
                           Achado hepático
                         </strong>
@@ -287,7 +287,7 @@ export default function LandingPage() {
                       />
                     </div>
                   </div>
-                  <div className="flex items-center justify-between border-t border-phone-border px-[13px] py-2 text-center text-phone-accent">
+                  <div className="flex items-center justify-between border-t border-phone-border px-3.25 py-2 text-center text-phone-accent">
                     {[
                       ["⌂", "Início"],
                       ["▤", "Casos"],
