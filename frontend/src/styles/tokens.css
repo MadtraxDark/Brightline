@@ -19,33 +19,34 @@
   --lp-actionable-bg: #eaf1f8;
   --lp-demo: #586778;
   --lp-window-dot: #c2ccd4;
+  --lp-preview-stage: #dce5eb;
   --lp-floating-header: #021837;
   --lp-header-shadow: #020b191f;
   /* superfícies e texto */
-  --bg: #F1F4F7;
-  --panel: #FFFFFF;
-  --border: #D5DCE3;
-  --border-strong: #8A96A3;     /* campos de texto, bordas que precisam ser vistas */
-  --text: #161B20;
-  --text-muted: #5A6673;
-  --control-hover: #E7EBEF;
-  --action-hover: #303B45;
+  --bg: #f1f4f7;
+  --panel: #ffffff;
+  --border: #d5dce3;
+  --border-strong: #8a96a3; /* campos de texto, bordas que precisam ser vistas */
+  --text: #161b20;
+  --text-muted: #5a6673;
+  --control-hover: #e7ebef;
+  --action-hover: #303b45;
 
   /* urgência (única cor da interface) */
-  --critical: #B71C1C;
-  --critical-tint: #FDECEC;
-  --urgent: #9E4D00;
-  --urgent-tint: #FFF1E0;
-  --actionable: #1F5FBF;
-  --actionable-tint: #E8F0FD;
+  --critical: #b71c1c;
+  --critical-tint: #fdecec;
+  --urgent: #9e4d00;
+  --urgent-tint: #fff1e0;
+  --actionable: #1f5fbf;
+  --actionable-tint: #e8f0fd;
 
   /* evidência no laudo */
-  --evidence-bg: #12161B;
-  --evidence-text: #F2F6F9;
+  --evidence-bg: #12161b;
+  --evidence-text: #f2f6f9;
 
   /* ação principal (neutra) */
-  --action-bg: #161B20;
-  --action-text: #FFFFFF;
+  --action-bg: #161b20;
+  --action-text: #ffffff;
 
   /* forma: raios diferentes por papel, não um só */
   --radius-panel: 8px;
@@ -54,51 +55,58 @@
   --radius-mark: 2px;
 
   /* espaçamento: usar só estes valores */
-  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
 }
 
 /* Tema escuro: só ativar se for testado no projetor. Mesmo conjunto de nomes. */
 [data-theme="dark"] {
-  --bg: #12161B;
-  --panel: #1A2027;
-  --border: #2B343E;
-  --border-strong: #55616E;
-  --text: #E8ECF0;
-  --text-muted: #93A0AD;
-  --critical: #FF5A5F;
-  --urgent: #FFA94D;
-  --actionable: #6FA8F7;
+  --bg: #12161b;
+  --panel: #1a2027;
+  --border: #2b343e;
+  --border-strong: #55616e;
+  --text: #e8ecf0;
+  --text-muted: #93a0ad;
+  --critical: #ff5a5f;
+  --urgent: #ffa94d;
+  --actionable: #6fa8f7;
   --critical-tint: color-mix(in srgb, var(--critical) 16%, var(--panel));
   --urgent-tint: color-mix(in srgb, var(--urgent) 16%, var(--panel));
   --actionable-tint: color-mix(in srgb, var(--actionable) 16%, var(--panel));
-  --evidence-bg: #EAF2F7;
-  --evidence-text: #12161B;
-  --action-bg: #E8ECF0;
-  --action-text: #12161B;
+  --evidence-bg: #eaf2f7;
+  --evidence-text: #12161b;
+  --action-bg: #e8ecf0;
+  --action-text: #12161b;
 }
 
 :root {
-  --bg: #F7F8FA;
-  --border: #E5E7EB;
+  --bg: #f7f8fa;
+  --border: #e5e7eb;
   --sidebar-bg: #021837;
-  --sidebar-hover: #19263D;
-  --sidebar-active: #2D3E5B;
-  --sidebar-text: #FFFFFF;
-  --sidebar-muted: #B4BFD1;
-  --sidebar-border: #2A3850;
-  --icon-bg: #F0F2F7;
+  --sidebar-hover: #19263d;
+  --sidebar-active: #2d3e5b;
+  --sidebar-text: #ffffff;
+  --sidebar-muted: #b4bfd1;
+  --sidebar-border: #2a3850;
+  --icon-bg: #f0f2f7;
   --icon-ink: #526078;
-  --table-head: #FAFBFC;
-  --table-hover: #F8F9FC;
-  --focus: #596D93;
-  --overlay-shadow: #101A2D26;
+  --table-head: #fafbfc;
+  --table-hover: #f8f9fc;
+  --focus: #596d93;
+  --overlay-shadow: #101a2d26;
 }
 
-:root { --brand-gold: #F5C434; }
+:root {
+  --brand-gold: #f5c434;
+}
 
 :root {
   --scrollbar-size: 10px;
   --scrollbar-track: var(--bg);
-  --scrollbar-thumb: #7D899B;
+  --scrollbar-thumb: #7d899b;
   --scrollbar-thumb-hover: #526078;
 }
