@@ -204,15 +204,15 @@
     "semantic_hash": ""
   },
   "frontend/src/App.jsx": {
-    "mtime": 1792262405.7299824,
-    "seen": 1792262451.9937682,
-    "ast_hash": "0ae92ec8a2216cfd07cd6170945a767a",
+    "mtime": 1792270657.1435049,
+    "seen": 1792270688.0847058,
+    "ast_hash": "b6519ff0c3efe1fa66d9ff8c65e50324",
     "semantic_hash": ""
   },
   "frontend/src/LandingPage.jsx": {
-    "mtime": 1792262407.9301887,
-    "seen": 1792262451.9937682,
-    "ast_hash": "919dee021938e9c90b75d9a823aab7f8",
+    "mtime": 1792270657.214635,
+    "seen": 1792270688.0847058,
+    "ast_hash": "c56a9dbdb3e3102369a4654486388abb",
     "semantic_hash": ""
   },
   "frontend/src/api.js": {
@@ -222,15 +222,15 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CaseDetail.jsx": {
-    "mtime": 1792262406.349483,
-    "seen": 1792262451.9947658,
-    "ast_hash": "c021ee9e00e733f08cb5f14c2622924c",
+    "mtime": 1792264555.569029,
+    "seen": 1792265086.1786292,
+    "ast_hash": "b98455b95c4b0aeb28c9501a8ba821ea",
     "semantic_hash": ""
   },
   "frontend/src/components/CaseList.jsx": {
-    "mtime": 1792262080.0321717,
-    "seen": 1792262376.284114,
-    "ast_hash": "328f131c6ce19c034f6558b8dfc15cfb",
+    "mtime": 1792266603.074831,
+    "seen": 1792266647.0513642,
+    "ast_hash": "400a4db0ff62d37d1e52d0fe268d1729",
     "semantic_hash": ""
   },
   "frontend/src/components/UrgencyBadge.jsx": {
@@ -282,9 +282,9 @@
     "semantic_hash": ""
   },
   "frontend/src/main.jsx": {
-    "mtime": 1792262406.648381,
-    "seen": 1792262451.999476,
-    "ast_hash": "7906b28b8813d7ec02cfe7904f94d44c",
+    "mtime": 1792264555.5735502,
+    "seen": 1792265086.187534,
+    "ast_hash": "1af4b8d9944657f9f0bcb34607d488c5",
     "semantic_hash": ""
   },
   "frontend/src/store/store.js": {
@@ -420,9 +420,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/BenefitsCarousel.jsx": {
-    "mtime": 1792257782.0367742,
-    "seen": 1792262376.284114,
-    "ast_hash": "8d7b2bdbabf0181453efaff0b364ef6f",
+    "mtime": 1792263612.3038774,
+    "seen": 1792263677.4821386,
+    "ast_hash": "a761340927cdbb16529cb7b10afcf777",
     "semantic_hash": ""
   },
   "frontend/src/components/DemoClock.jsx": {
@@ -432,9 +432,9 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ErrorBoundary.jsx": {
-    "mtime": 1792262080.04274,
-    "seen": 1792262376.284114,
-    "ast_hash": "70bbf1c5c48044ff2ce7b187d866732e",
+    "mtime": 1792264555.570031,
+    "seen": 1792265086.1801653,
+    "ast_hash": "e8f469f49667b80fd05a31fe5403ec29",
     "semantic_hash": ""
   },
   "frontend/src/components/Evaluation.jsx": {
@@ -546,15 +546,15 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/session.js": {
-    "mtime": 1792262406.0464466,
-    "seen": 1792262451.999476,
-    "ast_hash": "4fe7a107dcab3c9243389cfa074ede5f",
+    "mtime": 1792264555.571033,
+    "seen": 1792265086.187534,
+    "ast_hash": "b2e2e65c80c5fa102e095ecc255ed011",
     "semantic_hash": ""
   },
   "frontend/src/lib/session.test.js": {
-    "mtime": 1792262407.9469516,
-    "seen": 1792262451.999476,
-    "ast_hash": "51a7063e2699b0c98e5890ff05f19994",
+    "mtime": 1792264555.5725417,
+    "seen": 1792265086.187534,
+    "ast_hash": "ba72cd95b3356d5fd215f9153374ac8a",
     "semantic_hash": ""
   },
   "frontend/src/lib/splitEvidence.js": {
@@ -582,9 +582,9 @@
     "semantic_hash": ""
   },
   "frontend/src/useTitleAnimation.js": {
-    "mtime": 1792258946.5591648,
-    "seen": 1792262376.284114,
-    "ast_hash": "9408455a4e7c876ebd30380f6445925f",
+    "mtime": 1792270657.428357,
+    "seen": 1792270688.1018367,
+    "ast_hash": "cf8247f371662857fdec5c9d7ebf95c8",
     "semantic_hash": ""
   },
   "scripts/check-data.js": {
@@ -636,9 +636,9 @@
     "semantic_hash": ""
   },
   "frontend/docs/LANDING.md": {
-    "mtime": 1792262407.0248666,
-    "seen": 1792262452.030078,
-    "ast_hash": "1a83aa5bad099227727f8d919bb8e724",
+    "mtime": 1792270657.0771754,
+    "seen": 1792270688.1233559,
+    "ast_hash": "93f7b06605917774dc4b0b58637cf358",
     "semantic_hash": ""
   },
   "artifacts/ui/cadastro-1024.png": {
@@ -759,6 +759,24 @@
     "mtime": 1792262080.0321717,
     "seen": 1792262376.284114,
     "ast_hash": "f93e56d4f08421d025ca8697b3615f2b",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/FaqItem.jsx": {
+    "mtime": 1792264082.100028,
+    "seen": 1792264135.5586066,
+    "ast_hash": "3ad9b267577626cec401d6366f1dccfe",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/DashboardShell.jsx": {
+    "mtime": 1792270681.553506,
+    "seen": 1792270688.0869908,
+    "ast_hash": "579c15282945a57383c4c7a91c1a962d",
+    "semantic_hash": ""
+  },
+  "frontend/src/data/preview.js": {
+    "mtime": 1792266602.7841287,
+    "seen": 1792266647.0583642,
+    "ast_hash": "b5bb48607362933ec82e6e2df1a0efdf",
     "semantic_hash": ""
   }
 }
