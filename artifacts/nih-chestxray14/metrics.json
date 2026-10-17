@@ -1,0 +1,28 @@
+{
+  "labels": [
+    "Atelectasis",
+    "Cardiomegaly",
+    "Effusion",
+    "Infiltration",
+    "Mass",
+    "Nodule",
+    "Pneumonia",
+    "Pneumothorax",
+    "Consolidation",
+    "Edema",
+    "Emphysema",
+    "Fibrosis",
+    "Pleural_Thickening",
+    "Hernia"
+  ],
+  "counts": {
+    "train": 988,
+    "validation": 104,
+    "test": 295
+  },
+  "test_metrics": {
+    "loss": 0.39161190390586853,
+    "macro_auc": 0.6130061745643616
+  },
+  "note": "Research benchmark only; not validated for clinical diagnosis."
+}

@@ -1,4 +1,4 @@
-"""Importa um conjunto completo de laudos/cache para a conta autenticada no Supabase."""
+"""Importa um conjunto completo de laudos/cache para a conta autenticada no Brightline local."""
 import argparse
 import getpass
 import os
@@ -60,7 +60,7 @@ def main(argv=None):
                                json={"reports": reports, "extractions": cache})
         if response.is_error:
             raise ValueError(
-                f"Importação recusada (HTTP {response.status_code}). Confira a sessão e a migração do Supabase.")
+                f"Importação recusada (HTTP {response.status_code}). Confira a sessão e o banco local do Docker.")
         result = response.json()
         print(
             f"Importados: {result['reports']} laudos; {result['cases']} casos; hora simulada {result['sim_now']}.")
