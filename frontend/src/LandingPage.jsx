@@ -14,6 +14,7 @@ import {
 import logo from "./public/logo/logo-text.svg";
 import useLenisScroll from "./useLenisScroll.js";
 import useTitleAnimation from "./useTitleAnimation.js";
+import useScrollReveal from "./useScrollReveal.js";
 import LandingHeader from "./components/LandingHeader.jsx";
 import BenefitsCarousel from "./components/BenefitsCarousel.jsx";
 import FaqItem from "./components/FaqItem.jsx";
@@ -92,6 +93,7 @@ const questions = [
 export default function LandingPage() {
   const scrollRoot = useLenisScroll();
   useTitleAnimation(scrollRoot);
+  useScrollReveal(scrollRoot);
   return (
     <div className="landing" ref={scrollRoot}>
       <a className="skip-link" href="#conteudo">
