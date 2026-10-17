@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { CheckCheck, Clock3, FileText } from "lucide-react";
+import { CheckCheck, Clock3, FileText, ScanLine, Sparkles } from "lucide-react";
 import "../styles/benefits-carousel.css";
 
 const benefits = [
   { title: "Achados em contexto", detail: "Evidência direto do laudo", icon: FileText },
   { title: "Prioridades visíveis", detail: "Atenção ao que vem primeiro", icon: Clock3 },
   { title: "Acompanhamento contínuo", detail: "Da leitura à conduta registrada", icon: CheckCheck },
+  { title: "Não sinalizados", detail: "Achados para uma segunda revisão", icon: ScanLine },
+  { title: "Avaliação da IA", detail: "Recall, precisão e erros de exemplo", icon: Sparkles },
 ];
 
 export default function BenefitsCarousel() {
@@ -32,7 +34,7 @@ export default function BenefitsCarousel() {
   const running = visible && pageVisible && !reducedMotion;
 
   return <section className="benefits-carousel" ref={regionRef} aria-label="Benefícios do Brightline" aria-roledescription="carrossel" data-running={running} data-reduced-motion={reducedMotion}>
-    <div className="benefits-viewport" tabIndex={reducedMotion ? 0 : undefined} aria-label="Achados em contexto, prioridades visíveis e acompanhamento contínuo">
+    <div className="benefits-viewport" tabIndex={reducedMotion ? 0 : undefined} aria-label={benefits.map(({ title }) => title).join(", ")}>
       <div className="benefits-track">
         {[0, 1].map((copy) => <ul className="benefits-group" key={copy} aria-hidden={copy === 1 ? true : undefined} inert={copy === 1}>
           <li className="benefits-item benefits-intro"><span>Para quem cuida,<br /><strong>cada etapa importa.</strong></span></li>
