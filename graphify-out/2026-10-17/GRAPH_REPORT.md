@@ -1,130 +1,198 @@
 # Graph Report - Brightline  (2026-10-17)
 
 ## Corpus Check
-- 28 files · ~13,948 words
+- 98 files · ~86,032 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 10 file(s) not represented in the graph (top: (none) 3, .keras 2, .csv 2)
+- Unclassified: 15 file(s) not represented in the graph (top: .css 4, (none) 3, .keras 2)
 
 ## Summary
-- 216 nodes · 505 edges · 18 communities (11 shown, 7 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 14 edges (avg confidence: 0.89)
+- 607 nodes · 1211 edges · 41 communities (24 shown, 17 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 22 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3d037704`
+- Built from commit: `871634ec`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- Session
-- Data processing pipeline
-- config.py
-- train_nih.py
-- Product architecture and safeguards
-- AI pipeline evaluation
-- API models and schemas
-- post
-- db
-- 002_dataset_images.sql
+- engine.test.js
+- cal.DESIGN.md
+- download_nih_sample.py
+- test_ai_pipeline.py
+- Extração e avaliação do Brightline
+- check-data.js
+- main.py
+- App.jsx
+- frontend/package.json
+- session.test.js
 - Graphify project instructions
 - Commit conventions
-- main.py
-- init.sql
-- Offline extraction and evaluation cache
-- advance
-- authenticated
+- LandingPage.jsx
+- Evaluation.jsx
+- scripts
+- dev.mjs
+- Brightline — sistema visual
+- main.jsx
+- Revisão dos laudos sintéticos Brightline
+- dependencies
+- scripts
+- scripts/evaluate.js
+- Brightline: regras de design
+- design-tools.md
+- PRODUCT.md
+- NIH_TENSORFLOW.md
+- dashboardApi.js
+- lib/evaluate.js
+- ErrorBoundary
+- metrics.test.js
+- devDependencies
+- LANDING.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `db()` - 22 edges
-2. `PipelineTests` - 14 edges
-3. `read_json()` - 12 edges
-4. `write_json()` - 12 edges
-5. `sample()` - 12 edges
-6. `StrictModel` - 11 edges
-7. `validate_extraction()` - 11 edges
-8. `get_settings()` - 10 edges
-9. `load_reports()` - 10 edges
-10. `evaluate()` - 10 edges
+2. `react` - 18 edges
+3. `Shell()` - 18 edges
+4. `CaseDetail()` - 18 edges
+5. `scripts` - 15 edges
+6. `createStore()` - 15 edges
+7. `PipelineTests` - 14 edges
+8. `lucide-react` - 13 edges
+9. `selectCases()` - 13 edges
+10. `read_json()` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Human validates AI suggestions` --semantically_similar_to--> `Human review of labels and difficult cases`  [INFERRED] [semantically similar]
-  README.md → data/revisao_laudos.md
-- `signup()` --uses--> `Credentials`  [INFERRED]
-  backend/app/main.py → backend/app/models.py
-- `login()` --uses--> `Credentials`  [INFERRED]
-  backend/app/main.py → backend/app/models.py
-- `refresh()` --uses--> `RefreshInput`  [INFERRED]
-  backend/app/main.py → backend/app/models.py
-- `acknowledge()` --uses--> `AcknowledgeInput`  [INFERRED]
-  backend/app/main.py → backend/app/models.py
+- `confirmRead()` --calls--> `acknowledge()`  [EXTRACTED]
+  frontend/src/dashboardApi.js → frontend/src/api.js
+- `FastAPI backend` --conceptually_related_to--> `FastAPI dependency`  [INFERRED]
+  backend/README.md → backend/requirements.txt
+- `FastAPI backend` --conceptually_related_to--> `HTTPX dependency`  [INFERRED]
+  backend/README.md → backend/requirements.txt
+- `FastAPI backend` --conceptually_related_to--> `python-dotenv dependency`  [INFERRED]
+  backend/README.md → backend/requirements.txt
+- `FastAPI backend` --conceptually_related_to--> `Uvicorn dependency`  [INFERRED]
+  backend/README.md → backend/requirements.txt
 
 ## Import Cycles
 - None detected.
 
-## Hyperedges (group relationships)
-- **Offline data preparation pipeline** — ia_dados_offline_cache, prompts_extraction_rules, data_revisao_laudos_synthetic_reports, ia_dados_supabase_import [INFERRED 0.85]
+## Communities (41 total, 17 thin omitted)
 
-## Communities (18 total, 7 thin omitted)
+### Community 0 - "engine.test.js"
+Cohesion: 0.06
+Nodes (34): acknowledge(), advance(), clone(), loadCases(), OPEN_FOR_ESCALATION, registerAction(), replaceCase(), requireCase() (+26 more)
 
-### Community 0 - "Session"
-Cohesion: 0.23
-Nodes (11): case_detail(), cases(), clock(), current_hour(), health(), list_cases(), me(), missed() (+3 more)
+### Community 1 - "cal.DESIGN.md"
+Cohesion: 0.05
+Nodes (38): Border Radius Scale, Brand & Accent, Breakpoints, Buttons, Cards & Containers, Collapsing Strategy, Colors, Components (+30 more)
 
-### Community 1 - "Data processing pipeline"
-Cohesion: 0.14
-Nodes (13): load_reports(), read_json(), validate_extraction(), write_json(), identity(), load_aliases(), main(), normalize() (+5 more)
+### Community 2 - "download_nih_sample.py"
+Cohesion: 0.09
+Nodes (14): get_settings(), Settings, lifespan(), main(), main(), fetch(), main(), stable_patient_split() (+6 more)
 
-### Community 2 - "config.py"
-Cohesion: 0.21
-Nodes (5): get_settings(), Settings, lifespan(), main(), main()
+### Community 3 - "test_ai_pipeline.py"
+Cohesion: 0.10
+Nodes (18): load_reports(), read_json(), validate_extraction(), write_json(), evaluate(), identity(), load_aliases(), main() (+10 more)
 
-### Community 3 - "train_nih.py"
-Cohesion: 0.14
-Nodes (9): fetch(), main(), stable_patient_split(), main(), make_dataset(), patient_key(), read_labels(), read_split() (+1 more)
+### Community 4 - "Extração e avaliação do Brightline"
+Cohesion: 0.10
+Nodes (18): API Brightline, Executar, Persistência, Arquivos, Executar no PowerShell, Extração e avaliação do Brightline, Importar no PostgreSQL local, Interpretar a avaliação (+10 more)
 
-### Community 4 - "Product architecture and safeguards"
+### Community 5 - "check-data.js"
+Cohesion: 0.09
+Nodes (19): byId, byUrgency, cache, checkList(), confidences, dataDir, deadlines, doctors (+11 more)
+
+### Community 6 - "main.py"
+Cohesion: 0.06
+Nodes (42): acknowledge(), action(), advance(), authenticated(), case_detail(), cases(), clock(), command() (+34 more)
+
+### Community 7 - "App.jsx"
+Cohesion: 0.06
+Nodes (61): acknowledge(), advance(), getCase(), getStats(), listCases(), listMissed(), registerAction(), reset() (+53 more)
+
+### Community 8 - "frontend/package.json"
+Cohesion: 0.22
+Nodes (8): name, private, type, version, gsap, lenis, vite, @vitejs/plugin-react
+
+### Community 9 - "session.test.js"
+Cohesion: 0.20
+Nodes (14): App(), RequireAuth(), Login(), onSubmit(), Register(), PROFILE_KEY, isAuthenticated(), login() (+6 more)
+
+### Community 13 - "LandingPage.jsx"
 Cohesion: 0.16
-Nodes (12): FastAPI backend, FastAPI dependency, HTTPX dependency, python-dotenv dependency, Uvicorn dependency, Eurorad educational case references, Radiologia Brasileira educational reference, Synthetic imaging report review dataset (+4 more)
+Nodes (12): benefits, BenefitsCarousel(), LandingHeader(), links, examples, LandingPage(), ProductPreview(), questions (+4 more)
 
-### Community 5 - "AI pipeline evaluation"
-Cohesion: 0.25
-Nodes (5): evaluate(), extraction(), PipelineTests, caller(), sample()
+### Community 14 - "Evaluation.jsx"
+Cohesion: 0.21
+Nodes (10): cards, Evaluation(), FindingList(), precisionOverall, recallCritical, recallOverall, swapped, swappedKey() (+2 more)
 
-### Community 6 - "API models and schemas"
-Cohesion: 0.19
-Nodes (10): AcknowledgeInput, ActionInput, Credentials, ExtractionInput, FindingInput, GroundTruth, ImportInput, RefreshInput (+2 more)
+### Community 15 - "scripts"
+Cohesion: 0.18
+Nodes (10): name, private, scripts, build, dev, dev:backend, dev:frontend, install:frontend (+2 more)
 
-### Community 7 - "post"
-Cohesion: 0.23
-Nodes (11): issue_session(), login(), logout(), no_store_auth(), password_hash(), refresh(), signed_url(), signup() (+3 more)
+### Community 16 - "dev.mjs"
+Cohesion: 0.22
+Nodes (6): children, localPython, root, start(), stop(), vite
 
-### Community 8 - "db"
-Cohesion: 0.48
-Nodes (6): acknowledge(), action(), command(), db(), import_data(), reset()
+### Community 17 - "Brightline — sistema visual"
+Cohesion: 0.13
+Nodes (13): Referência visual, Barras de rolagem, Brightline — sistema visual, Cadastro, Continuidade da navegação, Direção aprovada, Hierarquia, Identidade (+5 more)
 
-### Community 14 - "init.sql"
+### Community 18 - "main.jsx"
 Cohesion: 0.29
-Nodes (13): cases, cases_owner_order, dataset_images, dataset_images_labels_gin, events, events_case_order, extractions, file_links (+5 more)
+Nodes (3): @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, react-dom
 
-### Community 15 - "Offline extraction and evaluation cache"
+### Community 19 - "Revisão dos laudos sintéticos Brightline"
 Cohesion: 0.29
-Nodes (5): Extraction evidence validation, Offline extraction and evaluation cache, Import prepared data into Supabase, Literal evidence requirement, Radiology finding extraction rules
+Nodes (6): Cobertura dos casos difíceis, Composição, Inventário para revisão do gabarito, Referências consultadas, Revisão dos laudos sintéticos Brightline, Semelhanças para revisar com Bruno
+
+### Community 20 - "dependencies"
+Cohesion: 0.22
+Nodes (9): dependencies, @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, gsap, lenis, lucide-react, react, react-dom (+1 more)
+
+### Community 21 - "scripts"
+Cohesion: 0.13
+Nodes (15): scripts, build, check:data, dev, prebuild, preview, test, test:engine (+7 more)
+
+### Community 22 - "scripts/evaluate.js"
+Cohesion: 0.18
+Nodes (8): cache, computed, current, dataDir, found, next, reports, write
+
+### Community 29 - "dashboardApi.js"
+Cohesion: 0.24
+Nodes (9): run(), submitAction(), closeCase(), confirmRead(), dashboardCase(), getCase(), getStats(), NETWORK_ERROR (+1 more)
+
+### Community 30 - "lib/evaluate.js"
+Cohesion: 0.31
+Nodes (5): byReportId(), computeEvaluation(), listItem(), normalizeName(), sameFinding()
+
+### Community 32 - "metrics.test.js"
+Cohesion: 0.53
+Nodes (3): formatPercent(), precision(), recall()
+
+### Community 33 - "devDependencies"
+Cohesion: 0.67
+Nodes (3): devDependencies, vite, @vitejs/plugin-react
 
 ## Knowledge Gaps
-- **8 isolated node(s):** `Graphify workflow instructions`, `Commit message instructions`, `Eurorad educational case references`, `Radiologia Brasileira educational reference`, `Extraction evidence validation` (+3 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 55 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **7 isolated node(s):** `Graphify workflow instructions`, `Commit message instructions`, `FastAPI dependency`, `HTTPX dependency`, `python-dotenv dependency` (+2 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 264 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `advance()` connect `advance` to `db`, `Session`, `main.py`, `post`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
-- **What connects `Graphify workflow instructions`, `Commit message instructions`, `Eurorad educational case references` to the rest of the system?**
-  _8 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Data processing pipeline` be split into smaller, more focused modules?**
-  _Cohesion score 0.1417004048582996 - nodes in this community are weakly interconnected._
-- **Why does `write_json()` connect `Data processing pipeline` to `AI pipeline evaluation`?**
-  _High betweenness centrality (0.025) - this node is a cross-community bridge._
-- **Should `train_nih.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.13666666666666666 - nodes in this community are weakly interconnected._
+- **Why does `lucide-react` connect `App.jsx` to `frontend/package.json`, `session.test.js`, `LandingPage.jsx`, `Evaluation.jsx`?**
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+- **Are the 2 inferred relationships involving `Shell()` (e.g. with `closeOnEscape()` and `closeOnOutside()`) actually correct?**
+  _`Shell()` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **What connects `Graphify workflow instructions`, `Commit message instructions`, `FastAPI dependency` to the rest of the system?**
+  _7 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `engine.test.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.06103896103896104 - nodes in this community are weakly interconnected._
+- **Why does `react` connect `App.jsx` to `frontend/package.json`, `session.test.js`, `main.jsx`, `LandingPage.jsx`?**
+  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+- **Should `cal.DESIGN.md` be split into smaller, more focused modules?**
+  _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
+- **Why does `scripts` connect `scripts` to `frontend/package.json`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
