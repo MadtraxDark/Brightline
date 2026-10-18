@@ -2,25 +2,25 @@
 
 ## Corpus Check
 
-- 186 files · ~174,670 words
+- 221 files · ~609,095 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 13 file(s) not represented in the graph (top: (none) 6, .css 3, .example 1)
+- Unclassified: 14 file(s) not represented in the graph (top: (none) 6, .css 3, .example 2)
 
 ## Summary
 
-- 1369 nodes · 2835 edges · 86 communities (65 shown, 21 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 84 edges (avg confidence: 0.9)
+- 1590 nodes · 3435 edges · 103 communities (75 shown, 28 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 96 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `813a079e`
+- Built from commit: `327abee1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 
-- selectors.js
+- selectors.test.js
 - cal.DESIGN.md
 - check-data.js
 - test_ai_pipeline.py
@@ -28,7 +28,7 @@
 - session.js
 - db
 - react
-- frontend/package.json
+- scripts
 - 002_dataset_images.sql
 - Graphify project instructions
 - report_analysis.py
@@ -40,24 +40,24 @@
 - Brightline — sistema visual
 - Evaluation.jsx
 - Revisão dos laudos sintéticos Brightline
-- api.js
+- frontend/package.json
 - scripts/evaluate.js
 - InputError
 - Brightline: regras de design
 - design-tools.md
 - PRODUCT.md
-- CaseDetail.jsx
+- Reports.jsx
 - CaseList.jsx
 - LANDING.md
 - doe_designs.py
-- App.jsx
+- reclassification.py
 - test_auth.py
 - Clinical Decision-Support Research and Evaluation
 - GRADE Evidence Profiles
-- main.py
+- App.jsx
 - Study Reporting and Appraisal
 - Experimental Design
-- Session
+- db
 - Aggregate Model and Biomarker Evaluation
 - Survival-Analysis Planning
 - Aggregate Cohort Evaluation
@@ -72,43 +72,56 @@
 - Sequential and Adaptive Designs
 - Clinical Decision-Support References
 - Regulatory and Governance Context
-- ref_node_assert
+- main.py
 - list_dataset_images
-- dashboardApi.js
+- api.js
 - machine-learning-engineer/SKILL.md
 - ml-engineer/SKILL.md
 - analyze_report
-- createStore
+- store.js
 - lib/evaluate.js
-- authenticated
+- TorchXRayVisionClassifierTests
 - ExamViewer
 - radiographApi.js
-- selectors.test.js
-- test_classifier_torchxrayvision.py
+- dashboardApi.js
 - Brightline: regras de design (v2)
 - infer
-- engine.test.js
+- time
 - FakeConnection
-- sidebarPref.test.js
-- store.js
+- selectors.js
+- CaseDetail
 - run-tests.js
-- escalationPath.test.js
-- patientLabel.js
+- ref_node_assert
+- createLunaHandler
 - classification-audit.md
 - report-image.md
+- ErrorBoundary
+- prompt.js
+- dependencies
+- engine.test.js
+- Depuração e testes de reclassificação
+- context.js
+- devDependencies
+- ref_node_fs
+- lunaVitePlugin.js
+- escalationPath.test.js
+- patientLabel.js
+- authenticated
+- 003_report_analyses.sql
+- physician-portraits.md
 
 ## God Nodes (most connected - your core abstractions)
 
-1. `InputError` - 36 edges
-2. `db()` - 33 edges
-3. `react` - 27 edges
-4. `Shell()` - 25 edges
-5. `scripts` - 24 edges
-6. `CaseDetail()` - 24 edges
-7. `IssueLog` - 23 edges
-8. `CaseList()` - 22 edges
-9. `load_json_object()` - 21 edges
-10. `lucide-react` - 21 edges
+1. `db()` - 45 edges
+2. `react` - 37 edges
+3. `InputError` - 36 edges
+4. `active_institution()` - 32 edges
+5. `lucide-react` - 29 edges
+6. `Shell()` - 27 edges
+7. `CaseDetail()` - 27 edges
+8. `scripts` - 24 edges
+9. `IssueLog` - 23 edges
+10. `DashboardShell()` - 23 edges
 
 ## Surprising Connections (you probably didn't know these)
 
@@ -116,23 +129,23 @@
   docs/classification-audit.md → backend/app/report_analysis.py
 - `Urgência: nunca só cor` --references--> `UrgencyBadge()` [INFERRED]
   brightline-design.md → frontend/src/components/UrgencyBadge.jsx
+- `Causa reproduzida e investigação` --references--> `authorizedRequest()` [INFERRED]
+  docs/RECLASSIFY_DEBUG_REPORT.md → frontend/src/lib/session.js
 - `Regras de trabalho para o Cursor` --references--> `useStore()` [INFERRED]
   brightline-design.md → frontend/src/store/useStore.js
-- `Arquitetura` --references--> `files()` [INFERRED]
-  docs/DATABASE_API.md → scripts/check-colors.js
-- `Extração, privacidade e fila` --references--> `files()` [INFERRED]
-  backend/docs/REPORT_ANALYSIS.md → scripts/check-colors.js
+- `API e persistência` --references--> `RadiographViewer()` [INFERRED]
+  docs/RADIOGRAPH_LOCALIZATION.md → frontend/src/components/RadiographViewer.jsx
 
 ## Import Cycles
 
 - None detected.
 
-## Communities (86 total, 21 thin omitted)
+## Communities (103 total, 28 thin omitted)
 
-### Community 0 - "selectors.js"
+### Community 0 - "selectors.test.js"
 
-Cohesion: 0.20
-Nodes (19): currentTarget(), getMissed(), timeRemaining(), buildNextDeadlineCard(), buildSidebarItems(), missedCount(), PRIORITY, fold() (+11 more)
+Cohesion: 0.17
+Nodes (14): acknowledge(), advance(), clone(), loadCases(), OPEN_FOR_ESCALATION, registerAction(), replaceCase(), requireCase() (+6 more)
 
 ### Community 1 - "cal.DESIGN.md"
 
@@ -152,32 +165,32 @@ Nodes (34): get_settings(), Settings, _extract_report(), lifespan(), load_report
 ### Community 4 - "Extração e avaliação do Brightline"
 
 Cohesion: 0.05
-Nodes (36): API Brightline, Executar, Persistência, Análise de laudos, Classificação de imagem independente, Extração, privacidade e fila, Requisição, Resposta (+28 more)
+Nodes (39): API Brightline, Executar, Persistência, Análise de laudos, Classificação de imagem independente, Requisição, Resposta, Arquivos (+31 more)
 
 ### Community 5 - "session.js"
 
-Cohesion: 0.16
-Nodes (24): App(), RequireAuth(), Login(), onSubmit(), Register(), PROFILE_KEY, AUTH_BASE, authRequest() (+16 more)
+Cohesion: 0.12
+Nodes (34): App(), RequireAuth(), checkSession(), InstitutionPicker(), InstitutionSwitcher(), change(), Login(), onSubmit() (+26 more)
 
 ### Community 6 - "db"
 
-Cohesion: 0.23
-Nodes (11): dataset_image_signed_url(), download_file(), issue_session(), login(), logout(), no_store_auth(), refresh(), report_radiograph_url() (+3 more)
+Cohesion: 0.19
+Nodes (15): dataset_image_content(), dataset_image_signed_url(), download_file(), issue_session(), login(), logout(), no_store_auth(), refresh() (+7 more)
 
 ### Community 7 - "react"
 
-Cohesion: 0.13
-Nodes (19): benefits, BenefitsCarousel(), FaqItem(), LandingHeader(), links, LandingPage(), previewState, ProductPreview() (+11 more)
+Cohesion: 0.12
+Nodes (17): benefits, BenefitsCarousel(), FaqItem(), LandingHeader(), links, LandingPage(), previewState, ProductPreview() (+9 more)
 
-### Community 8 - "frontend/package.json"
+### Community 8 - "scripts"
 
-Cohesion: 0.04
-Nodes (47): dependencies, @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, gsap, lenis, lucide-react, react, react-dom (+39 more)
+Cohesion: 0.08
+Nodes (24): scripts, build, check:colors, check:data, dev, prebuild, preview, test (+16 more)
 
 ### Community 11 - "report_analysis.py"
 
-Cohesion: 0.24
-Nodes (7): compare(), find_text_classes(), initialize_model(), laterality(), load_model(), _model(), model_metadata()
+Cohesion: 0.21
+Nodes (7): compare(), find_text_classes(), initialize_model(), laterality(), load_model(), _model(), _weights_available()
 
 ### Community 13 - "experiment.py"
 
@@ -186,8 +199,8 @@ Nodes (22): auc_ap(), augment(), bootstrap_ci(), build_table(), cmd_baseline(), 
 
 ### Community 14 - "init.sql"
 
-Cohesion: 0.13
-Nodes (25): cases, cases_owner_order, dataset_image_analyses, dataset_image_analyses_result_gin, dataset_image_links, dataset_image_links_expiry, dataset_images, dataset_images_labels_gin (+17 more)
+Cohesion: 0.11
+Nodes (27): cases, cases_owner_order, dataset_image_analyses, dataset_image_analyses_result_gin, dataset_image_links, dataset_image_links_expiry, dataset_images, dataset_images_labels_gin (+19 more)
 
 ### Community 15 - "scripts"
 
@@ -196,8 +209,8 @@ Nodes (22): devDependencies, husky, lint-staged, prettier, lint-staged, **/*.{js
 
 ### Community 16 - "store.test.js"
 
-Cohesion: 0.16
-Nodes (9): allowed, hits, source, children, localPython, root, start(), stop() (+1 more)
+Cohesion: 0.29
+Nodes (6): children, localPython, root, start(), stop(), vite
 
 ### Community 17 - "Brightline — sistema visual"
 
@@ -214,10 +227,10 @@ Nodes (10): cards, FindingList(), precisionOverall, recallCritical, recallOveral
 Cohesion: 0.29
 Nodes (6): Cobertura dos casos difíceis, Composição, Inventário para revisão do gabarito, Referências consultadas, Revisão dos laudos sintéticos Brightline, Semelhanças para revisar com Bruno
 
-### Community 20 - "api.js"
+### Community 20 - "frontend/package.json"
 
-Cohesion: 0.10
-Nodes (19): advance(), getStats(), listCases(), listMissed(), reset(), DemoClock(), onAdvance(), onReset() (+11 more)
+Cohesion: 0.18
+Nodes (8): name, private, type, version, @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, react-dom, tailwindcss
 
 ### Community 21 - "scripts/evaluate.js"
 
@@ -234,29 +247,29 @@ Nodes (46): _build_table(), _format_count(), main(), _to_csv(), _to_markdown(), 
 Cohesion: 0.50
 Nodes (3): Brightline: regras de design, Contrato assumido em `src/api.js`, Lista clínica de casos
 
-### Community 26 - "CaseDetail.jsx"
+### Community 26 - "Reports.jsx"
 
-Cohesion: 0.17
-Nodes (14): acknowledge(), getCase(), registerAction(), CaseDetail(), run(), submitAction(), goBack(), STEP_ICONS (+6 more)
+Cohesion: 0.25
+Nodes (10): MOCK_PHYSICIAN_PHOTOS, PhysicianAvatar(), PhysicianReportsModal(), fold(), Physicians(), PhysicianSelect(), blank, lucide-react (+2 more)
 
 ### Community 29 - "CaseList.jsx"
 
-Cohesion: 0.13
-Nodes (22): CaseList(), onStageKeyDown(), nextStage(), OVERVIEW_STAGES, QUEUE_STAGES, statusDeviation(), useReducedMotion(), ClinicalQueue() (+14 more)
+Cohesion: 0.12
+Nodes (23): STEP_ICONS, CaseList(), onStageKeyDown(), nextStage(), OVERVIEW_STAGES, QUEUE_STAGES, statusDeviation(), useReducedMotion() (+15 more)
 
 ### Community 37 - "doe_designs.py"
 
 Cohesion: 0.06
 Nodes (40): Choosing a design, Factorial and Design-of-Experiments (DOE), Fractional factorial, Full factorial, Resolution and aliasing, Response-surface designs, Screening designs, Space-filling designs (+32 more)
 
-### Community 38 - "App.jsx"
+### Community 38 - "reclassification.py"
 
-Cohesion: 0.15
-Nodes (18): crumb(), LANES, Overview(), applyView(), Shell(), Evaluation(), ProfileMenu(), SectionTransition() (+10 more)
+Cohesion: 0.19
+Nodes (3): InferenceWorker, _serve(), classified()
 
 ### Community 39 - "test_auth.py"
 
-Cohesion: 0.17
+Cohesion: 0.18
 Nodes (6): password_hash(), signup(), verify_password(), SignupInput, AuthDatabaseTests, AuthPolicyTests
 
 ### Community 40 - "Clinical Decision-Support Research and Evaluation"
@@ -269,10 +282,10 @@ Nodes (21): 1. Frame the Research Question, 2. Select the Artifact, 3. Run Local
 Cohesion: 0.10
 Nodes (19): Certainty Domains, Dissemination Bias (Publication Bias), Effect, Evidence to Decision, Final Certainty, GRADE Evidence Profiles, Helper, Imprecision (+11 more)
 
-### Community 42 - "main.py"
+### Community 42 - "App.jsx"
 
-Cohesion: 0.15
-Nodes (6): acknowledge(), action(), command(), health(), import_data(), validation_error()
+Cohesion: 0.11
+Nodes (23): crumb(), LANES, Overview(), applyView(), Shell(), toggleSidebar(), SectionTransition(), finish() (+15 more)
 
 ### Community 43 - "Study Reporting and Appraisal"
 
@@ -284,10 +297,10 @@ Nodes (15): AI Diagnostic Accuracy, AI Trial Protocols and Reports, Biomarker St
 Cohesion: 0.12
 Nodes (15): Choosing a design, Citing Scientific Agent Skills, DOE matrices — `scripts/doe_designs.py`, Experimental Design, Generating the design, Installation, Key references, Overview (+7 more)
 
-### Community 45 - "Session"
+### Community 45 - "db"
 
-Cohesion: 0.21
-Nodes (18): case_detail(), cases(), classify_dataset_image(), clock(), current_hour(), dataset_image_content(), db(), get_dataset_image() (+10 more)
+Cohesion: 0.18
+Nodes (25): active_institution(), cases(), classify_dataset_image(), clock(), create_report(), db(), delete_file(), delete_report() (+17 more)
 
 ### Community 46 - "Aggregate Model and Biomarker Evaluation"
 
@@ -311,13 +324,13 @@ Nodes (11): Allowed Node Types, Change Control, Decision-Logic Traceability, Mat
 
 ### Community 50 - "models.py"
 
-Cohesion: 0.23
-Nodes (10): AcknowledgeInput, ActionInput, Credentials, ExtractionInput, FindingInput, GroundTruth, ImportInput, RefreshInput (+2 more)
+Cohesion: 0.12
+Nodes (16): validate_institutions(), AcknowledgeInput, ActionInput, ActiveInstitutionInput, CreateReportInput, Credentials, ExtractionInput, FindingInput (+8 more)
 
 ### Community 51 - "DashboardShell.jsx"
 
-Cohesion: 0.16
-Nodes (13): crumb(), DashboardShell(), Overview(), SUMMARY, summaryValue(), NavigationHighlight(), move(), snap() (+5 more)
+Cohesion: 0.12
+Nodes (20): crumb(), DashboardShell(), loadData(), Overview(), SUMMARY, summaryValue(), Evaluation(), Missed() (+12 more)
 
 ### Community 52 - "Privacy, De-identification, and Disclosure"
 
@@ -359,50 +372,50 @@ Nodes (6): Assets, Boundary, Clinical Decision-Support References, Method Select
 Cohesion: 0.29
 Nodes (6): FDA AI-Enabled Device Lifecycle, FDA Clinical Decision Support, Governance Crosswalk, ICH E6(R3), E9, and E9(R1), ONC HTI-1 Transparency, Regulatory and Governance Context
 
-### Community 60 - "ref_node_assert"
+### Community 60 - "main.py"
 
-Cohesion: 0.17
-Nodes (5): cases, isLunaVisible(), PUBLIC_ROUTES, splitEvidence(), joined()
+Cohesion: 0.12
+Nodes (13): acknowledge(), action(), case_detail(), command(), current_hour(), database_error(), health(), institutions() (+5 more)
 
 ### Community 61 - "list_dataset_images"
 
-Cohesion: 0.10
+Cohesion: 0.11
 Nodes (5): advance(), list_dataset_images(), Connection, DatasetImageApiTests, Result
 
-### Community 62 - "dashboardApi.js"
+### Community 62 - "api.js"
 
-Cohesion: 0.32
-Nodes (7): closeCase(), confirmRead(), dashboardCase(), getCase(), getStats(), NETWORK_ERROR, registerAction()
+Cohesion: 0.20
+Nodes (16): acknowledge(), advance(), caseFromApi(), getCase(), refreshDashboard(), registerAction(), reportFromCase(), reset() (+8 more)
 
 ### Community 65 - "analyze_report"
 
-Cohesion: 0.32
-Nodes (3): analyze_report(), classify_radiograph(), _read_pdf()
+Cohesion: 0.27
+Nodes (4): analyze_report(), classify_radiograph(), _read_pdf(), model_metadata()
 
-### Community 66 - "createStore"
+### Community 66 - "store.js"
 
-Cohesion: 0.18
-Nodes (10): createStore(), commit(), emit(), freshState(), persist(), readState(), fakeTimers(), fixtureData (+2 more)
+Cohesion: 0.12
+Nodes (18): browserStorage(), createStore(), commit(), emit(), freshState(), persist(), readState(), dataSignature() (+10 more)
 
 ### Community 67 - "lib/evaluate.js"
 
-Cohesion: 0.60
+Cohesion: 0.31
 Nodes (5): byReportId(), computeEvaluation(), listItem(), normalizeName(), sameFinding()
 
 ### Community 71 - "ExamViewer"
 
-Cohesion: 0.12
-Nodes (15): ExamViewer(), ask(), close(), CaseChat(), send(), CaseChatModal(), LunaPanel(), LunaWidget() (+7 more)
+Cohesion: 0.07
+Nodes (32): ExamViewer(), ask(), close(), CaseChat(), send(), CaseChatModal(), LunaPanel(), send() (+24 more)
 
 ### Community 72 - "radiographApi.js"
 
-Cohesion: 0.17
-Nodes (20): LABELS, PT, RadiographClassifier(), classify(), PATHOLOGIES, RadiographLibrary(), chooseImage(), classifySelected() (+12 more)
+Cohesion: 0.15
+Nodes (22): API e persistência, LABELS, PT, RadiographClassifier(), classify(), PATHOLOGIES, RadiographLibrary(), chooseImage() (+14 more)
 
-### Community 73 - "selectors.test.js"
+### Community 73 - "dashboardApi.js"
 
-Cohesion: 0.19
-Nodes (13): acknowledge(), advance(), clone(), loadCases(), OPEN_FOR_ESCALATION, registerAction(), replaceCase(), requireCase() (+5 more)
+Cohesion: 0.24
+Nodes (10): listCases(), listMissed(), closeCase(), confirmRead(), dashboardCase(), getCase(), getCases(), getStats() (+2 more)
 
 ### Community 75 - "Brightline: regras de design (v2)"
 
@@ -411,70 +424,120 @@ Nodes (13): Antes de dar uma tela por pronta, Brightline: regras de design (v2),
 
 ### Community 76 - "infer"
 
-Cohesion: 0.22
-Nodes (3): infer(), preprocess(), ReportAnalysisTests
+Cohesion: 0.15
+Nodes (5): _cam_localizations(), infer(), preprocess(), ReportAnalysisTests, **init**()
 
-### Community 77 - "engine.test.js"
+### Community 77 - "time"
 
-Cohesion: 0.18
-Nodes (6): cache, dataDir, deepFreeze(), fixtureDir, reports, rootDir
+Cohesion: 0.31
+Nodes (4): crashed_localization(), stalled_classification(), stalled_localization(), WorkerTests
 
 ### Community 78 - "FakeConnection"
 
-Cohesion: 0.20
-Nodes (3): FakeConnection, FakeResult, ReportEndpointTests
+Cohesion: 0.16
+Nodes (5): FakeConnection, FakeResult, ReportEndpointTests, execute(), execute()
 
-### Community 79 - "sidebarPref.test.js"
+### Community 79 - "selectors.js"
 
-Cohesion: 0.31
-Nodes (5): toggleSidebar(), readObject(), readSidebarCollapsed(), SIDEBAR_KEY, writeSidebarCollapsed()
+Cohesion: 0.24
+Nodes (18): currentTarget(), getMissed(), timeRemaining(), buildNextDeadlineCard(), buildSidebarItems(), missedCount(), fold(), laneBucket() (+10 more)
 
-### Community 80 - "store.js"
+### Community 80 - "CaseDetail"
 
-Cohesion: 0.28
-Nodes (5): browserStorage(), dataSignature(), defaultTimers, memoryStorage(), STORAGE_KEY
+Cohesion: 0.21
+Nodes (10): refreshWorkspace(), CaseDetail(), reclassify(), run(), submitAction(), goBack(), Reports(), close() (+2 more)
 
 ### Community 81 - "run-tests.js"
 
 Cohesion: 0.25
 Nodes (7): collect(), files, frontend, nameWidth, root, rows, source
 
-### Community 82 - "escalationPath.test.js"
+### Community 82 - "ref_node_assert"
 
-Cohesion: 0.38
-Nodes (5): escalationPath(), SETTLED, STEPS, path(), report
+Cohesion: 0.15
+Nodes (6): cases, getLunaMode(), LUNA_MODE_KEY, setLunaMode(), splitEvidence(), joined()
 
-### Community 83 - "patientLabel.js"
+### Community 83 - "createLunaHandler"
 
-Cohesion: 0.67
-Nodes (5): ageOf(), nameOf(), patientLabel(), patientLine(), patientOf()
+Cohesion: 0.23
+Nodes (6): createLunaHandler(), error(), context, handler(), listen(), upstreamBase()
 
 ### Community 84 - "classification-audit.md"
 
 Cohesion: 0.33
 Nodes (5): Evidência reproduzível, Fluxo verificado, Melhorias implementadas, Resultado, Validação e limites
 
+### Community 87 - "prompt.js"
+
+Cohesion: 0.57
+Nodes (6): buildMessages(), encodeContext(), fitContext(), messageText(), SYSTEM_PROMPT, validateLunaInput()
+
+### Community 88 - "dependencies"
+
+Cohesion: 0.22
+Nodes (9): dependencies, @fontsource/atkinson-hyperlegible-next, @fontsource/source-serif-4, gsap, lenis, lucide-react, react, react-dom (+1 more)
+
+### Community 89 - "engine.test.js"
+
+Cohesion: 0.14
+Nodes (9): getStats(), getStats(), cache, dataDir, deepFreeze(), fixtureDir, reports, rootDir (+1 more)
+
+### Community 90 - "Depuração e testes de reclassificação"
+
+Cohesion: 0.22
+Nodes (8): Causa reproduzida e investigação, Comandos e verificações, Correções, Dados usados, Depuração e testes de reclassificação, Limitações e estado final, Resultados executados, Transferência dos casos legados autorizada pelo usuário
+
+### Community 91 - "context.js"
+
+Cohesion: 0.44
+Nodes (8): buildLunaContext(), caseContext(), clean(), CONFIDENCE, confidenceOf(), queueContext(), remoteReading(), stateOf()
+
+### Community 92 - "devDependencies"
+
+Cohesion: 0.40
+Nodes (5): devDependencies, tailwindcss, @tailwindcss/vite, vite, @vitejs/plugin-react
+
+### Community 93 - "ref_node_fs"
+
+Cohesion: 0.18
+Nodes (7): directories, files(), root, allowed, files(), hits, source
+
+### Community 94 - "lunaVitePlugin.js"
+
+Cohesion: 0.31
+Nodes (6): lunaVitePlugin(), mount(), readBody(), @tailwindcss/vite, vite, @vitejs/plugin-react
+
+### Community 95 - "escalationPath.test.js"
+
+Cohesion: 0.38
+Nodes (5): escalationPath(), SETTLED, STEPS, path(), report
+
+### Community 96 - "patientLabel.js"
+
+Cohesion: 0.67
+Nodes (5): ageOf(), nameOf(), patientLabel(), patientLine(), patientOf()
+
 ## Knowledge Gaps
 
 - **11 isolated node(s):** `tailwindcss`, `husky`, `lint-staged`, `prettier`, `Graphify workflow instructions` (+6 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 610 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 673 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **28 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `files()` connect `Extração e avaliação do Brightline` to `store.test.js`?**
-  _High betweenness centrality (0.325) - this node is a cross-community bridge._
+- **Why does `Análise de laudos` connect `Extração e avaliação do Brightline` to `db`?**
+  _High betweenness centrality (0.305) - this node is a cross-community bridge._
 - **Are the 6 inferred relationships involving `InputError` (e.g. with `main()` and `main()`) actually correct?**
   _`InputError` has 6 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `tailwindcss`, `husky`, `lint-staged` to the rest of the system?**
   _11 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `cal.DESIGN.md` be split into smaller, more focused modules?**
   _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._
-- **Why does `Extração, privacidade e fila` connect `Extração e avaliação do Brightline` to `Session`?**
-  _High betweenness centrality (0.319) - this node is a cross-community bridge._
+- **Why does `Localização visual de radiografias` connect `Extração e avaliação do Brightline` to `radiographApi.js`?**
+  _High betweenness centrality (0.305) - this node is a cross-community bridge._
 - **Should `check-data.js` be split into smaller, more focused modules?**
   _Cohesion score 0.08666666666666667 - nodes in this community are weakly interconnected._
-- **Why does `cases()` connect `Session` to `main.py`, `Extração e avaliação do Brightline`?**
-  _High betweenness centrality (0.312) - this node is a cross-community bridge._
+- **Should `test_ai_pipeline.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.0565088080530771 - nodes in this community are weakly interconnected._

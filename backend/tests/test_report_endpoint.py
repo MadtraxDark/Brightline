@@ -1,8 +1,9 @@
 import asyncio
 import unittest
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 from app import main
+from fastapi import HTTPException
 
 
 class FakeResult:
@@ -31,6 +32,59 @@ class FakeConnection:
 
 
 class ReportEndpointTests(unittest.TestCase):
+    def test_failed_inference_does_not_persist_or_return_success(self):
+        class LinkedImage(FakeConnection):
+            def execute(self, query, params=()):
+                self.statements.append((query, params))
+                return FakeResult({"content": b"image", "mime_type": "image/png", "analysis": {}})
+
+        session = {"user": {"id": "owner", "institutions": ["hctco-unifeso"],
+                            "active_institution_id": "hctco-unifeso"}}
+        for error, status in [(main.WorkerBusy("busy"), 409), (TimeoutError("timeout"), 504),
+                              (RuntimeError("unavailable"), 503), (ValueError("invalid"), 422)]:
+            with self.subTest(status=status):
+                conn = LinkedImage()
+                with patch.object(main, "db", return_value=conn), patch.object(
+                    main.reclassification_worker, "run", side_effect=error
+                ), self.assertRaises(HTTPException) as caught:
+                    asyncio.run(main.reclassify_report("TEST", session))
+                self.assertEqual(caught.exception.status_code, status)
+                self.assertFalse(any("INSERT" in sql for sql, _ in conn.statements))
+
+    def test_reclassification_reads_linked_image_and_persists_new_scores_and_markers(self):
+        class ReclassificationConnection(FakeConnection):
+            def execute(self, query, params=()):
+                self.statements.append((query, params))
+                if "SELECT f.content,f.mime_type,a.analysis" in query:
+                    return FakeResult({
+                        "content": b"original-radiograph-bytes",
+                        "mime_type": "image/png",
+                        "analysis": {"findings": []},
+                    })
+                return FakeResult()
+
+        connection = ReclassificationConnection()
+        probabilities = {label: 0.1 for label in main.report_analysis.LABELS}
+        probabilities["Atelectasis"] = 0.82
+        markers = [{"pathology": "Atelectasis", "score": 0.82, "x": 0.45, "y": 0.67,
+                    "localization_method": "gradcam", "localization_status": "estimated",
+                    "heatmap_available": True}]
+        session = {"user": {"id": "owner-test", "institutions": ["hctco-unifeso"],
+                             "active_institution_id": "hctco-unifeso"}}
+        with patch.object(main, "db", return_value=connection), patch.object(
+            main, "run_in_threadpool", new=AsyncMock(return_value=(probabilities, "model-test", markers, "data:image/png;base64,abc", {"weights": "test"}))), patch.object(
+            main.report_analysis, "model_metadata", return_value={"weights": "test"}
+        ) as metadata:
+            result = asyncio.run(main.reclassify_report("REPORT-TEST", session))
+
+        metadata.assert_not_called()
+        self.assertEqual(result["reclassification_status"], "completed")
+        self.assertEqual(result["predictions"], ["Atelectasis"])
+        self.assertEqual(result["markers"], markers)
+        self.assertEqual(result["heatmap"], "data:image/png;base64,abc")
+        self.assertTrue(result["human_review_required"])
+        self.assertTrue(any("INSERT INTO report_analyses" in query for query, _ in connection.statements))
+
     def test_analysis_is_persisted_for_authenticated_owner_and_requires_review(self):
         connection = FakeConnection()
         findings = [{
@@ -44,7 +98,8 @@ class ReportEndpointTests(unittest.TestCase):
             main, "_extract_report", return_value={"findings": findings}
         ):
             result = asyncio.run(main.analyze_report(
-                {"user": {"id": "owner-test"}},
+                {"user": {"id": "owner-test", "institutions": ["hctco-unifeso"],
+                          "active_institution_id": "hctco-unifeso"}},
                 report_text="Laudo sintético de teste.",
                 report_file=None,
                 radiograph=None,

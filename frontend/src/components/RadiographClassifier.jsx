@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Activity, ArrowLeft, Upload } from "lucide-react";
 import "../styles/classifier.css";
 import { classifyUploadedRadiograph } from "../radiographApi.js";
+import RadiographViewer from "./RadiographViewer.jsx";
+import PathologyScoreList from "./PathologyScoreList.jsx";
 
 const LABELS = [
   "Atelectasis",
@@ -49,6 +51,8 @@ export default function RadiographClassifier() {
   const [result, setResult] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [selectedPathology, setSelectedPathology] = useState(null);
+  const [hoveredPathology, setHoveredPathology] = useState(null);
   const preview = useMemo(
     () => (file ? URL.createObjectURL(file) : ""),
     [file],
@@ -66,6 +70,8 @@ export default function RadiographClassifier() {
     setBusy(true);
     setError("");
     setResult(null);
+    setSelectedPathology(null);
+    setHoveredPathology(null);
     try {
       setResult(await classifyUploadedRadiograph(file));
     } catch (caught) {
@@ -115,13 +121,28 @@ export default function RadiographClassifier() {
               }}
             />
           </label>
-          {file && (
-            <img
-              className="classifier-preview"
-              src={preview}
-              alt="Prévia da radiografia selecionada"
-            />
-          )}
+          {file &&
+            (result ? (
+              <RadiographViewer
+                src={preview}
+                alt="Prévia da radiografia"
+                markers={result.markers}
+                heatmap={result.heatmap}
+                activePathology={hoveredPathology ?? selectedPathology}
+                onSelectPathology={(label) =>
+                  setSelectedPathology((current) =>
+                    current === label ? null : label,
+                  )
+                }
+                onHoverPathology={setHoveredPathology}
+              />
+            ) : (
+              <img
+                className="classifier-preview"
+                src={preview}
+                alt="Prévia da radiografia selecionada"
+              />
+            ))}
           <button className="classifier-button" disabled={busy || !file}>
             {busy ? "Analisando…" : "Classificar imagem"}
           </button>
@@ -138,21 +159,19 @@ export default function RadiographClassifier() {
               As probabilidades não são diagnósticos. Todas as imagens e classes
               precisam de revisão profissional.
             </p>
-            {LABELS.map((label) => (
-              <div className="classifier-score" key={label}>
-                <span>{PT[label]}</span>
-                <div>
-                  <i
-                    style={{
-                      width: `${Math.max(0, Math.min(100, result.probabilities[label] * 100))}%`,
-                    }}
-                  />
-                </div>
-                <strong>
-                  {(result.probabilities[label] * 100).toFixed(1)}%
-                </strong>
-              </div>
-            ))}
+            <PathologyScoreList
+              probabilities={result.probabilities}
+              markers={result.markers}
+              labels={LABELS}
+              formatLabel={(label) => PT[label]}
+              activePathology={hoveredPathology ?? selectedPathology}
+              onSelectPathology={(label) =>
+                setSelectedPathology((current) =>
+                  current === label ? null : label,
+                )
+              }
+              onHoverPathology={setHoveredPathology}
+            />
             <small>
               Modelo: {result.model_version} · Corte exploratório:{" "}
               {(result.threshold * 100).toFixed(0)}%
