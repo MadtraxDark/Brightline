@@ -6,6 +6,7 @@ import {
   ChevronDown,
   Clock3,
   FileText,
+  Laptop,
   ScanLine,
   ShieldCheck,
   Smartphone,
@@ -209,107 +210,195 @@ export default function LandingPage() {
           </div>
           <div className="lp-difference-details">
             <div
-              className="lp-mobile-showcase"
+              className="lp-device-showcase"
               role="img"
-              aria-label="Prévia ilustrativa do painel Brightline em um celular, com indicadores, lista de casos e navegação inferior."
+              aria-label="Prévias separadas do painel Brightline no notebook e no celular."
             >
-              <div className="relative w-56 rounded-[34px] border-2 border-phone-shell bg-phone-shell p-2 shadow-[0_18px_38px_#1b272a26,0_4px_10px_#1b272a1a]">
-                <div className="absolute left-1/2 top-3.25 z-10 h-4 w-16 -translate-x-1/2 rounded-xl bg-phone-shell" />
-                <div className="min-h-95.5 overflow-hidden rounded-[26px] bg-phone-surface text-phone-ink">
-                  <div className="flex h-8.5 items-center justify-between px-3.5 pt-1 text-[8px] font-bold">
-                    <span>9:41</span>
-                    <span>●●●　▰</span>
-                  </div>
-                  <div className="flex h-11 items-center justify-between border-b border-phone-border px-3.25">
-                    <span className="flex items-center gap-1.25 text-[11px] font-semibold tracking-[-.03em]">
-                      <ShieldCheck size={15} /> Brightline
-                    </span>
-                    <span className="grid size-6 place-items-center rounded-full bg-phone-tint text-[8px] font-bold">
-                      DR
-                    </span>
-                  </div>
-                  <div className="px-3.25 pb-3 pt-4.5">
-                    <span className="text-[7px] font-bold tracking-widest text-phone-muted">
-                      VISÃO GERAL
-                    </span>
-                    <h3 className="mt-1.25! text-[15px] font-semibold tracking-[-.035em]">
-                      Bom dia, Dra. Ana
-                    </h3>
-                    <p className="mt-0.75! text-[8px] text-phone-muted">
-                      Veja o que precisa da sua atenção.
-                    </p>
-                    <div className="mt-3.5 grid grid-cols-2 gap-1.75">
-                      <div className="flex flex-col gap-0.5 rounded-lg border border-phone-border bg-white p-2">
-                        <strong className="text-base leading-none">08</strong>
-                        <span className="text-[7px] text-phone-muted">
-                          Em aberto
-                        </span>
-                      </div>
-                      <div className="flex flex-col gap-0.5 rounded-lg border border-phone-border bg-white p-2">
-                        <strong className="text-base leading-none">03</strong>
-                        <span className="text-[7px] text-phone-muted">
-                          Urgentes
-                        </span>
+              <div className="lp-device-column lp-laptop-column">
+                <div className="lp-laptop-preview" inert aria-hidden="true">
+                  <div className="lp-laptop-screen">
+                    <div className="lp-laptop-display">
+                      <div className="lp-laptop-ui">
+                        <aside className="lp-laptop-sidebar">
+                          <strong>Brightline</strong>
+                          <span className="is-active">Visão geral</span>
+                          <span>Não sinalizados</span>
+                          <span>Avaliação da IA</span>
+                        </aside>
+                        <div className="lp-laptop-content">
+                          <header>
+                            <span>Workspace　›　Visão geral</span>
+                            <span>Demonstração</span>
+                          </header>
+                          <div className="lp-laptop-overview">
+                            <h3>Visão geral</h3>
+                            <div className="lp-laptop-metrics">
+                              <div>
+                                <small>Abertos</small>
+                                <b>06</b>
+                              </div>
+                              <div>
+                                <small>Críticos</small>
+                                <b>02</b>
+                              </div>
+                              <div>
+                                <small>Escalados</small>
+                                <b>00</b>
+                              </div>
+                            </div>
+                            <div className="lp-laptop-table">
+                              <strong>Laudos em acompanhamento</strong>
+                              <div>
+                                <span>Laudo</span>
+                                <span>Prioridade</span>
+                                <span>Responsável</span>
+                              </div>
+                              <div>
+                                <span>Pneumotórax hipertensivo</span>
+                                <b>Crítico</b>
+                                <span>Dr. Paulo Mendes</span>
+                              </div>
+                              <div>
+                                <span>Hemorragia subaracnóidea</span>
+                                <b>Crítico</b>
+                                <span>Dra. Marina Lopes</span>
+                              </div>
+                              <div>
+                                <span>Apendicite aguda</span>
+                                <b>Urgente</b>
+                                <span>Dra. Helena Costa</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="lp-laptop-activity">
+                            <strong>Atividade recente</strong>
+                            <div>
+                              <span>08:42</span>
+                              <span>Leitura confirmada</span>
+                              <b>Dra. Ana Costa</b>
+                            </div>
+                            <div>
+                              <span>08:31</span>
+                              <span>Conduta registrada</span>
+                              <b>Dr. Paulo Mendes</b>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="mb-1.75 mt-4 flex justify-between text-[9px]">
-                      <strong>Prioridade</strong>
-                      <span className="text-[7px] text-phone-accent">
-                        Ver todos
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.75 rounded-lg border border-phone-border bg-white px-1.75 py-2">
-                      <i className="h-6.25 w-1 shrink-0 rounded-sm bg-phone-urgent" />
-                      <div className="flex min-w-0 flex-1 flex-col gap-0.75">
-                        <strong className="truncate text-[8px] font-semibold">
-                          Nódulo pulmonar
-                        </strong>
-                        <span className="text-[7px] text-phone-muted">
-                          TC de tórax · há 12 min
-                        </span>
-                      </div>
-                      <ArrowRight
-                        size={14}
-                        className="shrink-0 text-phone-muted"
-                      />
-                    </div>
-                    <div className="mt-1.5 flex items-center gap-1.75 rounded-lg border border-phone-border bg-white px-1.75 py-2">
-                      <i className="h-6.25 w-1 shrink-0 rounded-sm bg-phone-normal" />
-                      <div className="flex min-w-0 flex-1 flex-col gap-0.75">
-                        <strong className="truncate text-[8px] font-semibold">
-                          Achado hepático
-                        </strong>
-                        <span className="text-[7px] text-phone-muted">
-                          RM abdome · há 38 min
-                        </span>
-                      </div>
-                      <ArrowRight
-                        size={14}
-                        className="shrink-0 text-phone-muted"
-                      />
-                    </div>
                   </div>
-                  <div className="flex items-center justify-between border-t border-phone-border px-3.25 py-2 text-center text-phone-accent">
-                    {[
-                      ["⌂", "Início"],
-                      ["▤", "Casos"],
-                      ["◷", "Prazos"],
-                      ["◎", "Perfil"],
-                    ].map(([icon, label]) => (
-                      <span
-                        className="flex flex-col items-center gap-0.5 text-xs"
-                        key={label}
-                      >
-                        {icon}
-                        <small className="text-[6px]">{label}</small>
-                      </span>
-                    ))}
-                  </div>
+                  <div className="lp-laptop-base" />
+                </div>
+                <div className="lp-device-caption">
+                  <Laptop size={15} />
+                  <span>Painel no computador</span>
                 </div>
               </div>
-              <div className="lp-mobile-note">
-                <Smartphone size={17} />
-                <span>Uma experiência pensada para telas pequenas</span>
+              <div className="lp-device-column lp-phone-column">
+                <div className="lp-phone-slot">
+                  <div className="lp-phone-frame relative w-56 rounded-[34px] border-2 border-phone-shell bg-phone-shell p-2 shadow-[0_18px_38px_#1b272a26,0_4px_10px_#1b272a1a]">
+                    <div className="absolute left-1/2 top-3.25 z-10 h-4 w-16 -translate-x-1/2 rounded-xl bg-phone-shell" />
+                    <div className="min-h-95.5 overflow-hidden rounded-[26px] bg-phone-surface text-phone-ink">
+                      <div className="flex h-8.5 items-center justify-between px-3.5 pt-1 text-[8px] font-bold">
+                        <span>9:41</span>
+                        <span>●●●　▰</span>
+                      </div>
+                      <div className="flex h-11 items-center justify-between border-b border-phone-border px-3.25">
+                        <span className="flex items-center gap-1.25 text-[11px] font-semibold tracking-[-.03em]">
+                          <ShieldCheck size={15} /> Brightline
+                        </span>
+                        <span className="grid size-6 place-items-center rounded-full bg-phone-tint text-[8px] font-bold">
+                          DR
+                        </span>
+                      </div>
+                      <div className="px-3.25 pb-3 pt-4.5">
+                        <span className="text-[7px] font-bold tracking-widest text-phone-muted">
+                          VISÃO GERAL
+                        </span>
+                        <h3 className="mt-1.25! text-[15px] font-semibold tracking-[-.035em]">
+                          Bom dia, Dra. Ana
+                        </h3>
+                        <p className="mt-0.75! text-[8px] text-phone-muted">
+                          Veja o que precisa da sua atenção.
+                        </p>
+                        <div className="mt-3.5 grid grid-cols-2 gap-1.75">
+                          <div className="flex flex-col gap-0.5 rounded-lg border border-phone-border bg-white p-2">
+                            <strong className="text-base leading-none">
+                              08
+                            </strong>
+                            <span className="text-[7px] text-phone-muted">
+                              Em aberto
+                            </span>
+                          </div>
+                          <div className="flex flex-col gap-0.5 rounded-lg border border-phone-border bg-white p-2">
+                            <strong className="text-base leading-none">
+                              03
+                            </strong>
+                            <span className="text-[7px] text-phone-muted">
+                              Urgentes
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mb-1.75 mt-4 flex justify-between text-[9px]">
+                          <strong>Prioridade</strong>
+                          <span className="text-[7px] text-phone-accent">
+                            Ver todos
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.75 rounded-lg border border-phone-border bg-white px-1.75 py-2">
+                          <i className="h-6.25 w-1 shrink-0 rounded-sm bg-phone-urgent" />
+                          <div className="flex min-w-0 flex-1 flex-col gap-0.75">
+                            <strong className="truncate text-[8px] font-semibold">
+                              Nódulo pulmonar
+                            </strong>
+                            <span className="text-[7px] text-phone-muted">
+                              TC de tórax · há 12 min
+                            </span>
+                          </div>
+                          <ArrowRight
+                            size={14}
+                            className="shrink-0 text-phone-muted"
+                          />
+                        </div>
+                        <div className="mt-1.5 flex items-center gap-1.75 rounded-lg border border-phone-border bg-white px-1.75 py-2">
+                          <i className="h-6.25 w-1 shrink-0 rounded-sm bg-phone-normal" />
+                          <div className="flex min-w-0 flex-1 flex-col gap-0.75">
+                            <strong className="truncate text-[8px] font-semibold">
+                              Achado hepático
+                            </strong>
+                            <span className="text-[7px] text-phone-muted">
+                              RM abdome · há 38 min
+                            </span>
+                          </div>
+                          <ArrowRight
+                            size={14}
+                            className="shrink-0 text-phone-muted"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between border-t border-phone-border px-3.25 py-2 text-center text-phone-accent">
+                        {[
+                          ["⌂", "Início"],
+                          ["▤", "Casos"],
+                          ["◷", "Prazos"],
+                          ["◎", "Perfil"],
+                        ].map(([icon, label]) => (
+                          <span
+                            className="flex flex-col items-center gap-0.5 text-xs"
+                            key={label}
+                          >
+                            {icon}
+                            <small className="text-[6px]">{label}</small>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="lp-device-caption">
+                  <Smartphone size={15} />
+                  <span>Experiência no celular</span>
+                </div>
               </div>
             </div>
             <div className="lp-benefits">
