@@ -12,19 +12,19 @@ No reference or script establishes regulatory authorization, HIPAA compliance, c
 
 ## Navigation
 
-| File | Purpose |
-|---|---|
-| `safety_and_scope.md` | Refusal rules, escalation, and intended-use language |
-| `regulatory_and_governance.md` | FDA CDS/AI, ONC HTI-1, and ICH context |
-| `evidence_profiles.md` | Human GRADE evidence-profile workflow |
-| `study_reporting.md` | STROBE/RECORD, TRIPOD+AI, CONSORT-AI, SPIRIT-AI, DECIDE-AI, STARD-AI, REMARK, and PROBAST+AI |
-| `cohort_evaluation.md` | Aggregate cohort reporting and disclosure-aware tables |
-| `survival_analysis.md` | Estimand-led time-to-event planning |
-| `model_biomarker_evaluation.md` | Aggregate validation, calibration, uncertainty, and subgroup review |
-| `privacy_and_disclosure.md` | HHS de-identification methods and output controls |
-| `decision_logic_traceability.md` | Research/governance logic matrices |
-| `sources.md` | Authoritative source ledger checked 2026-09-30 |
-| `security_validation.md` | Baseline remediation, scan results, and accepted LOW findings |
+| File                             | Purpose                                                                                      |
+| -------------------------------- | -------------------------------------------------------------------------------------------- |
+| `safety_and_scope.md`            | Refusal rules, escalation, and intended-use language                                         |
+| `regulatory_and_governance.md`   | FDA CDS/AI, ONC HTI-1, and ICH context                                                       |
+| `evidence_profiles.md`           | Human GRADE evidence-profile workflow                                                        |
+| `study_reporting.md`             | STROBE/RECORD, TRIPOD+AI, CONSORT-AI, SPIRIT-AI, DECIDE-AI, STARD-AI, REMARK, and PROBAST+AI |
+| `cohort_evaluation.md`           | Aggregate cohort reporting and disclosure-aware tables                                       |
+| `survival_analysis.md`           | Estimand-led time-to-event planning                                                          |
+| `model_biomarker_evaluation.md`  | Aggregate validation, calibration, uncertainty, and subgroup review                          |
+| `privacy_and_disclosure.md`      | HHS de-identification methods and output controls                                            |
+| `decision_logic_traceability.md` | Research/governance logic matrices                                                           |
+| `sources.md`                     | Authoritative source ledger checked 2026-09-30                                               |
+| `security_validation.md`         | Baseline remediation, scan results, and accepted LOW findings                                |
 
 ## Assets
 
@@ -59,4 +59,3 @@ They do not use networks, API keys, environment variables, dynamic evaluation, s
 Use the study design and evaluation stage—not the presence of “AI” in a title—to select a framework. Reporting checklists are minimum disclosure guidance. Risk-of-bias tools require informed human judgments. GRADE certainty is outcome-specific and cannot be inferred from text.
 
 For an actual protocol, product, regulated submission, certified health IT module, or data release, obtain review from the relevant methodologist, privacy official, legal/regulatory counsel, governance owner, and domain experts.
-
