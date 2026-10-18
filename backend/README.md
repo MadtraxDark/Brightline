@@ -39,3 +39,5 @@ O cadastro recebe `name`, `email`, `password` (mínimo de 9 caracteres) e uma li
 - Notificações são eventos simulados. Nenhuma mensagem real é enviada.
 
 Consulte a [documentação da API](docs/API.md) e o [README principal](../README.md).
+
+Consulte também o guia de [análise de laudos e radiografias](docs/REPORT_ANALYSIS.md) para requisições, respostas e limites do protótipo.

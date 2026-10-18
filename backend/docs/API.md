@@ -1,5 +1,7 @@
 # API Brightline
 
+O catálogo NIH, links temporários de imagem, análises salvas e filtros estão documentados em [DATABASE_API.md](../../docs/DATABASE_API.md).
+
 API FastAPI com PostgreSQL local. Configure `DATABASE_URL` em `backend/.env`; o Docker Compose cria o banco e aplica o esquema inicial. Execute `docker compose exec api python -m backend.migrate` para aplicar migrações pendentes.
 
 ## Executar
@@ -28,7 +30,7 @@ Abra [Swagger](http://localhost:8000/docs) ou [health check](http://localhost:80
 - A migração `004_institutions` altera somente tabelas existentes. Registros antigos recebem o escopo `__legacy__` e ficam preservados, mas indisponíveis nos hospitais até que haja uma associação confiável.
 - O schema atual não possui uma entidade de pacientes nem campos que identifiquem pacientes nos laudos. Não criei operações de pacientes baseadas em IDs de laudo; isso exige uma decisão de modelagem compatível com a regra de não criar tabelas.
 - Arquivos JSON, PNG, JPEG e PDF são armazenados no PostgreSQL; links de leitura expiram em 60 segundos.
-- `dataset_images` armazena o conjunto NIH ChestX-ray14 usado pelo treinador TensorFlow.
+- `dataset_images` armazena o conjunto NIH ChestX-ray14 importado para avaliação.
 - `docker compose down` mantém os dados no volume; `docker compose down -v` remove o volume.
 - As notificações são eventos simulados. Nenhuma mensagem real é enviada.
 
