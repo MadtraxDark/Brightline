@@ -1,14 +1,42 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Camera, UserRound } from "lucide-react";
+import InstitutionPicker from "./InstitutionPicker.jsx";
+import {
+  currentUser,
+  getInstitutions,
+  updateInstitutions,
+} from "../lib/session.js";
 
 export default function Settings({ profile, onSave }) {
   const [name, setName] = useState(profile.name);
   const [photo, setPhoto] = useState(profile.photo);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
+  const [institutions, setInstitutions] = useState([]);
+  const [selectedInstitutions, setSelectedInstitutions] = useState(
+    () => currentUser(sessionStorage)?.institutions ?? [],
+  );
+  const [activeInstitution, setActiveInstitution] = useState(
+    () => currentUser(sessionStorage)?.active_institution_id ?? "",
+  );
+  const [pending, setPending] = useState(false);
   const [reading, setReading] = useState(false);
   const fileRef = useRef(null);
   const readVersion = useRef(0);
+
+  useEffect(() => {
+    let active = true;
+    getInstitutions()
+      .then((items) => {
+        if (active) setInstitutions(items);
+      })
+      .catch((reason) => {
+        if (active) setError(reason.message);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   function changePhoto(event) {
     const file = event.target.files?.[0];
@@ -40,17 +68,31 @@ export default function Settings({ profile, onSave }) {
     reader.readAsDataURL(file);
   }
 
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault();
     setError("");
     setStatus("");
+    if (selectedInstitutions.length === 0) {
+      setError("Mantenha pelo menos uma instituição vinculada.");
+      return;
+    }
+    const nextActive = selectedInstitutions.includes(activeInstitution)
+      ? activeInstitution
+      : selectedInstitutions[0];
+    setPending(true);
     try {
-      onSave({ name: name.trim(), photo });
-      setStatus("Perfil atualizado nesta sessão.");
-    } catch {
-      setError(
-        "Não foi possível salvar. Tente uma imagem menor ou verifique o armazenamento do navegador.",
+      const user = await updateInstitutions(
+        sessionStorage,
+        selectedInstitutions,
+        nextActive,
       );
+      setActiveInstitution(user.active_institution_id);
+      onSave({ name: name.trim(), photo });
+      setStatus("Perfil e instituições atualizados.");
+    } catch (reason) {
+      setError(reason.message || "Não foi possível salvar suas alterações.");
+    } finally {
+      setPending(false);
     }
   }
 
@@ -58,7 +100,7 @@ export default function Settings({ profile, onSave }) {
     <>
       <div className="page-intro">
         <h1>Configurações</h1>
-        <p>Personalize como seu perfil aparece no Brightline.</p>
+        <p>Gerencie seu perfil e os hospitais associados à sua conta.</p>
       </div>
       <section
         className="panel settings-panel"
@@ -66,10 +108,47 @@ export default function Settings({ profile, onSave }) {
       >
         <h2 id="settings-profile-title">Perfil</h2>
         <p className="settings-description">
-          Estas preferências ficam neste navegador durante a sessão de
-          demonstração.
+          A instituição ativa define quais dados clínicos ficam disponíveis no
+          painel.
         </p>
         <form onSubmit={submit} className="settings-form">
+          <div className="settings-field">
+            <span>Instituições vinculadas</span>
+            <InstitutionPicker
+              institutions={institutions}
+              selected={selectedInstitutions}
+              onChange={(next) => {
+                setSelectedInstitutions(next);
+                if (!next.includes(activeInstitution)) {
+                  setActiveInstitution(next[0] || "");
+                }
+                setStatus("");
+              }}
+              disabled={pending}
+            />
+          </div>
+          {selectedInstitutions.length > 1 ? (
+            <label className="settings-field">
+              Instituição ativa após salvar
+              <select
+                value={
+                  selectedInstitutions.includes(activeInstitution)
+                    ? activeInstitution
+                    : selectedInstitutions[0]
+                }
+                onChange={(event) => setActiveInstitution(event.target.value)}
+                disabled={pending}
+              >
+                {institutions
+                  .filter((item) => selectedInstitutions.includes(item.id))
+                  .map((institution) => (
+                    <option key={institution.id} value={institution.id}>
+                      {institution.name}
+                    </option>
+                  ))}
+              </select>
+            </label>
+          ) : null}
           <div className="settings-photo-row">
             <span className="profile-avatar settings-avatar">
               {photo ? (
@@ -147,8 +226,12 @@ export default function Settings({ profile, onSave }) {
             </p>
           ) : null}
           <div className="settings-save">
-            <button className="btn-primary" type="submit" disabled={reading}>
-              Salvar alterações
+            <button
+              className="btn-primary"
+              type="submit"
+              disabled={reading || pending}
+            >
+              {pending ? "Salvando…" : "Salvar alterações"}
             </button>
             <p role="status" className="hint">
               {status}

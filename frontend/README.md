@@ -13,16 +13,16 @@ npm run build
 
 - `/`: landing page com prévia visual, perguntas frequentes e Lenis.
 - O header fica fixo e sempre inteiro: transparente e integrado ao hero no topo, com fundo azul-marinho ao rolar. No celular, o botão Menu abre navegação em tela cheia; Escape fecha o menu.
-- `/home`: painel protegido com laudos sintéticos, revisão e acompanhamento.
-- `/login` e `/cadastro`: autenticação real; cadastro com senha de pelo menos 9 caracteres.
+- `/home`: painel protegido com laudos da API, filtrados pelo hospital ativo.
+- `/login` e `/cadastro`: autenticação real; cadastro com seleção de uma ou mais instituições e senha de pelo menos 9 caracteres.
 - `src/components/`: componentes do painel.
 - `src/styles/`: estilos e tokens visuais.
-- `src/engine/` e `src/store/`: motor e persistência da demonstração local, com testes.
-- `src/data/`: fixtures sintéticas; não são os dados importados no Supabase.
+- `src/engine/` e `src/store/`: motor de prévias e estado em memória; casos autenticados vêm da API.
+- `src/data/`: fixtures sintéticas usadas nas prévias e avaliação; não são dados de hospitais.
 - `docs/`: documentação de produto e design.
 - `scripts/`: auxiliares de captura e verificação para execução em uma sessão Playwright.
 
-Os laudos do painel usam a API simulada em `src/api.js`, adaptada por `src/dashboardApi.js`. A autenticação usa a API FastAPI e o PostgreSQL configurado em `backend/.env`. Inicie os dois serviços com `npm run dev` na raiz. O proxy de desenvolvimento encaminha `/api` para `http://127.0.0.1:8000`; configure `BRIGHTLINE_API_TARGET` para outra API atualizada. No build, `/api` precisa de proxy no servidor ou de `VITE_AUTH_API_URL` configurada.
+O painel e a autenticação usam a API FastAPI e o PostgreSQL configurado em `backend/.env`. Inicie os dois serviços com `npm run dev` na raiz. O proxy de desenvolvimento encaminha `/api` para `http://127.0.0.1:8000`; configure `BRIGHTLINE_API_TARGET` para outra API atualizada. No build, `/api` precisa de proxy no servidor ou de `VITE_AUTH_API_URL` configurada. Ao trocar o hospital, o painel invalida o estado anterior e busca novamente os dados autorizados pelo backend.
 
 `npm run build` gera `frontend/dist/`. Use `npm run preview` para conferir esse resultado. Em hospedagem estática, configure fallback para `index.html` nas rotas da aplicação, incluindo `/home`.
 

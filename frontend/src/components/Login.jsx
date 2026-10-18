@@ -18,7 +18,9 @@ import {
   safeRedirectPath,
   validateLogin,
   validateRegistration,
+  getInstitutions,
 } from "../lib/session.js";
+import InstitutionPicker from "./InstitutionPicker.jsx";
 
 export default function Login({ mode = "login" }) {
   const registering = mode === "register";
@@ -29,6 +31,7 @@ export default function Login({ mode = "login" }) {
   const nameRef = useRef(null);
   const confirmationRef = useRef(null);
   const nameErrorId = useId();
+  const institutionsErrorId = useId();
   const confirmationErrorId = useId();
   const passwordHintId = useId();
   const emailErrorId = useId();
@@ -38,11 +41,32 @@ export default function Login({ mode = "login" }) {
   const [pending, setPending] = useState(false);
   const [serverError, setServerError] = useState("");
   const [registered, setRegistered] = useState(false);
+  const [institutions, setInstitutions] = useState([]);
+  const [selectedInstitutions, setSelectedInstitutions] = useState([]);
+  const [institutionsError, setInstitutionsError] = useState("");
+  const [institutionsLoading, setInstitutionsLoading] = useState(true);
   const successRef = useRef(null);
 
   useEffect(() => {
     if (registered) successRef.current?.focus();
   }, [registered]);
+
+  useEffect(() => {
+    let active = true;
+    getInstitutions()
+      .then((items) => {
+        if (active) setInstitutions(items);
+      })
+      .catch((error) => {
+        if (active) setServerError(error.message);
+      })
+      .finally(() => {
+        if (active) setInstitutionsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const authedOnLoad = useRef(isAuthenticated(sessionStorage));
 
@@ -81,9 +105,15 @@ export default function Login({ mode = "login" }) {
           data.get("confirmation"),
         )
       : validateLogin(data.get("email"), data.get("password"));
+    if (registering && selectedInstitutions.length === 0) {
+      setInstitutionsError("Selecione pelo menos uma instituição.");
+      nextErrors.institutions = true;
+    }
     if (Object.values(nextErrors).some(Boolean)) {
       setErrors(nextErrors);
       if (nextErrors.name) nameRef.current?.focus();
+      else if (nextErrors.institutions)
+        document.getElementById("register-institutions")?.focus();
       else if (nextErrors.email) emailRef.current?.focus();
       else if (nextErrors.password) passwordRef.current?.focus();
       else confirmationRef.current?.focus();
@@ -96,11 +126,23 @@ export default function Login({ mode = "login" }) {
         password: data.get("password"),
       };
       if (registering) {
-        await register({ ...credentials, name: data.get("name") });
+        await register({
+          ...credentials,
+          name: data.get("name"),
+          institutions: selectedInstitutions,
+        });
         setRegistered(true);
       } else {
-        await login(sessionStorage, credentials);
-        navigate(safeRedirectPath(location.state?.from), { replace: true });
+        const user = await login(sessionStorage, {
+          ...credentials,
+          institution_id: data.get("institution_id"),
+        });
+        navigate(
+          user.active_institution_id
+            ? safeRedirectPath(location.state?.from)
+            : "/configuracoes",
+          { replace: true },
+        );
       }
     } catch (error) {
       setServerError(error.message);
@@ -170,6 +212,64 @@ export default function Login({ mode = "login" }) {
                   : "Entre para acompanhar seus laudos."}
               </p>
               <form className="login-form" onSubmit={onSubmit} noValidate>
+                {registering ? (
+                  <div
+                    role="group"
+                    aria-labelledby="register-institutions-label"
+                    aria-describedby={
+                      institutionsError ? institutionsErrorId : undefined
+                    }
+                  >
+                    <p
+                      id="register-institutions-label"
+                      className="login-field-label"
+                    >
+                      Instituições
+                    </p>
+                    <div id="register-institutions" tabIndex={-1}>
+                      <InstitutionPicker
+                        institutions={institutions}
+                        selected={selectedInstitutions}
+                        onChange={(next) => {
+                          setSelectedInstitutions(next);
+                          setInstitutionsError("");
+                        }}
+                        label="Selecione as instituições às quais você tem vínculo"
+                        disabled={institutionsLoading || pending}
+                      />
+                    </div>
+                    {institutionsError ? (
+                      <p
+                        className="login-error"
+                        id={institutionsErrorId}
+                        role="alert"
+                      >
+                        {institutionsError}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : (
+                  <div>
+                    <label htmlFor="login-institution">Instituição</label>
+                    <select
+                      id="login-institution"
+                      name="institution_id"
+                      defaultValue=""
+                      disabled={institutionsLoading || pending}
+                    >
+                      <option value="">Selecione uma instituição</option>
+                      {institutions.map((institution) => (
+                        <option key={institution.id} value={institution.id}>
+                          {institution.name}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="login-field-hint">
+                      Contas antigas sem vínculo podem entrar sem seleção para
+                      configurar as instituições do perfil.
+                    </p>
+                  </div>
+                )}
                 {registering ? (
                   <div>
                     <label htmlFor="register-name">Nome completo</label>
