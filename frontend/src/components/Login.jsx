@@ -7,7 +7,6 @@ import {
   Lock,
   Mail,
   UserRound,
-  FlaskConical,
   Stethoscope,
 } from "lucide-react";
 import logo from "../public/logo/logo-text.svg";
@@ -116,9 +115,14 @@ export default function Login({ mode = "login" }) {
         className="login-brand-panel"
         aria-label="Brightline, inteligência clínica"
       >
-        <span className="brand-image login-logo" translate="no">
+        <Link
+          className="brand-image login-logo"
+          to="/"
+          aria-label="Brightline — voltar à página inicial"
+          translate="no"
+        >
           <img src={logo} alt="Brightline" width="180" height="68" />
-        </span>
+        </Link>
         <div className="login-brand-message">
           <span className="login-brand-line" aria-hidden="true" />
           <h2>
@@ -136,9 +140,6 @@ export default function Login({ mode = "login" }) {
       <div className="login-main">
         <header className="login-topline">
           <span>Inteligência clínica</span>
-          <span className="login-demo-badge">
-            <FlaskConical size={14} aria-hidden="true" /> Demonstração
-          </span>
         </header>
         <main className="login-card" aria-labelledby="login-title">
           {registered ? (
@@ -377,8 +378,7 @@ export default function Login({ mode = "login" }) {
           <p className="auth-switch">
             <Link to="/">Voltar ao site</Link>
           </p>
-          <div className="login-demo-note">
-            <FlaskConical size={18} aria-hidden="true" />
+          <div className="login-account-note">
             <div>
               <h2>
                 {registering ? "Sua conta no Brightline" : "Acesse sua conta"}
@@ -386,7 +386,7 @@ export default function Login({ mode = "login" }) {
               <p>
                 {registering
                   ? "Crie sua conta com nome, e-mail e uma senha de pelo menos 9 caracteres. Seus dados de acesso ficam salvos para os próximos logins."
-                  : "Entre com o e-mail e a senha que você cadastrou. Os laudos apresentados no painel continuam sendo demonstrativos."}
+                  : "Entre com o e-mail e a senha que você cadastrou para acompanhar seus laudos."}
               </p>
             </div>
           </div>
