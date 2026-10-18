@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { acknowledge } from "../engine/engine.js";
-import { selectCase, selectCases, selectMissed, selectStats } from "./selectors.js";
+import {
+  selectCase,
+  selectCases,
+  selectMissed,
+  selectStats,
+} from "./selectors.js";
 
 function caso(overrides) {
   return {
@@ -53,8 +58,16 @@ test("selectCases ordena por urgência e, dentro dela, pelo menor tempo restante
 
 test("a busca ignora maiúsculas e acentos", () => {
   const state = estado([
-    caso({ id: "h", finding: "Hemorragia subaracnóidea aguda", urgency: "critical" }),
-    caso({ id: "n", finding: "Nódulo pulmonar suspeito", urgency: "actionable" }),
+    caso({
+      id: "h",
+      finding: "Hemorragia subaracnóidea aguda",
+      urgency: "critical",
+    }),
+    caso({
+      id: "n",
+      finding: "Nódulo pulmonar suspeito",
+      urgency: "actionable",
+    }),
   ]);
   assert.deepEqual(
     selectCases(state, { query: "hemorragia" }).map((item) => item.id),
@@ -68,15 +81,37 @@ test("a busca ignora maiúsculas e acentos", () => {
 
 test("urgência, status e busca juntos devolvem só a interseção", () => {
   const state = estado([
-    caso({ id: "ok", finding: "Hemorragia subaracnóidea", urgency: "critical", status: "notified" }),
-    caso({ id: "outra-busca", finding: "Pneumotórax", urgency: "critical", status: "notified" }),
-    caso({ id: "outro-status", finding: "Hemorragia antiga", urgency: "critical", status: "escalated" }),
-    caso({ id: "outra-urgencia", finding: "Hemorragia leve", urgency: "urgent", status: "notified" }),
+    caso({
+      id: "ok",
+      finding: "Hemorragia subaracnóidea",
+      urgency: "critical",
+      status: "notified",
+    }),
+    caso({
+      id: "outra-busca",
+      finding: "Pneumotórax",
+      urgency: "critical",
+      status: "notified",
+    }),
+    caso({
+      id: "outro-status",
+      finding: "Hemorragia antiga",
+      urgency: "critical",
+      status: "escalated",
+    }),
+    caso({
+      id: "outra-urgencia",
+      finding: "Hemorragia leve",
+      urgency: "urgent",
+      status: "notified",
+    }),
   ]);
   assert.deepEqual(
-    selectCases(state, { urgency: "critical", status: "notified", query: "hemorragia" }).map(
-      (item) => item.id,
-    ),
+    selectCases(state, {
+      urgency: "critical",
+      status: "notified",
+      query: "hemorragia",
+    }).map((item) => item.id),
     ["ok"],
   );
 });
@@ -101,17 +136,40 @@ test("selectMissed devolve só críticos e urgentes não sinalizados", () => {
 
 test("onlyUnflagged restringe a críticos e urgentes não sinalizados e aceita busca", () => {
   const state = estado([
-    caso({ id: "c", urgency: "critical", flagged_by_radiologist: false, finding: "Hemorragia" }),
-    caso({ id: "fechado", urgency: "urgent", flagged_by_radiologist: false, status: "closed", finding: "Apendicite" }),
-    caso({ id: "sinalizado", urgency: "urgent", flagged_by_radiologist: true, finding: "Derrame" }),
-    caso({ id: "acionavel", urgency: "actionable", flagged_by_radiologist: false, finding: "Nódulo" }),
+    caso({
+      id: "c",
+      urgency: "critical",
+      flagged_by_radiologist: false,
+      finding: "Hemorragia",
+    }),
+    caso({
+      id: "fechado",
+      urgency: "urgent",
+      flagged_by_radiologist: false,
+      status: "closed",
+      finding: "Apendicite",
+    }),
+    caso({
+      id: "sinalizado",
+      urgency: "urgent",
+      flagged_by_radiologist: true,
+      finding: "Derrame",
+    }),
+    caso({
+      id: "acionavel",
+      urgency: "actionable",
+      flagged_by_radiologist: false,
+      finding: "Nódulo",
+    }),
   ]);
   assert.deepEqual(
     selectCases(state, { onlyUnflagged: true }).map((item) => item.id),
     ["c", "fechado"],
   );
   assert.deepEqual(
-    selectCases(state, { onlyUnflagged: true, query: "hemorragia" }).map((item) => item.id),
+    selectCases(state, { onlyUnflagged: true, query: "hemorragia" }).map(
+      (item) => item.id,
+    ),
     ["c"],
   );
 });
@@ -125,7 +183,11 @@ test("selectStats deixa de ter tempo médio nulo depois do acknowledge", () => {
 
 test("selectCases inclui radiologista e solicitante sem perder os campos atuais", () => {
   const state = estado([
-    caso({ id: "c1", radiologist: "Dra. Ana Luz", ordering_physician: "Dr. Paulo Mendes" }),
+    caso({
+      id: "c1",
+      radiologist: "Dra. Ana Luz",
+      ordering_physician: "Dr. Paulo Mendes",
+    }),
   ]);
   const [item] = selectCases(state);
   assert.equal(item.radiologist, "Dra. Ana Luz");
