@@ -1,5 +1,6 @@
 import {
   pathologyColor,
+  pathologyLabel,
   validLocalizationMarkers,
   visiblePathologyScores,
 } from "../lib/pathologyColors.js";
@@ -8,7 +9,7 @@ export default function PathologyScoreList({
   probabilities,
   markers,
   labels,
-  formatLabel = (label) => label.replaceAll("_", " "),
+  formatLabel = pathologyLabel,
   activePathology,
   onSelectPathology,
   onHoverPathology,
@@ -29,15 +30,18 @@ export default function PathologyScoreList({
         const hasMarker = markerPathologies.has(pathology);
         const content = (
           <>
-            {hasMarker && (
+            <span className="pathology-score-label">
               <span
                 className="pathology-color-dot"
                 aria-hidden="true"
                 style={{ backgroundColor: pathologyColor(pathology) }}
               />
-            )}
-            <span className="pathology-score-label">
               {formatLabel(pathology)}
+            </span>
+            <span className="pathology-score-meter" aria-hidden="true">
+              <span
+                style={{ width: `${Math.max(0, Math.min(100, score * 100))}%` }}
+              />
             </span>
             <strong>{(score * 100).toFixed(1)}%</strong>
           </>

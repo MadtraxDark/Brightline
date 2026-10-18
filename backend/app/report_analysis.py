@@ -117,8 +117,26 @@ def preprocess(image_bytes: bytes, *, return_geometry: bool = False):
     batch = torch.from_numpy(img).float()[None, ...]
     if return_geometry:
         return batch, {"width": original_width, "height": original_height,
-                       "left": left, "top": top, "side": crop_side}
+                       "left": left, "top": top, "side": crop_side, "gray": gray}
     return batch
+
+
+def _on_exposed_film(gray, x, y):
+    """Reject centers that land on the unexposed black border of the radiograph."""
+    import numpy as np
+
+    if gray is None:
+        return True
+    height, width = gray.shape[:2]
+    if width < 2 or height < 2 or not math.isfinite(x) or not math.isfinite(y):
+        return False
+    px = min(width - 1, max(0, int(round(x * (width - 1)))))
+    py = min(height - 1, max(0, int(round(y * (height - 1)))))
+    radius = max(3, int(round(min(width, height) * 0.015)))
+    patch = gray[max(0, py - radius):py + radius + 1, max(0, px - radius):px + radius + 1]
+    if patch.size == 0:
+        return False
+    return float(np.percentile(patch, 80)) >= 28
 
 
 def _cam_localizations(model, batch, probabilities, geometry):
@@ -167,6 +185,8 @@ def _cam_localizations(model, batch, probabilities, geometry):
                     continue
                 x = (geometry["left"] + ((cx + 0.5) / IMAGE_SIZE) * geometry["side"]) / geometry["width"]
                 y = (geometry["top"] + ((cy + 0.5) / IMAGE_SIZE) * geometry["side"]) / geometry["height"]
+                if not _on_exposed_film(geometry.get("gray"), x, y):
+                    continue
                 cams.append((label, float(probabilities[label]), cam, x, y))
     finally:
         handle.remove()

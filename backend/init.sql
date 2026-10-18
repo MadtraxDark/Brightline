@@ -127,3 +127,5 @@ ALTER TABLE cases ADD COLUMN IF NOT EXISTS closed_at timestamptz;
 ALTER TABLE cases ADD COLUMN IF NOT EXISTS closed_at_sim double precision;
 ALTER TABLE cases ADD COLUMN IF NOT EXISTS requester_sent_at timestamptz;
 ALTER TABLE cases ADD COLUMN IF NOT EXISTS requester_sent_at_sim double precision;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS view_all_reports boolean NOT NULL DEFAULT false;
+ALTER TABLE reports ADD COLUMN IF NOT EXISTS dataset_filename text;

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Building2,
   ChevronRight,
@@ -15,6 +16,35 @@ import { communicationRule } from "../lib/groupByUrgency.js";
 import { statusLabel } from "../format.js";
 import PhysicianAvatar from "./PhysicianAvatar.jsx";
 import UrgencyBadge from "./UrgencyBadge.jsx";
+import { loadReportImage } from "../lib/reportImage.js";
+
+function ExamThumb({ report }) {
+  const fileId = report?.image_file_id;
+  const datasetFilename = report?.dataset_filename;
+  const fallback = report?.image_url || "/images/chest-xray-demo.png";
+  const [src, setSrc] = useState(fileId || datasetFilename ? "" : fallback);
+  useEffect(() => {
+    if (!fileId && !datasetFilename) {
+      setSrc(fallback);
+      return undefined;
+    }
+    let active = true;
+    loadReportImage({
+      image_file_id: fileId,
+      dataset_filename: datasetFilename,
+    })
+      .then((url) => {
+        if (active) setSrc(url || fallback);
+      })
+      .catch(() => {
+        if (active) setSrc(fallback);
+      });
+    return () => {
+      active = false;
+    };
+  }, [fileId, datasetFilename, fallback]);
+  return <img className="clinical-exam-image" src={src || fallback} alt="" />;
+}
 
 export default function ClinicalQueue({ groups, reports }) {
   const byId = new Map(reports.map((report) => [report.report_id, report]));
@@ -62,11 +92,7 @@ export default function ClinicalQueue({ groups, reports }) {
                     </span>
                   </div>
                   <div className="clinical-exam">
-                    <img
-                      className="clinical-exam-image"
-                      src={report.image_url || "/images/chest-xray-demo.png"}
-                      alt=""
-                    />
+                    <ExamThumb report={report} />
                     <FileText size={15} aria-hidden="true" />
                     <span>{report.modality || "Modalidade não informada"}</span>
                   </div>
@@ -107,7 +133,7 @@ export default function ClinicalQueue({ groups, reports }) {
                         </span>
                         <span className="classification-status">
                           <CheckCircle2 size={14} aria-hidden="true" />
-                          Classificado
+                          Confiança registrada
                         </span>
                         {confidence.numeric && item.confidence_is_example ? (
                           <small>Percentual simulado</small>

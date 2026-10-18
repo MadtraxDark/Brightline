@@ -1,6 +1,6 @@
 import PointChat from "./luna/PointChat.jsx";
 import lunaIcon from "../assets/luna.png";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ScanLine,
   Expand,
@@ -16,7 +16,8 @@ import {
   pathologyColor,
   validLocalizationMarkers,
 } from "../lib/pathologyColors.js";
-import { authorizedRequest } from "../lib/session.js";
+import { loadReportImage } from "../lib/reportImage.js";
+import { markersInsideFilm } from "../lib/filmMarkers.js";
 
 export default function ExamViewer({
   report,
@@ -30,15 +31,20 @@ export default function ExamViewer({
 }) {
   const [remoteSrc, setRemoteSrc] = useState("");
   const fileId = report?.image_file_id;
+  const datasetFilename = report?.dataset_filename;
+  const linked = Boolean(fileId || datasetFilename);
   useEffect(() => {
-    if (!fileId) {
+    if (!linked) {
       setRemoteSrc("");
       return undefined;
     }
     let active = true;
-    authorizedRequest(`/files/${fileId}/signed-url`, { method: "POST" })
-      .then((data) => {
-        if (active) setRemoteSrc(data?.url || "");
+    loadReportImage({
+      image_file_id: fileId,
+      dataset_filename: datasetFilename,
+    })
+      .then((url) => {
+        if (active) setRemoteSrc(url || "");
       })
       .catch(() => {
         if (active) setRemoteSrc("");
@@ -46,11 +52,11 @@ export default function ExamViewer({
     return () => {
       active = false;
     };
-  }, [fileId]);
+  }, [fileId, datasetFilename]);
   const src =
     remoteSrc ||
-    (!fileId && (report?.image_url || "/images/chest-xray-demo.png"));
-  const illustrative = !fileId;
+    (!linked && (report?.image_url || "/images/chest-xray-demo.png"));
+  const illustrative = !linked;
   const [mobile, setMobile] = useState(
     () => matchMedia("(max-width:700px)").matches,
   );
@@ -287,13 +293,27 @@ export default function ExamViewer({
             a.y + a.height <= 1,
         )
       : [];
-  const localizations = illustrative ? [] : validLocalizationMarkers(analysis);
+  const localizations = useMemo(
+    () => (illustrative ? [] : validLocalizationMarkers(analysis)),
+    [analysis, illustrative],
+  );
+  const previewImage = useRef(null);
+  const [onFilm, setOnFilm] = useState(null);
+  const shownLocalizations = onFilm ?? localizations;
+  useEffect(() => {
+    const image = previewImage.current;
+    if (!image?.complete || !image.naturalWidth) {
+      setOnFilm(null);
+      return;
+    }
+    setOnFilm(markersInsideFilm(image, localizations));
+  }, [localizations, src]);
   useEffect(() => {
     setFailed(false);
   }, [src]);
   useEffect(() => {
     if (!focusPathology || illustrative || !src) return undefined;
-    const marker = localizations.find(
+    const marker = shownLocalizations.find(
       (localization) => localization.pathology === focusPathology,
     );
     if (!marker || !dialog.current) return undefined;
@@ -389,17 +409,17 @@ export default function ExamViewer({
           {!failed && src ? (
             <div className="exam-preview-image" style={{ aspectRatio: ratio }}>
               <img
+                ref={previewImage}
                 src={src}
                 alt={alt}
-                onLoad={(event) =>
-                  setRatio(
-                    event.currentTarget.naturalWidth /
-                      event.currentTarget.naturalHeight,
-                  )
-                }
+                onLoad={(event) => {
+                  const image = event.currentTarget;
+                  setRatio(image.naturalWidth / image.naturalHeight);
+                  setOnFilm(markersInsideFilm(image, localizations));
+                }}
                 onError={() => setFailed(true)}
               />
-              {localizations.map((marker) => (
+              {shownLocalizations.map((marker) => (
                 <span
                   key={marker.pathology}
                   className={`exam-preview-marker${activePathology === marker.pathology ? " is-active" : ""}`}
@@ -480,7 +500,12 @@ export default function ExamViewer({
               <X size={22} />
             </button>
           </header>
-          <div className="exam-tools">
+          <div
+            className="exam-tools"
+            role="toolbar"
+            aria-label="Ferramentas da imagem"
+          >
+            <span className="exam-tool-heading">Selecionar e perguntar</span>
             <button
               type="button"
               aria-label="Marcar ponto para perguntar à Luna"
@@ -521,29 +546,35 @@ export default function ExamViewer({
               aria-pressed={canvasMode}
               onClick={toggleMode}
             >
-              C
+              <ScanLine size={19} />
+              <span className="exam-tool-name">
+                Navegar <kbd>C</kbd>
+              </span>
             </button>
-            <button
-              type="button"
-              className="exam-desktop-control"
-              aria-label="Diminuir zoom"
-              disabled={zoom <= 0.25}
-              onClick={() => setZoom((z) => Math.max(0.25, z - 0.25))}
-            >
-              <ZoomOut size={19} />
-            </button>
-            <output className="exam-desktop-control" aria-label="Zoom">
-              {Math.round(zoom * 100)}%
-            </output>
-            <button
-              type="button"
-              className="exam-desktop-control"
-              aria-label="Aumentar zoom"
-              disabled={zoom >= 4}
-              onClick={() => setZoom((z) => Math.min(4, z + 0.25))}
-            >
-              <ZoomIn size={19} />
-            </button>
+            <span className="exam-tool-heading exam-desktop-control">Zoom</span>
+            <div className="exam-zoom-group exam-desktop-control">
+              <button
+                type="button"
+                className="exam-desktop-control"
+                aria-label="Diminuir zoom"
+                disabled={zoom <= 0.25}
+                onClick={() => setZoom((z) => Math.max(0.25, z - 0.25))}
+              >
+                <ZoomOut size={19} />
+              </button>
+              <output className="exam-desktop-control" aria-label="Zoom">
+                {Math.round(zoom * 100)}%
+              </output>
+              <button
+                type="button"
+                className="exam-desktop-control"
+                aria-label="Aumentar zoom"
+                disabled={zoom >= 4}
+                onClick={() => setZoom((z) => Math.min(4, z + 0.25))}
+              >
+                <ZoomIn size={19} />
+              </button>
+            </div>
             <button
               type="button"
               aria-label="Centralizar imagem"
@@ -552,6 +583,11 @@ export default function ExamViewer({
               <RotateCcw size={18} />
               <span className="exam-touch-label">Centralizar</span>
             </button>
+            {(annotations.length > 0 ||
+              shownLocalizations.length > 0 ||
+              analysis?.heatmap) && (
+              <span className="exam-tool-heading">Visualizações</span>
+            )}
             {annotations.length > 0 && (
               <button
                 type="button"
@@ -561,7 +597,7 @@ export default function ExamViewer({
                 Marcações da IA
               </button>
             )}
-            {localizations.length > 0 && (
+            {shownLocalizations.length > 0 && (
               <button
                 type="button"
                 aria-pressed={showLocalization}
@@ -803,7 +839,7 @@ export default function ExamViewer({
                     </span>
                   ))}
                 {showLocalization &&
-                  localizations.map((marker) => (
+                  shownLocalizations.map((marker) => (
                     <button
                       key={marker.pathology}
                       type="button"
@@ -880,7 +916,7 @@ export default function ExamViewer({
                       : "Posicionar imagem · Roda e arraste: mover imagem"}
               {!mobile && " · C alterna o modo"}
             </span>
-            {!annotations.length && !localizations.length && (
+            {!annotations.length && !shownLocalizations.length && (
               <span>
                 Não há marcações de imagem da IA disponíveis para este caso.
               </span>

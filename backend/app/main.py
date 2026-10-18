@@ -70,7 +70,8 @@ def issue_session(conn, user, institution_id):
     return {"access_token": access, "refresh_token": refresh, "token_type": "bearer", "expires_in": 3600,
             "user": {"id": str(user["id"]), "email": user["email"], "name": user["name"],
                      "institutions": institutions, "active_institution_id": institution_id,
-                     "active_institution_name": INSTITUTION_NAMES.get(institution_id)}}
+                     "active_institution_name": INSTITUTION_NAMES.get(institution_id),
+                     "view_all_reports": bool(user.get("view_all_reports"))}}
 
 
 bearer = HTTPBearer(auto_error=False)
@@ -81,13 +82,14 @@ def authenticated(credentials: Annotated[HTTPAuthorizationCredentials | None, De
         raise HTTPException(401, "Informe um access_token válido.", headers={
                             "WWW-Authenticate": "Bearer"})
     with db() as conn:
-        row = conn.execute("""SELECT u.id,u.email,u.name,u.institutions,s.access_hash,s.active_institution_id FROM sessions s JOIN users u ON u.id=s.user_id
+        row = conn.execute("""SELECT u.id,u.email,u.name,u.institutions,u.view_all_reports,s.access_hash,s.active_institution_id FROM sessions s JOIN users u ON u.id=s.user_id
             WHERE s.access_hash=%s AND s.expires_at>now()""", (token_hash(credentials.credentials),)).fetchone()
     if not row:
         raise HTTPException(401, "Sessão inválida ou expirada.")
     return {"token": credentials.credentials, "user": {"id": str(row["id"]), "email": row["email"], "name": row["name"],
             "institutions": row["institutions"] or [], "active_institution_id": row["active_institution_id"],
-            "active_institution_name": INSTITUTION_NAMES.get(row["active_institution_id"])}}
+            "active_institution_name": INSTITUTION_NAMES.get(row["active_institution_id"]),
+            "view_all_reports": bool(row["view_all_reports"])}}
 
 
 Session = Annotated[dict, Depends(authenticated)]
@@ -100,6 +102,10 @@ def active_institution(session):
     if institution_id not in session["user"].get("institutions", []):
         raise HTTPException(403, "Sua sessão não possui vínculo com a instituição ativa.")
     return institution_id
+
+
+def sees_every_report(session):
+    return bool(session["user"].get("view_all_reports"))
 
 
 @asynccontextmanager
@@ -343,7 +349,7 @@ async def signup(body: SignupInput):
 async def login(body: LoginInput):
     with db() as conn:
         user = conn.execute(
-            "SELECT id,email,name,password_hash,institutions FROM users WHERE email=%s", (body.email,)).fetchone()
+            "SELECT id,email,name,password_hash,institutions,view_all_reports FROM users WHERE email=%s", (body.email,)).fetchone()
         if not user or not verify_password(body.password.get_secret_value(), user["password_hash"]):
             raise HTTPException(401, "Usuário ou senha inválidos. Verifique seus dados e tente novamente.")
         linked = user["institutions"] or []
@@ -365,7 +371,7 @@ async def login(body: LoginInput):
 async def refresh(body: RefreshInput):
     value = body.refresh_token.get_secret_value()
     with db() as conn:
-        row = conn.execute("SELECT u.id,u.email,u.name,u.institutions,s.active_institution_id,s.id AS session_id FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.refresh_hash=%s AND s.refresh_expires_at>now() FOR UPDATE OF s",
+        row = conn.execute("SELECT u.id,u.email,u.name,u.institutions,u.view_all_reports,s.active_institution_id,s.id AS session_id FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.refresh_hash=%s AND s.refresh_expires_at>now() FOR UPDATE OF s",
                            (token_hash(value),)).fetchone()
         if not row:
             raise HTTPException(401, "Sessão inválida.")
@@ -575,32 +581,36 @@ async def delete_report(report_id: str, session: Session):
 
 @app.get("/workspace")
 async def workspace(session: Session):
-    scope = (session["user"]["id"], active_institution(session))
+    view_all = sees_every_report(session)
+    scope = () if view_all else (session["user"]["id"], active_institution(session))
+    report_where = "" if view_all else "WHERE r.owner_id=%s AND r.institution_id=%s"
+    case_where = "" if view_all else "WHERE c.owner_id=%s AND c.institution_id=%s"
+    owned_where = "" if view_all else "WHERE owner_id=%s AND institution_id=%s"
     with db() as conn:
         reports = conn.execute(
-            """SELECT r.owner_id, r.institution_id, r.report_id, r.modality, r.text, r.flagged_by_radiologist,
-               r.radiologist, r.ordering_physician,
+            f"""SELECT r.owner_id, r.institution_id, r.report_id, r.modality, r.text, r.flagged_by_radiologist,
+               r.radiologist, r.ordering_physician, r.dataset_filename,
                (SELECT rf.file_id FROM report_files rf JOIN files f
                  USING(owner_id,institution_id,file_id)
                  WHERE rf.owner_id=r.owner_id AND rf.institution_id=r.institution_id
                    AND rf.report_id=r.report_id AND rf.role='radiograph'
                  ORDER BY f.created_at DESC,f.file_id LIMIT 1) AS image_file_id
-               FROM reports r WHERE r.owner_id=%s AND r.institution_id=%s ORDER BY r.report_id""", scope,
+               FROM reports r {report_where} ORDER BY r.report_id""", scope,
         ).fetchall()
         cases = conn.execute(
-            """SELECT c.id, c.owner_id, c.institution_id, c.report_id, c.finding, c.evidence, c.urgency, c.confidence, c.status,
+            f"""SELECT c.id, c.owner_id, c.institution_id, c.report_id, c.finding, c.evidence, c.urgency, c.confidence, c.status,
                c.escalation_level, c.deadline_hours, c.deadline_at_sim, c.notified_at_sim,
                c.closed_at, c.closed_at_sim, c.requester_sent_at, c.requester_sent_at_sim,
                COALESCE(s.sim_now, 0) AS sim_now
                FROM cases c LEFT JOIN sim_state s
                  ON s.owner_id=c.owner_id AND s.institution_id=c.institution_id
-               WHERE c.owner_id=%s AND c.institution_id=%s""", scope,
+               {case_where}""", scope,
         ).fetchall()
         events = conn.execute(
-            "SELECT case_id, detail, at_sim FROM events WHERE owner_id=%s AND institution_id=%s ORDER BY at_sim, id", scope,
+            f"SELECT case_id, detail, at_sim FROM events {owned_where} ORDER BY at_sim, id", scope,
         ).fetchall()
         extractions = conn.execute(
-            "SELECT owner_id, institution_id, report_id, findings FROM extractions WHERE owner_id=%s AND institution_id=%s", scope,
+            f"SELECT owner_id, institution_id, report_id, findings FROM extractions {owned_where}", scope,
         ).fetchall()
     by_case = {}
     for event in events:
@@ -623,6 +633,7 @@ async def workspace(session: Session):
         case_id = str(case["id"])
         presented.append({
             "id": case_id,
+            "institution_id": case["institution_id"],
             "report_id": case["report_id"],
             "finding": case["finding"],
             "evidence": case["evidence"],
@@ -648,6 +659,7 @@ async def workspace(session: Session):
         "reports": [
             {
                 "report_id": row["report_id"],
+                "institution_id": row["institution_id"],
                 "modality": row["modality"],
                 "text": row["text"],
                 "flagged_by_radiologist": row["flagged_by_radiologist"],
@@ -655,7 +667,8 @@ async def workspace(session: Session):
                 "ordering_physician": row["ordering_physician"],
                 "classified": (str(row["owner_id"]), row["institution_id"], row["report_id"]) in classified,
                 "image_file_id": row["image_file_id"],
-                "image_url": None if row["image_file_id"] else "/images/chest-xray-demo.png",
+                "dataset_filename": row["dataset_filename"],
+                "image_url": None if row["image_file_id"] or row["dataset_filename"] else "/images/chest-xray-demo.png",
             }
             for row in reports
         ],
@@ -1048,11 +1061,16 @@ async def classify_radiograph(
 async def get_report_analysis(report_id: str, session: Session):
     if not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", report_id):
         raise HTTPException(404, "Análise não encontrada.")
-    institution = active_institution(session)
+    view_all = sees_every_report(session)
+    institution = None if view_all else active_institution(session)
     with db() as conn:
-        row = conn.execute("""SELECT a.analysis,a.model_version,a.created_at
-            FROM report_analyses a JOIN reports r USING(owner_id,institution_id,report_id)
-            WHERE a.owner_id=%s AND a.institution_id=%s AND a.report_id=%s""", (session["user"]["id"], institution, report_id)).fetchone()
+        if view_all:
+            row = conn.execute("""SELECT a.analysis,a.model_version,a.created_at
+                FROM report_analyses a WHERE a.report_id=%s ORDER BY a.created_at DESC LIMIT 1""", (report_id,)).fetchone()
+        else:
+            row = conn.execute("""SELECT a.analysis,a.model_version,a.created_at
+                FROM report_analyses a JOIN reports r USING(owner_id,institution_id,report_id)
+                WHERE a.owner_id=%s AND a.institution_id=%s AND a.report_id=%s""", (session["user"]["id"], institution, report_id)).fetchone()
     if not row:
         raise HTTPException(404, "Análise não encontrada.")
     return {**row["analysis"], "model_version": row["model_version"],
@@ -1066,18 +1084,51 @@ async def reclassify_report(report_id: str, session: Session):
     logger.info("[RECLASSIFY] stage=received request_id=%s", request_id)
     if not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", report_id):
         raise HTTPException(404, "Laudo não encontrado.")
-    institution = active_institution(session)
+    view_all = sees_every_report(session)
+    institution = None if view_all else active_institution(session)
     owner = session["user"]["id"]
     with db() as conn:
-        row = conn.execute("""SELECT f.content,f.mime_type,a.analysis
-            FROM report_files rf JOIN files f
-              ON f.owner_id=rf.owner_id AND f.institution_id=rf.institution_id AND f.file_id=rf.file_id
-            LEFT JOIN report_analyses a
-              ON a.owner_id=rf.owner_id AND a.institution_id=rf.institution_id AND a.report_id=rf.report_id
-            WHERE rf.owner_id=%s AND rf.institution_id=%s AND rf.report_id=%s AND rf.role='radiograph'
-            ORDER BY f.created_at DESC,f.file_id LIMIT 1""", (owner, institution, report_id)).fetchone()
+        if view_all:
+            row = conn.execute("""SELECT f.owner_id,f.institution_id,f.content,f.mime_type,a.analysis
+                FROM report_files rf JOIN files f
+                  ON f.owner_id=rf.owner_id AND f.institution_id=rf.institution_id AND f.file_id=rf.file_id
+                LEFT JOIN report_analyses a
+                  ON a.owner_id=rf.owner_id AND a.institution_id=rf.institution_id AND a.report_id=rf.report_id
+                WHERE rf.report_id=%s AND rf.role='radiograph'
+                ORDER BY f.created_at DESC,f.file_id LIMIT 1""", (report_id,)).fetchone()
+        else:
+            row = conn.execute("""SELECT f.content,f.mime_type,a.analysis
+                FROM report_files rf JOIN files f
+                  ON f.owner_id=rf.owner_id AND f.institution_id=rf.institution_id AND f.file_id=rf.file_id
+                LEFT JOIN report_analyses a
+                  ON a.owner_id=rf.owner_id AND a.institution_id=rf.institution_id AND a.report_id=rf.report_id
+                WHERE rf.owner_id=%s AND rf.institution_id=%s AND rf.report_id=%s AND rf.role='radiograph'
+                ORDER BY f.created_at DESC,f.file_id LIMIT 1""", (owner, institution, report_id)).fetchone()
+        if not row:
+            if view_all:
+                row = conn.execute("""SELECT r.owner_id,r.institution_id,d.content,
+                    CASE WHEN right(lower(d.filename), 4) = '.png' THEN 'image/png' ELSE 'image/jpeg' END AS mime_type,
+                    a.analysis
+                    FROM reports r
+                    JOIN dataset_images d ON d.filename=r.dataset_filename
+                    LEFT JOIN report_analyses a
+                      ON a.owner_id=r.owner_id AND a.institution_id=r.institution_id AND a.report_id=r.report_id
+                    WHERE r.report_id=%s
+                    ORDER BY r.institution_id LIMIT 1""", (report_id,)).fetchone()
+            else:
+                row = conn.execute("""SELECT d.content,
+                    CASE WHEN right(lower(d.filename), 4) = '.png' THEN 'image/png' ELSE 'image/jpeg' END AS mime_type,
+                    a.analysis
+                    FROM reports r
+                    JOIN dataset_images d ON d.filename=r.dataset_filename
+                    LEFT JOIN report_analyses a
+                      ON a.owner_id=r.owner_id AND a.institution_id=r.institution_id AND a.report_id=r.report_id
+                    WHERE r.owner_id=%s AND r.institution_id=%s AND r.report_id=%s""",
+                    (owner, institution, report_id)).fetchone()
     if not row:
         raise HTTPException(404, "Este laudo não possui radiografia vinculada para reclassificar.")
+    owner = row["owner_id"] if view_all else owner
+    institution = row["institution_id"] if view_all else institution
     image_bytes = bytes(row["content"])
     if not image_bytes or len(image_bytes) > report_analysis.MAX_IMAGE_BYTES:
         raise HTTPException(413, "Radiografia vazia ou acima do limite de 10 MB.")
@@ -1138,17 +1189,24 @@ async def report_radiograph_url(report_id: str, request: Request, session: Sessi
         raise HTTPException(404, "Radiografia não encontrada.")
     expires = int(datetime.now(timezone.utc).timestamp()) + 60
     ticket = secrets.token_urlsafe(32)
+    view_all = sees_every_report(session)
     owner = session["user"]["id"]
-    institution = active_institution(session)
+    institution = None if view_all else active_institution(session)
     with db() as conn:
-        row = conn.execute("""SELECT f.file_id FROM report_files rf JOIN files f
-            USING(owner_id,institution_id,file_id) WHERE rf.owner_id=%s AND rf.institution_id=%s AND rf.report_id=%s
-            AND rf.role='radiograph' AND f.mime_type IN ('image/png','image/jpeg')
-            ORDER BY f.created_at DESC LIMIT 1""", (owner, institution, report_id)).fetchone()
+        if view_all:
+            row = conn.execute("""SELECT f.owner_id,f.institution_id,f.file_id FROM report_files rf JOIN files f
+                USING(owner_id,institution_id,file_id) WHERE rf.report_id=%s
+                AND rf.role='radiograph' AND f.mime_type IN ('image/png','image/jpeg')
+                ORDER BY f.created_at DESC LIMIT 1""", (report_id,)).fetchone()
+        else:
+            row = conn.execute("""SELECT f.owner_id,f.institution_id,f.file_id FROM report_files rf JOIN files f
+                USING(owner_id,institution_id,file_id) WHERE rf.owner_id=%s AND rf.institution_id=%s AND rf.report_id=%s
+                AND rf.role='radiograph' AND f.mime_type IN ('image/png','image/jpeg')
+                ORDER BY f.created_at DESC LIMIT 1""", (owner, institution, report_id)).fetchone()
         if not row:
             raise HTTPException(404, "Radiografia não encontrada.")
         conn.execute("INSERT INTO file_links(token_hash,owner_id,institution_id,file_id,expires_at,session_access_hash) VALUES (%s,%s,%s,%s,to_timestamp(%s),%s)",
-                     (token_hash(ticket), owner, institution, row["file_id"], expires, token_hash(session["token"])))
+                     (token_hash(ticket), row["owner_id"], row["institution_id"], row["file_id"], expires, token_hash(session["token"])))
     url = f"/files/{quote(row['file_id'], safe='')}?token={quote(ticket)}"
     return {"url": url, "expires_in": 60}
 
@@ -1174,18 +1232,26 @@ async def upload_file(request: Request, session: Session):
 
 @app.post("/files/{file_id}/signed-url")
 async def signed_url(file_id: str, session: Session, request: Request):
-    institution = active_institution(session)
+    view_all = sees_every_report(session)
+    institution = None if view_all else active_institution(session)
     if not re.fullmatch(r"[0-9a-f]{32}\.(json|png|jpg|pdf)", file_id):
         raise HTTPException(400, "Identificador de arquivo inválido.")
     expires = int(datetime.now(timezone.utc).timestamp())+60
     ticket = secrets.token_urlsafe(32)
     with db() as conn:
-        exists = conn.execute("SELECT 1 FROM files WHERE owner_id=%s AND institution_id=%s AND file_id=%s",
-                              (session["user"]["id"], institution, file_id)).fetchone()
+        if view_all:
+            exists = conn.execute("""SELECT owner_id,institution_id FROM files f
+                WHERE f.file_id=%s AND EXISTS (
+                  SELECT 1 FROM report_files rf
+                  WHERE rf.owner_id=f.owner_id AND rf.institution_id=f.institution_id AND rf.file_id=f.file_id
+                )""", (file_id,)).fetchone()
+        else:
+            exists = conn.execute("SELECT owner_id,institution_id FROM files WHERE owner_id=%s AND institution_id=%s AND file_id=%s",
+                                  (session["user"]["id"], institution, file_id)).fetchone()
         if not exists:
             raise HTTPException(404, "Arquivo não encontrado.")
         conn.execute("INSERT INTO file_links(token_hash,owner_id,institution_id,file_id,expires_at,session_access_hash) VALUES (%s,%s,%s,%s,to_timestamp(%s),%s)",
-                     (token_hash(ticket), session["user"]["id"], institution, file_id, expires, token_hash(session["token"])))
+                     (token_hash(ticket), exists["owner_id"], exists["institution_id"], file_id, expires, token_hash(session["token"])))
     return {"url": f"{str(request.base_url).rstrip('/')}/files/{file_id}?token={ticket}", "expires_in": 60}
 
 
@@ -1196,8 +1262,10 @@ async def download_file(file_id: str, token: str):
     with db() as conn:
         row = conn.execute("""SELECT f.mime_type,f.content FROM file_links l JOIN files f
           ON f.owner_id=l.owner_id AND f.institution_id=l.institution_id AND f.file_id=l.file_id
-          JOIN sessions s ON s.access_hash=l.session_access_hash AND s.active_institution_id=l.institution_id
-          WHERE l.token_hash=%s AND l.file_id=%s AND l.expires_at>now() AND s.expires_at>now()""", (token_hash(token), file_id)).fetchone()
+          JOIN sessions s ON s.access_hash=l.session_access_hash
+          JOIN users u ON u.id=s.user_id
+          WHERE l.token_hash=%s AND l.file_id=%s AND l.expires_at>now() AND s.expires_at>now()
+            AND (u.view_all_reports OR s.active_institution_id=l.institution_id)""", (token_hash(token), file_id)).fetchone()
     if not row:
         raise HTTPException(404, "Arquivo não encontrado.")
     return Response(content=bytes(row["content"]), media_type=row["mime_type"])
