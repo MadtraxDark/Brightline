@@ -8,10 +8,13 @@ import {
   ZoomIn,
   ZoomOut,
   RotateCcw,
+  Eraser,
   Scan,
 } from "lucide-react";
 
-import { caseChatReply } from "../lib/caseChat.js";
+import { askLuna } from "../lib/luna/client.js";
+import { getLunaMode } from "../lib/luna/mode.js";
+import { buildCaseContext, lunaReplyText } from "../lib/luna/live.js";
 import {
   pathologyColor,
   validLocalizationMarkers,
@@ -28,6 +31,7 @@ export default function ExamViewer({
   focusPathology,
   onSelectPathology,
   onHoverPathology,
+  clearToken = 0,
 }) {
   const [remoteSrc, setRemoteSrc] = useState("");
   const fileId = report?.image_file_id;
@@ -219,15 +223,15 @@ export default function ExamViewer({
     };
   }
   const [points, setPoints] = useState([]);
+  const [markersHidden, setMarkersHidden] = useState(false);
+  const seenClear = useRef(0);
   const [selected, setSelected] = useState(null);
   const [question, setQuestion] = useState("");
   const [discussion, setDiscussion] = useState([]);
   const plane = useRef(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [typing, setTyping] = useState(false);
-  const replyTimer = useRef(null);
   const busyReply = useRef(false);
-  useEffect(() => () => clearTimeout(replyTimer.current), []);
   function addPoint(x, y) {
     const point = { id: points.length + 1, x, y };
     setPoints((previous) => [...previous, point]);
@@ -238,11 +242,25 @@ export default function ExamViewer({
   function ask(event) {
     event.preventDefault();
     if (!question.trim() || !selected || busyReply.current) return;
-    const text = question.trim();
-    const answer =
-      "Este ponto foi marcado por você; a Luna ainda não analisa pixels ou regiões da imagem. " +
-      caseChatReply(text, item ?? {}, report);
+    const text = question.trim().slice(0, 500);
     const id = crypto.randomUUID();
+    const classified = selected.kind === "classificacao";
+    const mark = {
+      tipo: classified
+        ? "classificacao"
+        : selected.kind === "area"
+          ? "area"
+          : "ponto",
+      x: selected.x,
+      y: selected.y,
+      largura: selected.width ?? null,
+      altura: selected.height ?? null,
+      achado: selected.pathology ?? null,
+      escore: selected.score ?? null,
+      observacao: classified
+        ? "Centro estimado de relevância do classificador. Não é detecção confirmada nem diagnóstico."
+        : "Marcação manual do usuário. Não é detecção do modelo nem diagnóstico.",
+    };
     setDiscussion((previous) => [
       ...previous,
       {
@@ -256,15 +274,38 @@ export default function ExamViewer({
     setQuestion("");
     setTyping(true);
     busyReply.current = true;
-    replyTimer.current = setTimeout(() => {
-      setDiscussion((previous) =>
-        previous.map((message) =>
-          message.id === id ? { ...message, answer } : message,
-        ),
-      );
-      setTyping(false);
-      busyReply.current = false;
-    }, 900);
+    askLuna({
+      question: text,
+      context: buildCaseContext(item ?? {}, report, { marcacao: mark }),
+      mode: getLunaMode(sessionStorage),
+    })
+      .then((result) => {
+        const answer =
+          lunaReplyText(result) ||
+          "Não foi possível consultar a Luna agora. Tente de novo.";
+        setDiscussion((previous) =>
+          previous.map((message) =>
+            message.id === id ? { ...message, answer } : message,
+          ),
+        );
+      })
+      .catch(() => {
+        setDiscussion((previous) =>
+          previous.map((message) =>
+            message.id === id
+              ? {
+                  ...message,
+                  answer:
+                    "Não foi possível consultar a Luna agora. Tente de novo.",
+                }
+              : message,
+          ),
+        );
+      })
+      .finally(() => {
+        setTyping(false);
+        busyReply.current = false;
+      });
   }
   const [failed, setFailed] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -299,7 +340,23 @@ export default function ExamViewer({
   );
   const previewImage = useRef(null);
   const [onFilm, setOnFilm] = useState(null);
-  const shownLocalizations = onFilm ?? localizations;
+  const shownLocalizations = markersHidden ? [] : (onFilm ?? localizations);
+  useEffect(() => {
+    if (!clearToken || clearToken === seenClear.current) return;
+    seenClear.current = clearToken;
+    setPoints([]);
+    setDrawing(null);
+    areaStart.current = null;
+    setPointMode(false);
+    setAreaMode(false);
+    setSelected(null);
+    setQuestion("");
+    setChatOpen(false);
+    setMarkersHidden(true);
+  }, [clearToken]);
+  useEffect(() => {
+    setMarkersHidden(false);
+  }, [analysis]);
   useEffect(() => {
     const image = previewImage.current;
     if (!image?.complete || !image.naturalWidth) {
@@ -376,6 +433,18 @@ export default function ExamViewer({
     setZoom(1);
     setOffset({ x: 0, y: 0 });
     setPan({ x: 0, y: 0 });
+  }
+  function clearMarks() {
+    setPoints([]);
+    setDrawing(null);
+    areaStart.current = null;
+    setPointMode(false);
+    setAreaMode(false);
+    if (selected?.kind !== "classificacao") {
+      setSelected(null);
+      setQuestion("");
+      setChatOpen(false);
+    }
   }
   function close() {
     dialog.current.close();
@@ -582,6 +651,15 @@ export default function ExamViewer({
             >
               <RotateCcw size={18} />
               <span className="exam-touch-label">Centralizar</span>
+            </button>
+            <button
+              type="button"
+              aria-label="Limpar marcações e pontos"
+              disabled={!points.length && !drawing}
+              onClick={clearMarks}
+            >
+              <Eraser size={18} />
+              <span className="exam-touch-label">Limpar</span>
             </button>
             {(annotations.length > 0 ||
               shownLocalizations.length > 0 ||
@@ -860,11 +938,17 @@ export default function ExamViewer({
                       onBlur={() => onHoverPathology?.(null)}
                       onClick={(event) => {
                         event.stopPropagation();
-                        onSelectPathology?.(
-                          focusPathology === marker.pathology
-                            ? null
-                            : marker.pathology,
-                        );
+                        onSelectPathology?.(marker.pathology);
+                        setSelected({
+                          id: marker.pathology,
+                          kind: "classificacao",
+                          x: marker.x,
+                          y: marker.y,
+                          pathology: marker.pathology,
+                          score: marker.score,
+                        });
+                        setChatOpen(true);
+                        setQuestion("");
                       }}
                     >
                       <span

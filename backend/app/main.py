@@ -35,8 +35,9 @@ BACKEND_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND_DIR))
 from extract import extract_one  # noqa: E402 - reuses Brightline's validated extraction pipeline
 from .institutions import INSTITUTIONS, INSTITUTION_IDS, INSTITUTION_NAMES, link_user_institutions
-from .models import (AcknowledgeInput, ActionInput, ActiveInstitutionInput, ImportInput,
-                     InstitutionSelection, LoginInput, RefreshInput, ReportRecordInput, SignupInput, Status, Urgency)
+from .models import (AcknowledgeInput, ActionInput, ActiveInstitutionInput, CommunicationInput,
+                     ImportInput, InstitutionSelection, LoginInput, RefreshInput, ReportRecordInput,
+                     SignupInput, Status, Urgency)
 
 
 def db():
@@ -1269,6 +1270,75 @@ async def download_file(file_id: str, token: str):
     if not row:
         raise HTTPException(404, "Arquivo não encontrado.")
     return Response(content=bytes(row["content"]), media_type=row["mime_type"])
+
+
+def _communication_scope(session):
+    institution = active_institution(session)
+    if sees_every_report(session):
+        return "", (), institution
+    return "WHERE owner_id=%s AND institution_id=%s", (session["user"]["id"], institution), institution
+
+
+def _known_peer(conn, session, peer_name, report_id=None):
+    clause, params, _institution = _communication_scope(session)
+    where = clause or "WHERE true"
+    found = conn.execute(
+        f"""SELECT 1 FROM reports
+            {where} AND (radiologist=%s OR ordering_physician=%s)
+            {"AND report_id=%s" if report_id else ""}
+            LIMIT 1""",
+        (*params, peer_name, peer_name, *((report_id,) if report_id else ())),
+    ).fetchone()
+    return bool(found)
+
+
+@app.get("/communications")
+async def list_communications(session: Session):
+    clause, params, _institution = _communication_scope(session)
+    where = clause or "WHERE true"
+    with db() as conn:
+        rows = conn.execute(
+            f"""SELECT id::text, peer_name, channel, body, report_id, email_to,
+                       author_id::text, author_name, created_at
+                FROM (
+                  SELECT * FROM communications {where}
+                  ORDER BY created_at DESC LIMIT 400
+                ) recent
+                ORDER BY created_at ASC""",
+            params,
+        ).fetchall()
+    return {"messages": rows}
+
+
+@app.post("/communications", status_code=201)
+async def create_communication(body: CommunicationInput, session: Session):
+    peer = body.peer_name.strip()
+    text = body.body.strip()
+    if not peer or not text:
+        raise HTTPException(422, "Escreva a mensagem e escolha um médico.")
+    if body.report_id and not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", body.report_id):
+        raise HTTPException(422, "A referência de laudo não é válida.")
+    email_to = (body.email_to or "").strip()
+    if body.channel == "email":
+        if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email_to):
+            raise HTTPException(422, "Informe um e-mail válido para abrir a mensagem.")
+    elif email_to:
+        raise HTTPException(422, "O e-mail só é usado na opção de envio por e-mail.")
+    institution = active_institution(session)
+    owner = session["user"]["id"]
+    with db() as conn:
+        if not _known_peer(conn, session, peer, body.report_id):
+            raise HTTPException(404, "Esse médico ou laudo não está disponível nesta conta.")
+        row = conn.execute(
+            """INSERT INTO communications
+               (owner_id, institution_id, peer_name, channel, body, report_id, email_to, author_id, author_name)
+               VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+               RETURNING id::text, peer_name, channel, body, report_id, email_to,
+                         author_id::text, author_name, created_at""",
+            (owner, institution, peer, body.channel, text, body.report_id or None,
+             email_to or None, owner, session["user"]["name"] or "Você"),
+        ).fetchone()
+    return row
 
 
 @app.get("/files")

@@ -9,6 +9,8 @@ import {
 } from "../lib/pathologyColors.js";
 import { markersInsideFilm } from "../lib/filmMarkers.js";
 import PathologyScoreList from "./PathologyScoreList.jsx";
+import RollingPercent from "./RollingPercent.jsx";
+import { topProbabilityPercent } from "../lib/classificationConfidence.js";
 
 const LINE_MS = 1200;
 const DOTS_MS = 900;
@@ -23,6 +25,7 @@ export default function LunaReadingModal({
   onReveal,
   onFail,
   onClose,
+  fromConfidence,
 }) {
   const dialog = useRef(null);
   const previousOverflow = useRef("");
@@ -189,7 +192,7 @@ export default function LunaReadingModal({
         <div className="luna-reading-voice">
           <img src={luna} alt="" width="72" height="72" />
           <p id="luna-reading-line">Pera aí, acho que vi algo</p>
-          {beat === "dots" || beat === "scores" ? (
+          {beat === "dots" ? (
             <p className="luna-reading-dots" aria-label="Luna analisando">
               <span />
               <span />
@@ -198,6 +201,17 @@ export default function LunaReadingModal({
           ) : null}
           {beat === "scores" && result?.probabilities ? (
             <div className="luna-reading-scores" aria-live="polite">
+              {Number.isFinite(topProbabilityPercent(result.probabilities)) ? (
+                <p className="luna-reading-confidence-line">
+                  <span>Confiança da Luna</span>
+                  <RollingPercent
+                    className="classification-confidence"
+                    value={topProbabilityPercent(result.probabilities)}
+                    from={fromConfidence}
+                    rollId={1}
+                  />
+                </p>
+              ) : null}
               <PathologyScoreList
                 probabilities={result.probabilities}
                 markers={result.markers}

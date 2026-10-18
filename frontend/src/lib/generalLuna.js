@@ -15,6 +15,8 @@ export function generalLunaReply(question, cases = []) {
     return "No laudo, clique em Ampliar imagem. Use a roda do mouse para ajustar o zoom e C para alternar a navegação do plano. Nos controles da imagem, escolha a Luna para marcar um ponto ou o seletor de área para arrastar uma região e conversar sobre ela. As marcações são manuais; o chat demonstrativo não interpreta os pixels.";
   if (/perfil|foto|nome|configura/.test(query))
     return "Abra o menu com seu nome no canto superior direito e escolha Configurações. Lá você pode ajustar seu nome e sua foto de perfil.";
+  if (/aba|menu|contato|e-mail|email/.test(query) && /comunic/.test(query))
+    return "A aba Comunicação, no menu lateral, lista os médicos que aparecem nos laudos. Escolha um contato para registrar a conversa, indicar um laudo ou abrir um e-mail no programa do seu computador.";
   if (/notifica|comunica|escal|leitura|conduta/.test(query))
     return "A seção Comunicação de cada laudo mostra o responsável atual e as etapas de escalonamento. Confirme a leitura antes de registrar a conduta. O histórico registra as ações e notificações do caso.";
   if (/laudo|medic|clinica|navega|ajuda|plataforma/.test(query))

@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Send, X } from "lucide-react";
 import luna from "../../assets/luna.png";
 import { useStore } from "../../store/useStore.js";
-import { generalLunaReply } from "../../lib/generalLuna.js";
+import { askLuna } from "../../lib/luna/client.js";
+import { getLunaMode } from "../../lib/luna/mode.js";
+import { lunaReplyText } from "../../lib/luna/live.js";
 
 export default function LunaPanel({ open, onClose }) {
   const cases = useStore((state) => state.cases);
@@ -15,10 +17,8 @@ export default function LunaPanel({ open, onClose }) {
   const [draft, setDraft] = useState("");
   const [typing, setTyping] = useState(false);
   const busy = useRef(false);
-  const timer = useRef(null);
   const log = useRef(null);
   const input = useRef(null);
-  useEffect(() => () => clearTimeout(timer.current), []);
   useEffect(() => {
     if (open) input.current?.focus();
   }, [open]);
@@ -32,24 +32,50 @@ export default function LunaPanel({ open, onClose }) {
       node.style.height = `${Math.min(100, Math.max(24, node.scrollHeight))}px`;
     }
   }, [draft, open]);
-  function send(event) {
+  async function send(event) {
     event.preventDefault();
-    if (!draft.trim() || busy.current) return;
-    const question = draft.trim(),
-      reply = generalLunaReply(question, cases);
+    const question = draft.trim().slice(0, 500);
+    if (!question || busy.current) return;
+    const history = messages.slice(-6).map((message) => ({
+      role: message.role,
+      text: message.text.slice(0, 800),
+    }));
     setMessages((previous) => [...previous, { role: "user", text: question }]);
     setDraft("");
     setTyping(true);
     busy.current = true;
     input.current?.focus();
-    timer.current = setTimeout(() => {
+    try {
+      const result = await askLuna({
+        question,
+        history,
+        context: {
+          tipo: "painel",
+          casos: cases.slice(0, 20).map((item) => ({
+            id: item.id,
+            achado: item.finding,
+            urgencia: item.urgency,
+            status: item.status,
+            prazo_horas: item.deadline_hours,
+          })),
+        },
+        mode: getLunaMode(sessionStorage),
+      });
+      const text = lunaReplyText(result);
+      if (!text) return;
+      setMessages((previous) => [...previous, { role: "assistant", text }]);
+    } catch {
       setMessages((previous) => [
         ...previous,
-        { role: "assistant", text: reply },
+        {
+          role: "assistant",
+          text: "Não foi possível consultar a Luna agora. Tente de novo.",
+        },
       ]);
+    } finally {
       setTyping(false);
       busy.current = false;
-    }, 850);
+    }
   }
   return (
     <div
@@ -130,7 +156,7 @@ export default function LunaPanel({ open, onClose }) {
             <Send size={19} />
           </button>
         </form>
-        <small>Conversa demonstrativa · A IA sugere. Você valida.</small>
+        <small>A IA sugere. Você valida.</small>
       </div>
     </div>
   );

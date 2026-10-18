@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import lunaAvatar from "../../assets/luna.png";
-import { caseChatReply } from "../../lib/caseChat.js";
+import { askLuna } from "../../lib/luna/client.js";
+import { getLunaMode } from "../../lib/luna/mode.js";
+import { buildCaseContext, lunaReplyText } from "../../lib/luna/live.js";
 
 export default function CaseChat({ item, report }) {
   const [messages, setMessages] = useState([]);
@@ -33,23 +35,40 @@ export default function CaseChat({ item, report }) {
     input.style.height = "auto";
     input.style.height = `${Math.min(112, Math.max(24, input.scrollHeight))}px`;
   }, [draft]);
-  function send() {
-    const question = draft.trim();
+  async function send() {
+    const question = draft.trim().slice(0, 500);
     if (!question || busy.current) return;
     busy.current = true;
-    const reply = caseChatReply(question, item, report);
+    const history = messages.slice(-6).map((message) => ({
+      role: message.role,
+      text: message.text.slice(0, 800),
+    }));
     setMessages((previous) => [...previous, { role: "user", text: question }]);
     setDraft("");
     setTyping(true);
     inputRef.current?.focus();
-    timer.current = setTimeout(() => {
+    try {
+      const result = await askLuna({
+        question,
+        history,
+        context: buildCaseContext(item, report),
+        mode: getLunaMode(sessionStorage),
+      });
+      const text = lunaReplyText(result);
+      if (!text) return;
+      setMessages((previous) => [...previous, { role: "assistant", text }]);
+    } catch {
       setMessages((previous) => [
         ...previous,
-        { role: "assistant", text: reply },
+        {
+          role: "assistant",
+          text: "Não foi possível consultar a Luna agora. Tente de novo.",
+        },
       ]);
+    } finally {
       setTyping(false);
       busy.current = false;
-    }, 900);
+    }
   }
   return (
     <section
@@ -127,9 +146,7 @@ export default function CaseChat({ item, report }) {
             <Send size={20} aria-hidden="true" />
           </button>
         </form>
-        <p className="case-chat-footnote">
-          Conversa demonstrativa · A IA sugere. O médico valida.
-        </p>
+        <p className="case-chat-footnote">A IA sugere. O médico valida.</p>
       </div>
     </section>
   );
