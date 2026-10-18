@@ -29,6 +29,7 @@ import CaseList from "./CaseList.jsx";
 import DemoClock from "./DemoClock.jsx";
 import Evaluation from "./Evaluation.jsx";
 import ProfileMenu from "./ProfileMenu.jsx";
+import InstitutionSwitcher from "./InstitutionSwitcher.jsx";
 import Settings from "./Settings.jsx";
 import NavigationHighlight from "./NavigationHighlight.jsx";
 import Missed from "./Missed.jsx";
@@ -38,6 +39,8 @@ import { formatAverage } from "../format.js";
 import { selectMissed, selectStats } from "../store/selectors.js";
 import { useStore } from "../store/useStore.js";
 import { previewData } from "../data/preview.js";
+import { refreshDashboard } from "../api.js";
+import { currentUser } from "../lib/session.js";
 
 const SUMMARY = [
   { key: "open", label: "Abertos" },
@@ -125,9 +128,40 @@ function Overview({ preview = false }) {
 export default function DashboardShell({ preview = false }) {
   const [profile, setProfile] = useState(() => readProfile(sessionStorage));
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dataStatus, setDataStatus] = useState(preview ? "ready" : "loading");
+  const [dataError, setDataError] = useState("");
   const { pathname: routePath } = useLocation();
   const pathname = preview ? "/home" : routePath;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (preview) return undefined;
+    let active = true;
+    async function loadData() {
+      if (!active) return;
+      if (!currentUser(sessionStorage)?.active_institution_id) {
+        setDataStatus("ready");
+        return;
+      }
+      setDataStatus("loading");
+      setDataError("");
+      try {
+        await refreshDashboard();
+        if (active) setDataStatus("ready");
+      } catch (error) {
+        if (active) {
+          setDataError(error.message);
+          setDataStatus("error");
+        }
+      }
+    }
+    loadData();
+    window.addEventListener("brightline:institution-changed", loadData);
+    return () => {
+      active = false;
+      window.removeEventListener("brightline:institution-changed", loadData);
+    };
+  }, [preview]);
   const activeSection =
     pathname === "/home" || pathname.startsWith("/caso/")
       ? "0"
@@ -169,6 +203,29 @@ export default function DashboardShell({ preview = false }) {
   );
 
   const Workspace = preview ? "div" : "main";
+
+  if (!preview && dataStatus === "loading") {
+    return (
+      <div className="session-state" role="status">
+        Carregando dados da instituição…
+      </div>
+    );
+  }
+  if (!preview && dataStatus === "error") {
+    return (
+      <div className="session-state">
+        <p role="alert">{dataError}</p>
+        <button
+          className="btn-primary"
+          onClick={() =>
+            window.dispatchEvent(new Event("brightline:institution-changed"))
+          }
+        >
+          Tentar novamente
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="app">
@@ -276,13 +333,16 @@ export default function DashboardShell({ preview = false }) {
           {preview ? (
             <span className="lp-preview-profile">Demonstração</span>
           ) : (
-            <ProfileMenu
-              profile={profile}
-              onLogout={async () => {
-                await logout(sessionStorage);
-                navigate("/login", { replace: true });
-              }}
-            />
+            <>
+              <InstitutionSwitcher />
+              <ProfileMenu
+                profile={profile}
+                onLogout={async () => {
+                  await logout(sessionStorage);
+                  navigate("/login", { replace: true });
+                }}
+              />
+            </>
           )}
         </header>
         <Workspace
