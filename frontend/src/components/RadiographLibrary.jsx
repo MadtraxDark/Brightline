@@ -8,6 +8,8 @@ import {
   listRadiographs,
 } from "../radiographApi.js";
 import "../styles/classifier.css";
+import RadiographViewer from "./RadiographViewer.jsx";
+import PathologyScoreList from "./PathologyScoreList.jsx";
 
 const PAGE_SIZE = 24;
 const PATHOLOGIES = [
@@ -37,6 +39,8 @@ export default function RadiographLibrary() {
   const [analysis, setAnalysis] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [selectedPathology, setSelectedPathology] = useState(null);
+  const [hoveredPathology, setHoveredPathology] = useState(null);
 
   const loadPage = useCallback(async () => {
     setBusy(true);
@@ -64,6 +68,8 @@ export default function RadiographLibrary() {
   async function chooseImage(item) {
     setSelected(item);
     setAnalysis(null);
+    setSelectedPathology(null);
+    setHoveredPathology(null);
     setImageUrl("");
     setError("");
     try {
@@ -84,6 +90,8 @@ export default function RadiographLibrary() {
     setError("");
     try {
       setAnalysis(await classifyRadiographById(selected.id));
+      setSelectedPathology(null);
+      setHoveredPathology(null);
       await loadPage();
     } catch (caught) {
       setError(caught.message || "Não foi possível classificar a imagem.");
@@ -205,13 +213,28 @@ export default function RadiographLibrary() {
                 Rótulos NIH: {selected.finding_labels.join(", ") || "nenhum"}
               </p>
             </div>
-            {imageUrl && (
-              <img
-                className="classifier-preview"
-                src={imageUrl}
-                alt={`Radiografia ${selected.id}`}
-              />
-            )}
+            {imageUrl &&
+              (analysis ? (
+                <RadiographViewer
+                  src={imageUrl}
+                  alt={`Radiografia ${selected.id}`}
+                  markers={analysis.markers}
+                  heatmap={analysis.heatmap}
+                  activePathology={hoveredPathology ?? selectedPathology}
+                  onSelectPathology={(label) =>
+                    setSelectedPathology((current) =>
+                      current === label ? null : label,
+                    )
+                  }
+                  onHoverPathology={setHoveredPathology}
+                />
+              ) : (
+                <img
+                  className="classifier-preview"
+                  src={imageUrl}
+                  alt={`Radiografia ${selected.id}`}
+                />
+              ))}
             <button
               className="classifier-button"
               type="button"
@@ -223,13 +246,18 @@ export default function RadiographLibrary() {
             {analysis && (
               <div className="classifier-results">
                 <h3>Probabilidades exploratórias</h3>
-                {Object.entries(analysis.probabilities).map(
-                  ([label, score]) => (
-                    <p key={label}>
-                      {label}: {(score * 100).toFixed(1)}%
-                    </p>
-                  ),
-                )}
+                <PathologyScoreList
+                  probabilities={analysis.probabilities}
+                  markers={analysis.markers}
+                  labels={PATHOLOGIES}
+                  activePathology={hoveredPathology ?? selectedPathology}
+                  onSelectPathology={(label) =>
+                    setSelectedPathology((current) =>
+                      current === label ? null : label,
+                    )
+                  }
+                  onHoverPathology={setHoveredPathology}
+                />
                 <p>
                   Modelo {analysis.model_version}. Revisão profissional
                   obrigatória; resultado não diagnóstico.

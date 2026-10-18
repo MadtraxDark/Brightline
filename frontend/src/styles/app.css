@@ -2947,7 +2947,7 @@ button.summary-item {
   font-weight: 500;
   line-height: 1.45;
 }
-/* Acompanhamento: responsável, etapa atual e acesso ao laudo. */
+/* Acompanhamento: responsÃ¡vel, etapa atual e acesso ao laudo. */
 .clinical-followup {
   gap: 18px;
   align-self: start;
@@ -3218,7 +3218,7 @@ button.summary-item {
   }
 }
 
-/* Classificação dentro do documento, junto aos dados de origem. */
+/* ClassificaÃ§Ã£o dentro do documento, junto aos dados de origem. */
 .report-case-heading h2 {
   font-size: 32px;
 }
@@ -3411,8 +3411,8 @@ button.summary-item {
     padding: 12px;
   }
 }
-/* Abertura do laudo: documento e visor se desdobram como uma única composição.
-   O conteúdo existe desde o primeiro quadro; nenhum atraso de carregamento artificial. */
+/* Abertura do laudo: documento e visor se desdobram como uma Ãºnica composiÃ§Ã£o.
+   O conteÃºdo existe desde o primeiro quadro; nenhum atraso de carregamento artificial. */
 @media (prefers-reduced-motion: no-preference) {
   .report-enter .report-case-heading,
   .report-enter .report-case-summary {
@@ -3466,7 +3466,7 @@ button.summary-item {
   }
 }
 
-/* A transição da seção coordena a página inteira, sem sobrepor entradas locais. */
+/* A transiÃ§Ã£o da seÃ§Ã£o coordena a pÃ¡gina inteira, sem sobrepor entradas locais. */
 .section-transition {
   min-width: 0;
   transform-origin: 50% 0;
@@ -3482,7 +3482,7 @@ button.summary-item {
 .section-transition .report-enter > .case-chat {
   animation: none;
 }
-/* Fluxo de comunicação: nós conectados e sinal em direção à próxima etapa. */
+/* Fluxo de comunicaÃ§Ã£o: nÃ³s conectados e sinal em direÃ§Ã£o Ã  prÃ³xima etapa. */
 .communication {
   padding: 24px;
 }
@@ -3645,7 +3645,7 @@ button.summary-item {
     transform: translateY(440%);
   }
 }
-/* Ações e histórico: tarefas legíveis e eventos com tempo bem definido. */
+/* AÃ§Ãµes e histÃ³rico: tarefas legÃ­veis e eventos com tempo bem definido. */
 .communication .detail-actions {
   margin-top: 24px;
   padding-block: 20px;
@@ -3783,7 +3783,7 @@ button.summary-item {
     font-size: 13px;
   }
 }
-/* Identidade do usuário sempre ao lado do avatar. */
+/* Identidade do usuÃ¡rio sempre ao lado do avatar. */
 .profile-trigger {
   gap: 10px;
   padding: 6px 10px 6px 6px;
@@ -3855,6 +3855,66 @@ button.summary-item {
   background: var(--evidence-bg);
   cursor: zoom-in;
   color: var(--sidebar-text);
+}
+.exam-preview-image {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+}
+.exam-preview-image > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+.exam-preview-marker {
+  position: absolute;
+  z-index: 2;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--pathology-color);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--pathology-color) 65%, transparent);
+  transition:
+    width 120ms ease,
+    height 120ms ease,
+    box-shadow 120ms ease;
+}
+.exam-preview-marker.is-active {
+  width: 16px;
+  height: 16px;
+  box-shadow: 0 0 0 4px
+    color-mix(in srgb, var(--pathology-color) 55%, transparent);
+}
+.exam-preview-marker-label {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 7px);
+  display: none;
+  width: max-content;
+  max-width: 220px;
+  padding: 5px 7px;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  font-size: 11px;
+  line-height: 1.3;
+}
+.exam-preview-marker:hover .exam-preview-marker-label,
+.exam-preview-marker.is-active .exam-preview-marker-label {
+  display: block;
+}
+.exam-image-loading {
+  display: grid;
+  min-height: 240px;
+  place-items: center;
+  color: var(--sidebar-muted);
 }
 .exam-preview-overlay {
   position: absolute;
@@ -3980,6 +4040,53 @@ button.summary-item {
   height: 100%;
   object-fit: contain;
   pointer-events: none;
+}
+.exam-image-plane > img.exam-localization-heatmap {
+  position: absolute;
+  inset: 0;
+  object-fit: fill;
+  opacity: 0.82;
+}
+.exam-dialog .exam-image-plane .exam-ai-marker {
+  position: absolute;
+  z-index: 4;
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  padding: 0;
+  border: 2px solid var(--panel);
+  border-radius: 50%;
+  background: var(--pathology-color);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--pathology-color) 55%, transparent);
+  cursor: pointer;
+  transition: box-shadow 120ms ease;
+}
+.exam-dialog .exam-image-plane .exam-ai-marker.is-active {
+  box-shadow: 0 0 0 4px
+    color-mix(in srgb, var(--pathology-color) 65%, transparent);
+}
+.exam-ai-marker > span {
+  position: absolute;
+  left: 50%;
+  top: -7px;
+  display: none;
+  width: max-content;
+  max-width: 260px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.exam-ai-marker:hover > span,
+.exam-ai-marker:focus-visible > span,
+.exam-ai-marker > span.is-open {
+  display: block;
 }
 .exam-annotation {
   position: absolute;
@@ -4323,7 +4430,7 @@ button.summary-item {
   object-fit: contain;
   border-radius: 50%;
 }
-/* Regra global: campos não permitem redimensionamento manual. */
+/* Regra global: campos nÃ£o permitem redimensionamento manual. */
 textarea {
   resize: none !important;
 }
@@ -4569,6 +4676,10 @@ textarea {
   color: var(--critical);
 }
 .reclassify-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   margin-left: auto;
   min-height: 40px;
   padding: 8px 12px;
@@ -4584,6 +4695,19 @@ textarea {
 .reclassify-button:hover {
   background: var(--control-hover);
 }
+.reclassify-button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+.reclassify-spinner {
+  flex: 0 0 auto;
+  animation: reclassify-spin 1s linear infinite;
+}
+@keyframes reclassify-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .reclassify-button:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
@@ -4591,6 +4715,99 @@ textarea {
 .report-luna-classification .reclassification-notice {
   font-size: 12px;
   line-height: 1.5;
+}
+.report-luna-classification .reclassification-error {
+  color: var(--critical);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.reclassification-scores {
+  display: grid;
+  gap: 5px;
+  flex-basis: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--panel);
+  font-size: 12px;
+}
+.reclassification-scores > small {
+  color: var(--text-muted);
+}
+.reclassification-score {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 7px;
+  min-height: 22px;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+}
+button.reclassification-score {
+  padding: 3px 6px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+button.reclassification-score:hover,
+button.reclassification-score.is-selected {
+  border-color: color-mix(in srgb, var(--focus) 45%, var(--border));
+  background: color-mix(in srgb, var(--focus) 9%, var(--panel));
+}
+.reclassification-scores > .pathology-score-list {
+  width: 100%;
+  min-width: 0;
+}
+.pathology-score-list {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+}
+.pathology-score {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 9px minmax(0, 1fr) auto;
+  gap: 7px;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 26px;
+  padding: 3px 6px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.pathology-score-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+button.pathology-score {
+  cursor: pointer;
+}
+.pathology-score.is-selected {
+  border-color: color-mix(in srgb, var(--focus) 45%, var(--border));
+  background: color-mix(in srgb, var(--focus) 9%, var(--panel));
+}
+.pathology-score strong {
+  font-variant-numeric: tabular-nums;
+}
+.pathology-color-dot {
+  display: inline-block;
+  flex: 0 0 9px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid color-mix(in srgb, var(--text) 35%, transparent);
+  border-radius: 50%;
 }
 .exam-luna-tool {
   display: block;
@@ -4747,7 +4964,7 @@ textarea {
     right: 10px;
   }
 }
-/* Marcações manuais: pontos legíveis e regiões ligadas à conversa. */
+/* MarcaÃ§Ãµes manuais: pontos legÃ­veis e regiÃµes ligadas Ã  conversa. */
 .exam-dialog .exam-user-point {
   width: 30px;
   height: 30px;
@@ -5039,7 +5256,7 @@ textarea {
     height: 300px;
   }
 }
-/* Diretório médico: identidade, atuação e laudos associados. */
+/* DiretÃ³rio mÃ©dico: identidade, atuaÃ§Ã£o e laudos associados. */
 .physicians-total {
   display: flex;
   align-items: center;
@@ -5206,7 +5423,7 @@ textarea {
     height: 260px;
   }
 }
-/* Retratos médicos com enquadramento completo, sem recorte de rosto e ombros. */
+/* Retratos mÃ©dicos com enquadramento completo, sem recorte de rosto e ombros. */
 .physician-rich-card .physician-card-portrait {
   height: auto;
   aspect-ratio: 1;
@@ -5684,7 +5901,7 @@ textarea {
     padding: 18px;
   }
 }
-/* Acervo de laudos: ações e classificação com hierarquia explícita. */
+/* Acervo de laudos: aÃ§Ãµes e classificaÃ§Ã£o com hierarquia explÃ­cita. */
 .report-library-open {
   min-height: 46px;
   padding: 12px 16px;
@@ -5804,7 +6021,7 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
-/* Cadastro de laudos: seleção pesquisável e upload com prévia. */
+/* Cadastro de laudos: seleÃ§Ã£o pesquisÃ¡vel e upload com prÃ©via. */
 .report-form-dialog {
   max-width: 860px;
 }

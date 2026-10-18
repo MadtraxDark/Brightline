@@ -13,6 +13,49 @@ from app import report_analysis as service
 
 
 class ReportAnalysisTests(unittest.TestCase):
+    def test_cam_failure_keeps_valid_real_model_scores(self):
+        stream = io.BytesIO()
+        Image.new("L", (224, 224), 128).save(stream, format="PNG")
+        with patch.object(service, "_cam_localizations", side_effect=RuntimeError("CAM failure")):
+            scores, _, markers, heatmap = service.infer(stream.getvalue(), include_localizations=True)
+        self.assertEqual(len(scores), 14)
+        self.assertTrue(all(np.isfinite(value) and 0 <= value <= 1 for value in scores.values()))
+        self.assertEqual(markers, [])
+        self.assertIsNone(heatmap)
+
+    @unittest.skipIf(Image is None, "Pillow nÃ£o estÃ¡ instalado no ambiente local")
+    def test_gradcam_localizes_supported_candidate_below_classification_threshold(self):
+        class Block(torch.nn.Module):
+            def forward(self, value):
+                return value
+
+        class FakeDenseNet(torch.nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.features = torch.nn.Module()
+                self.features.denseblock4 = Block()
+                self.pathologies = list(service.LABELS)
+
+            def forward(self, value):
+                features = self.features.denseblock4(value)
+                score = features[:, :, 70:120, 70:120].mean(dim=(1, 2, 3))
+                return torch.stack([score if label == "Atelectasis" else score * 0
+                                    for label in self.pathologies], dim=1)
+
+        model = FakeDenseNet()
+        batch = torch.zeros((1, 1, 224, 224))
+        batch[:, :, 70:120, 70:120] = 1
+        scores = {label: 0.1 for label in service.LABELS}
+        scores["Atelectasis"] = 0.49
+        geometry = {"width": 400, "height": 200, "left": 100.0, "top": 0.0, "side": 200}
+        markers, heatmap = service._cam_localizations(model, batch, scores, geometry)
+        self.assertEqual(len(markers), 1)
+        self.assertEqual(markers[0]["pathology"], "Atelectasis")
+        self.assertAlmostEqual(markers[0]["x"], 0.5, delta=0.05)
+        self.assertAlmostEqual(markers[0]["y"], 0.425, delta=0.04)
+        self.assertEqual(markers[0]["localization_status"], "estimated")
+        self.assertTrue(heatmap.startswith("data:image/png;base64,"))
+
     def test_comparison_exposes_both_disagreement_directions(self):
         findings = [{"finding": "derrame pleural à direita", "evidence": "Derrame pleural à direita."}]
         scores = {name: 0.1 for name in service.LABELS}
