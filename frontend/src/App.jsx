@@ -1,3 +1,5 @@
+import Reports from "./components/Reports.jsx";
+import Physicians from "./components/Physicians.jsx";
 import SectionTransition from "./components/SectionTransition.jsx";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -13,6 +15,9 @@ import {
 import {
   ArrowRight,
   FileCheck,
+  Files,
+  Stethoscope,
+  Building2,
   ShieldCheck,
   LayoutDashboard,
   EyeOff,
@@ -42,6 +47,7 @@ import {
   writeSidebarCollapsed,
 } from "./lib/sidebarPref.js";
 import Missed from "./components/Missed.jsx";
+import { refreshWorkspace } from "./api.js";
 import { logout, validateSession } from "./lib/session.js";
 import { formatRemaining } from "./lib/formatRemaining.js";
 import { buildSidebarItems } from "./lib/sidebarItems.js";
@@ -61,6 +67,8 @@ const LANES = [
 ];
 
 function crumb(pathname) {
+  if (pathname.startsWith("/laudos")) return "Laudos";
+  if (pathname.startsWith("/medicos")) return "Médicos";
   if (pathname.startsWith("/configuracoes")) return "Configurações";
   if (pathname.startsWith("/caso/")) return "Caso";
   if (pathname.startsWith("/nao-sinalizados")) return "Não sinalizados";
@@ -241,6 +249,20 @@ function Shell() {
         : pathname.startsWith("/avaliacao")
           ? "2"
           : "none";
+  const [workspaceError, setWorkspaceError] = useState("");
+  useEffect(() => {
+    let active = true;
+    refreshWorkspace()
+      .then(() => {
+        if (active) setWorkspaceError("");
+      })
+      .catch((error) => {
+        if (active) setWorkspaceError(error.message);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
   const cases = useStore((state) => state.cases);
   const simNow = useStore((state) => state.simNow);
   const reports = useStore((state) => state.reports);
@@ -344,28 +366,40 @@ function Shell() {
                 </span>
               </NavLink>
             </nav>
-            <nav className="sidebar-priority" aria-label="Por prioridade">
+            <nav
+              className="sidebar-primary sidebar-planned"
+              aria-label="Cadastros e documentos"
+            >
               <hr className="sidebar-divider" />
-              {menu.sections[1].items.map((item) => (
-                <Link
-                  key={item.id}
-                  to={item.to}
-                  data-level={item.id}
-                  data-tip={`${item.label}, ${item.count} casos`}
-                  aria-current={view.lane === item.id ? "true" : undefined}
-                  aria-label={`${item.label}, ${item.count} casos`}
-                  onClick={() => setMenuOpen(false)}
+              <NavLink
+                to="/laudos"
+                data-tip="Laudos"
+                onClick={() => setMenuOpen(false)}
+              >
+                <Files size={21} aria-hidden="true" />
+                <span className="sidebar-label">Laudos</span>
+              </NavLink>
+              <NavLink
+                to="/medicos"
+                data-tip="Médicos"
+                onClick={() => setMenuOpen(false)}
+              >
+                <Stethoscope size={21} aria-hidden="true" />
+                <span className="sidebar-label">Médicos</span>
+              </NavLink>
+              {[["Clínicas", Building2]].map(([label, Icon]) => (
+                <button
+                  key={label}
+                  type="button"
+                  aria-disabled="true"
+                  data-tip={`${label} · Em breve`}
+                  aria-label={`${label}, em breve`}
+                  className="sidebar-planned-item"
                 >
-                  {item.id === "noAlert" ? (
-                    <FileCheck size={16} aria-hidden="true" />
-                  ) : (
-                    <UrgencyIcon level={item.id} size={16} />
-                  )}
-                  <span className="sidebar-label">{item.label}</span>
-                  <span className="sidebar-count" aria-hidden="true">
-                    {item.count}
-                  </span>
-                </Link>
+                  <Icon size={21} aria-hidden="true" />
+                  <span className="sidebar-label">{label}</span>
+                  <span className="sidebar-planned-badge">Em breve</span>
+                </button>
               ))}
             </nav>
           </div>
@@ -443,10 +477,13 @@ function Shell() {
           </div>
         </header>
         <main className="workspace" id="workspace" tabIndex={-1}>
+          {workspaceError ? <p role="alert">{workspaceError}</p> : null}
           <SectionTransition>
             {(displayedLocation) => (
               <Routes location={displayedLocation}>
                 <Route path="/home" element={<Overview />} />
+                <Route path="/medicos" element={<Physicians />} />
+                <Route path="/laudos" element={<Reports />} />
                 <Route path="/caso/:id" element={<CaseDetail />} />
                 <Route path="/nao-sinalizados" element={<Missed />} />
                 <Route path="/avaliacao" element={<Evaluation />} />

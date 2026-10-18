@@ -16,7 +16,7 @@ function collect(dir, found = []) {
   return found;
 }
 
-const files = collect(source).sort();
+const files = [...collect(source), ...collect(join(frontend, "server"))].sort();
 const rows = [];
 let failed = false;
 

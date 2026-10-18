@@ -24,6 +24,11 @@ class ReportInput(StrictModel):
     ground_truth: list[GroundTruth] = Field(default_factory=list)
 
 
+class CreateReportInput(ReportInput):
+    classify: bool = False
+    image_file_id: str | None = Field(default=None, max_length=100)
+
+
 class FindingInput(StrictModel):
     finding: str = Field(min_length=1)
     evidence: str = Field(min_length=1)

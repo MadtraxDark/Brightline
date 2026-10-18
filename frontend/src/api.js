@@ -1,3 +1,4 @@
+import { authorizedRequest } from "./lib/session.js";
 import {
   selectCase,
   selectCases,
@@ -5,6 +6,16 @@ import {
   selectStats,
 } from "./store/selectors.js";
 import { store } from "./store/store.js";
+
+export async function refreshWorkspace() {
+  const data = await authorizedRequest("/workspace");
+  store.replace({
+    simNow: data.sim_now,
+    reports: data.reports,
+    cases: data.cases,
+  });
+  return store.getState();
+}
 
 export async function listCases(filters) {
   return selectCases(store.getState(), filters);
@@ -16,13 +27,21 @@ export async function getCase(id) {
   return detail;
 }
 
-export async function acknowledge(id, by) {
-  store.acknowledge(id, by);
+export async function acknowledge(id) {
+  await authorizedRequest(`/cases/${id}/acknowledge`, {
+    method: "POST",
+    body: { by: "Revisão" },
+  });
+  await refreshWorkspace();
   return (await getCase(id)).case;
 }
 
 export async function registerAction(id, action, close) {
-  store.registerAction(id, action, close);
+  await authorizedRequest(`/cases/${id}/action`, {
+    method: "POST",
+    body: { action: action?.trim() || "Caso encerrado", close: Boolean(close) },
+  });
+  await refreshWorkspace();
   return (await getCase(id)).case;
 }
 

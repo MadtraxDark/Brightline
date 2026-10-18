@@ -1,3 +1,5 @@
+import PointChat from "./luna/PointChat.jsx";
+import lunaIcon from "../assets/luna.png";
 import { useEffect, useRef, useState } from "react";
 import {
   ScanLine,
@@ -6,43 +8,92 @@ import {
   ZoomIn,
   ZoomOut,
   RotateCcw,
-  MapPin,
-  Send,
+  Scan,
 } from "lucide-react";
 
 import { caseChatReply } from "../lib/caseChat.js";
+import { authorizedRequest } from "../lib/session.js";
 
 export default function ExamViewer({ report, modality, item }) {
-  const src = report?.image_url || "/images/chest-xray-demo.png";
-  const illustrative = !report?.image_url;
+  const [remoteSrc, setRemoteSrc] = useState("");
+  const fileId = report?.image_file_id;
+  useEffect(() => {
+    if (!fileId) {
+      setRemoteSrc("");
+      return undefined;
+    }
+    let active = true;
+    authorizedRequest(`/files/${fileId}/signed-url`, { method: "POST" })
+      .then((data) => {
+        if (active) setRemoteSrc(data?.url || "");
+      })
+      .catch(() => {
+        if (active) setRemoteSrc("");
+      });
+    return () => {
+      active = false;
+    };
+  }, [fileId]);
+  const src = remoteSrc || report?.image_url || "/images/chest-xray-demo.png";
+  const illustrative = !remoteSrc && !report?.image_url;
   const [pointMode, setPointMode] = useState(false);
+  const [areaMode, setAreaMode] = useState(false);
+  const [drawing, setDrawing] = useState(null);
+  const areaStart = useRef(null);
+  function imagePosition(event) {
+    const rect = plane.current.getBoundingClientRect();
+    return {
+      x: Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width)),
+      y: Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height)),
+    };
+  }
   const [points, setPoints] = useState([]);
   const [selected, setSelected] = useState(null);
   const [question, setQuestion] = useState("");
   const [discussion, setDiscussion] = useState([]);
   const plane = useRef(null);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const replyTimer = useRef(null);
+  const busyReply = useRef(false);
+  useEffect(() => () => clearTimeout(replyTimer.current), []);
   function addPoint(x, y) {
     const point = { id: points.length + 1, x, y };
     setPoints((previous) => [...previous, point]);
     setSelected(point);
+    setChatOpen(true);
     setQuestion("");
   }
   function ask(event) {
     event.preventDefault();
-    if (!question.trim() || !selected) return;
+    if (!question.trim() || !selected || busyReply.current) return;
     const text = question.trim();
+    const answer =
+      "Este ponto foi marcado por você; a Luna ainda não analisa pixels ou regiões da imagem. " +
+      caseChatReply(text, item ?? {}, report);
+    const id = crypto.randomUUID();
     setDiscussion((previous) => [
       ...previous,
       {
+        id,
         point: selected.id,
+        kind: selected.kind,
         question: text,
-        answer:
-          "Este ponto foi marcado por você; a Luna ainda não analisa pixels ou regiões da imagem. " +
-          caseChatReply(text, item ?? {}, report),
+        answer: null,
       },
     ]);
     setQuestion("");
-    setSelected(null);
+    setTyping(true);
+    busyReply.current = true;
+    replyTimer.current = setTimeout(() => {
+      setDiscussion((previous) =>
+        previous.map((message) =>
+          message.id === id ? { ...message, answer } : message,
+        ),
+      );
+      setTyping(false);
+      busyReply.current = false;
+    }, 900);
   }
   const [failed, setFailed] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -53,6 +104,7 @@ export default function ExamViewer({ report, modality, item }) {
   const [ratio, setRatio] = useState(1);
   const [marks, setMarks] = useState(true);
   const dialog = useRef(null);
+  const previousOverflow = useRef("");
   const drag = useRef(null);
   const trigger = useRef(null);
   const annotations =
@@ -73,7 +125,7 @@ export default function ExamViewer({ report, modality, item }) {
   }, [src]);
   useEffect(
     () => () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow.current;
     },
     [],
   );
@@ -137,6 +189,7 @@ export default function ExamViewer({ report, modality, item }) {
           onClick={() => {
             reset();
             dialog.current.showModal();
+            previousOverflow.current = document.body.style.overflow;
             document.body.style.overflow = "hidden";
           }}
         >
@@ -179,7 +232,7 @@ export default function ExamViewer({ report, modality, item }) {
           if (event.target === dialog.current) close();
         }}
         onClose={() => {
-          document.body.style.overflow = "";
+          document.body.style.overflow = previousOverflow.current;
           trigger.current?.focus();
         }}
       >
@@ -208,10 +261,30 @@ export default function ExamViewer({ report, modality, item }) {
               aria-pressed={pointMode}
               onClick={() => {
                 setPointMode((v) => !v);
+                setAreaMode(false);
                 setSelected(null);
               }}
             >
-              <MapPin size={19} />
+              <img
+                className="exam-luna-tool"
+                src={lunaIcon}
+                alt=""
+                width="30"
+                height="30"
+              />
+            </button>
+            <button
+              type="button"
+              aria-label="Marcar área para perguntar à Luna"
+              aria-pressed={areaMode}
+              onClick={() => {
+                setAreaMode((v) => !v);
+                setPointMode(false);
+                setDrawing(null);
+                areaStart.current = null;
+              }}
+            >
+              <Scan size={20} />
             </button>
             <button
               className="exam-mode-toggle"
@@ -260,7 +333,15 @@ export default function ExamViewer({ report, modality, item }) {
             <div
               className="exam-stage"
               ref={stage}
-              data-mode={pointMode ? "point" : canvasMode ? "canvas" : "image"}
+              data-mode={
+                areaMode
+                  ? "area"
+                  : pointMode
+                    ? "point"
+                    : canvasMode
+                      ? "canvas"
+                      : "image"
+              }
               style={{
                 backgroundPosition: `${pan.x}px ${pan.y}px`,
                 backgroundSize: `${48 * zoom}px ${48 * zoom}px`,
@@ -287,6 +368,20 @@ export default function ExamViewer({ report, modality, item }) {
               }}
               onPointerDown={(event) => {
                 if (event.button !== 0) return;
+                if (areaMode) {
+                  const rect = plane.current.getBoundingClientRect();
+                  if (
+                    event.clientX < rect.left ||
+                    event.clientX > rect.right ||
+                    event.clientY < rect.top ||
+                    event.clientY > rect.bottom
+                  )
+                    return;
+                  areaStart.current = imagePosition(event);
+                  setDrawing({ ...areaStart.current, width: 0, height: 0 });
+                  event.currentTarget.setPointerCapture(event.pointerId);
+                  return;
+                }
                 if (pointMode) {
                   const rect = plane.current.getBoundingClientRect();
                   const x = (event.clientX - rect.left) / rect.width;
@@ -302,6 +397,17 @@ export default function ExamViewer({ report, modality, item }) {
                 };
               }}
               onPointerMove={(event) => {
+                if (areaStart.current) {
+                  const pos = imagePosition(event),
+                    start = areaStart.current;
+                  setDrawing({
+                    x: Math.min(pos.x, start.x),
+                    y: Math.min(pos.y, start.y),
+                    width: Math.abs(pos.x - start.x),
+                    height: Math.abs(pos.y - start.y),
+                  });
+                  return;
+                }
                 if (!drag.current) return;
                 const { x, y, origin } = drag.current;
                 if (canvasMode)
@@ -315,10 +421,32 @@ export default function ExamViewer({ report, modality, item }) {
                     y: origin.y + (event.clientY - y) / zoom,
                   });
               }}
-              onPointerUp={() => {
+              onPointerUp={(event) => {
+                if (areaStart.current) {
+                  const pos = imagePosition(event),
+                    start = areaStart.current;
+                  const region = {
+                    id: points.length + 1,
+                    kind: "area",
+                    x: Math.min(pos.x, start.x),
+                    y: Math.min(pos.y, start.y),
+                    width: Math.abs(pos.x - start.x),
+                    height: Math.abs(pos.y - start.y),
+                  };
+                  if (region.width > 0.015 && region.height > 0.015) {
+                    setPoints((p) => [...p, region]);
+                    setSelected(region);
+                    setChatOpen(true);
+                    setQuestion("");
+                  }
+                  areaStart.current = null;
+                  setDrawing(null);
+                }
                 drag.current = null;
               }}
               onPointerCancel={() => {
+                areaStart.current = null;
+                setDrawing(null);
                 drag.current = null;
               }}
             >
@@ -332,23 +460,59 @@ export default function ExamViewer({ report, modality, item }) {
               >
                 {points.map((point) => (
                   <button
-                    className="exam-user-point"
+                    className={
+                      point.kind === "area"
+                        ? "exam-user-area"
+                        : "exam-user-point"
+                    }
                     type="button"
                     key={point.id}
                     style={{
                       left: `${point.x * 100}%`,
                       top: `${point.y * 100}%`,
+                      ...(point.kind === "area"
+                        ? {
+                            width: `${point.width * 100}%`,
+                            height: `${point.height * 100}%`,
+                          }
+                        : {
+                            transform: `translate(-50%,-50%) scale(${1 / zoom})`,
+                          }),
                     }}
-                    aria-label={`Perguntar sobre ponto ${point.id}`}
+                    aria-label={`Perguntar sobre ${point.kind === "area" ? "área" : "ponto"} ${point.id}`}
+                    aria-pressed={selected?.id === point.id}
                     onPointerDown={(e) => e.stopPropagation()}
                     onClick={() => {
                       setSelected(point);
+                      setChatOpen(true);
                       setQuestion("");
                     }}
                   >
-                    {point.id}
+                    <span
+                      style={
+                        point.kind === "area"
+                          ? {
+                              transform: `scale(${1 / zoom})`,
+                              transformOrigin: "0 100%",
+                            }
+                          : undefined
+                      }
+                    >
+                      {point.id}
+                    </span>
                   </button>
                 ))}
+                {drawing && (
+                  <span
+                    className="exam-area-draft"
+                    style={{
+                      left: `${drawing.x * 100}%`,
+                      top: `${drawing.y * 100}%`,
+                      width: `${drawing.width * 100}%`,
+                      height: `${drawing.height * 100}%`,
+                    }}
+                  />
+                )}
                 <img
                   src={src}
                   alt={alt}
@@ -377,47 +541,21 @@ export default function ExamViewer({ report, modality, item }) {
                   ))}
               </div>
             </div>
-            {(selected || discussion.length > 0) && (
-              <aside
-                className="exam-point-chat"
-                aria-label="Conversa com Luna sobre pontos"
-              >
-                <h3>Luna · Pontos da imagem</h3>
-                <p className="point-chat-hint">
-                  Marcações manuais · Respostas demonstrativas sobre o laudo.
-                </p>
-                <div className="point-chat-log" role="log" aria-live="polite">
-                  {discussion.map((message, index) => (
-                    <div key={index}>
-                      <span>Ponto {message.point} · Você</span>
-                      <p className="point-question">{message.question}</p>
-                      <span>Luna</span>
-                      <p>{message.answer}</p>
-                    </div>
-                  ))}
-                </div>
-                {selected && (
-                  <form onSubmit={ask}>
-                    <label htmlFor="point-question">
-                      Sua pergunta · Ponto {selected.id}
-                    </label>
-                    <textarea
-                      id="point-question"
-                      autoFocus
-                      key={selected.id}
-                      value={question}
-                      onChange={(e) => setQuestion(e.target.value)}
-                      maxLength={2000}
-                      placeholder="O que você quer discutir neste ponto?"
-                      rows={3}
-                    />
-                    <button type="submit" disabled={!question.trim()}>
-                      <Send size={16} />
-                      Enviar para Luna
-                    </button>
-                  </form>
-                )}
-              </aside>
+            {chatOpen && (
+              <PointChat
+                selected={selected}
+                question={question}
+                onQuestion={setQuestion}
+                onSubmit={ask}
+                discussion={discussion}
+                typing={typing}
+                reportId={report?.report_id}
+                onClose={() => {
+                  setChatOpen(false);
+                  setPointMode(false);
+                  setAreaMode(false);
+                }}
+              />
             )}
           </div>
           <footer>
