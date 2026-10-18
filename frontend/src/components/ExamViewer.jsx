@@ -12,9 +12,22 @@ import {
 } from "lucide-react";
 
 import { caseChatReply } from "../lib/caseChat.js";
+import {
+  pathologyColor,
+  validLocalizationMarkers,
+} from "../lib/pathologyColors.js";
 import { authorizedRequest } from "../lib/session.js";
 
-export default function ExamViewer({ report, modality, item }) {
+export default function ExamViewer({
+  report,
+  modality,
+  item,
+  analysis,
+  activePathology,
+  focusPathology,
+  onSelectPathology,
+  onHoverPathology,
+}) {
   const [remoteSrc, setRemoteSrc] = useState("");
   const fileId = report?.image_file_id;
   useEffect(() => {
@@ -34,8 +47,10 @@ export default function ExamViewer({ report, modality, item }) {
       active = false;
     };
   }, [fileId]);
-  const src = remoteSrc || report?.image_url || "/images/chest-xray-demo.png";
-  const illustrative = !remoteSrc && !report?.image_url;
+  const src =
+    remoteSrc ||
+    (!fileId && (report?.image_url || "/images/chest-xray-demo.png"));
+  const illustrative = !fileId;
   const [pointMode, setPointMode] = useState(false);
   const [areaMode, setAreaMode] = useState(false);
   const [drawing, setDrawing] = useState(null);
@@ -103,6 +118,8 @@ export default function ExamViewer({ report, modality, item }) {
   const stage = useRef(null);
   const [ratio, setRatio] = useState(1);
   const [marks, setMarks] = useState(true);
+  const [showLocalization, setShowLocalization] = useState(true);
+  const [showHeatmap, setShowHeatmap] = useState(false);
   const dialog = useRef(null);
   const previousOverflow = useRef("");
   const drag = useRef(null);
@@ -120,9 +137,35 @@ export default function ExamViewer({ report, modality, item }) {
             a.y + a.height <= 1,
         )
       : [];
+  const localizations = illustrative ? [] : validLocalizationMarkers(analysis);
   useEffect(() => {
     setFailed(false);
   }, [src]);
+  useEffect(() => {
+    if (!focusPathology || illustrative || !src) return undefined;
+    const marker = localizations.find(
+      (localization) => localization.pathology === focusPathology,
+    );
+    if (!marker || !dialog.current) return undefined;
+    if (!dialog.current.open) {
+      dialog.current.showModal();
+      previousOverflow.current = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+    }
+    const frame = requestAnimationFrame(() => {
+      const currentStage = stage.current;
+      const currentPlane = plane.current;
+      if (!currentStage || !currentPlane) return;
+      const nextZoom = 1.35;
+      setZoom(nextZoom);
+      setOffset({ x: 0, y: 0 });
+      setPan({
+        x: currentPlane.clientWidth * (0.5 - marker.x) * nextZoom,
+        y: currentPlane.clientHeight * (0.5 - marker.y) * nextZoom,
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [focusPathology, illustrative, src]);
   useEffect(
     () => () => {
       document.body.style.overflow = previousOverflow.current;
@@ -184,7 +227,7 @@ export default function ExamViewer({ report, modality, item }) {
           ref={trigger}
           className="exam-preview"
           type="button"
-          disabled={failed}
+          disabled={failed || !src}
           aria-label="Abrir visualização ampliada da imagem"
           onClick={() => {
             reset();
@@ -193,8 +236,39 @@ export default function ExamViewer({ report, modality, item }) {
             document.body.style.overflow = "hidden";
           }}
         >
-          {!failed ? (
-            <img src={src} alt={alt} onError={() => setFailed(true)} />
+          {!failed && src ? (
+            <div className="exam-preview-image" style={{ aspectRatio: ratio }}>
+              <img
+                src={src}
+                alt={alt}
+                onLoad={(event) =>
+                  setRatio(
+                    event.currentTarget.naturalWidth /
+                      event.currentTarget.naturalHeight,
+                  )
+                }
+                onError={() => setFailed(true)}
+              />
+              {localizations.map((marker) => (
+                <span
+                  key={marker.pathology}
+                  className={`exam-preview-marker${activePathology === marker.pathology ? " is-active" : ""}`}
+                  style={{
+                    left: `${marker.x * 100}%`,
+                    top: `${marker.y * 100}%`,
+                    "--pathology-color": pathologyColor(marker.pathology),
+                  }}
+                  title={`${marker.pathology}: região estimada`}
+                  aria-hidden="true"
+                >
+                  <span className="exam-preview-marker-label">
+                    {marker.pathology.replaceAll("_", " ")}
+                  </span>
+                </span>
+              ))}
+            </div>
+          ) : !failed && !src ? (
+            <span className="exam-image-loading">Carregando radiografia…</span>
           ) : (
             <span className="exam-image-error">Imagem indisponível</span>
           )}
@@ -234,6 +308,7 @@ export default function ExamViewer({ report, modality, item }) {
         onClose={() => {
           document.body.style.overflow = previousOverflow.current;
           trigger.current?.focus();
+          onSelectPathology?.(null);
         }}
       >
         <div className="exam-dialog-shell">
@@ -326,6 +401,24 @@ export default function ExamViewer({ report, modality, item }) {
                 onClick={() => setMarks((v) => !v)}
               >
                 Marcações da IA
+              </button>
+            )}
+            {localizations.length > 0 && (
+              <button
+                type="button"
+                aria-pressed={showLocalization}
+                onClick={() => setShowLocalization((value) => !value)}
+              >
+                Pontos estimados
+              </button>
+            )}
+            {analysis?.heatmap && (
+              <button
+                type="button"
+                aria-pressed={showHeatmap}
+                onClick={() => setShowHeatmap((value) => !value)}
+              >
+                Heatmap
               </button>
             )}
           </div>
@@ -524,6 +617,14 @@ export default function ExamViewer({ report, modality, item }) {
                     )
                   }
                 />
+                {showHeatmap && analysis?.heatmap && (
+                  <img
+                    className="exam-localization-heatmap"
+                    src={analysis.heatmap}
+                    alt="Heatmap Grad-CAM estimado"
+                    draggable="false"
+                  />
+                )}
                 {marks &&
                   annotations.map((a, index) => (
                     <span
@@ -538,6 +639,48 @@ export default function ExamViewer({ report, modality, item }) {
                     >
                       <span>{a.label || `Achado ${index + 1}`}</span>
                     </span>
+                  ))}
+                {showLocalization &&
+                  localizations.map((marker) => (
+                    <button
+                      key={marker.pathology}
+                      type="button"
+                      className={`exam-ai-marker${activePathology === marker.pathology ? " is-active" : ""}`}
+                      style={{
+                        left: `${marker.x * 100}%`,
+                        top: `${marker.y * 100}%`,
+                        transform: `translate(-50%, -50%) scale(${(activePathology === marker.pathology ? 1.4 : 1) / zoom})`,
+                        "--pathology-color": pathologyColor(marker.pathology),
+                      }}
+                      title={`${marker.pathology} · escore ${(marker.score * 100).toFixed(1)}% · região estimada`}
+                      aria-label={`${marker.pathology}, escore do modelo ${(marker.score * 100).toFixed(1)}%, região estimada`}
+                      aria-pressed={activePathology === marker.pathology}
+                      onPointerDown={(event) => event.stopPropagation()}
+                      onMouseEnter={() => onHoverPathology?.(marker.pathology)}
+                      onMouseLeave={() => onHoverPathology?.(null)}
+                      onFocus={() => onHoverPathology?.(marker.pathology)}
+                      onBlur={() => onHoverPathology?.(null)}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onSelectPathology?.(
+                          focusPathology === marker.pathology
+                            ? null
+                            : marker.pathology,
+                        );
+                      }}
+                    >
+                      <span
+                        className={
+                          activePathology === marker.pathology ? "is-open" : ""
+                        }
+                        style={{
+                          transform: `translate(-50%, -100%) scale(${zoom})`,
+                        }}
+                      >
+                        {marker.pathology} · {(marker.score * 100).toFixed(1)}%
+                        · estimativa
+                      </span>
+                    </button>
                   ))}
               </div>
             </div>
@@ -567,7 +710,7 @@ export default function ExamViewer({ report, modality, item }) {
                   : "Posicionar imagem · Roda e arraste: mover imagem"}{" "}
               · C alterna o modo
             </span>
-            {!annotations.length && (
+            {!annotations.length && !localizations.length && (
               <span>
                 Não há marcações de imagem da IA disponíveis para este caso.
               </span>

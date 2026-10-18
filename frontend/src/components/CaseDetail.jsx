@@ -11,17 +11,21 @@ import {
   Eye,
   ClipboardCheck,
   Clock3,
+  LoaderCircle,
 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { acknowledge, registerAction } from "../api.js";
+import { authorizedRequest } from "../lib/session.js";
 import { formatOffset, statusLabel } from "../format.js";
 import { deadlinePill } from "../lib/deadlinePill.js";
 import { escalationPath } from "../lib/escalationPath.js";
 import { formatRemaining } from "../lib/formatRemaining.js";
 import { splitEvidence } from "../lib/splitEvidence.js";
+import { validLocalizationMarkers } from "../lib/pathologyColors.js";
 import { selectCase } from "../store/selectors.js";
 import { useStore } from "../store/useStore.js";
 import ExamViewer from "./ExamViewer.jsx";
+import PathologyScoreList from "./PathologyScoreList.jsx";
 import CaseChatModal from "./luna/CaseChatModal.jsx";
 import UrgencyBadge from "./UrgencyBadge.jsx";
 
@@ -45,14 +49,47 @@ export default function CaseDetail() {
   );
   const [error, setError] = useState("");
   const [reclassificationNotice, setReclassificationNotice] = useState(false);
+  const [reclassification, setReclassification] = useState(null);
+  const [reclassifying, setReclassifying] = useState(false);
+  const [reclassificationError, setReclassificationError] = useState("");
+  const [selectedPathology, setSelectedPathology] = useState(null);
+  const [hoveredPathology, setHoveredPathology] = useState(null);
   const [pending, setPending] = useState(false);
   const [actionOpen, setActionOpen] = useState(false);
   const [note, setNote] = useState("");
   const [closeCase, setCloseCase] = useState(true);
   const noteRef = useRef(null);
   const openActionRef = useRef(null);
+  const analysisFetch = useRef(0);
+  const reclassificationRequest = useRef(null);
   const status = detail?.case.status;
-  useEffect(() => setReclassificationNotice(false), [id]);
+  const reportId = detail?.case.report_id;
+  useEffect(() => {
+    reclassificationRequest.current?.abort();
+    reclassificationRequest.current = null;
+    setReclassifying(false);
+    setReclassificationNotice(false);
+    setReclassification(null);
+    setReclassificationError("");
+    setSelectedPathology(null);
+    setHoveredPathology(null);
+    if (!reportId) return undefined;
+    let active = true;
+    const requestId = ++analysisFetch.current;
+    authorizedRequest(`/reports/${encodeURIComponent(reportId)}/analysis`)
+      .then((saved) => {
+        if (active && requestId === analysisFetch.current)
+          setReclassification(saved);
+      })
+      .catch(() => {
+        if (active && requestId === analysisFetch.current)
+          setReclassification(null);
+      });
+    return () => {
+      active = false;
+      reclassificationRequest.current?.abort();
+    };
+  }, [id, reportId]);
 
   useEffect(() => {
     if (status !== "read") setActionOpen(false);
@@ -75,6 +112,7 @@ export default function CaseDetail() {
 
   const item = detail.case;
   const confidence = classificationConfidence(item);
+  const localizationMarkers = validLocalizationMarkers(reclassification);
   const reportText = detail.report?.text ?? item.text ?? "";
   const evidence = splitEvidence(reportText, item.evidence);
   const pill = deadlinePill(item);
@@ -92,8 +130,61 @@ export default function CaseDetail() {
     : item.status === "closed"
       ? "O caso já está fechado."
       : item.status === "action_taken"
-        ? "A ação já foi registrada."
-        : "Confirme a leitura antes de registrar a ação.";
+        ? "A aá§ão já foi registrada."
+        : "Confirme a leitura antes de registrar a aá§ão.";
+
+  async function reclassify() {
+    if (
+      reclassificationRequest.current ||
+      !reportId ||
+      !detail.report?.image_file_id
+    )
+      return;
+    const controller = new AbortController();
+    reclassificationRequest.current = controller;
+    analysisFetch.current += 1;
+    setReclassificationError("");
+    setReclassificationNotice(false);
+    setSelectedPathology(null);
+    setHoveredPathology(null);
+    setReclassification(null);
+    setReclassifying(true);
+    try {
+      const result = await authorizedRequest(
+        `/reports/${encodeURIComponent(reportId)}/reclassify`,
+        { method: "POST", timeoutMs: 120000, signal: controller.signal },
+      );
+      if (
+        reclassificationRequest.current !== controller ||
+        controller.signal.aborted
+      )
+        return;
+      if (
+        !result?.probabilities ||
+        !Object.values(result.probabilities).every(Number.isFinite)
+      ) {
+        throw new Error("O servidor retornou scores invá¡lidos.");
+      }
+      setReclassification(result);
+      setReclassificationNotice(true);
+    } catch (caught) {
+      if (
+        reclassificationRequest.current !== controller ||
+        controller.signal.aborted
+      )
+        return;
+      setReclassificationError(
+        caught instanceof Error
+          ? caught.message
+          : "Não foi possá­vel reclassificar a radiografia.",
+      );
+    } finally {
+      if (reclassificationRequest.current === controller) {
+        reclassificationRequest.current = null;
+        setReclassifying(false);
+      }
+    }
+  }
 
   async function run(action) {
     setError("");
@@ -102,7 +193,9 @@ export default function CaseDetail() {
       await action();
     } catch (caught) {
       setError(
-        caught instanceof Error ? caught.message : "A ação não foi registrada.",
+        caught instanceof Error
+          ? caught.message
+          : "A aá§ão não foi registrada.",
       );
     } finally {
       setPending(false);
@@ -119,7 +212,7 @@ export default function CaseDetail() {
   function submitAction(event) {
     event.preventDefault();
     if (!note.trim()) {
-      setError("Descreva a ação tomada.");
+      setError("Descreva a aá§ão tomada.");
       return;
     }
     run(async () => {
@@ -156,13 +249,13 @@ export default function CaseDetail() {
       </header>
       <section className="communication" aria-labelledby="communication-title">
         <div className="communication-head">
-          <h3 id="communication-title">Comunicação</h3>
+          <h3 id="communication-title">Comunicaá§ão</h3>
           <span className={`deadline-pill is-${pill.kind}`}>{pill.text}</span>
         </div>
         <ol className="escalation-path">
           {steps.map((step) => {
             const done =
-              step.state === "Já notificado" ||
+              step.state === "Já¡ notificado" ||
               step.state === "Leitura confirmada";
             const Icon = STEP_ICONS[step.level];
             return (
@@ -228,7 +321,7 @@ export default function CaseDetail() {
               }
             >
               {pending && canConfirm
-                ? "Confirmando…"
+                ? "ConfirmandoÃ¢â‚¬Â¦"
                 : canConfirm
                   ? "Confirmar leitura"
                   : "Leitura confirmada"}
@@ -241,7 +334,7 @@ export default function CaseDetail() {
                   <ClipboardCheck size={19} aria-hidden="true" />
                 </span>
                 <div>
-                  <h4>Conduta clínica</h4>
+                  <h4>Conduta clá­nica</h4>
                   <p className="hint">
                     {registerReason ||
                       "Descreva a conduta adotada para este caso."}
@@ -255,7 +348,7 @@ export default function CaseDetail() {
                 disabled={!canRegister || pending}
                 onClick={openAction}
               >
-                Registrar ação
+                Registrar aá§ão
               </button>
             </div>
           )}
@@ -266,7 +359,7 @@ export default function CaseDetail() {
               onKeyDown={onActionKeyDown}
             >
               <label>
-                Ação tomada
+                Aá§ão tomada
                 <textarea
                   ref={noteRef}
                   name="clinical-action"
@@ -286,7 +379,7 @@ export default function CaseDetail() {
                 Fechar caso
               </label>
               <button className="btn-primary" type="submit" disabled={pending}>
-                Registrar ação
+                Registrar aá§ão
               </button>
             </form>
           ) : null}
@@ -305,10 +398,10 @@ export default function CaseDetail() {
         </div>
         <div className="communication-history-head">
           <h3>
-            Histórico de comunicação{" "}
+            Histá³rico de comunicaá§ão{" "}
             <span className="count">{detail.events.length}</span>
           </h3>
-          <span>Tempo da demonstração</span>
+          <span>Tempo da demonstraá§ão</span>
         </div>
         <ol className="timeline communication-history">
           {detail.events.map((event, index) => (
@@ -319,7 +412,7 @@ export default function CaseDetail() {
               <div className="communication-event-copy">
                 <span>{event.label}</span>
                 {index === detail.events.length - 1 ? (
-                  <small>Última atualização</small>
+                  <small>Última atualizaá§ão</small>
                 ) : null}
               </div>
               <time dateTime={`PT${event.at}H`}>{formatOffset(event.at)}</time>
@@ -337,7 +430,7 @@ export default function CaseDetail() {
         <section className="report-document" aria-label="Documento do laudo">
           <header className="report-document-heading">
             <div>
-              <h3>Laudo radiológico</h3>
+              <h3>Laudo radiolá³gico</h3>
               <p>{item.modality}</p>
             </div>
             <span>{item.report_id}</span>
@@ -353,7 +446,7 @@ export default function CaseDetail() {
               </dd>
             </div>
             <div>
-              <dt>Médico solicitante</dt>
+              <dt>Má©dico solicitante</dt>
               <dd className="report-physician">
                 <PhysicianAvatar
                   name={
@@ -367,12 +460,12 @@ export default function CaseDetail() {
             </div>
             {detail.report?.source_clinic ? (
               <div>
-                <dt>Clínica de origem</dt>
+                <dt>Clá­nica de origem</dt>
                 <dd>{detail.report.source_clinic}</dd>
               </div>
             ) : null}
             <div className="report-luna-classification">
-              <dt>Classificação da Luna</dt>
+              <dt>Classificaá§ão da Luna</dt>
               <dd>
                 <span
                   className={`classification-confidence is-${confidence.tone}`}
@@ -386,18 +479,63 @@ export default function CaseDetail() {
                 <button
                   className="reclassify-button"
                   type="button"
-                  onClick={() => setReclassificationNotice(true)}
+                  disabled={reclassifying || !detail.report?.image_file_id}
+                  aria-busy={reclassifying}
+                  onClick={reclassify}
                 >
-                  Reclassificar
+                  {reclassifying ? (
+                    <>
+                      <LoaderCircle
+                        size={15}
+                        className="reclassify-spinner"
+                        aria-hidden="true"
+                      />
+                      Reclassificando radiografiaÃ¢â‚¬Â¦
+                    </>
+                  ) : detail.report?.image_file_id ? (
+                    "Reclassificar"
+                  ) : (
+                    "Radiografia não vinculada"
+                  )}
                 </button>
-                {item.confidence_is_example && (
-                  <small>Percentual simulado</small>
+                {!detail.report?.image_file_id && (
+                  <small>Este laudo não possui radiografia vinculada.</small>
                 )}
                 {reclassificationNotice && (
                   <small className="reclassification-notice" role="status">
-                    A reclassificação pela Luna ainda não está conectada. O
-                    resultado atual foi mantido.
+                    Reclassificaá§ão concluá­da e salva.
                   </small>
+                )}
+                {reclassificationError && (
+                  <small className="reclassification-error" role="alert">
+                    {reclassificationError}
+                  </small>
+                )}
+                {reclassification?.probabilities && (
+                  <div className="reclassification-scores" aria-live="polite">
+                    <strong>Saá­das atuais do TorchXRayVision</strong>
+                    <PathologyScoreList
+                      probabilities={reclassification.probabilities}
+                      markers={reclassification.markers}
+                      activePathology={hoveredPathology ?? selectedPathology}
+                      onSelectPathology={(label) =>
+                        setSelectedPathology((current) =>
+                          current === label ? null : label,
+                        )
+                      }
+                      onHoverPathology={setHoveredPathology}
+                    />{" "}
+                    <small>
+                      Escores exploratá³rios do modelo; não são probabilidades
+                      clá­nicas calibradas.
+                    </small>
+                    {reclassification.localization_status === "unavailable" && (
+                      <small>{reclassification.localization_note}</small>
+                    )}
+                  </div>
+                )}
+                {item.confidence_is_example && !reclassification && (
+                  <small>Percentual simulado</small>
                 )}
               </dd>
             </div>
@@ -416,15 +554,16 @@ export default function CaseDetail() {
           </p>
           {evidence.found ? null : (
             <p className="missing-evidence">
-              Trecho de evidência não localizado no laudo
+              Trecho de evidáªncia não localizado no laudo
             </p>
           )}
 
           <footer className="report-document-footer">
             <span>
-              O trecho destacado corresponde à evidência identificada pela Luna.
+              O trecho destacado corresponde à evidáªncia identificada pela
+              Luna.
             </span>
-            <strong>A IA sugere. O médico valida.</strong>
+            <strong>A IA sugere. O má©dico valida.</strong>
           </footer>
         </section>
         <ExamViewer
@@ -432,6 +571,11 @@ export default function CaseDetail() {
           item={item}
           report={detail.report}
           modality={item.modality}
+          analysis={reclassification}
+          activePathology={hoveredPathology ?? selectedPathology}
+          focusPathology={selectedPathology}
+          onSelectPathology={setSelectedPathology}
+          onHoverPathology={setHoveredPathology}
         />
       </div>
     </article>

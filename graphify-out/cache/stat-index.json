@@ -18,16 +18,16 @@
     }
   },
   "AGENTS.md": {
-    "size": 4413,
-    "mtime_ns": 1792295997427651300,
-    "indexed_at_ns": 1792296108974652700,
-    "word_count": 604
+    "size": 5276,
+    "mtime_ns": 1792302549419849300,
+    "indexed_at_ns": 1792303434067504700,
+    "word_count": 712
   },
   "README.md": {
-    "size": 2915,
-    "mtime_ns": 1792295997429155300,
-    "indexed_at_ns": 1792296108974652700,
-    "word_count": 390
+    "size": 3095,
+    "mtime_ns": 1792302534748428400,
+    "indexed_at_ns": 1792303434070477000,
+    "word_count": 415
   },
   "backend/.github/commit-message-instructions.md": {
     "size": 3448,
@@ -45,10 +45,10 @@
     }
   },
   "backend/README.md": {
-    "size": 2369,
-    "mtime_ns": 1792294962940098900,
-    "indexed_at_ns": 1792296109052080500,
-    "word_count": 324
+    "size": 2680,
+    "mtime_ns": 1792302534750428700,
+    "indexed_at_ns": 1792303434113413500,
+    "word_count": 361
   },
   "backend/app/__init__.py": {
     "size": 0,
@@ -69,21 +69,21 @@
     }
   },
   "backend/app/main.py": {
-    "size": 42326,
-    "mtime_ns": 1792296138130141100,
-    "indexed_at_ns": 1792296159642499800,
-    "word_count": 3361,
+    "size": 68883,
+    "mtime_ns": 1792303990466125900,
+    "indexed_at_ns": 1792304052657919500,
+    "word_count": 5293,
     "hashes": {
-      "backend/app/main.py": "9cec50ae8c03d79435ab0205f62b331b3de0ec02c17b1f58fd406667db8b0d37"
+      "backend/app/main.py": "7da5d5760b816fba7bb1bd6a9ac33d5c8fa2bccaa5fba3104074efa3f2714d7e"
     }
   },
   "backend/app/models.py": {
-    "size": 3551,
-    "mtime_ns": 1792294962940098900,
-    "indexed_at_ns": 1792296109791405200,
-    "word_count": 282,
+    "size": 5315,
+    "mtime_ns": 1792302534752031400,
+    "indexed_at_ns": 1792303435194107300,
+    "word_count": 402,
     "hashes": {
-      "backend/app/models.py": "046d9fa41302cac79995e063fedce75872df793d619cb9edc7c1fef64bc6409a"
+      "backend/app/models.py": "6608e597b9946b4ced07c4d28939eccddcab8cc749640c5d2a321b2e165a5499"
     }
   },
   "backend/requirements.txt": {
@@ -130,8 +130,8 @@
   },
   "backend/init.sql": {
     "size": 5438,
-    "mtime_ns": 1792295997431161000,
-    "indexed_at_ns": 1792296109824387200,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435230119100,
     "word_count": 655,
     "hashes": {
       "backend/init.sql": "4be11a6f163eec2d905d17f6107bd097d84f5fdb91e30cbb68d6827cb6b234aa"
@@ -147,12 +147,12 @@
     }
   },
   "backend/migrate.py": {
-    "size": 1591,
-    "mtime_ns": 1792294962949132500,
-    "indexed_at_ns": 1792296109824387200,
-    "word_count": 129,
+    "size": 1846,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435230490800,
+    "word_count": 161,
     "hashes": {
-      "backend/migrate.py": "ec50de0034615e1f915220ee2c1ff448ce3b26ff0fa7355f2030900a51e530cc"
+      "backend/migrate.py": "228bdc3eb94e65624afebd17382a697a164a2c30ae21738d0dfbf1e32ebc00f9"
     }
   },
   "backend/migrations/002_dataset_images.sql": {
@@ -201,12 +201,12 @@
     }
   },
   "backend/docs/API.md": {
-    "size": 1573,
-    "mtime_ns": 1792295997431161000,
-    "indexed_at_ns": 1792296109925302400,
-    "word_count": 199,
+    "size": 2516,
+    "mtime_ns": 1792302534753025500,
+    "indexed_at_ns": 1792303435423166000,
+    "word_count": 323,
     "hashes": {
-      "backend/docs/api.md": "0e594a4e1960da632e3ffe8e0355bfd1309e9cc7aef7e73f36ca38d9268efeed"
+      "backend/docs/api.md": "37bf2b2c828dd88268a3043b9aee969eccaee902f2e7196086b83b88e37da944"
     }
   },
   "backend/evaluate.py": {
@@ -279,12 +279,12 @@
     }
   },
   "frontend/README.md": {
-    "size": 2283,
-    "mtime_ns": 1792296099776159200,
-    "indexed_at_ns": 1792296109941965500,
-    "word_count": 318,
+    "size": 2388,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435462327000,
+    "word_count": 342,
     "hashes": {
-      "frontend/readme.md": "7e8ae960a6227d70c8eb4ef4cbde968eb18aecaddb631845dba18207c36363dd"
+      "frontend/readme.md": "f09e46c324352e07d67dad540c3172eaba149949b1c728e44b930749fbb70622"
     }
   },
   "frontend/docs/DESIGN.md": {
@@ -307,8 +307,8 @@
   },
   "frontend/docs/regras-de-design.md": {
     "size": 3983,
-    "mtime_ns": 1792294962965734900,
-    "indexed_at_ns": 1792296109959199200,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435475422200,
     "word_count": 536,
     "hashes": {
       "frontend/docs/regras-de-design.md": "44c276b971a44d65dff60413f54c75dad1e38bc8f5a1afa5fc615b29398c77d2"
@@ -322,8 +322,8 @@
   },
   "frontend/package.json": {
     "size": 1885,
-    "mtime_ns": 1792294962965734900,
-    "indexed_at_ns": 1792296109858019300,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435294331500,
     "word_count": 132,
     "hashes": {
       "frontend/package.json": "f560d547a33d46542547076286e42d1d2a552556a41b27ea24de7004b4342cb7"
@@ -342,39 +342,39 @@
     "word_count": 405
   },
   "frontend/src/App.jsx": {
-    "size": 17128,
-    "mtime_ns": 1792295997432161700,
-    "indexed_at_ns": 1792296109183453400,
-    "word_count": 1210
+    "size": 18943,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434462788400,
+    "word_count": 1338
   },
   "frontend/src/LandingPage.jsx": {
     "size": 23966,
-    "mtime_ns": 1792295053530198600,
-    "indexed_at_ns": 1792296109184464500,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434464528600,
     "word_count": 1702
   },
   "frontend/src/api.js": {
-    "size": 1309,
-    "mtime_ns": 1792294962969898600,
-    "indexed_at_ns": 1792296109184464500,
-    "word_count": 126
+    "size": 3370,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434467525800,
+    "word_count": 303
   },
   "frontend/src/components/CaseDetail.jsx": {
-    "size": 13518,
-    "mtime_ns": 1792294962975529100,
-    "indexed_at_ns": 1792296109205227400,
-    "word_count": 933
+    "size": 20692,
+    "mtime_ns": 1792305583294396600,
+    "indexed_at_ns": 1792305675552266100,
+    "word_count": 1356
   },
   "frontend/src/components/CaseList.jsx": {
-    "size": 13077,
-    "mtime_ns": 1792294962975529100,
-    "indexed_at_ns": 1792296109207675200,
-    "word_count": 1176
+    "size": 21553,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434488522300,
+    "word_count": 1413
   },
   "frontend/src/components/UrgencyBadge.jsx": {
     "size": 727,
-    "mtime_ns": 1792294962987516400,
-    "indexed_at_ns": 1792296109241376600,
+    "mtime_ns": 1792302534873333100,
+    "indexed_at_ns": 1792303434543751300,
     "word_count": 92
   },
   "frontend/src/dashboardApi.js": {
@@ -394,8 +394,8 @@
   },
   "frontend/src/data/extractions_cache.json": {
     "size": 2405,
-    "mtime_ns": 1792294962991460400,
-    "indexed_at_ns": 1792296109858019300,
+    "mtime_ns": 1792302534877330900,
+    "indexed_at_ns": 1792303435305336100,
     "word_count": 200,
     "hashes": {
       "frontend/src/data/extractions_cache.json": "11ee97ce3e176c3129888adbc23d06ca7bf1d06216f76514e996ef2e5a52984f"
@@ -403,8 +403,8 @@
   },
   "frontend/src/data/reports.json": {
     "size": 5221,
-    "mtime_ns": 1792294962992464800,
-    "indexed_at_ns": 1792296109858019300,
+    "mtime_ns": 1792302534878333000,
+    "indexed_at_ns": 1792303435308337400,
     "word_count": 532,
     "hashes": {
       "frontend/src/data/reports.json": "a674fbbd5a24d564fe86a5d0e5d9d4bfca9aa6dd6ef36f5344a4654be3bae323"
@@ -412,8 +412,8 @@
   },
   "frontend/src/engine/engine.js": {
     "size": 6347,
-    "mtime_ns": 1792294962993465600,
-    "indexed_at_ns": 1792296109262154300,
+    "mtime_ns": 1792302534878333000,
+    "indexed_at_ns": 1792303434569529000,
     "word_count": 653
   },
   "frontend/src/engine/engine.test.js": {
@@ -430,8 +430,8 @@
   },
   "frontend/src/main.jsx": {
     "size": 1347,
-    "mtime_ns": 1792294963010090500,
-    "indexed_at_ns": 1792296109330561300,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434675604500,
     "word_count": 114
   },
   "frontend/src/public/logo/favicon-logo.svg": {
@@ -447,15 +447,15 @@
     "word_count": 26
   },
   "frontend/src/store/store.js": {
-    "size": 5468,
-    "mtime_ns": 1792294963031170300,
-    "indexed_at_ns": 1792296109341349700,
-    "word_count": 547
+    "size": 6271,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434688174500,
+    "word_count": 622
   },
   "frontend/src/store/store.test.js": {
     "size": 6668,
-    "mtime_ns": 1792294963031170300,
-    "indexed_at_ns": 1792296109341349700,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434689679100,
     "word_count": 654
   },
   "frontend/src/store/useStore.js": {
@@ -471,15 +471,15 @@
     "word_count": 235
   },
   "frontend/vite.config.js": {
-    "size": 452,
-    "mtime_ns": 1792294963031170300,
-    "indexed_at_ns": 1792296109361768700,
-    "word_count": 43
+    "size": 693,
+    "mtime_ns": 1792302534905219900,
+    "indexed_at_ns": 1792303434697051000,
+    "word_count": 67
   },
   "package.json": {
     "size": 765,
-    "mtime_ns": 1792294963090849500,
-    "indexed_at_ns": 1792296109874709600,
+    "mtime_ns": 1792302534930853200,
+    "indexed_at_ns": 1792303435336785400,
     "word_count": 67,
     "hashes": {
       "package.json": "d90bc856d5dc2a6cdf3c195e7fa2bd8285de395fcbd4b600101ecc23ff9944ac"
@@ -492,39 +492,39 @@
     "word_count": 354
   },
   "backend/app/report_analysis.py": {
-    "size": 8715,
-    "mtime_ns": 1792294962940098900,
-    "indexed_at_ns": 1792296109791405200,
-    "word_count": 765,
+    "size": 15101,
+    "mtime_ns": 1792305246189603800,
+    "indexed_at_ns": 1792305676288762100,
+    "word_count": 1288,
     "hashes": {
-      "backend/app/report_analysis.py": "f987e6209d0143884355004f79a3d4703ebd55d4e56c4c1bfe77dc7695741adb"
+      "backend/app/report_analysis.py": "c952d601eed09b4ba8f33f5cc0ae2091ac32ca6568a29fcc005aac79b265faf5"
     }
   },
   "backend/docs/REPORT_ANALYSIS.md": {
-    "size": 4970,
-    "mtime_ns": 1792294962946816200,
-    "indexed_at_ns": 1792296109925302400,
-    "word_count": 579,
+    "size": 5290,
+    "mtime_ns": 1792302534754028000,
+    "indexed_at_ns": 1792303435427165800,
+    "word_count": 606,
     "hashes": {
-      "backend/docs/report_analysis.md": "7cb95b7335447a0140fdc6033f6eabcb3fc985b425c96675adeec409d6e5a73e"
+      "backend/docs/report_analysis.md": "f57347a7ac8bde7ef9787597cf85c76cc43382ef24142f4a29340ec4a36c6dec"
     }
   },
   "backend/migrations/003_report_analyses.sql": {
-    "size": 757,
-    "mtime_ns": 1792294962949132500,
-    "indexed_at_ns": 1792296109824387200,
-    "word_count": 83,
+    "size": 484,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435247791800,
+    "word_count": 62,
     "hashes": {
-      "backend/migrations/003_report_analyses.sql": "2980e16a70ef65f934a1ed97d55e32b62742e4b5fe743af327cca4af2fbd61e0"
+      "backend/migrations/003_report_analyses.sql": "343acf3dff2d5197c9a90a5a94da841ea0f298c36faba04225c94792701ba3ad"
     }
   },
   "backend/tests/test_report_analysis.py": {
-    "size": 4335,
-    "mtime_ns": 1792294962949132500,
-    "indexed_at_ns": 1792296109841347000,
-    "word_count": 324,
+    "size": 6610,
+    "mtime_ns": 1792305247088750600,
+    "indexed_at_ns": 1792305676384954300,
+    "word_count": 482,
     "hashes": {
-      "backend/tests/test_report_analysis.py": "3dd0ef4776c35e7f319f9f78507d4a73b61110b5f968950514666f6b68f71314"
+      "backend/tests/test_report_analysis.py": "a8f0344b3d0f183c74cdbeec09af0f7c34843c4a42966b2f08b5348289ab45d7"
     }
   },
   "artifacts/ui/cadastro-1024.png": {
@@ -684,10 +684,10 @@
     "word_count": 445
   },
   "frontend/src/components/Login.jsx": {
-    "size": 15052,
-    "mtime_ns": 1792295053531200900,
-    "indexed_at_ns": 1792296109224438600,
-    "word_count": 981
+    "size": 18916,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434510924000,
+    "word_count": 1190
   },
   "frontend/src/components/Missed.jsx": {
     "size": 1970,
@@ -702,10 +702,10 @@
     "word_count": 374
   },
   "frontend/src/components/ProfileMenu.jsx": {
-    "size": 4175,
-    "mtime_ns": 1792294962985511100,
-    "indexed_at_ns": 1792296109230628100,
-    "word_count": 330
+    "size": 4165,
+    "mtime_ns": 1792302534870654500,
+    "indexed_at_ns": 1792303434525864000,
+    "word_count": 329
   },
   "frontend/src/components/Register.jsx": {
     "size": 114,
@@ -714,10 +714,10 @@
     "word_count": 14
   },
   "frontend/src/components/Settings.jsx": {
-    "size": 5239,
-    "mtime_ns": 1792294962987516400,
-    "indexed_at_ns": 1792296109240371300,
-    "word_count": 376
+    "size": 8136,
+    "mtime_ns": 1792302534873333100,
+    "indexed_at_ns": 1792303434541159900,
+    "word_count": 559
   },
   "frontend/src/fixtures/evaluation.json": {
     "size": 352,
@@ -739,8 +739,8 @@
   },
   "frontend/src/fixtures/reports.json": {
     "size": 5221,
-    "mtime_ns": 1792294962994464700,
-    "indexed_at_ns": 1792296109874709600,
+    "mtime_ns": 1792302534879332800,
+    "indexed_at_ns": 1792303435317954900,
     "word_count": 532,
     "hashes": {
       "frontend/src/fixtures/reports.json": "51eebb093885305353078c0545cd44895aa100d76ecc5d94a2a26abd62d7fb08"
@@ -789,16 +789,16 @@
     "word_count": 61
   },
   "frontend/src/lib/session.js": {
-    "size": 6370,
-    "mtime_ns": 1792294963007080800,
-    "indexed_at_ns": 1792296109307950800,
-    "word_count": 697
+    "size": 10833,
+    "mtime_ns": 1792303922762328100,
+    "indexed_at_ns": 1792303972969248100,
+    "word_count": 1167
   },
   "frontend/src/lib/session.test.js": {
-    "size": 7122,
-    "mtime_ns": 1792294963007080800,
-    "indexed_at_ns": 1792296109307950800,
-    "word_count": 641
+    "size": 7407,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434656710200,
+    "word_count": 659
   },
   "frontend/src/lib/splitEvidence.js": {
     "size": 591,
@@ -814,14 +814,14 @@
   },
   "frontend/src/store/selectors.js": {
     "size": 5752,
-    "mtime_ns": 1792294963031170300,
-    "indexed_at_ns": 1792296109341349700,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434683664100,
     "word_count": 622
   },
   "frontend/src/store/selectors.test.js": {
     "size": 10760,
-    "mtime_ns": 1792294963031170300,
-    "indexed_at_ns": 1792296109341349700,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434686174900,
     "word_count": 1045
   },
   "frontend/src/useTitleAnimation.js": {
@@ -832,8 +832,8 @@
   },
   "scripts/check-data.js": {
     "size": 12618,
-    "mtime_ns": 1792294963097074400,
-    "indexed_at_ns": 1792296109375412100,
+    "mtime_ns": 1792302534930853200,
+    "indexed_at_ns": 1792303434716988800,
     "word_count": 1215
   },
   "scripts/evaluate.js": {
@@ -879,19 +879,19 @@
     "word_count": 380
   },
   "backend/tests/test_report_endpoint.py": {
-    "size": 2515,
-    "mtime_ns": 1792294962949132500,
-    "indexed_at_ns": 1792296109853666100,
-    "word_count": 188,
+    "size": 5960,
+    "mtime_ns": 1792303587042449400,
+    "indexed_at_ns": 1792303973683274600,
+    "word_count": 375,
     "hashes": {
-      "backend/tests/test_report_endpoint.py": "20e4f8b9f1f58cb073da33881a219701710e87d26da90b75a2e5fa270f0ebba3"
+      "backend/tests/test_report_endpoint.py": "7dcc5eb40fece67013ff0cecb932da4836a43d37b673340ba0120e65d9bb4ff7"
     }
   },
   "frontend/src/components/RadiographClassifier.jsx": {
-    "size": 4374,
-    "mtime_ns": 1792296096314079700,
-    "indexed_at_ns": 1792296109232629400,
-    "word_count": 377
+    "size": 6561,
+    "mtime_ns": 1792305583204822700,
+    "indexed_at_ns": 1792305675582855400,
+    "word_count": 496
   },
   ".codex/skills/clinical-decision-support/SKILL.md": {
     "size": 14440,
@@ -966,12 +966,12 @@
     }
   },
   ".codex/skills/clinical-decision-support/references/README.md": {
-    "size": 3324,
-    "mtime_ns": 1792294962884917500,
-    "indexed_at_ns": 1792296109887769000,
-    "word_count": 372,
+    "size": 4093,
+    "mtime_ns": 1792302534745431600,
+    "indexed_at_ns": 1792303435347580700,
+    "word_count": 376,
     "hashes": {
-      ".codex/skills/clinical-decision-support/references/readme.md": "2854956c95d9e1efb21349d7a32f47fedf8215183484984b3e8c5c292382a5ba"
+      ".codex/skills/clinical-decision-support/references/readme.md": "b43f25faa2af36f17cada88e337facd4c0f99976421b39ade3069e837f493270"
     }
   },
   ".codex/skills/clinical-decision-support/references/cohort_evaluation.md": {
@@ -1227,12 +1227,12 @@
     }
   },
   "backend/tests/test_classifier_torchxrayvision.py": {
-    "size": 2714,
-    "mtime_ns": 1792296069113244200,
-    "indexed_at_ns": 1792296109841347000,
-    "word_count": 200,
+    "size": 5003,
+    "mtime_ns": 1792302549421563400,
+    "indexed_at_ns": 1792303435274485800,
+    "word_count": 345,
     "hashes": {
-      "backend/tests/test_classifier_torchxrayvision.py": "e8da52d67f635f53d4f1649f77a56e48228851164f276c85afaba8c095b5c5ec"
+      "backend/tests/test_classifier_torchxrayvision.py": "443df8fb8a01aae66ddcd1f1e20ef0acf3331253829a68e5dcdcab7ff20e9573"
     }
   },
   "docs/classification-audit.md": {
@@ -1254,19 +1254,19 @@
     }
   },
   "backend/tests/test_auth.py": {
-    "size": 4364,
-    "mtime_ns": 1792294962949132500,
-    "indexed_at_ns": 1792296109841347000,
-    "word_count": 246,
+    "size": 11926,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435268485700,
+    "word_count": 599,
     "hashes": {
-      "backend/tests/test_auth.py": "c72d839b3af886cd5f52825b8682f71001daeb6ee3d5a111216b6c134b5ddf3e"
+      "backend/tests/test_auth.py": "56f19d17edcdafd4ef0743570b4369ae284700ed92a677b6ae17316456af8993"
     }
   },
   "frontend/src/components/DashboardShell.jsx": {
-    "size": 10680,
-    "mtime_ns": 1792294962981872900,
-    "indexed_at_ns": 1792296109208077800,
-    "word_count": 844
+    "size": 12448,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434493032400,
+    "word_count": 984
   },
   "frontend/src/components/FaqItem.jsx": {
     "size": 2288,
@@ -1275,10 +1275,10 @@
     "word_count": 209
   },
   "frontend/src/data/preview.js": {
-    "size": 337,
-    "mtime_ns": 1792294962992464800,
-    "indexed_at_ns": 1792296109258156100,
-    "word_count": 46
+    "size": 67,
+    "mtime_ns": 1792302534877330900,
+    "indexed_at_ns": 1792303434565531200,
+    "word_count": 12
   },
   "frontend/src/useScrollReveal.js": {
     "size": 2387,
@@ -1296,12 +1296,12 @@
     }
   },
   "ml/nih_download.py": {
-    "size": 7528,
-    "mtime_ns": 1792294963090849500,
-    "indexed_at_ns": 1792296109874709600,
+    "size": 7526,
+    "mtime_ns": 1792302534930853200,
+    "indexed_at_ns": 1792303435331287300,
     "word_count": 699,
     "hashes": {
-      "ml/nih_download.py": "ae4417cd434d5758de97ecd677743e713b1844612bd464cbd013edc64f6d441a"
+      "ml/nih_download.py": "93333d93f0783cc6539b3e3bfa710ea7dd2d7bb8480654f78299861cc413378c"
     }
   },
   "run_full_training.ps1": {
@@ -1314,45 +1314,45 @@
     }
   },
   "backend/migrations/004_dataset_image_api.sql": {
-    "size": 751,
-    "mtime_ns": 1792295754844724700,
-    "indexed_at_ns": 1792296109835522300,
+    "size": 768,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435251789300,
     "word_count": 88,
     "hashes": {
-      "backend/migrations/004_dataset_image_api.sql": "30af1048cda2c540ebd2565635dbfd35fc14334ee1f736a57f2cc636a4820466"
+      "backend/migrations/004_dataset_image_api.sql": "f27111c6c1c5474f5d826b4673f9a52cfe0eee21fd166eb3cce9c75c0367a7fb"
     }
   },
   "backend/tests/test_dataset_image_api.py": {
-    "size": 4650,
-    "mtime_ns": 1792296179752189600,
-    "indexed_at_ns": 1792296201775370900,
-    "word_count": 267,
+    "size": 5086,
+    "mtime_ns": 1792303261088316200,
+    "indexed_at_ns": 1792303435279407000,
+    "word_count": 284,
     "hashes": {
-      "backend/tests/test_dataset_image_api.py": "cb918dd7d7c4e1081340c1f505bf2640d65838abfc0f397504b29e335608ad48"
+      "backend/tests/test_dataset_image_api.py": "a0c0d11942d64a61d9e35513c09c386758747bb5a20afef62f84d9ef6eba92a1"
     }
   },
   "brightline-design.md": {
     "size": 9323,
-    "mtime_ns": 1792294962949132500,
-    "indexed_at_ns": 1792296109934548500,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435430677000,
     "word_count": 1372,
     "hashes": {
       "brightline-design.md": "8e5848bd4b27b4923838933fc29dff670f2e846eb2ea57bd9a5f03a7c4d94857"
     }
   },
   "docs/DATABASE_API.md": {
-    "size": 7104,
-    "mtime_ns": 1792295956552095900,
-    "indexed_at_ns": 1792296109936553900,
-    "word_count": 980,
+    "size": 10360,
+    "mtime_ns": 1792303524777237300,
+    "indexed_at_ns": 1792303973835214700,
+    "word_count": 1331,
     "hashes": {
-      "docs/database_api.md": "1f41102100f4c80d9d99263f2ce73b9e8de399908018b1c91abad717fb4fe9eb"
+      "docs/database_api.md": "6dc40f110c0d988ab4f0162529e96d9d690b3de275214db71c7bce14aee5575f"
     }
   },
   "docs/report-image.md": {
     "size": 514,
-    "mtime_ns": 1792294962949132500,
-    "indexed_at_ns": 1792296109941965500,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435458742400,
     "word_count": 47,
     "hashes": {
       "docs/report-image.md": "4d479705b4534bdf87a1267c9036402f036480dd5421abbcd1d95ecee920dd30"
@@ -1360,74 +1360,74 @@
   },
   "frontend/public/images/chest-xray-demo.png": {
     "size": 452225,
-    "mtime_ns": 1792294962969898600,
-    "indexed_at_ns": 1792296109167585100,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303434247910100,
     "word_count": 16332
   },
   "frontend/src/assets/luna.png": {
     "size": 530947,
-    "mtime_ns": 1792294962975529100,
-    "indexed_at_ns": 1792296109189971500,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434469525700,
     "word_count": 18637
   },
   "frontend/src/assets/luna.svg": {
     "size": 424779,
-    "mtime_ns": 1792294962975529100,
-    "indexed_at_ns": 1792296109201227400,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434481524100,
     "word_count": 95
   },
   "frontend/src/components/ClinicalQueue.jsx": {
-    "size": 7312,
-    "mtime_ns": 1792294962980806500,
-    "indexed_at_ns": 1792296109208077800,
-    "word_count": 412
+    "size": 6226,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434491032500,
+    "word_count": 333
   },
   "frontend/src/components/ExamViewer.jsx": {
-    "size": 15255,
-    "mtime_ns": 1792294962983869600,
-    "indexed_at_ns": 1792296109208077800,
-    "word_count": 1186
+    "size": 25451,
+    "mtime_ns": 1792305408049392800,
+    "indexed_at_ns": 1792305675564264900,
+    "word_count": 1906
   },
   "frontend/src/components/RadiographLibrary.jsx": {
-    "size": 6379,
-    "mtime_ns": 1792295924803845200,
-    "indexed_at_ns": 1792296109234710100,
-    "word_count": 501
+    "size": 9129,
+    "mtime_ns": 1792305583236253300,
+    "indexed_at_ns": 1792305675592700500,
+    "word_count": 623
   },
   "frontend/src/components/SectionTransition.jsx": {
     "size": 2655,
-    "mtime_ns": 1792294962987516400,
-    "indexed_at_ns": 1792296109237747800,
+    "mtime_ns": 1792302534872333500,
+    "indexed_at_ns": 1792303434538657200,
     "word_count": 258
   },
   "frontend/src/components/luna/CaseChat.jsx": {
     "size": 4218,
-    "mtime_ns": 1792294962988515500,
-    "indexed_at_ns": 1792296109243375900,
+    "mtime_ns": 1792302534874331300,
+    "indexed_at_ns": 1792303434545751400,
     "word_count": 342
   },
   "frontend/src/components/luna/CaseChatModal.jsx": {
     "size": 1861,
-    "mtime_ns": 1792294962988515500,
-    "indexed_at_ns": 1792296109245408900,
+    "mtime_ns": 1792302534874331300,
+    "indexed_at_ns": 1792303434548017700,
     "word_count": 147
   },
   "frontend/src/components/luna/LunaPanel.jsx": {
-    "size": 393,
-    "mtime_ns": 1792294962989516100,
-    "indexed_at_ns": 1792296109247409500,
-    "word_count": 37
+    "size": 4260,
+    "mtime_ns": 1792302534875333100,
+    "indexed_at_ns": 1792303434550017900,
+    "word_count": 352
   },
   "frontend/src/components/luna/LunaWidget.jsx": {
-    "size": 3633,
-    "mtime_ns": 1792294962989516100,
-    "indexed_at_ns": 1792296109249578900,
-    "word_count": 325
+    "size": 3679,
+    "mtime_ns": 1792302534875333100,
+    "indexed_at_ns": 1792303434552530100,
+    "word_count": 333
   },
   "frontend/src/data/contacts.json": {
     "size": 223,
-    "mtime_ns": 1792294962991020200,
-    "indexed_at_ns": 1792296109858019300,
+    "mtime_ns": 1792302534876331100,
+    "indexed_at_ns": 1792303435299332100,
     "word_count": 37,
     "hashes": {
       "frontend/src/data/contacts.json": "a6b91b3b9d32460094f7502f519ead8ca1cde9157d58ca465d0f0d864dd52b8d"
@@ -1435,140 +1435,425 @@
   },
   "frontend/src/lib/caseChat.js": {
     "size": 2687,
-    "mtime_ns": 1792294962995568800,
-    "indexed_at_ns": 1792296109273154500,
+    "mtime_ns": 1792302534879332800,
+    "indexed_at_ns": 1792303434581642000,
     "word_count": 305
   },
   "frontend/src/lib/caseChat.test.js": {
     "size": 1118,
-    "mtime_ns": 1792294962996569500,
-    "indexed_at_ns": 1792296109274666600,
+    "mtime_ns": 1792302534879332800,
+    "indexed_at_ns": 1792303434583640000,
     "word_count": 127
   },
   "frontend/src/lib/classificationConfidence.js": {
     "size": 804,
-    "mtime_ns": 1792294962996569500,
-    "indexed_at_ns": 1792296109274666600,
+    "mtime_ns": 1792302534879332800,
+    "indexed_at_ns": 1792303434585639500,
     "word_count": 101
   },
   "frontend/src/lib/classificationConfidence.test.js": {
     "size": 1083,
-    "mtime_ns": 1792294962997570900,
-    "indexed_at_ns": 1792296109274666600,
+    "mtime_ns": 1792302534880835800,
+    "indexed_at_ns": 1792303434588145100,
     "word_count": 104
   },
   "frontend/src/lib/deadlinePill.js": {
     "size": 349,
-    "mtime_ns": 1792294962998571300,
-    "indexed_at_ns": 1792296109274666600,
+    "mtime_ns": 1792302534880835800,
+    "indexed_at_ns": 1792303434590152500,
     "word_count": 47
   },
   "frontend/src/lib/deadlinePill.test.js": {
     "size": 1326,
-    "mtime_ns": 1792294962999570500,
-    "indexed_at_ns": 1792296109274666600,
+    "mtime_ns": 1792302534881842900,
+    "indexed_at_ns": 1792303434593150500,
     "word_count": 108
   },
   "frontend/src/lib/escalationPath.js": {
     "size": 1020,
-    "mtime_ns": 1792294962999570500,
-    "indexed_at_ns": 1792296109274666600,
+    "mtime_ns": 1792302534881842900,
+    "indexed_at_ns": 1792303434595150300,
     "word_count": 133
   },
   "frontend/src/lib/escalationPath.test.js": {
     "size": 2144,
-    "mtime_ns": 1792294963000569100,
-    "indexed_at_ns": 1792296109274666600,
+    "mtime_ns": 1792302534881842900,
+    "indexed_at_ns": 1792303434597849000,
     "word_count": 244
   },
   "frontend/src/lib/groupByUrgency.js": {
     "size": 647,
-    "mtime_ns": 1792294963003080600,
-    "indexed_at_ns": 1792296109296262500,
+    "mtime_ns": 1792302534883843300,
+    "indexed_at_ns": 1792303434611848500,
     "word_count": 75
   },
   "frontend/src/lib/groupByUrgency.test.js": {
     "size": 1262,
-    "mtime_ns": 1792294963003080600,
-    "indexed_at_ns": 1792296109297261600,
+    "mtime_ns": 1792302534883843300,
+    "indexed_at_ns": 1792303434613858400,
     "word_count": 120
   },
   "frontend/src/lib/luna.js": {
     "size": 213,
-    "mtime_ns": 1792294963004085100,
-    "indexed_at_ns": 1792296109299260300,
+    "mtime_ns": 1792302534884841300,
+    "indexed_at_ns": 1792303434615854100,
     "word_count": 23
   },
   "frontend/src/lib/luna.test.js": {
     "size": 498,
-    "mtime_ns": 1792294963004085100,
-    "indexed_at_ns": 1792296109300799400,
+    "mtime_ns": 1792302534884841300,
+    "indexed_at_ns": 1792303434617853500,
     "word_count": 35
   },
   "frontend/src/lib/patientLabel.js": {
     "size": 1123,
-    "mtime_ns": 1792294963005084000,
-    "indexed_at_ns": 1792296109306838800,
+    "mtime_ns": 1792302534888839100,
+    "indexed_at_ns": 1792303434646203800,
     "word_count": 141
   },
   "frontend/src/lib/patientLabel.test.js": {
     "size": 1172,
-    "mtime_ns": 1792294963006082500,
-    "indexed_at_ns": 1792296109307950800,
+    "mtime_ns": 1792302534888839100,
+    "indexed_at_ns": 1792303434649199800,
     "word_count": 148
   },
   "frontend/src/lib/sidebarItems.js": {
-    "size": 1842,
-    "mtime_ns": 1792294963008090000,
-    "indexed_at_ns": 1792296109307950800,
-    "word_count": 196
+    "size": 1520,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434658711100,
+    "word_count": 148
   },
   "frontend/src/lib/sidebarItems.test.js": {
-    "size": 2911,
-    "mtime_ns": 1792294963008090000,
-    "indexed_at_ns": 1792296109307950800,
-    "word_count": 226
+    "size": 2150,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434661711900,
+    "word_count": 186
   },
   "frontend/src/lib/sidebarPref.js": {
     "size": 822,
-    "mtime_ns": 1792294963009085100,
-    "indexed_at_ns": 1792296109307950800,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434663453900,
     "word_count": 95
   },
   "frontend/src/lib/sidebarPref.test.js": {
     "size": 2191,
-    "mtime_ns": 1792294963009085100,
-    "indexed_at_ns": 1792296109307950800,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434666558300,
     "word_count": 224
   },
   "frontend/src/lib/viewState.js": {
     "size": 930,
-    "mtime_ns": 1792294963010090500,
-    "indexed_at_ns": 1792296109327559700,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434672114700,
     "word_count": 104
   },
   "frontend/src/lib/viewState.test.js": {
     "size": 1681,
-    "mtime_ns": 1792294963010090500,
-    "indexed_at_ns": 1792296109329558100,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434673514400,
     "word_count": 151
   },
   "frontend/src/radiographApi.js": {
-    "size": 2562,
-    "mtime_ns": 1792295920373115300,
-    "indexed_at_ns": 1792296109341349700,
-    "word_count": 244
+    "size": 2686,
+    "mtime_ns": 1792302534894195800,
+    "indexed_at_ns": 1792303434681664500,
+    "word_count": 246
   },
   "scripts/check-colors.js": {
     "size": 1244,
-    "mtime_ns": 1792294963097074400,
-    "indexed_at_ns": 1792296109374329300,
+    "mtime_ns": 1792302534930853200,
+    "indexed_at_ns": 1792303434714478100,
     "word_count": 130
   },
   "scripts/run-tests.js": {
-    "size": 1679,
-    "mtime_ns": 1792294963101331700,
-    "indexed_at_ns": 1792296109385341400,
-    "word_count": 185
+    "size": 1722,
+    "mtime_ns": 1792302534930853200,
+    "indexed_at_ns": 1792303434723648600,
+    "word_count": 187
+  },
+  "backend/app/institutions.py": {
+    "size": 1021,
+    "mtime_ns": 1792302534751019800,
+    "indexed_at_ns": 1792303435187596800,
+    "word_count": 98,
+    "hashes": {
+      "backend/app/institutions.py": "5f72458febd25c0ba3cc60fdaa21b0354e928bdc0f1e289320088b216a6fc649"
+    }
+  },
+  "backend/migrations/003_auth_reconcile.sql": {
+    "size": 363,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435244329300,
+    "word_count": 58,
+    "hashes": {
+      "backend/migrations/003_auth_reconcile.sql": "b7e057a87b16c2b05a9f8f253ddbd2f967554a7a7a018ab7ef80fbceac69a950"
+    }
+  },
+  "backend/migrations/004_institutions.sql": {
+    "size": 10495,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435255300100,
+    "word_count": 992,
+    "hashes": {
+      "backend/migrations/004_institutions.sql": "3942c95523510c84bef906eb5fee733d31cb1b70108de396c02c8aada807e120"
+    }
+  },
+  "backend/migrations/005_institutional_dataset_analyses.sql": {
+    "size": 2947,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435258518500,
+    "word_count": 253,
+    "hashes": {
+      "backend/migrations/005_institutional_dataset_analyses.sql": "0c6d13fec13749b1eaef612bbf3eea5f45e4bcd5f629a2b9b68c3a67bc54982b"
+    }
+  },
+  "docs/RADIOGRAPH_LOCALIZATION.md": {
+    "size": 6915,
+    "mtime_ns": 1792305598217530300,
+    "indexed_at_ns": 1792305676572367300,
+    "word_count": 972,
+    "hashes": {
+      "docs/radiograph_localization.md": "c111121aec93af82f242150b8767acc96524eca2b2d09423434551effe00c5b5"
+    }
+  },
+  "docs/physician-portraits.md": {
+    "size": 1022,
+    "mtime_ns": 1792302534754695000,
+    "indexed_at_ns": 1792303435454772000,
+    "word_count": 139,
+    "hashes": {
+      "docs/physician-portraits.md": "075522d7fe63ddf76e1da0e43fcfce201e91cae1c553afe72d9cdab2feb168a3"
+    }
+  },
+  "frontend/public/images/physicians/ana-luz.png": {
+    "size": 2015268,
+    "mtime_ns": 1792302534782905100,
+    "indexed_at_ns": 1792303434258451400,
+    "word_count": 79065
+  },
+  "frontend/public/images/physicians/caio-ribeiro.png": {
+    "size": 2053949,
+    "mtime_ns": 1792302534792907100,
+    "indexed_at_ns": 1792303434294965800,
+    "word_count": 85947
+  },
+  "frontend/public/images/physicians/helena-costa.png": {
+    "size": 2109686,
+    "mtime_ns": 1792302534805462700,
+    "indexed_at_ns": 1792303434333167600,
+    "word_count": 80174
+  },
+  "frontend/public/images/physicians/marina-lopes.png": {
+    "size": 2246302,
+    "mtime_ns": 1792302534831299200,
+    "indexed_at_ns": 1792303434370321400,
+    "word_count": 81411
+  },
+  "frontend/public/images/physicians/paulo-mendes.png": {
+    "size": 2085867,
+    "mtime_ns": 1792302534852288200,
+    "indexed_at_ns": 1792303434411970900,
+    "word_count": 88176
+  },
+  "frontend/server/lunaHandler.js": {
+    "size": 3862,
+    "mtime_ns": 1792302534853257300,
+    "indexed_at_ns": 1792303434453374500,
+    "word_count": 374
+  },
+  "frontend/server/lunaHandler.test.js": {
+    "size": 7726,
+    "mtime_ns": 1792302534854253600,
+    "indexed_at_ns": 1792303434455480700,
+    "word_count": 801
+  },
+  "frontend/server/lunaVitePlugin.js": {
+    "size": 2097,
+    "mtime_ns": 1792302534854994100,
+    "indexed_at_ns": 1792303434457627500,
+    "word_count": 193
+  },
+  "frontend/server/readonly.test.js": {
+    "size": 1077,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434459789000,
+    "word_count": 120
+  },
+  "frontend/src/components/InstitutionPicker.jsx": {
+    "size": 1438,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434498036100,
+    "word_count": 107
+  },
+  "frontend/src/components/InstitutionSwitcher.jsx": {
+    "size": 2457,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434498036100,
+    "word_count": 209
+  },
+  "frontend/src/components/PhysicianAvatar.jsx": {
+    "size": 1594,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434516862900,
+    "word_count": 139
+  },
+  "frontend/src/components/PhysicianReportsModal.jsx": {
+    "size": 4563,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434518863900,
+    "word_count": 282
+  },
+  "frontend/src/components/PhysicianSelect.jsx": {
+    "size": 3796,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434521863500,
+    "word_count": 275
+  },
+  "frontend/src/components/Physicians.jsx": {
+    "size": 6172,
+    "mtime_ns": 1792302534855617700,
+    "indexed_at_ns": 1792303434523864100,
+    "word_count": 426
+  },
+  "frontend/src/components/RadiographViewer.jsx": {
+    "size": 2977,
+    "mtime_ns": 1792305583165586500,
+    "indexed_at_ns": 1792305675594215200,
+    "word_count": 212
+  },
+  "frontend/src/components/Reports.jsx": {
+    "size": 20056,
+    "mtime_ns": 1792302534872333500,
+    "indexed_at_ns": 1792303434536144700,
+    "word_count": 1297
+  },
+  "frontend/src/components/luna/PointChat.jsx": {
+    "size": 4333,
+    "mtime_ns": 1792302534876331100,
+    "indexed_at_ns": 1792303434555531900,
+    "word_count": 334
+  },
+  "frontend/src/lib/generalLuna.js": {
+    "size": 2412,
+    "mtime_ns": 1792302534882842600,
+    "indexed_at_ns": 1792303434606847000,
+    "word_count": 315
+  },
+  "frontend/src/lib/generalLuna.test.js": {
+    "size": 643,
+    "mtime_ns": 1792302534883843300,
+    "indexed_at_ns": 1792303434608848900,
+    "word_count": 74
+  },
+  "frontend/src/lib/luna/client.js": {
+    "size": 2819,
+    "mtime_ns": 1792302534885842900,
+    "indexed_at_ns": 1792303434619853500,
+    "word_count": 325
+  },
+  "frontend/src/lib/luna/client.test.js": {
+    "size": 5998,
+    "mtime_ns": 1792302534885842900,
+    "indexed_at_ns": 1792303434622854300,
+    "word_count": 667
+  },
+  "frontend/src/lib/luna/context.js": {
+    "size": 3856,
+    "mtime_ns": 1792302534886845600,
+    "indexed_at_ns": 1792303434624853500,
+    "word_count": 355
+  },
+  "frontend/src/lib/luna/context.test.js": {
+    "size": 4127,
+    "mtime_ns": 1792302534887714400,
+    "indexed_at_ns": 1792303434627358200,
+    "word_count": 331
+  },
+  "frontend/src/lib/luna/mock.js": {
+    "size": 2070,
+    "mtime_ns": 1792302534887714400,
+    "indexed_at_ns": 1792303434629570000,
+    "word_count": 234
+  },
+  "frontend/src/lib/luna/mode.js": {
+    "size": 456,
+    "mtime_ns": 1792302534888839100,
+    "indexed_at_ns": 1792303434630504100,
+    "word_count": 59
+  },
+  "frontend/src/lib/luna/mode.test.js": {
+    "size": 1143,
+    "mtime_ns": 1792302534888839100,
+    "indexed_at_ns": 1792303434630504100,
+    "word_count": 113
+  },
+  "frontend/src/lib/luna/prompt.js": {
+    "size": 3743,
+    "mtime_ns": 1792302534888839100,
+    "indexed_at_ns": 1792303434636652800,
+    "word_count": 474
+  },
+  "frontend/src/lib/luna/prompt.test.js": {
+    "size": 2258,
+    "mtime_ns": 1792302534888839100,
+    "indexed_at_ns": 1792303434637658200,
+    "word_count": 226
+  },
+  "frontend/src/lib/luna/quotes.js": {
+    "size": 646,
+    "mtime_ns": 1792302534888839100,
+    "indexed_at_ns": 1792303434641188400,
+    "word_count": 54
+  },
+  "backend/app/reclassification.py": {
+    "size": 5018,
+    "mtime_ns": 1792303506186424000,
+    "indexed_at_ns": 1792303973590688300,
+    "word_count": 350,
+    "hashes": {
+      "backend/app/reclassification.py": "c2823b9637b30e9bd8c49e93d371298927ef894f943a4c607f6317ef56e9233d"
+    }
+  },
+  "backend/tests/test_reclassification_worker.py": {
+    "size": 2183,
+    "mtime_ns": 1792303586194686800,
+    "indexed_at_ns": 1792303973676274700,
+    "word_count": 110,
+    "hashes": {
+      "backend/tests/test_reclassification_worker.py": "a0d8bf39a7931a0d309f37701b8bb089c3270f84d546cfc06ccb2367ae0aac1c"
+    }
+  },
+  "frontend/src/lib/reclassification.test.js": {
+    "size": 2929,
+    "mtime_ns": 1792303922784328900,
+    "indexed_at_ns": 1792303972969248100,
+    "word_count": 317
+  },
+  "docs/RECLASSIFY_DEBUG_REPORT.md": {
+    "size": 13037,
+    "mtime_ns": 1792304049612664100,
+    "indexed_at_ns": 1792304052920513100,
+    "word_count": 1516,
+    "hashes": {
+      "docs/reclassify_debug_report.md": "7995ebaf3e1fe73d716308d5cb65955a89035d84c144433c669d13c6759cd10f"
+    }
+  },
+  "frontend/src/components/PathologyScoreList.jsx": {
+    "size": 2008,
+    "mtime_ns": 1792305539290866300,
+    "indexed_at_ns": 1792305675569801900,
+    "word_count": 144
+  },
+  "frontend/src/lib/pathologyColors.js": {
+    "size": 1760,
+    "mtime_ns": 1792305472631382800,
+    "indexed_at_ns": 1792305675693623200,
+    "word_count": 166
+  },
+  "frontend/src/lib/pathologyColors.test.js": {
+    "size": 1748,
+    "mtime_ns": 1792305594199152900,
+    "indexed_at_ns": 1792305675695139300,
+    "word_count": 181
   }
 }
