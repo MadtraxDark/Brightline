@@ -9,7 +9,7 @@ from unittest.mock import patch, Mock
 
 from brightline_data import ROOT, load_reports, validate_extraction, write_json, read_json
 from evaluate import evaluate, load_aliases
-from extract import call_claude, extract_one, main
+from extract import call_gemini, extract_one, main
 
 
 def sample(rid="T-01"):
@@ -72,13 +72,17 @@ class PipelineTests(unittest.TestCase):
 
     def test_api_request_does_not_leak_ground_truth(self):
         report = sample()
-        response = io.BytesIO(json.dumps({"stop_reason": "end_turn", "content": [
-            {"type": "text", "text": json.dumps(extraction(report))}]}).encode())
+        response = io.BytesIO(json.dumps({"candidates": [{"finishReason": "STOP", "content": {"parts": [
+            {"text": json.dumps(extraction(report))}]}}]}).encode())
         with patch("extract.urllib.request.urlopen", return_value=response) as send:
-            call_claude(report, "prompt", "model", "secret")
+            call_gemini(report, "prompt", "model", "secret")
+        request = send.call_args.args[0]
+        self.assertIn("/models/model:generateContent", request.full_url)
+        self.assertEqual(request.get_header("X-goog-api-key"), "secret")
         payload = json.loads(send.call_args.args[0].data)
-        user = json.loads(payload["messages"][0]["content"])
+        user = json.loads(payload["contents"][0]["parts"][0]["text"])
         self.assertEqual(set(user), {"report_id", "text"})
+        self.assertEqual(payload["generationConfig"]["responseMimeType"], "application/json")
 
     def test_wrong_urgency_counts_as_fp_and_fn(self):
         report = sample()
@@ -137,7 +141,7 @@ class PipelineTests(unittest.TestCase):
             cache = base / "cache.json"
             args = ["--reports", str(base / "reports.json"), "--cache", str(cache),
                     "--prompt", str(prompt), "--model", "test-model"]
-            with patch.dict(os.environ, {"ANTHROPIC_API_KEY": "test-only"}), patch("sys.stdout", io.StringIO()), patch("sys.stderr", io.StringIO()):
+            with patch.dict(os.environ, {"GEMINI_API_KEY": "test-only"}), patch("sys.stdout", io.StringIO()), patch("sys.stderr", io.StringIO()):
                 with patch("extract.extract_one", side_effect=[extraction(reports[0]), ValueError("falha de teste")]):
                     self.assertEqual(main(args), 2)
                 self.assertEqual(set(read_json(cache)), {"T-01"})

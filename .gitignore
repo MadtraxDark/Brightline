@@ -42,3 +42,9 @@ Thumbs.db
 !.vscode/settings.json
 !backend/.vscode/
 !backend/.vscode/settings.json
+
+scratchvenv/
+artifacts/compare/
+scripts/compare/
+graphify-out/cache/ast/
+

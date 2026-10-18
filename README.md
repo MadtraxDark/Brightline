@@ -30,7 +30,7 @@ A API fica em `http://localhost:8080`. O PostgreSQL é publicado em `localhost:5
 
 `docker compose down` preserva o banco. `docker compose down -v` remove o volume e os dados persistidos.
 
-O conjunto NIH ChestX-ray14 foi importado para `dataset_images` no PostgreSQL; os arquivos de imagem não precisam estar no repositório. Para importar novamente, consulte [NIH_TENSORFLOW.md](backend/NIH_TENSORFLOW.md).
+O conjunto NIH ChestX-ray14 foi importado para `dataset_images` no PostgreSQL; os arquivos de imagem não precisam estar no repositório.
 
 ## Documentação
 

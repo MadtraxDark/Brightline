@@ -6,7 +6,7 @@ Esta parte produz o cache offline importado no PostgreSQL local pelo backend. Os
 
 - `data/reports.json`: 40 laudos e seus gabaritos.
 - `prompts/extraction.txt`: regras e seis exemplos fixos, separados dos laudos avaliados.
-- `extract.py`: chamadas ao Claude e validação do resultado.
+- `extract.py`: chamadas Gemini Developer API e validação do resultado.
 - `evaluate.py`: comparação determinística com o gabarito.
 - `data/finding_aliases.json`: equivalências de nomes aprovadas por revisão humana; começa vazio.
 - `brightline_data.py`: validação e escrita dos arquivos.
@@ -21,22 +21,18 @@ python extract.py --validate-only
 
 Código de saída 2 significa cache incompleto, inclusive quando ele ainda não existe. Não é erro nos laudos.
 
-Configure a chave sem escrevê-la nos arquivos. O comando abaixo pede a chave sem exibi-la e a disponibiliza somente nesta sessão do PowerShell:
+Configure a chave Gemini Developer API criada no Google AI Studio. No PowerShell, ela fica somente nesta sessao:
 
 ```powershell
-$secureKey = Read-Host 'Chave da API Anthropic' -AsSecureString
-$env:ANTHROPIC_API_KEY = [System.Net.NetworkCredential]::new('', $secureKey).Password
-$env:ANTHROPIC_MODEL = Read-Host 'ID do modelo Claude disponível na sua conta'
+$secureKey = Read-Host 'Chave Gemini Developer API' -AsSecureString
+$env:GEMINI_API_KEY = [System.Net.NetworkCredential]::new('', $secureKey).Password
+$env:GEMINI_MODEL = 'gemini-3.5-flash-lite' # opcional; modelo padrao
 python extract.py
 python extract.py --validate-only
 python evaluate.py
 ```
 
-As chamadas à API são cobradas pelo provedor. O modelo é explícito para não depender de um nome presumido ou indisponível na conta. Não é necessário configurar chave para avaliar um cache existente. O script usa `POST https://api.anthropic.com/v1/messages`, conforme a [documentação oficial](https://platform.claude.com/docs/en/api/messages/create).
-
-O script só envia ID e texto ao modelo. O gabarito e a sinalização do radiologista não são enviados. Valida JSON, campos, ID, urgência, prazo, confiança e presença literal de cada evidência. São no máximo três tentativas por laudo: uma inicial e duas novas tentativas. Uma falha não vira `findings: []` e não interrompe os outros laudos.
-
-O progresso é salvo após cada laudo, por substituição atômica. Saídas válidas entram em `data/extractions_cache.json`; falhas ficam em `data/extractions_cache.errors.json`; hashes de texto, prompt e modelo ficam em `data/extractions_cache.meta.json`. O contrato do cache permanece um dicionário de ID para objeto com `report_id` e `findings`.
+O extrator chama `generateContent` da Gemini Developer API e envia a chave no cabecalho `x-goog-api-key`, conforme a [documentacao oficial](https://ai.google.dev/api/generate-content). O modelo padrao aparece no nivel gratuito, sujeito a limites e disponibilidade que podem mudar. O Google informa que pode usar dados enviados no nivel gratuito para melhorar seus produtos. Nao envie laudos identificaveis ou dados sensiveis sem autorizacao e avaliacao de privacidade adequadas ([precos e uso dos dados](https://ai.google.dev/gemini-api/docs/pricing)).
 
 ## Retomar e iterar
 

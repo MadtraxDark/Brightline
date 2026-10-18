@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import LandingPage from "./LandingPage.jsx";
 import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
+import RadiographClassifier from "./components/RadiographClassifier.jsx";
 import DashboardShell from "./components/DashboardShell.jsx";
 import { validateSession } from "./lib/session.js";
 
@@ -61,6 +62,7 @@ function RequireAuth({ children }) {
 export default function App() {
   const { pathname } = useLocation();
   const path = pathname.replace(/\/+$/, "") || "/";
+  if (path === "/classificar") return <RequireAuth><RadiographClassifier /></RequireAuth>;
   if (path === "/") return <LandingPage />;
   if (path === "/login") return <Login />;
   if (path === "/cadastro") return <Register />;
