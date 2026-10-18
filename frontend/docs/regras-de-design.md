@@ -33,4 +33,13 @@ Campos de caso: `id`, `finding_name`, `urgency`, `current_target`, `time_remaini
 `status`: `detected`, `notified`, `read`, `action_recorded`, `closed`, `escalated`.
 
 ### Lista clínica de casos
+
 Na visão geral, cada caso apresenta achado e prazo, modalidade e identificação do laudo, texto original, médico solicitante, radiologista e clínica de origem. O responsável pelo acompanhamento fica separado da autoria e da solicitação. A clínica é lida do campo opcional `source_clinic` do laudo; dados ausentes aparecem como “Não informada”, sem criar identidades fictícias. Em telas pequenas, o acompanhamento passa para abaixo do conteúdo clínico.
+
+A classificação da Luna aparece junto aos dados de origem, com status “Classificado”. Percentuais devem vir de `confidence_percent` (0–100): >80 verde, 20–80 amarelo, <20 vermelho. Confiança categórica não deve ser convertida em percentual fictício; apresentar o nível e “Percentual não fornecido”.
+
+Abertura de laudos: documento com acomodação de escala e recorte, imagem com revelação lateral e duração máxima de 420ms. Executar somente na troca do caso, sem espera artificial e sem repetir em atualizações do relógio ou da conversa. Respeitar prefers-reduced-motion com conteúdo estático.
+
+Transições entre seções internas: saída de 120ms e entrada de 240ms, com deslocamento e recorte discretos; navegação de retorno inverte a direção. Aplicar também nas mudanças de prioridade. A camada central substitui animações locais duplicadas, respeita movimento reduzido e aceita seleção rápida de outro destino.
+
+Campos de texto: desabilitar redimensionamento manual (resize:none) em toda a interface. Compositores de chat podem crescer automaticamente até uma altura máxima e então usar rolagem interna.

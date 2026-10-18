@@ -38,27 +38,43 @@ Não existe cor de marca além do azul-marinho da sidebar e do amarelo do logo, 
 Valores do tema claro. Confira o arquivo para os valores atuais antes de alterar qualquer um.
 
 ```css
---bg: #F1F4F7;            --panel: #FFFFFF;
---border: #D5DCE3;        --border-strong: #8A96A3;
---text: #161B20;          --text-muted: #5A6673;
+--bg: #f1f4f7;
+--panel: #ffffff;
+--border: #d5dce3;
+--border-strong: #8a96a3;
+--text: #161b20;
+--text-muted: #5a6673;
 
---critical: #B71C1C;      --critical-tint: #FDECEC;
---urgent: #9E4D00;        --urgent-tint: #FFF1E0;
---actionable: #1F5FBF;    --actionable-tint: #E8F0FD;
+--critical: #b71c1c;
+--critical-tint: #fdecec;
+--urgent: #9e4d00;
+--urgent-tint: #fff1e0;
+--actionable: #1f5fbf;
+--actionable-tint: #e8f0fd;
 
---evidence-bg: #12161B;   --evidence-text: #F2F6F9;
---action-bg: #161B20;     --action-text: #FFFFFF;
+--evidence-bg: #12161b;
+--evidence-text: #f2f6f9;
+--action-bg: #161b20;
+--action-text: #ffffff;
 
---radius-panel: 8px;  --radius-control: 6px;  --radius-badge: 4px;  --radius-mark: 2px;
---s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
+--radius-panel: 8px;
+--radius-control: 6px;
+--radius-badge: 4px;
+--radius-mark: 2px;
+--s1: 4px;
+--s2: 8px;
+--s3: 12px;
+--s4: 16px;
+--s5: 24px;
+--s6: 32px;
 ```
 
 **Sobre o azul-marinho da sidebar (`#021837`)**, use só estas cores de urgência, que passam de 4,5:1:
 
 ```css
---on-dark-critical: #FF5A5F;   /* 5,8:1 */
---on-dark-urgent: #FFA94D;     /* 9,3:1 */
---on-dark-actionable: #6FA8F7; /* 7,3:1 */
+--on-dark-critical: #ff5a5f; /* 5,8:1 */
+--on-dark-urgent: #ffa94d; /* 9,3:1 */
+--on-dark-actionable: #6fa8f7; /* 7,3:1 */
 ```
 
 As cores de urgência do tema claro dão só 2,7 a 3,0:1 sobre o azul-marinho: **não as use dentro da sidebar**.
@@ -74,10 +90,10 @@ Contrastes conferidos no tema claro: texto 15,7:1 sobre `--bg`; `--text-muted` 5
 
 ## Urgência: nunca só cor
 
-| Valor | Rótulo | Cor | Ícone |
-|---|---|---|---|
-| `critical` | Crítico | `--critical` | `TriangleAlert` |
-| `urgent` | Urgente | `--urgent` | `Clock` |
+| Valor        | Rótulo    | Cor            | Ícone           |
+| ------------ | --------- | -------------- | --------------- |
+| `critical`   | Crítico   | `--critical`   | `TriangleAlert` |
+| `urgent`     | Urgente   | `--urgent`     | `Clock`         |
 | `actionable` | Acionável | `--actionable` | `CalendarClock` |
 
 Selo único `UrgencyBadge`: ícone, rótulo, texto na cor do nível, fundo `--*-tint`, borda de 1px. Além disso, "Sem alerta" é neutro (ícone `FileCheck`) e sempre acompanhado de "Não é liberação clínica": **nunca** chame de "aprovado" ou "normal".
@@ -136,3 +152,5 @@ Selo único `UrgencyBadge`: ícone, rótulo, texto na cor do nível, fundo `--*-
 - [ ] Nenhum gráfico, nenhuma cor de marca nova.
 - [ ] Contraste mínimo de 4,5:1 em texto novo.
 - [ ] Cabe em 1280×620 sem cortar.
+
+Transição de página: 240ms, só em resposta à navegação, desativada com prefers-reduced-motion.

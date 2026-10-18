@@ -10,6 +10,7 @@ const dataDir = join(
 const urgencies = new Set(["critical", "urgent", "actionable"]);
 const confidences = new Set(["high", "medium", "low"]);
 const deadlines = { critical: 1, urgent: 24, actionable: 720 };
+const locations = new Set(["Pronto-socorro", "Internado", "Ambulatório"]);
 const errors = [];
 const warnings = [];
 
@@ -57,6 +58,21 @@ if (!Array.isArray(reports)) {
     }
     if (typeof report?.flagged_by_radiologist !== "boolean") {
       fail(id, "flagged_by_radiologist precisa ser booleano.");
+    }
+    if (report?.patient != null) {
+      if (!nonEmpty(report.patient?.name)) fail(id, "patient sem name.");
+      const age = report.patient?.age;
+      if (
+        typeof age !== "number" ||
+        !Number.isFinite(age) ||
+        age < 0 ||
+        age > 120
+      ) {
+        fail(id, "patient.age precisa ser um número entre 0 e 120.");
+      }
+    }
+    if (report?.location != null && !locations.has(report.location)) {
+      fail(id, `location inválida: ${report.location}.`);
     }
     if (!Array.isArray(report?.ground_truth)) {
       fail(id, "ground_truth precisa ser um array.");
@@ -335,6 +351,17 @@ const physicians = new Set(
   reportList.map((item) => item.ordering_physician).filter(nonEmpty),
 );
 const doctors = new Set([...radiologists, ...physicians]);
+let contacts = {};
+try {
+  contacts = readJson("contacts.json");
+} catch {
+  warn("contacts.json", "arquivo ausente.");
+}
+for (const doctor of doctors) {
+  if (!nonEmpty(contacts?.[doctor]?.ramal)) {
+    warn(doctor, "sem entrada em contacts.json.");
+  }
+}
 if (radiologists.size > 8)
   warn("radiologistas", `${radiologists.size} radiologistas distintos.`);
 if (physicians.size > 10)

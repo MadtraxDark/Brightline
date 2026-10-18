@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "check:data": "node ../scripts/check-data.js",
-    "prebuild": "npm run check:data",
+    "check:colors": "node ../scripts/check-colors.js",
+    "prebuild": "npm run check:data && npm run check:colors",
+    "test:patient": "node --test src/lib/patientLabel.test.js",
     "test:engine": "node --test src/engine/engine.test.js",
     "test:store": "node --test src/store/store.test.js",
     "test:format": "node --test src/lib/formatRemaining.test.js",
@@ -23,7 +25,8 @@
     "test:luna": "node --test src/lib/luna.test.js",
     "test:view": "node --test src/lib/viewState.test.js",
     "test:sidebar-items": "node --test src/lib/sidebarItems.test.js",
-    "test": "npm run test:engine && npm run test:store && npm run test:format && npm run test:selectors && npm run test:evidence && npm run test:metrics && npm run test:session && npm run test:evaluate && npm run test:groups && npm run test:sidebar && npm run test:deadline && npm run test:luna && npm run test:view && npm run test:sidebar-items"
+    "test:escalation": "node --test src/lib/escalationPath.test.js",
+    "test": "node ../scripts/run-tests.js"
   },
   "dependencies": {
     "@fontsource/atkinson-hyperlegible-next": "^5.2.8",
