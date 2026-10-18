@@ -1,7 +1,7 @@
 const STEPS = [
   ["Médico solicitante", "ordering_physician"],
   ["Radiologista que assinou", "radiologist"],
-  ["Coordenação de Radiologia", null],
+  ["Médico solicitante", "ordering_physician"],
 ];
 
 const SETTLED = new Set(["read", "action_taken", "closed"]);
@@ -19,6 +19,9 @@ export function escalationPath(caso, relatorio) {
       else state = "Já notificado";
     } else if (index === level) state = "Atual";
     else if (index < level) state = "Já notificado";
+    if (index === 2 && item.status === "closed") {
+      state = item.requester_sent_at ? "Laudo fechado" : "Envio pendente";
+    }
     const name = field
       ? String(report[field] || item[field] || "")
       : "Coordenação de Radiologia";

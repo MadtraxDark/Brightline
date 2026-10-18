@@ -1433,7 +1433,7 @@
     align-self: center;
     width: 100%;
     max-width: 392px;
-    margin: 56px auto;
+    margin-inline: auto;
     padding: 0;
   }
   .login-card h1 {
@@ -1530,9 +1530,102 @@
     margin: 1px 0 0;
     accent-color: var(--sidebar-bg);
   }
-  .login-form > div > select {
+  .login-institution {
+    position: relative;
+  }
+  .login-institution-trigger {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     width: 100%;
     min-height: 50px;
+    padding: 0 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: 7px;
+    background: var(--panel);
+    color: var(--text);
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+  }
+  .login-institution-trigger > svg:first-child {
+    flex-shrink: 0;
+    color: var(--text-muted);
+  }
+  .login-institution-trigger > span {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .login-institution-trigger > span.is-placeholder {
+    color: var(--text-muted);
+  }
+  .login-institution-chevron {
+    flex-shrink: 0;
+    color: var(--text-muted);
+  }
+  .login-institution.is-open .login-institution-chevron {
+    transform: rotate(180deg);
+  }
+  .login-institution.is-open .login-institution-trigger,
+  .login-institution-trigger:focus-visible {
+    border-color: var(--focus);
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+  .login-institution-trigger:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+  .login-institution-menu {
+    outline: none;
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    overflow: visible;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel);
+    box-shadow: 0 8px 24px var(--overlay-shadow);
+  }
+  .login-institution-menu button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: left;
+    cursor: pointer;
+  }
+  .login-institution-menu button span {
+    flex: 1;
+    min-width: 0;
+  }
+  .login-institution-menu button svg {
+    flex-shrink: 0;
+    color: var(--actionable);
+  }
+  .login-institution-menu button.is-active,
+  .login-institution-menu button:hover {
+    background: var(--control-hover);
+  }
+  .login-institution-menu button[aria-selected="true"] {
+    background: var(--actionable-tint);
+    font-weight: 600;
   }
   .login-form label,
   .login-field-label {

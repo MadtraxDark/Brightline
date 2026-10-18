@@ -7,6 +7,7 @@ const links = [
   ["O produto", "#demonstracao"],
   ["Como funciona", "#como-funciona"],
   ["Diferenciais", "#diferenciais"],
+  ["Planos", "#planos"],
   ["Dúvidas", "#duvidas"],
   ["Acessar painel", "/login"],
 ];
@@ -74,7 +75,11 @@ export default function LandingHeader() {
             .map(([label, href]) => (
               <a
                 key={href}
-                href={href}
+                href={
+                  href.startsWith("#") && window.location.pathname !== "/"
+                    ? `/${href}`
+                    : href
+                }
                 aria-current={activeSection === href ? "location" : undefined}
               >
                 <span className="bl-nav-dot" aria-hidden="true" />
@@ -135,7 +140,11 @@ export default function LandingHeader() {
           {links.map(([label, href], index) => (
             <a
               key={href}
-              href={href}
+              href={
+                href.startsWith("#") && window.location.pathname !== "/"
+                  ? `/${href}`
+                  : href
+              }
               style={{ "--link-index": index }}
               aria-current={activeSection === href ? "location" : undefined}
               onClick={() => setMenuOpen(false)}

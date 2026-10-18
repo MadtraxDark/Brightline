@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -13,6 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import logo from "./public/logo/logo-text.svg";
+import brandSymbol from "./public/logo/favicon-logo.svg";
 import useLenisScroll from "./useLenisScroll.js";
 import useTitleAnimation from "./useTitleAnimation.js";
 import useScrollReveal from "./useScrollReveal.js";
@@ -22,7 +24,47 @@ import FaqItem from "./components/FaqItem.jsx";
 import reports from "./data/reports.json" with { type: "json" };
 import cache from "./data/extractions_cache.json" with { type: "json" };
 import { getMissed, loadCases } from "./engine/engine.js";
-import DashboardShell from "./components/DashboardShell.jsx";
+import ProductDashboardPreview from "./components/ProductDashboardPreview.jsx";
+import PricingSection from "./PricingSection.jsx";
+
+function LunaWelcome() {
+  const ref = useRef(null);
+  const [stage, setStage] = useState("waiting");
+  useEffect(() => {
+    let timer;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setStage("typing");
+        timer = window.setTimeout(() => setStage("ready"), 900);
+        observer.disconnect();
+      },
+      { threshold: 0.3 },
+    );
+    observer.observe(ref.current.parentElement);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+    };
+  }, []);
+  return (
+    <div ref={ref} className="lp-luna-welcome" data-stage={stage}>
+      {stage === "ready" ? (
+        <p>
+          Oi! Eu sou a Luna.
+          <br />
+          <strong>Boas-vindas ao Brightline!</strong>
+        </p>
+      ) : (
+        <span className="lp-luna-welcome-dots" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </span>
+      )}
+    </div>
+  );
+}
 
 const previewState = loadCases(reports, cache);
 const examples = previewState.cases;
@@ -33,7 +75,7 @@ function ProductPreview() {
     <div
       className="lp-product"
       role="img"
-      aria-label="Prévia ilustrativa do painel Brightline com indicadores, menu e três laudos fictícios."
+      aria-label="Prévia ilustrativa do painel Brightline com prioridades clínicas, cards de laudos, médicos e confiança da Luna."
     >
       <div className="lp-product-chrome">
         <span className="lp-window-dots">
@@ -47,14 +89,7 @@ function ProductPreview() {
         <span className="lp-live-dot" />
       </div>
       <div className="lp-dashboard-preview" inert aria-hidden="true">
-        <DashboardShell preview />
-      </div>
-      <div className="lp-product-foot">
-        <span>
-          <span className="lp-live-dot" /> {reports.length} laudos sintéticos ·
-          dados da demonstração
-        </span>
-        <span>Prévia visual · dados fictícios</span>
+        <ProductDashboardPreview />
       </div>
     </div>
   );
@@ -212,79 +247,20 @@ export default function LandingPage() {
             <div
               className="lp-device-showcase"
               role="img"
-              aria-label="Prévias separadas do painel Brightline no notebook e no celular."
+              aria-label="Prévias ilustrativas: laudo com radiografia no notebook e visão geral de prioridades no celular."
             >
               <div className="lp-device-column lp-laptop-column">
-                <div className="lp-laptop-preview" inert aria-hidden="true">
+                <div className="lp-laptop-preview" aria-hidden="true">
                   <div className="lp-laptop-screen">
                     <div className="lp-laptop-display">
-                      <div className="lp-laptop-ui">
-                        <aside className="lp-laptop-sidebar">
-                          <strong>Brightline</strong>
-                          <span className="is-active">Visão geral</span>
-                          <span>Não sinalizados</span>
-                          <span>Avaliação da IA</span>
-                        </aside>
-                        <div className="lp-laptop-content">
-                          <header>
-                            <span>Workspace　›　Visão geral</span>
-                            <span>Demonstração</span>
-                          </header>
-                          <div className="lp-laptop-overview">
-                            <h3>Visão geral</h3>
-                            <div className="lp-laptop-metrics">
-                              <div>
-                                <small>Abertos</small>
-                                <b>06</b>
-                              </div>
-                              <div>
-                                <small>Críticos</small>
-                                <b>02</b>
-                              </div>
-                              <div>
-                                <small>Escalados</small>
-                                <b>00</b>
-                              </div>
-                            </div>
-                            <div className="lp-laptop-table">
-                              <strong>Laudos em acompanhamento</strong>
-                              <div>
-                                <span>Laudo</span>
-                                <span>Prioridade</span>
-                                <span>Responsável</span>
-                              </div>
-                              <div>
-                                <span>Pneumotórax hipertensivo</span>
-                                <b>Crítico</b>
-                                <span>Dr. Paulo Mendes</span>
-                              </div>
-                              <div>
-                                <span>Hemorragia subaracnóidea</span>
-                                <b>Crítico</b>
-                                <span>Dra. Marina Lopes</span>
-                              </div>
-                              <div>
-                                <span>Apendicite aguda</span>
-                                <b>Urgente</b>
-                                <span>Dra. Helena Costa</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="lp-laptop-activity">
-                            <strong>Atividade recente</strong>
-                            <div>
-                              <span>08:42</span>
-                              <span>Leitura confirmada</span>
-                              <b>Dra. Ana Costa</b>
-                            </div>
-                            <div>
-                              <span>08:31</span>
-                              <span>Conduta registrada</span>
-                              <b>Dr. Paulo Mendes</b>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <img
+                        className="lp-device-capture lp-desktop-capture"
+                        src="/images/landing-report-desktop.png"
+                        width="1534"
+                        height="883"
+                        alt=""
+                        loading="lazy"
+                      />
                     </div>
                   </div>
                   <div className="lp-laptop-base" />
@@ -296,103 +272,15 @@ export default function LandingPage() {
               </div>
               <div className="lp-device-column lp-phone-column">
                 <div className="lp-phone-slot">
-                  <div className="lp-phone-frame relative w-56 rounded-[34px] border-2 border-phone-shell bg-phone-shell p-2 shadow-[0_18px_38px_#1b272a26,0_4px_10px_#1b272a1a]">
-                    <div className="absolute left-1/2 top-3.25 z-10 h-4 w-16 -translate-x-1/2 rounded-xl bg-phone-shell" />
-                    <div className="min-h-95.5 overflow-hidden rounded-[26px] bg-phone-surface text-phone-ink">
-                      <div className="flex h-8.5 items-center justify-between px-3.5 pt-1 text-[8px] font-bold">
-                        <span>9:41</span>
-                        <span>●●●　▰</span>
-                      </div>
-                      <div className="flex h-11 items-center justify-between border-b border-phone-border px-3.25">
-                        <span className="flex items-center gap-1.25 text-[11px] font-semibold tracking-[-.03em]">
-                          <ShieldCheck size={15} /> Brightline
-                        </span>
-                        <span className="grid size-6 place-items-center rounded-full bg-phone-tint text-[8px] font-bold">
-                          DR
-                        </span>
-                      </div>
-                      <div className="px-3.25 pb-3 pt-4.5">
-                        <span className="text-[7px] font-bold tracking-widest text-phone-muted">
-                          VISÃO GERAL
-                        </span>
-                        <h3 className="mt-1.25! text-[15px] font-semibold tracking-[-.035em]">
-                          Bom dia, Dra. Ana
-                        </h3>
-                        <p className="mt-0.75! text-[8px] text-phone-muted">
-                          Veja o que precisa da sua atenção.
-                        </p>
-                        <div className="mt-3.5 grid grid-cols-2 gap-1.75">
-                          <div className="flex flex-col gap-0.5 rounded-lg border border-phone-border bg-white p-2">
-                            <strong className="text-base leading-none">
-                              08
-                            </strong>
-                            <span className="text-[7px] text-phone-muted">
-                              Em aberto
-                            </span>
-                          </div>
-                          <div className="flex flex-col gap-0.5 rounded-lg border border-phone-border bg-white p-2">
-                            <strong className="text-base leading-none">
-                              03
-                            </strong>
-                            <span className="text-[7px] text-phone-muted">
-                              Urgentes
-                            </span>
-                          </div>
-                        </div>
-                        <div className="mb-1.75 mt-4 flex justify-between text-[9px]">
-                          <strong>Prioridade</strong>
-                          <span className="text-[7px] text-phone-accent">
-                            Ver todos
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1.75 rounded-lg border border-phone-border bg-white px-1.75 py-2">
-                          <i className="h-6.25 w-1 shrink-0 rounded-sm bg-phone-urgent" />
-                          <div className="flex min-w-0 flex-1 flex-col gap-0.75">
-                            <strong className="truncate text-[8px] font-semibold">
-                              Nódulo pulmonar
-                            </strong>
-                            <span className="text-[7px] text-phone-muted">
-                              TC de tórax · há 12 min
-                            </span>
-                          </div>
-                          <ArrowRight
-                            size={14}
-                            className="shrink-0 text-phone-muted"
-                          />
-                        </div>
-                        <div className="mt-1.5 flex items-center gap-1.75 rounded-lg border border-phone-border bg-white px-1.75 py-2">
-                          <i className="h-6.25 w-1 shrink-0 rounded-sm bg-phone-normal" />
-                          <div className="flex min-w-0 flex-1 flex-col gap-0.75">
-                            <strong className="truncate text-[8px] font-semibold">
-                              Achado hepático
-                            </strong>
-                            <span className="text-[7px] text-phone-muted">
-                              RM abdome · há 38 min
-                            </span>
-                          </div>
-                          <ArrowRight
-                            size={14}
-                            className="shrink-0 text-phone-muted"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between border-t border-phone-border px-3.25 py-2 text-center text-phone-accent">
-                        {[
-                          ["⌂", "Início"],
-                          ["▤", "Casos"],
-                          ["◷", "Prazos"],
-                          ["◎", "Perfil"],
-                        ].map(([icon, label]) => (
-                          <span
-                            className="flex flex-col items-center gap-0.5 text-xs"
-                            key={label}
-                          >
-                            {icon}
-                            <small className="text-[6px]">{label}</small>
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                  <div className="lp-phone-frame lp-phone-capture-frame">
+                    <img
+                      className="lp-device-capture lp-mobile-capture"
+                      src="/images/landing-overview-mobile.png"
+                      width="517"
+                      height="884"
+                      alt=""
+                      loading="lazy"
+                    />
                   </div>
                 </div>
                 <div className="lp-device-caption">
@@ -447,25 +335,52 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section className="lp-human">
-          <div className="lp-human-symbol" aria-hidden="true">
-            <ShieldCheck size={50} strokeWidth={1} />
+        <section className="lp-luna" aria-labelledby="lp-luna-title">
+          <div className="lp-luna-portrait">
+            <LunaWelcome />
+            <img
+              className="lp-luna-brand-symbol"
+              src={brandSymbol}
+              alt=""
+              aria-hidden="true"
+            />
+            <img
+              className="lp-luna-character"
+              src="/images/luna-assistant-full.png"
+              alt="Luna, a assistente do Brightline, de corpo inteiro em uma pose de boas-vindas"
+              loading="lazy"
+            />
           </div>
-
-          <h2>
-            A inteligência é artificial.
-            <br />
-            <em>A decisão é sua.</em>
-          </h2>
-          <p>
-            O Brightline conecta informação e acompanhamento.
-            <br />O profissional segue no centro de cada decisão.
-          </p>
-          <span className="lp-human-note">
-            <Check size={14} /> Sugestões com evidência <span>·</span> Revisão
-            humana <span>·</span> Ações registradas
-          </span>
+          <div className="lp-luna-content">
+            <span className="lp-luna-intro">A IA do Brightline</span>
+            <h2 id="lp-luna-title">
+              Conheça a <em>Luna.</em>
+            </h2>
+            <p>
+              Uma companhia para explorar seus laudos, entender as evidências e
+              acompanhar o que precisa de atenção.
+            </p>
+            <ul className="lp-luna-capabilities">
+              <li>
+                <FileText size={20} />
+                <span>Mais contexto para revisar o laudo.</span>
+              </li>
+              <li>
+                <ScanLine size={20} />
+                <span>Selecione um ponto ou uma área para conversar.</span>
+              </li>
+              <li>
+                <ShieldCheck size={20} />
+                <span>A Luna sugere. A decisão continua com você.</span>
+              </li>
+            </ul>
+            <a className="lp-luna-link" href="/login">
+              Conheça a Luna no painel <ArrowUpRight size={18} />
+            </a>
+            <small>Conversas demonstrativas, com revisão humana.</small>
+          </div>
         </section>
+        <PricingSection />
         <section className="lp-faq lp-section" id="duvidas">
           <div>
             <h2>

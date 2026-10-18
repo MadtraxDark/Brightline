@@ -83,7 +83,40 @@ export default function LunaWidget() {
 
   useEffect(() => {
     if (!open) return undefined;
+    const mobile = matchMedia("(max-width:700px)");
+    const previousOverflow = document.body.style.overflow;
+    const siblings = [...root.current.parentElement.children].filter(
+      (node) => node !== root.current,
+    );
+    const previousInert = siblings.map((node) => node.inert);
+    function syncMobile() {
+      document.body.style.overflow = mobile.matches
+        ? "hidden"
+        : previousOverflow;
+      siblings.forEach((node, index) => {
+        node.inert = mobile.matches || previousInert[index];
+      });
+    }
+    syncMobile();
+    mobile.addEventListener("change", syncMobile);
+
     function onKey(event) {
+      if (event.key === "Tab" && mobile.matches) {
+        const focusable = [
+          ...root.current.querySelectorAll(
+            "#luna-panel button:not(:disabled), #luna-panel textarea",
+          ),
+        ];
+        const first = focusable[0],
+          last = focusable.at(-1);
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
       if (event.key !== "Escape") return;
       event.preventDefault();
       close();
@@ -95,6 +128,11 @@ export default function LunaWidget() {
     document.addEventListener("keydown", onKey);
     document.addEventListener("pointerdown", onPointer);
     return () => {
+      mobile.removeEventListener("change", syncMobile);
+      document.body.style.overflow = previousOverflow;
+      siblings.forEach((node, index) => {
+        node.inert = previousInert[index];
+      });
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("pointerdown", onPointer);
     };

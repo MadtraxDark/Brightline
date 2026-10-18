@@ -21,6 +21,7 @@ import {
   getInstitutions,
 } from "../lib/session.js";
 import InstitutionPicker from "./InstitutionPicker.jsx";
+import LoginInstitutionSelect from "./LoginInstitutionSelect.jsx";
 
 export default function Login({ mode = "login" }) {
   const registering = mode === "register";
@@ -250,20 +251,16 @@ export default function Login({ mode = "login" }) {
                   </div>
                 ) : (
                   <div>
-                    <label htmlFor="login-institution">Instituição</label>
-                    <select
-                      id="login-institution"
-                      name="institution_id"
-                      defaultValue=""
-                      disabled={institutionsLoading || pending}
+                    <label
+                      id="login-institution-label"
+                      htmlFor="login-institution"
                     >
-                      <option value="">Selecione uma instituição</option>
-                      {institutions.map((institution) => (
-                        <option key={institution.id} value={institution.id}>
-                          {institution.name}
-                        </option>
-                      ))}
-                    </select>
+                      Instituição
+                    </label>
+                    <LoginInstitutionSelect
+                      institutions={institutions}
+                      disabled={institutionsLoading || pending}
+                    />
                     <p className="login-field-hint">
                       Contas antigas sem vínculo podem entrar sem seleção para
                       configurar as instituições do perfil.

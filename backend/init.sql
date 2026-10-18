@@ -122,3 +122,8 @@ CREATE TABLE IF NOT EXISTS dataset_image_analyses (
   PRIMARY KEY(owner_id, filename)
 );
 CREATE INDEX IF NOT EXISTS dataset_image_analyses_result_gin ON dataset_image_analyses USING gin(analysis);
+
+ALTER TABLE cases ADD COLUMN IF NOT EXISTS closed_at timestamptz;
+ALTER TABLE cases ADD COLUMN IF NOT EXISTS closed_at_sim double precision;
+ALTER TABLE cases ADD COLUMN IF NOT EXISTS requester_sent_at timestamptz;
+ALTER TABLE cases ADD COLUMN IF NOT EXISTS requester_sent_at_sim double precision;

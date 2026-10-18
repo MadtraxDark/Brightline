@@ -1,7 +1,7 @@
 import Reports from "./components/Reports.jsx";
 import Physicians from "./components/Physicians.jsx";
 import SectionTransition from "./components/SectionTransition.jsx";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Link,
   NavLink,
@@ -168,6 +168,9 @@ function Overview() {
           </div>
         </button>
       </section>
+      <p className="mobile-summary-note">
+        Sem alerta não significa liberação clínica.
+      </p>
       <CaseList
         variant="overview"
         grouped
@@ -186,10 +189,12 @@ function RequireAuth({ children }) {
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState("");
   const [attempt, setAttempt] = useState(0);
+  const checked = useRef(false);
   useEffect(() => {
     let active = true;
+    checked.current = false;
     async function checkSession() {
-      setStatus("loading");
+      if (!checked.current) setStatus("loading");
       try {
         const user = await validateSession(sessionStorage);
         if (active) {
@@ -206,6 +211,8 @@ function RequireAuth({ children }) {
           setError(reason.message);
           setStatus("error");
         }
+      } finally {
+        if (active) checked.current = true;
       }
     }
     checkSession();
@@ -262,6 +269,7 @@ function Shell() {
   );
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
+  const [notice, setNotice] = useState("");
   const view = parseView(search);
   const activeSection =
     pathname === "/home" || pathname.startsWith("/caso/")
@@ -272,6 +280,14 @@ function Shell() {
           ? "2"
           : "none";
   const [workspaceError, setWorkspaceError] = useState("");
+  useEffect(() => {
+    const message = sessionStorage.getItem("brightline:notice");
+    if (!message) return undefined;
+    sessionStorage.removeItem("brightline:notice");
+    setNotice(message);
+    const timer = window.setTimeout(() => setNotice(""), 4000);
+    return () => window.clearTimeout(timer);
+  }, [pathname]);
   useEffect(() => {
     let active = true;
     refreshWorkspace()
@@ -308,7 +324,13 @@ function Shell() {
         Ir para os laudos
       </a>
       <aside className="sidebar">
-        <div className="brand" translate="no">
+        <Link
+          to="/"
+          className="brand"
+          translate="no"
+          aria-label="Brightline — ir para a página inicial"
+          onClick={() => window.scrollTo(0, 0)}
+        >
           <span className="brand-image">
             <img
               className="brand-full"
@@ -325,7 +347,7 @@ function Shell() {
               height="32"
             />
           </span>
-        </div>
+        </Link>
         <button
           type="button"
           className="sidebar-menu-toggle"
@@ -499,6 +521,11 @@ function Shell() {
           </div>
         </header>
         <main className="workspace" id="workspace" tabIndex={-1}>
+          {notice ? (
+            <p className="save-notice" role="status">
+              {notice}
+            </p>
+          ) : null}
           {workspaceError ? <p role="alert">{workspaceError}</p> : null}
           <SectionTransition>
             {(displayedLocation) => (
@@ -552,6 +579,8 @@ export default function App() {
       </RequireAuth>
     );
   if (path === "/") return <LandingPage />;
+  if (path === "/planos" || path === "/pricing")
+    return <Navigate to="/#planos" replace />;
   if (path === "/login") return <Login />;
   if (path === "/cadastro") return <Register />;
   return (

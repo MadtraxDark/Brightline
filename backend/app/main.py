@@ -34,7 +34,7 @@ logger = logging.getLogger("uvicorn.error")
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND_DIR))
 from extract import extract_one  # noqa: E402 - reuses Brightline's validated extraction pipeline
-from .institutions import INSTITUTIONS, INSTITUTION_IDS, INSTITUTION_NAMES
+from .institutions import INSTITUTIONS, INSTITUTION_IDS, INSTITUTION_NAMES, link_user_institutions
 from .models import (AcknowledgeInput, ActionInput, ActiveInstitutionInput, ImportInput,
                      InstitutionSelection, LoginInput, RefreshInput, ReportRecordInput, SignupInput, Status, Urgency)
 
@@ -332,6 +332,7 @@ async def signup(body: SignupInput):
             for institution_id in body.institutions:
                 conn.execute("INSERT INTO sim_state(owner_id,institution_id) VALUES (%s,%s) ON CONFLICT DO NOTHING",
                              (user["id"], institution_id))
+            link_user_institutions(conn, user["id"], body.institutions)
         return {"user": {"id": str(user["id"]), "email": user["email"], "name": user["name"],
                          "institutions": user["institutions"], "active_institution_id": None}}
     except psycopg.errors.UniqueViolation:
@@ -405,6 +406,7 @@ async def update_institutions(body: InstitutionSelection, session: Session):
         # Records remain assigned to their original institution; removing access never moves them.
         conn.execute("UPDATE users SET institutions=%s WHERE id=%s",
                      (psycopg.types.json.Jsonb(body.institutions), owner))
+        link_user_institutions(conn, owner, body.institutions)
         conn.execute("UPDATE sessions SET active_institution_id=%s WHERE access_hash=%s",
                      (body.active_institution_id, token_hash(session["token"])))
         for institution_id in body.institutions:
@@ -457,13 +459,15 @@ def present_case(case, now):
     case["notified_at"] = case.pop("notified_at_sim")
     case["acknowledged_at"] = case.pop("acknowledged_at_sim")
     case["events"] = case.get("events") or []
+    case.update(requester_dispatch_state(case, now))
     case["time_remaining_hours"] = float(case["deadline_at"]) - now
     return case
 
 
 def list_cases(conn, owner, institution, urgency=None, status=None, missed=False):
     sql = """SELECT c.id,c.owner_id,c.institution_id,c.report_id,c.finding,c.evidence,c.urgency,c.confidence,c.status,c.escalation_level,
-       c.current_target,c.deadline_at_sim,c.notified_at_sim,c.acknowledged_at_sim,r.modality,r.radiologist,
+       c.current_target,c.deadline_at_sim,c.notified_at_sim,c.acknowledged_at_sim,
+       c.closed_at,c.closed_at_sim,c.requester_sent_at,c.requester_sent_at_sim,r.modality,r.radiologist,
        r.ordering_physician,r.text,r.flagged_by_radiologist,
        COALESCE((SELECT json_agg(json_build_object('at',e.at_sim,'label',e.detail) ORDER BY e.at_sim,e.id)
                  FROM events e WHERE e.owner_id=c.owner_id AND e.institution_id=c.institution_id AND e.case_id=c.id),'[]'::json) AS events
@@ -586,6 +590,7 @@ async def workspace(session: Session):
         cases = conn.execute(
             """SELECT c.id, c.owner_id, c.institution_id, c.report_id, c.finding, c.evidence, c.urgency, c.confidence, c.status,
                c.escalation_level, c.deadline_hours, c.deadline_at_sim, c.notified_at_sim,
+               c.closed_at, c.closed_at_sim, c.requester_sent_at, c.requester_sent_at_sim,
                COALESCE(s.sim_now, 0) AS sim_now
                FROM cases c LEFT JOIN sim_state s
                  ON s.owner_id=c.owner_id AND s.institution_id=c.institution_id
@@ -626,6 +631,7 @@ async def workspace(session: Session):
             "confidence_percent": extra.get("confidence_percent"),
             "confidence_is_example": extra.get("confidence_is_example") is True,
             "status": case["status"],
+            **requester_dispatch_state(case, clock),
             "escalation_level": case["escalation_level"],
             "deadline_hours": case["deadline_hours"],
             "deadline_at": float(case["deadline_at_sim"]) - clock,
@@ -745,9 +751,60 @@ def command(conn, owner, institution, op, payload):
     conn.execute("INSERT INTO events(owner_id,institution_id,case_id,type,detail,at_sim,actor_id) VALUES (%s,%s,%s,'action_taken',%s,%s,%s)",
                  (owner, institution, case["id"], "Ação registrada: " + payload["action"], now, owner))
     if state == "closed":
+        conn.execute("UPDATE cases SET closed_at=COALESCE(closed_at,now()),closed_at_sim=COALESCE(closed_at_sim,%s) WHERE id=%s", (now, case["id"]))
         conn.execute("INSERT INTO events(owner_id,institution_id,case_id,type,detail,at_sim,actor_id) VALUES (%s,%s,%s,'closed','Caso fechado',%s,%s)",
                      (owner, institution, case["id"], now, owner))
     return {"id": str(case["id"]), "status": state}
+
+
+def requester_dispatch_state(case, sim_now, now=None):
+    closed = case.get("closed_at")
+    sent = case.get("requester_sent_at")
+    if not closed:
+        return {"requester_sent_at": sent.isoformat() if sent else None, "requester_dispatch_deadline": None}
+    current = now or datetime.now(timezone.utc)
+    endpoint = sent or current
+    clock = case.get("requester_sent_at_sim") if sent else sim_now
+    remaining = float(case["deadline_at_sim"]) - float(clock or 0) - (endpoint - closed).total_seconds() / 3600
+    return {
+        "requester_sent_at": sent.isoformat() if sent else None,
+        "requester_dispatch_deadline": None if sent else (current + timedelta(hours=remaining)).isoformat(),
+        "requester_dispatch_remaining_hours": remaining,
+    }
+
+
+@app.post("/cases/{case_id}/send-requester")
+async def send_requester(case_id: UUID, session: Session):
+    active_institution(session)
+    institutions = session["user"].get("institutions", [])
+    with db() as conn:
+        case = conn.execute(
+            "SELECT * FROM cases WHERE id=%s AND institution_id=ANY(%s) FOR UPDATE",
+            (case_id, institutions),
+        ).fetchone()
+        if not case:
+            raise HTTPException(404, "Caso não encontrado.")
+        institution = case["institution_id"]
+        if case["status"] != "closed":
+            raise HTTPException(409, "Confirme a leitura e registre a ação antes do envio.")
+        if case.get("requester_sent_at"):
+            return {"sent": True, "already_registered": True}
+        report = conn.execute(
+            "SELECT ordering_physician FROM reports WHERE owner_id=%s AND institution_id=%s AND report_id=%s",
+            (case["owner_id"], institution, case["report_id"]),
+        ).fetchone()
+        if not report or not report["ordering_physician"].strip():
+            raise HTTPException(422, "Médico solicitante não informado.")
+        now = current_hour(conn, case["owner_id"], institution)
+        conn.execute(
+            "UPDATE cases SET requester_sent_at=now(),requester_sent_at_sim=%s WHERE id=%s",
+            (now, case_id),
+        )
+        conn.execute(
+            "INSERT INTO events(owner_id,institution_id,case_id,type,detail,at_sim,actor_id) VALUES (%s,%s,%s,'requester_sent',%s,%s,%s)",
+            (case["owner_id"], institution, case_id, "Envio interno registrado para " + report["ordering_physician"], now, session["user"]["id"]),
+        )
+    return {"sent": True, "channel": "internal"}
 
 
 @app.post("/cases/{case_id}/acknowledge")

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Camera, UserRound } from "lucide-react";
 import InstitutionPicker from "./InstitutionPicker.jsx";
 import {
@@ -8,6 +9,7 @@ import {
 } from "../lib/session.js";
 
 export default function Settings({ profile, onSave }) {
+  const navigate = useNavigate();
   const [name, setName] = useState(profile.name);
   const [photo, setPhoto] = useState(profile.photo);
   const [error, setError] = useState("");
@@ -88,7 +90,10 @@ export default function Settings({ profile, onSave }) {
       );
       setActiveInstitution(user.active_institution_id);
       onSave({ name: name.trim(), photo });
-      setStatus("Perfil e instituições atualizados.");
+      sessionStorage.setItem("brightline:notice", "Usuário salvo");
+      const historyIndex = window.history.state?.idx;
+      if (typeof historyIndex === "number" && historyIndex > 0) navigate(-1);
+      else navigate("/home");
     } catch (reason) {
       setError(reason.message || "Não foi possível salvar suas alterações.");
     } finally {
