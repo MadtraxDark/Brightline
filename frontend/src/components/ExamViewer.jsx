@@ -293,21 +293,21 @@ export default function ExamViewer({
             a.y + a.height <= 1,
         )
       : [];
-  const shownLocalizations = useMemo(
+  const localizations = useMemo(
     () => (illustrative ? [] : validLocalizationMarkers(analysis)),
     [analysis, illustrative],
   );
   const previewImage = useRef(null);
   const [onFilm, setOnFilm] = useState(null);
-  const shownLocalizations = onFilm ?? shownLocalizations;
+  const shownLocalizations = onFilm ?? localizations;
   useEffect(() => {
     const image = previewImage.current;
     if (!image?.complete || !image.naturalWidth) {
       setOnFilm(null);
       return;
     }
-    setOnFilm(markersInsideFilm(image, shownLocalizations));
-  }, [shownLocalizations, src]);
+    setOnFilm(markersInsideFilm(image, localizations));
+  }, [localizations, src]);
   useEffect(() => {
     setFailed(false);
   }, [src]);
@@ -415,7 +415,7 @@ export default function ExamViewer({
                 onLoad={(event) => {
                   const image = event.currentTarget;
                   setRatio(image.naturalWidth / image.naturalHeight);
-                  setOnFilm(markersInsideFilm(image, shownLocalizations));
+                  setOnFilm(markersInsideFilm(image, localizations));
                 }}
                 onError={() => setFailed(true)}
               />
