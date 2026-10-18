@@ -3,6 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator, m
 
 Urgency = Literal["critical", "urgent", "actionable"]
 Status = Literal["detected", "notified", "read", "action_taken", "closed", "escalated"]
+InstitutionId = Literal["brightline", "unifeso"]
 
 
 class StrictModel(BaseModel):
@@ -70,6 +71,7 @@ class ImportInput(StrictModel):
 class Credentials(StrictModel):
     email: str = Field(min_length=3, max_length=254, pattern=r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
     password: SecretStr = Field(min_length=1, max_length=256)
+    institution_id: InstitutionId | None = None
 
     @field_validator("email", mode="before")
     @classmethod
@@ -80,11 +82,18 @@ class Credentials(StrictModel):
 class SignupInput(Credentials):
     name: str = Field(min_length=2, max_length=80)
     password: SecretStr = Field(min_length=9, max_length=256)
+    institutions: list[InstitutionId] = Field(
+        default_factory=lambda: ["brightline"], min_length=1, max_length=2
+    )
 
     @field_validator("name", mode="before")
     @classmethod
     def normalize_name(cls, value):
         return value.strip() if isinstance(value, str) else value
+
+
+class InstitutionMembershipInput(StrictModel):
+    institutions: list[InstitutionId] = Field(min_length=1, max_length=2)
 
 
 class RefreshInput(StrictModel):

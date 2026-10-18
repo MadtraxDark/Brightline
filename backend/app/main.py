@@ -23,7 +23,7 @@ from fastapi.concurrency import run_in_threadpool
 from pypdf import PdfReader
 
 from .config import get_settings
-from .models import AcknowledgeInput, ActionInput, Credentials, ImportInput, RefreshInput, SignupInput, Status, Urgency
+from .models import AcknowledgeInput, ActionInput, Credentials, ImportInput, InstitutionMembershipInput, RefreshInput, SignupInput, Status, Urgency
 
 from . import report_analysis
 
@@ -58,8 +58,13 @@ def issue_session(conn, user):
     access, refresh = secrets.token_urlsafe(40), secrets.token_urlsafe(48)
     conn.execute("INSERT INTO sessions(user_id, access_hash, refresh_hash, expires_at) VALUES (%s,%s,%s,%s)",
                  (user["id"], token_hash(access), token_hash(refresh), datetime.now(timezone.utc)+timedelta(hours=1)))
+    institutions = conn.execute(
+        "SELECT institution_id FROM user_institutions WHERE user_id=%s ORDER BY institution_id",
+        (user["id"],),
+    ).fetchall()
     return {"access_token": access, "refresh_token": refresh, "token_type": "bearer", "expires_in": 3600,
-            "user": {"id": str(user["id"]), "email": user["email"], "name": user["name"]}}
+            "user": {"id": str(user["id"]), "email": user["email"], "name": user["name"],
+                     "institutions": [row["institution_id"] for row in institutions]}}
 
 
 bearer = HTTPBearer(auto_error=False)
@@ -72,9 +77,14 @@ def authenticated(credentials: Annotated[HTTPAuthorizationCredentials | None, De
     with db() as conn:
         row = conn.execute("""SELECT u.id,u.email,u.name,s.access_hash FROM sessions s JOIN users u ON u.id=s.user_id
             WHERE s.access_hash=%s AND s.expires_at>now()""", (token_hash(credentials.credentials),)).fetchone()
+        institutions = conn.execute(
+            "SELECT institution_id FROM user_institutions WHERE user_id=%s ORDER BY institution_id",
+            (row["id"],),
+        ).fetchall() if row else []
     if not row:
         raise HTTPException(401, "Sessão inválida ou expirada.")
-    return {"token": credentials.credentials, "user": {"id": str(row["id"]), "email": row["email"], "name": row["name"]}}
+    return {"token": credentials.credentials, "user": {"id": str(row["id"]), "email": row["email"], "name": row["name"],
+            "institutions": [item["institution_id"] for item in institutions]}}
 
 
 Session = Annotated[dict, Depends(authenticated)]
@@ -100,7 +110,7 @@ try:
 except ValueError:
     origins = ("http://localhost:5173", "http://127.0.0.1:5173")
 app.add_middleware(CORSMiddleware, allow_origins=list(origins), allow_credentials=False,
-                   allow_methods=["GET", "POST", "DELETE"], allow_headers=["Authorization", "Content-Type"])
+                   allow_methods=["GET", "POST", "PUT", "DELETE"], allow_headers=["Authorization", "Content-Type"])
 
 
 @app.exception_handler(RequestValidationError)
@@ -136,9 +146,15 @@ async def signup(body: SignupInput):
         with db() as conn:
             user = conn.execute("INSERT INTO users(name,email,password_hash) VALUES (%s,%s,%s) RETURNING id,email,name",
                                 (body.name, body.email, password_hash(body.password.get_secret_value()))).fetchone()
+            for institution in dict.fromkeys(body.institutions):
+                conn.execute(
+                    "INSERT INTO user_institutions(user_id,institution_id) VALUES (%s,%s)",
+                    (user["id"], institution),
+                )
             conn.execute(
                 "INSERT INTO sim_state(owner_id) VALUES (%s)", (user["id"],))
-        return {"user": {"id": str(user["id"]), "email": user["email"], "name": user["name"]}}
+        return {"user": {"id": str(user["id"]), "email": user["email"], "name": user["name"],
+                          "institutions": list(dict.fromkeys(body.institutions))}}
     except psycopg.errors.UniqueViolation:
         raise HTTPException(409, "Este e-mail já está cadastrado.") from None
 
@@ -150,6 +166,11 @@ async def login(body: Credentials):
             "SELECT id,email,name,password_hash FROM users WHERE email=%s", (body.email,)).fetchone()
         if not user or not verify_password(body.password.get_secret_value(), user["password_hash"]):
             raise HTTPException(401, "E-mail ou senha inválidos.")
+        if body.institution_id and not conn.execute(
+            "SELECT 1 FROM user_institutions WHERE user_id=%s AND institution_id=%s",
+            (user["id"], body.institution_id),
+        ).fetchone():
+            raise HTTPException(403, "Instituição não vinculada a este perfil.")
         return issue_session(conn, user)
 
 
@@ -168,6 +189,20 @@ async def refresh(body: RefreshInput):
 @app.get("/auth/me")
 async def me(session: Session):
     return session["user"]
+
+
+@app.put("/auth/institutions")
+async def update_institutions(body: InstitutionMembershipInput, session: Session):
+    user_id = session["user"]["id"]
+    institutions = list(dict.fromkeys(body.institutions))
+    with db() as conn:
+        conn.execute("DELETE FROM user_institutions WHERE user_id=%s", (user_id,))
+        for institution in institutions:
+            conn.execute(
+                "INSERT INTO user_institutions(user_id,institution_id) VALUES (%s,%s)",
+                (user_id, institution),
+            )
+    return {"institutions": institutions}
 
 
 @app.post("/auth/logout", status_code=204)

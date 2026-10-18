@@ -8,6 +8,7 @@ import "@fontsource/source-serif-4/400.css";
 import * as api from "./api.js";
 import App from "./App.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
+import { HospitalProvider } from "./components/HospitalProvider.jsx";
 import { store } from "./store/store.js";
 import "./styles/tailwind.css";
 
@@ -31,9 +32,11 @@ if (import.meta.env.DEV) {
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <ErrorBoundary>
-        <App />
-      </ErrorBoundary>
+      <HospitalProvider>
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
+      </HospitalProvider>
     </BrowserRouter>
   </StrictMode>,
 );

@@ -18,6 +18,16 @@ class AuthPolicyTests(unittest.TestCase):
         body = SignupInput(name=" Ana Silva ", email=" ANA@example.test ", password="123456789")
         self.assertEqual(body.name, "Ana Silva")
         self.assertEqual(body.email, "ana@example.test")
+        self.assertEqual(body.institutions, ["brightline"])
+        self.assertEqual(
+            SignupInput(
+                name="Ana Silva",
+                email="ana@example.test",
+                password="123456789",
+                institutions=["brightline", "unifeso"],
+            ).institutions,
+            ["brightline", "unifeso"],
+        )
 
     def test_password_hash_is_salted_and_verified(self):
         encoded = password_hash("test-password")
@@ -32,7 +42,8 @@ class AuthDatabaseTests(unittest.TestCase):
     def test_complete_account_lifecycle(self):
         email = f"auth-test-{uuid4().hex}@example.test"
         password = secrets.token_urlsafe(20)
-        payload = {"name": "Teste Auth", "email": email, "password": password}
+        payload = {"name": "Teste Auth", "email": email, "password": password,
+                   "institutions": ["unifeso"]}
         user_id = None
         with TestClient(app) as client:
             try:
@@ -49,14 +60,36 @@ class AuthDatabaseTests(unittest.TestCase):
                     self.assertEqual(row["name"], "Teste Auth")
                     self.assertNotEqual(row["password_hash"], password)
                     self.assertTrue(verify_password(password, row["password_hash"]))
+                    self.assertEqual(
+                        conn.execute(
+                            "SELECT institution_id FROM user_institutions WHERE user_id=%s",
+                            (user_id,),
+                        ).fetchall(),
+                        [{"institution_id": "unifeso"}],
+                    )
                 self.assertEqual(client.post("/auth/signup", json=payload).status_code, 409)
-                credentials = {"email": email.upper(), "password": password}
+                credentials = {"email": email.upper(), "password": password,
+                               "institution_id": "unifeso"}
                 self.assertEqual(client.post("/auth/login", json={**credentials, "password": "wrong"}).status_code, 401)
                 login = client.post("/auth/login", json=credentials)
                 self.assertEqual(login.status_code, 200)
                 session = login.json()
+                self.assertEqual(session["user"]["institutions"], ["unifeso"])
                 headers = {"Authorization": f"Bearer {session['access_token']}"}
-                self.assertEqual(client.get("/auth/me", headers=headers).json()["id"], user_id)
+                me = client.get("/auth/me", headers=headers).json()
+                self.assertEqual(me["id"], user_id)
+                self.assertEqual(me["institutions"], ["unifeso"])
+                denied = client.post(
+                    "/auth/login",
+                    json={**credentials, "institution_id": "brightline"},
+                )
+                self.assertEqual(denied.status_code, 403)
+                changed = client.put(
+                    "/auth/institutions",
+                    headers=headers,
+                    json={"institutions": ["brightline", "unifeso"]},
+                )
+                self.assertEqual(changed.json()["institutions"], ["brightline", "unifeso"])
                 refreshed = client.post("/auth/refresh", json={"refresh_token": session["refresh_token"]})
                 self.assertEqual(refreshed.status_code, 200)
                 self.assertEqual(client.get("/auth/me", headers=headers).status_code, 401)

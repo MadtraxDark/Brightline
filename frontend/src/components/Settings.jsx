@@ -1,9 +1,15 @@
 import { useRef, useState } from "react";
-import { Camera, UserRound } from "lucide-react";
+import { Building2, Camera, UserRound } from "lucide-react";
 
-export default function Settings({ profile, onSave }) {
+export default function Settings({
+  profile,
+  hospitals,
+  selectedHospitalIds,
+  onSave,
+}) {
   const [name, setName] = useState(profile.name);
   const [photo, setPhoto] = useState(profile.photo);
+  const [hospitalIds, setHospitalIds] = useState(selectedHospitalIds);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
   const [reading, setReading] = useState(false);
@@ -40,12 +46,12 @@ export default function Settings({ profile, onSave }) {
     reader.readAsDataURL(file);
   }
 
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault();
     setError("");
     setStatus("");
     try {
-      onSave({ name: name.trim(), photo });
+      await onSave({ name: name.trim(), photo, hospitalIds });
       setStatus("Perfil atualizado nesta sessão.");
     } catch {
       setError(
@@ -155,6 +161,74 @@ export default function Settings({ profile, onSave }) {
             </p>
           </div>
         </form>
+      </section>
+      <section
+        className="panel settings-panel"
+        aria-labelledby="settings-hospitals-title"
+      >
+        <h2 id="settings-hospitals-title">Instituições onde trabalho</h2>
+        <p className="settings-description">
+          Selecione todos os hospitais em que você atua. Você poderá alternar
+          entre eles no menu superior; cada instituição aplica seu tema quando
+          disponível.
+        </p>
+        <fieldset className="institution-options">
+          <legend className="sr-only">Hospitais vinculados ao perfil</legend>
+          {hospitals.length ? (
+            hospitals.map((hospital) => (
+              <label className="institution-option" key={hospital.id}>
+                <input
+                  type="checkbox"
+                  checked={hospitalIds.includes(hospital.id)}
+                  disabled={
+                    hospitalIds.length === 1 &&
+                    hospitalIds.includes(hospital.id)
+                  }
+                  onChange={(event) => {
+                    setHospitalIds((current) =>
+                      event.target.checked
+                        ? [...current, hospital.id]
+                        : current.filter((id) => id !== hospital.id),
+                    );
+                    setStatus("");
+                  }}
+                />
+                <Building2 size={18} aria-hidden="true" />
+                <span>
+                  <strong>{hospital.name}</strong>
+                  <small>
+                    {hospital.id === "unifeso"
+                      ? "Tema institucional UNIFESO / HCTCO"
+                      : "Tema padrão Brightline"}
+                  </small>
+                </span>
+              </label>
+            ))
+          ) : (
+            <p>Nenhuma instituição disponível.</p>
+          )}
+        </fieldset>
+        <button
+          className="btn-primary"
+          type="button"
+          onClick={async () => {
+            setError("");
+            setStatus("");
+            try {
+              await onSave({ name: name.trim(), photo, hospitalIds });
+              setStatus("Instituições atualizadas no seu perfil.");
+            } catch {
+              setError(
+                "Não foi possível salvar as instituições. Tente novamente.",
+              );
+            }
+          }}
+        >
+          Salvar instituições
+        </button>
+        <p role="status" className="hint">
+          {status}
+        </p>
       </section>
     </>
   );

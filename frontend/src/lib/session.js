@@ -79,13 +79,17 @@ async function authRequest(path, { body, token, method = "POST" } = {}) {
       response.status === 204 ? null : await response.json().catch(() => null);
     if (!response.ok) {
       const message =
-        typeof data?.detail === "string"
-          ? data.detail
-          : response.status === 422
-            ? "Confira os dados. A senha do cadastro deve ter pelo menos 9 caracteres."
-            : response.status === 401
-              ? "E-mail ou senha inválidos."
-              : "Não foi possível acessar o serviço de autenticação. Tente novamente.";
+        path === "login" && response.status === 401
+          ? "Não foi possível entrar. Confira o e-mail, a senha e se você já tem uma conta cadastrada."
+          : path === "login" && response.status === 403
+            ? "A instituição selecionada não está vinculada ao seu perfil. Confira a instituição ou atualize seus vínculos."
+            : typeof data?.detail === "string"
+              ? data.detail
+              : response.status === 422
+                ? "Confira os dados. A senha do cadastro deve ter pelo menos 9 caracteres."
+                : response.status === 401
+                  ? "E-mail ou senha inválidos."
+                  : "Não foi possível acessar o serviço de autenticação. Tente novamente.";
       const error = new Error(message);
       error.status = response.status;
       throw error;
@@ -101,16 +105,32 @@ async function authRequest(path, { body, token, method = "POST" } = {}) {
   }
 }
 
-export async function login(storage, { email, password }) {
+export async function login(storage, { email, password, institution_id }) {
   const session = await authRequest("login", {
-    body: { email: email.trim().toLowerCase(), password },
+    body: { email: email.trim().toLowerCase(), password, institution_id },
   });
   return saveSession(storage, session);
 }
 
-export async function register({ name, email, password }) {
+export async function register({ name, email, password, institutions }) {
   return authRequest("signup", {
-    body: { name: name.trim(), email: email.trim().toLowerCase(), password },
+    body: {
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      password,
+      institutions,
+    },
+  });
+}
+
+export async function updateInstitutions(storage, institutions) {
+  const session = readSession(storage);
+  if (!session)
+    throw new Error("Entre novamente para editar suas instituições.");
+  return authRequest("institutions", {
+    method: "PUT",
+    token: session.access_token,
+    body: { institutions },
   });
 }
 

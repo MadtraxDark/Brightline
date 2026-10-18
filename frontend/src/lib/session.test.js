@@ -60,12 +60,15 @@ test("login real envia credenciais, valida sessão e logout revoga", async (t) =
     { status: 200, data: session.user },
     { status: 204 },
   ]);
-  await login(storage, credentials);
+  await login(storage, { ...credentials, institution_id: "unifeso" });
   assert.equal(isAuthenticated(storage), true);
   assert.deepEqual(await validateSession(storage), session.user);
   await logout(storage);
   assert.equal(isAuthenticated(storage), false);
-  assert.deepEqual(JSON.parse(calls[0].options.body), credentials);
+  assert.deepEqual(JSON.parse(calls[0].options.body), {
+    ...credentials,
+    institution_id: "unifeso",
+  });
   assert.equal(calls[1].options.headers.Authorization, "Bearer access");
   assert.ok(calls[2].url.endsWith("/auth/logout"));
 });
@@ -76,8 +79,13 @@ test("cadastro cria a conta sem autenticar; login explícito inicia a sessão", 
     { status: 201, data: { user: session.user } },
     { status: 200, data: session },
   ]);
-  await register({ ...credentials, name: " Ana Silva " });
+  await register({
+    ...credentials,
+    name: " Ana Silva ",
+    institutions: ["unifeso"],
+  });
   assert.equal(JSON.parse(calls[0].options.body).name, "Ana Silva");
+  assert.deepEqual(JSON.parse(calls[0].options.body).institutions, ["unifeso"]);
   assert.equal(isAuthenticated(storage), false);
   assert.equal(storage.getItem(SESSION_KEY), null);
   await login(storage, credentials);
@@ -89,7 +97,25 @@ test("falha de login não cria sessão", async (t) => {
   mockResponses(t, [
     { status: 401, data: { detail: "E-mail ou senha inválidos." } },
   ]);
-  await assert.rejects(login(storage, credentials), /inválidos/);
+  await assert.rejects(
+    login(storage, credentials),
+    /Confira o e-mail, a senha e se você já tem uma conta cadastrada/,
+  );
+  assert.equal(isAuthenticated(storage), false);
+});
+
+test("login informa quando a instituição não está vinculada ao perfil", async (t) => {
+  const storage = memoryStorage();
+  mockResponses(t, [
+    {
+      status: 403,
+      data: { detail: "Instituição não vinculada a este perfil." },
+    },
+  ]);
+  await assert.rejects(
+    login(storage, { ...credentials, institution_id: "unifeso" }),
+    /instituição selecionada não está vinculada ao seu perfil/,
+  );
   assert.equal(isAuthenticated(storage), false);
 });
 

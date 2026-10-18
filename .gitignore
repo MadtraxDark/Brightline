@@ -48,3 +48,7 @@ artifacts/compare/
 scripts/compare/
 graphify-out/cache/ast/
 
+
+# Local Brightline PostgreSQL cluster
+.local-postgres/
+.local-postgres.log

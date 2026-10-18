@@ -22,6 +22,7 @@ import {
   FlaskConical,
   Menu,
   X,
+  Building2,
 } from "lucide-react";
 import logo from "../public/logo/logo-text.svg";
 import CaseDetail from "./CaseDetail.jsx";
@@ -33,11 +34,12 @@ import Settings from "./Settings.jsx";
 import NavigationHighlight from "./NavigationHighlight.jsx";
 import Missed from "./Missed.jsx";
 import { readProfile, saveProfile } from "../lib/profile.js";
-import { logout } from "../lib/session.js";
+import { logout, updateInstitutions } from "../lib/session.js";
 import { formatAverage } from "../format.js";
 import { selectMissed, selectStats } from "../store/selectors.js";
 import { useStore } from "../store/useStore.js";
 import { previewData } from "../data/preview.js";
+import { useHospital } from "./HospitalProvider.jsx";
 
 const SUMMARY = [
   { key: "open", label: "Abertos" },
@@ -125,6 +127,16 @@ function Overview({ preview = false }) {
 export default function DashboardShell({ preview = false }) {
   const [profile, setProfile] = useState(() => readProfile(sessionStorage));
   const [menuOpen, setMenuOpen] = useState(false);
+  const {
+    hospitalId,
+    hospitals,
+    institutionOptions,
+    hospitalIds,
+    userKey,
+    setHospitalId,
+    setHospitalIds,
+    syncUser,
+  } = useHospital();
   const { pathname: routePath } = useLocation();
   const pathname = preview ? "/home" : routePath;
   const navigate = useNavigate();
@@ -168,6 +180,10 @@ export default function DashboardShell({ preview = false }) {
     [cases, reports],
   );
 
+  useEffect(() => {
+    syncUser();
+  }, [syncUser]);
+
   const Workspace = preview ? "div" : "main";
 
   return (
@@ -179,11 +195,23 @@ export default function DashboardShell({ preview = false }) {
       )}
       <aside className="sidebar">
         <div className="sidebar-header">
-          <div className="brand" translate="no">
-            <span className="brand-image">
-              <img src={logo} alt="Brightline" width="156" height="59" />
-            </span>
-          </div>
+          {hospitalId === "unifeso" ? (
+            <div className="institution-brand" aria-label="UNIFESO HCTCO">
+              <span className="institution-brand-mark" aria-hidden="true">
+                <Building2 size={23} />
+              </span>
+              <span className="institution-brand-copy">
+                <strong>UNIFESO</strong>
+                <small>HCTCO · Brightline</small>
+              </span>
+            </div>
+          ) : (
+            <div className="brand" translate="no">
+              <span className="brand-image">
+                <img src={logo} alt="Brightline" width="156" height="59" />
+              </span>
+            </div>
+          )}
           <button
             type="button"
             className="sidebar-menu-toggle"
@@ -273,6 +301,23 @@ export default function DashboardShell({ preview = false }) {
             Workspace <ChevronRight size={14} aria-hidden="true" />
             <span>{crumb(pathname)}</span>
           </div>
+          {!preview ? (
+            <label className="hospital-selector">
+              <Building2 size={17} aria-hidden="true" />
+              <span className="hospital-selector-label">Hospital</span>
+              <select
+                aria-label="Selecionar hospital"
+                value={hospitalId}
+                onChange={(event) => setHospitalId(event.target.value)}
+              >
+                {hospitals.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
           {preview ? (
             <span className="lp-preview-profile">Demonstração</span>
           ) : (
@@ -302,8 +347,16 @@ export default function DashboardShell({ preview = false }) {
                 path="/configuracoes"
                 element={
                   <Settings
+                    key={userKey}
                     profile={profile}
-                    onSave={(next) => {
+                    hospitals={institutionOptions}
+                    selectedHospitalIds={hospitalIds}
+                    onSave={async (next) => {
+                      await updateInstitutions(
+                        sessionStorage,
+                        next.hospitalIds,
+                      );
+                      setHospitalIds(next.hospitalIds);
                       saveProfile(sessionStorage, next);
                       setProfile(next);
                     }}

@@ -9,6 +9,8 @@ import {
   UserRound,
   FlaskConical,
   Stethoscope,
+  Building2,
+  ChevronDown,
 } from "lucide-react";
 import logo from "../public/logo/logo-text.svg";
 import {
@@ -20,11 +22,17 @@ import {
   validateLogin,
   validateRegistration,
 } from "../lib/session.js";
+import {
+  HOSPITALS,
+  saveHospitalSelection,
+  useHospital,
+} from "./HospitalProvider.jsx";
 
 export default function Login({ mode = "login" }) {
   const registering = mode === "register";
   const navigate = useNavigate();
   const location = useLocation();
+  const { setHospitalId } = useHospital();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const nameRef = useRef(null);
@@ -39,6 +47,9 @@ export default function Login({ mode = "login" }) {
   const [pending, setPending] = useState(false);
   const [serverError, setServerError] = useState("");
   const [registered, setRegistered] = useState(false);
+  const [institutionId, setInstitutionId] = useState("brightline");
+  const [institutionIds, setInstitutionIds] = useState(["brightline"]);
+  const [institutionError, setInstitutionError] = useState("");
   const successRef = useRef(null);
 
   useEffect(() => {
@@ -82,6 +93,12 @@ export default function Login({ mode = "login" }) {
           data.get("confirmation"),
         )
       : validateLogin(data.get("email"), data.get("password"));
+    if (registering && institutionIds.length === 0) {
+      setInstitutionError(
+        "Selecione pelo menos uma instituição onde você trabalha.",
+      );
+      return;
+    }
     if (Object.values(nextErrors).some(Boolean)) {
       setErrors(nextErrors);
       if (nextErrors.name) nameRef.current?.focus();
@@ -97,10 +114,30 @@ export default function Login({ mode = "login" }) {
         password: data.get("password"),
       };
       if (registering) {
-        await register({ ...credentials, name: data.get("name") });
+        const account = await register({
+          ...credentials,
+          name: data.get("name"),
+          institutions: institutionIds,
+        });
+        saveHospitalSelection(
+          account?.user?.id,
+          account?.user?.institutions || institutionIds,
+          institutionIds[0],
+          true,
+        );
         setRegistered(true);
       } else {
-        await login(sessionStorage, credentials);
+        const user = await login(sessionStorage, {
+          ...credentials,
+          institution_id: institutionId,
+        });
+        saveHospitalSelection(
+          user.id,
+          user.institutions || [institutionId],
+          institutionId,
+          true,
+        );
+        setHospitalId(institutionId);
         navigate(safeRedirectPath(location.state?.from), { replace: true });
       }
     } catch (error) {
@@ -201,6 +238,75 @@ export default function Login({ mode = "login" }) {
                     ) : null}
                   </div>
                 ) : null}
+                {registering ? (
+                  <div className="login-institution-options">
+                    <span className="login-institution-label">
+                      Instituições onde você trabalha
+                    </span>
+                    <details className="login-institution-dropdown">
+                      <summary>
+                        <Building2 size={17} aria-hidden="true" />
+                        <span>
+                          {institutionIds.length
+                            ? HOSPITALS.filter((hospital) =>
+                                institutionIds.includes(hospital.id),
+                              )
+                                .map((hospital) => hospital.name)
+                                .join(", ")
+                            : "Selecione uma ou mais instituições"}
+                        </span>
+                        <ChevronDown size={16} aria-hidden="true" />
+                      </summary>
+                      <div className="login-institution-menu">
+                        {HOSPITALS.map((hospital) => (
+                          <label
+                            className="login-institution-option"
+                            key={hospital.id}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={institutionIds.includes(hospital.id)}
+                              onChange={(event) => {
+                                setInstitutionIds((current) =>
+                                  event.target.checked
+                                    ? [...current, hospital.id]
+                                    : current.filter(
+                                        (id) => id !== hospital.id,
+                                      ),
+                                );
+                                setInstitutionError("");
+                              }}
+                            />
+                            <span>{hospital.name}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </details>
+                    <p>Escolha todas as instituições em que você atua.</p>
+                    {institutionError ? (
+                      <p className="login-error" role="alert">
+                        {institutionError}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : (
+                  <label className="login-institution-select">
+                    <span>Instituição para esta sessão</span>
+                    <select
+                      value={institutionId}
+                      onChange={(event) => {
+                        setInstitutionId(event.target.value);
+                        setHospitalId(event.target.value);
+                      }}
+                    >
+                      {HOSPITALS.map((hospital) => (
+                        <option key={hospital.id} value={hospital.id}>
+                          {hospital.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
                 <div>
                   <label htmlFor="login-email">E-mail</label>
                   <div

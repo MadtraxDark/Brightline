@@ -140,6 +140,43 @@
     --brand-gold: #f5c434;
   }
 
+  :root[data-hospital="unifeso"] {
+    --lp-navy: #174f43;
+    --lp-navy-soft: #246858;
+    --lp-ink: #183b32;
+    --lp-muted: #5d776d;
+    --lp-cream: #f1f7f2;
+    --lp-line: #d9e7dd;
+    --lp-light-ink: #d0e3d8;
+    --lp-accent: #c8e4d1;
+    --lp-accent-ink: #285a49;
+    --lp-evidence: #edf5ef;
+    --lp-demo: #547366;
+    --lp-floating-header: #174f43;
+    --bg: #f3f7f4;
+    --panel: #ffffff;
+    --border: #d8e4dc;
+    --border-strong: #829c8d;
+    --text: #20372f;
+    --text-muted: #5d756a;
+    --control-hover: #edf4ef;
+    --action-hover: #1d5a49;
+    --action-bg: #2d765e;
+    --action-text: #ffffff;
+    --sidebar-bg: #ffffff;
+    --sidebar-hover: #edf5ef;
+    --sidebar-active: #e0eee4;
+    --sidebar-text: #285b49;
+    --sidebar-muted: #5c776c;
+    --sidebar-border: #dce8df;
+    --icon-bg: #eaf3ed;
+    --icon-ink: #39745c;
+    --table-head: #f5f9f6;
+    --table-hover: #f1f7f3;
+    --focus: #2e765b;
+    --overlay-shadow: #183b3220;
+  }
+
   :root {
     --scrollbar-size: 10px;
     --scrollbar-track: var(--bg);
@@ -266,6 +303,40 @@
     width: 100%;
     height: auto;
   }
+  .institution-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 170px;
+    color: var(--sidebar-text);
+  }
+  .institution-brand-mark {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    color: var(--sidebar-text);
+    border: 1px solid var(--sidebar-border);
+    border-radius: 10px 10px 4px 10px;
+    background: var(--sidebar-active);
+  }
+  .institution-brand-copy {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+  }
+  .institution-brand-copy strong {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 18px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .institution-brand-copy small {
+    color: var(--sidebar-muted);
+    font-size: 10px;
+    letter-spacing: 0.02em;
+  }
   .sidebar-caption {
     margin: 32px 14px 14px;
     font-size: 13px;
@@ -332,6 +403,39 @@
     align-items: center;
     gap: 16px;
     padding: 0 40px;
+  }
+  .hospital-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 11px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--panel);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .hospital-selector > svg {
+    flex-shrink: 0;
+    color: var(--action-bg);
+  }
+  .hospital-selector select {
+    max-width: 190px;
+    min-height: 36px;
+    padding: 0 2px;
+    color: var(--text);
+    border: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .hospital-selector select:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
   }
   .breadcrumb {
     display: flex;
@@ -992,6 +1096,26 @@
       height: 52px;
       padding: 0 20px;
     }
+    .hospital-selector {
+      min-height: 36px;
+      gap: 5px;
+      padding-inline: 7px;
+    }
+    .hospital-selector-label {
+      display: none;
+    }
+    .hospital-selector select {
+      max-width: 138px;
+      font-size: 12px;
+    }
+    .institution-brand {
+      width: auto;
+      gap: 7px;
+    }
+    .institution-brand-mark {
+      width: 34px;
+      height: 34px;
+    }
     .workspace {
       padding: 24px 16px;
     }
@@ -1113,6 +1237,19 @@
     .btn-primary,
     .btn-secondary {
       min-height: 44px;
+    }
+  }
+  @media (max-width: 430px) {
+    .topbar {
+      gap: 7px;
+      padding-inline: 12px;
+    }
+    .breadcrumb {
+      gap: 6px;
+      font-size: 11px;
+    }
+    .hospital-selector select {
+      max-width: 112px;
     }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -1438,6 +1575,106 @@
     margin-bottom: 9px;
     font-size: 14px;
     font-weight: 500;
+  }
+  .login-institution-select {
+    display: grid !important;
+    gap: 8px;
+    margin: 0 !important;
+  }
+  .login-institution-select select {
+    width: 100%;
+    min-height: 48px;
+    padding: 0 12px;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    border-radius: 7px;
+    background: var(--panel);
+    font: inherit;
+  }
+  .login-institution-options {
+    display: grid;
+    gap: 7px;
+    margin: 0;
+    padding: 0;
+  }
+  .login-institution-label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .login-institution-options > p {
+    margin: -4px 0 2px;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+  .login-institution-dropdown {
+    position: relative;
+  }
+  .login-institution-dropdown summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 7px;
+    background: var(--panel);
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+  }
+  .login-institution-dropdown summary::-webkit-details-marker {
+    display: none;
+  }
+  .login-institution-dropdown summary > span {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+  .login-institution-dropdown summary > svg {
+    flex: 0 0 auto;
+    color: var(--action-bg);
+  }
+  .login-institution-menu {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    display: grid;
+    gap: 4px;
+    padding: 7px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel);
+    box-shadow: 0 12px 28px var(--overlay-shadow);
+  }
+  .login-form .login-institution-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 11px 12px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--panel);
+    cursor: pointer;
+  }
+  .login-institution-option input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--action-bg);
+  }
+  .login-institution-option svg {
+    flex: 0 0 auto;
+    color: var(--action-bg);
+  }
+  .login-institution-option:has(input:checked) {
+    border-color: var(--action-bg);
+    background: var(--bg);
   }
   .login-control {
     position: relative;
@@ -2004,6 +2241,48 @@
     margin-top: 8px;
     line-height: 1.6;
     max-width: 62ch;
+  }
+  .institution-options {
+    display: grid;
+    gap: 10px;
+    margin: 22px 0 18px;
+    padding: 0;
+    border: 0;
+  }
+  .institution-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .institution-option:has(input:checked) {
+    border-color: var(--brand-gold);
+    background: var(--bg);
+  }
+  .institution-option input {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--action-bg);
+  }
+  .institution-option > svg {
+    flex: 0 0 auto;
+    color: var(--text-muted);
+  }
+  .institution-option span {
+    display: grid;
+    gap: 3px;
+  }
+  .institution-option strong {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .institution-option small {
+    color: var(--text-muted);
+    font-size: 12px;
   }
   .settings-form {
     margin-top: 28px;
