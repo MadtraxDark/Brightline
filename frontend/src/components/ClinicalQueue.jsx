@@ -3,7 +3,6 @@ import {
   ChevronRight,
   FileText,
   CheckCircle2,
-  UserRound,
   Bell,
   Eye,
   ArrowUpRight,
@@ -14,34 +13,8 @@ import { Link } from "react-router-dom";
 import { deadlinePill } from "../lib/deadlinePill.js";
 import { communicationRule } from "../lib/groupByUrgency.js";
 import { statusLabel } from "../format.js";
+import PhysicianAvatar from "./PhysicianAvatar.jsx";
 import UrgencyBadge from "./UrgencyBadge.jsx";
-
-function PhysicianAvatar({ name, photo }) {
-  const initials = String(name || "")
-    .replace(/^(dr\.?|dra\.?)\s+/i, "")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .filter((_, index, names) => index === 0 || index === names.length - 1)
-    .map((part) => part[0])
-    .join("")
-    .toLocaleUpperCase("pt-BR");
-  return (
-    <span className="physician-avatar" aria-hidden="true">
-      {photo ? (
-        <img
-          src={photo}
-          alt=""
-          onError={(event) => {
-            event.currentTarget.hidden = true;
-            event.currentTarget.nextElementSibling.hidden = false;
-          }}
-        />
-      ) : null}
-      <span hidden={!!photo}>{initials || "—"}</span>
-    </span>
-  );
-}
 
 export default function ClinicalQueue({ groups, reports }) {
   const byId = new Map(reports.map((report) => [report.report_id, report]));
@@ -89,6 +62,11 @@ export default function ClinicalQueue({ groups, reports }) {
                     </span>
                   </div>
                   <div className="clinical-exam">
+                    <img
+                      className="clinical-exam-image"
+                      src={report.image_url || "/images/chest-xray-demo.png"}
+                      alt=""
+                    />
                     <FileText size={15} aria-hidden="true" />
                     <span>{report.modality || "Modalidade não informada"}</span>
                   </div>
@@ -99,32 +77,26 @@ export default function ClinicalQueue({ groups, reports }) {
                     <div className="clinical-physician">
                       <dt>Médico solicitante</dt>
                       <dd>
-                        <PhysicianAvatar
-                          name={report.ordering_physician}
-                          photo={report.ordering_physician_photo}
-                        />
-                        <span>
-                          {report.ordering_physician || "Não informado"}
-                        </span>
+                        <PhysicianAvatar name={report.ordering_physician} />
+                        <span>{report.ordering_physician}</span>
                       </dd>
                     </div>
                     <div className="clinical-physician">
                       <dt>Radiologista</dt>
                       <dd>
-                        <PhysicianAvatar
-                          name={report.radiologist}
-                          photo={report.radiologist_photo}
-                        />
-                        <span>{report.radiologist || "Não informado"}</span>
+                        <PhysicianAvatar name={report.radiologist} />
+                        <span>{report.radiologist}</span>
                       </dd>
                     </div>
-                    <div>
-                      <dt>
-                        <Building2 size={13} aria-hidden="true" />
-                        Clínica de origem
-                      </dt>
-                      <dd>{report.source_clinic || "Não informada"}</dd>
-                    </div>
+                    {report.source_clinic ? (
+                      <div>
+                        <dt>
+                          <Building2 size={13} aria-hidden="true" />
+                          Clínica de origem
+                        </dt>
+                        <dd>{report.source_clinic}</dd>
+                      </div>
+                    ) : null}
                     <div className="clinical-classification">
                       <dt>Confiança da Luna</dt>
                       <dd>
@@ -148,13 +120,6 @@ export default function ClinicalQueue({ groups, reports }) {
                 </div>
                 <div className="clinical-followup">
                   <h4 className="clinical-followup-label">Acompanhamento</h4>
-                  <div className="followup-person">
-                    <UserRound size={19} aria-hidden="true" />
-                    <div>
-                      <span>Responsável atual</span>
-                      <strong>{item.current_target || "Não informado"}</strong>
-                    </div>
-                  </div>
                   <div className="followup-state">
                     <span className={`followup-status is-${item.status}`}>
                       <StatusIcon size={15} aria-hidden="true" />

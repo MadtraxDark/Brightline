@@ -1,5 +1,3 @@
-import cache from "../data/extractions_cache.json" with { type: "json" };
-import reports from "../data/reports.json" with { type: "json" };
 import {
   acknowledge as acknowledgeCase,
   advance as advanceClock,
@@ -8,6 +6,8 @@ import {
 } from "../engine/engine.js";
 
 export const STORAGE_KEY = "brightline:v1";
+const EMPTY_REPORTS = [];
+const EMPTY_CACHE = {};
 
 function dataSignature(sourceReports, sourceCache) {
   const text = JSON.stringify([sourceReports, sourceCache]);
@@ -51,14 +51,14 @@ function browserStorage() {
 }
 
 export function createStore({ storage, timers = defaultTimers, data } = {}) {
-  const sourceReports = data?.reports ?? reports;
-  const sourceCache = data?.cache ?? cache;
+  const sourceReports = data?.reports ?? EMPTY_REPORTS;
+  const sourceCache = data?.cache ?? EMPTY_CACHE;
   const sig = dataSignature(sourceReports, sourceCache);
 
   function freshState() {
     const loaded = loadCases(sourceReports, sourceCache);
     return {
-      v: 1,
+      v: 2,
       sig,
       simNow: loaded.simNow,
       cases: loaded.cases,
@@ -74,7 +74,7 @@ export function createStore({ storage, timers = defaultTimers, data } = {}) {
       const parsed = JSON.parse(raw);
       if (
         !parsed ||
-        parsed.v !== 1 ||
+        parsed.v !== 2 ||
         parsed.sig !== sig ||
         !Array.isArray(parsed.cases) ||
         typeof parsed.simNow !== "number"
@@ -82,7 +82,7 @@ export function createStore({ storage, timers = defaultTimers, data } = {}) {
         return freshState();
       }
       return {
-        v: 1,
+        v: 2,
         sig,
         simNow: parsed.simNow,
         cases: parsed.cases,
@@ -104,7 +104,7 @@ export function createStore({ storage, timers = defaultTimers, data } = {}) {
       storage.setItem(
         STORAGE_KEY,
         JSON.stringify({
-          v: current.v,
+          v: 2,
           sig: current.sig,
           simNow: current.simNow,
           cases: current.cases,
@@ -156,7 +156,7 @@ export function createStore({ storage, timers = defaultTimers, data } = {}) {
       cancelTimer();
       const generation = timerGeneration;
       commit({
-        v: 1,
+        v: 2,
         sig,
         simNow: result.state.simNow,
         cases: result.state.cases,
@@ -180,7 +180,7 @@ export function createStore({ storage, timers = defaultTimers, data } = {}) {
     acknowledge(id, by) {
       const next = runEngine(() => acknowledgeCase(state, id, by));
       commit({
-        v: 1,
+        v: 2,
         sig,
         simNow: next.simNow,
         cases: next.cases,
@@ -193,13 +193,29 @@ export function createStore({ storage, timers = defaultTimers, data } = {}) {
         registerCaseAction(state, id, action, close),
       );
       commit({
-        v: 1,
+        v: 2,
         sig,
         simNow: next.simNow,
         cases: next.cases,
         reports: state.reports,
         recentlyEscalated: state.recentlyEscalated,
       });
+    },
+    replace(next) {
+      cancelTimer();
+      const reports = Array.isArray(next?.reports) ? next.reports : [];
+      const cases = Array.isArray(next?.cases) ? next.cases : [];
+      const nextSig = dataSignature(reports, cases);
+      state = {
+        v: 2,
+        sig: nextSig,
+        simNow: Number(next?.simNow) || 0,
+        cases,
+        reports,
+        recentlyEscalated: [],
+      };
+      persist(state);
+      emit();
     },
     reset() {
       cancelTimer();
@@ -210,7 +226,7 @@ export function createStore({ storage, timers = defaultTimers, data } = {}) {
       }
       const loaded = runEngine(() => loadCases(sourceReports, sourceCache));
       state = {
-        v: 1,
+        v: 2,
         sig,
         simNow: loaded.simNow,
         cases: loaded.cases,

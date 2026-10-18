@@ -119,7 +119,9 @@ export default function LunaWidget() {
         type="button"
         className="luna-button"
         data-open={open ? "true" : "false"}
-        aria-label="Abrir Luna, assistente de IA (em breve)"
+        aria-label={
+          open ? "Fechar chat geral da Luna" : "Abrir chat geral da Luna"
+        }
         aria-expanded={open}
         aria-controls="luna-panel"
         onClick={() => setOpen((value) => !value)}

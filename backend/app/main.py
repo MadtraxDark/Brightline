@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime, timedelta, timezone
 from hashlib import pbkdf2_hmac, sha256
 import hmac
+import json
 import os
 import re
 import secrets
@@ -23,7 +24,7 @@ from fastapi.concurrency import run_in_threadpool
 from pypdf import PdfReader
 
 from .config import get_settings
-from .models import AcknowledgeInput, ActionInput, Credentials, ImportInput, RefreshInput, SignupInput, Status, Urgency
+from .models import CreateReportInput, AcknowledgeInput, ActionInput, Credentials, ImportInput, RefreshInput, SignupInput, Status, Urgency
 
 from . import report_analysis
 
@@ -80,12 +81,53 @@ def authenticated(credentials: Annotated[HTTPAuthorizationCredentials | None, De
 Session = Annotated[dict, Depends(authenticated)]
 
 
+def ensure_shared_reports():
+    reports_path = BACKEND_DIR.parent / "frontend" / "src" / "data" / "reports.json"
+    cache_path = BACKEND_DIR.parent / "frontend" / "src" / "data" / "extractions_cache.json"
+    if not reports_path.is_file() or not cache_path.is_file():
+        return
+    reports = json.loads(reports_path.read_text(encoding="utf-8"))
+    cache = json.loads(cache_path.read_text(encoding="utf-8"))
+    with db() as conn:
+        if conn.execute("SELECT count(*) AS n FROM reports").fetchone()["n"]:
+            return
+        owner = conn.execute("SELECT id FROM users ORDER BY created_at LIMIT 1").fetchone()
+        if not owner:
+            return
+        owner_id = owner["id"]
+        conn.execute("INSERT INTO sim_state(owner_id) VALUES (%s) ON CONFLICT DO NOTHING", (owner_id,))
+        for report in reports:
+            conn.execute(
+                """INSERT INTO reports(owner_id,report_id,modality,radiologist,ordering_physician,text,flagged_by_radiologist,ground_truth)
+                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
+                (owner_id, report["report_id"], report["modality"], report["radiologist"], report["ordering_physician"],
+                 report["text"], report["flagged_by_radiologist"], psycopg.types.json.Jsonb(report.get("ground_truth") or [])),
+            )
+            findings = cache.get(report["report_id"], {}).get("findings", [])
+            conn.execute(
+                "INSERT INTO extractions(owner_id,report_id,findings) VALUES (%s,%s,%s)",
+                (owner_id, report["report_id"], psycopg.types.json.Jsonb(findings)),
+            )
+            for finding in findings:
+                case = conn.execute(
+                    """INSERT INTO cases(owner_id,report_id,finding,evidence,urgency,deadline_hours,confidence,current_target,deadline_at_sim)
+                       VALUES (%s,%s,%s,%s,%s,%s,%s,'Fila de revisão',%s) RETURNING id""",
+                    (owner_id, report["report_id"], finding["finding"], finding["evidence"], finding["urgency"],
+                     finding["deadline_hours"], finding["confidence"], finding["deadline_hours"]),
+                ).fetchone()
+                conn.execute(
+                    "INSERT INTO events(owner_id,case_id,type,detail,at_sim,actor_id) VALUES (%s,%s,'notified',%s,0,%s)",
+                    (owner_id, case["id"], "Laudo disponível para revisão", owner_id),
+                )
+
+
 @asynccontextmanager
 async def lifespan(app):
     settings = get_settings()
     # O init.sql é executado pelo container Postgres; aqui apenas validamos conexão.
     with psycopg.connect(settings.database_url) as conn:
         conn.execute("SELECT 1")
+    ensure_shared_reports()
     try:
         report_analysis.initialize_model()
     except Exception:
@@ -212,6 +254,86 @@ def list_cases(conn, owner, urgency=None, status=None, missed=False):
                   key=lambda c: ({"critical": 0, "urgent": 1, "actionable": 2}[c["urgency"]], c["time_remaining_hours"], str(c["id"])))
 
 
+@app.get("/workspace")
+async def workspace(session: Session):
+    with db() as conn:
+        reports = conn.execute(
+            """SELECT r.owner_id, r.report_id, r.modality, r.text, r.flagged_by_radiologist,
+               r.radiologist, r.ordering_physician,
+               (SELECT rf.file_id FROM report_files rf
+                 WHERE rf.owner_id=r.owner_id AND rf.report_id=r.report_id AND rf.role='radiograph'
+                 LIMIT 1) AS image_file_id
+               FROM reports r ORDER BY r.report_id""",
+        ).fetchall()
+        cases = conn.execute(
+            """SELECT c.id, c.owner_id, c.report_id, c.finding, c.evidence, c.urgency, c.confidence, c.status,
+               c.escalation_level, c.deadline_hours, c.deadline_at_sim, c.notified_at_sim,
+               COALESCE(s.sim_now, 0) AS sim_now
+               FROM cases c LEFT JOIN sim_state s ON s.owner_id=c.owner_id""",
+        ).fetchall()
+        events = conn.execute(
+            "SELECT case_id, detail, at_sim FROM events ORDER BY at_sim, id",
+        ).fetchall()
+        extractions = conn.execute("SELECT owner_id, report_id, findings FROM extractions").fetchall()
+    by_case = {}
+    for event in events:
+        by_case.setdefault(str(event["case_id"]), []).append(
+            {"at": float(event["at_sim"]), "label": event["detail"]}
+        )
+    by_report = {(str(row["owner_id"]), row["report_id"]): row for row in reports}
+    percents = {}
+    for row in extractions:
+        for finding in row["findings"] or []:
+            if isinstance(finding, dict) and "confidence_percent" in finding:
+                percents[(str(row["owner_id"]), row["report_id"], finding.get("finding"))] = finding
+    presented = []
+    for case in cases:
+        key = (str(case["owner_id"]), case["report_id"])
+        report = by_report.get(key)
+        extra = percents.get((*key, case["finding"]), {})
+        clock = float(case["sim_now"] or 0)
+        case_id = str(case["id"])
+        presented.append({
+            "id": case_id,
+            "report_id": case["report_id"],
+            "finding": case["finding"],
+            "evidence": case["evidence"],
+            "urgency": case["urgency"],
+            "confidence": case["confidence"],
+            "confidence_percent": extra.get("confidence_percent"),
+            "confidence_is_example": extra.get("confidence_is_example") is True,
+            "status": case["status"],
+            "escalation_level": case["escalation_level"],
+            "deadline_hours": case["deadline_hours"],
+            "deadline_at": float(case["deadline_at_sim"]) - clock,
+            "notified_at": float(case["notified_at_sim"]) - clock,
+            "modality": report["modality"] if report else None,
+            "text": report["text"] if report else "",
+            "radiologist": report["radiologist"] if report else None,
+            "ordering_physician": report["ordering_physician"] if report else None,
+            "flagged_by_radiologist": bool(report["flagged_by_radiologist"]) if report else False,
+            "events": by_case.get(case_id, []),
+        })
+    return {
+        "sim_now": 0,
+        "reports": [
+            {
+                "report_id": row["report_id"],
+                "modality": row["modality"],
+                "text": row["text"],
+                "flagged_by_radiologist": row["flagged_by_radiologist"],
+                "radiologist": row["radiologist"],
+                "ordering_physician": row["ordering_physician"],
+                "classified": (str(row["owner_id"]),row["report_id"]) in {(str(e["owner_id"]),e["report_id"]) for e in extractions},
+                "image_file_id": row["image_file_id"],
+                "image_url": None if row["image_file_id"] else "/images/chest-xray-demo.png",
+            }
+            for row in reports
+        ],
+        "cases": presented,
+    }
+
+
 @app.get("/cases")
 async def cases(session: Session, urgency: Urgency | None = None, status: Status | None = None):
     with db() as conn:
@@ -290,7 +412,7 @@ def command(conn, owner, op, payload):
                     "INSERT INTO events(owner_id,case_id,type,detail,at_sim,actor_id) VALUES (%s,%s,'coordination_overdue','Prazo estourado na coordenação',%s,%s)", (owner, c["id"], now, owner))
         return {"sim_now": now, "changed_cases": changed}
     case = conn.execute(
-        "SELECT * FROM cases WHERE owner_id=%s AND id=%s FOR UPDATE", (owner, payload["id"])).fetchone()
+        "SELECT * FROM cases WHERE id=%s FOR UPDATE", (payload["id"],)).fetchone()
     if not case:
         raise HTTPException(404, "Caso não encontrado.")
     if op == "acknowledge":
@@ -407,6 +529,34 @@ def _extract_report(report_id: str, text: str) -> dict:
         return extract_one({"report_id": report_id, "text": text}, prompt_path.read_text(encoding="utf-8-sig"), model, key)
     except (ValueError, OSError, RuntimeError):
         raise HTTPException(502, "A extração do laudo falhou; nenhum resultado foi persistido.") from None
+
+
+@app.post("/reports", status_code=201)
+async def create_report(payload: CreateReportInput, session: Session):
+    owner = session["user"]["id"]
+    if not all(value.strip() for value in [payload.report_id, payload.modality, payload.text, payload.radiologist, payload.ordering_physician]):
+        raise HTTPException(422, "Preencha todos os campos do laudo.")
+    findings = (await run_in_threadpool(_extract_report, payload.report_id, payload.text))["findings"] if payload.classify else []
+    with db() as conn:
+        conn.execute("SELECT id FROM users WHERE id=%s FOR UPDATE", (owner,))
+        if conn.execute("SELECT 1 FROM reports WHERE owner_id=%s AND report_id=%s", (owner,payload.report_id)).fetchone():
+            raise HTTPException(409, "Já existe um laudo com esse nome. Escolha outro nome.")
+        conn.execute("INSERT INTO sim_state(owner_id) VALUES (%s) ON CONFLICT DO NOTHING", (owner,))
+        conn.execute("""INSERT INTO reports(owner_id,report_id,modality,radiologist,ordering_physician,text,flagged_by_radiologist,ground_truth)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,'[]'::jsonb)""", (owner,payload.report_id,payload.modality,payload.radiologist,payload.ordering_physician,payload.text,payload.flagged_by_radiologist))
+        if payload.classify:
+            conn.execute("INSERT INTO extractions(owner_id,report_id,findings) VALUES (%s,%s,%s)", (owner,payload.report_id,psycopg.types.json.Jsonb(findings)))
+        if payload.image_file_id:
+            image = conn.execute("SELECT mime_type FROM files WHERE owner_id=%s AND file_id=%s", (owner,payload.image_file_id)).fetchone()
+            if not image or image["mime_type"] not in {"image/png","image/jpeg"}:
+                raise HTTPException(422, "Radiografia inválida ou não encontrada.")
+            conn.execute("INSERT INTO report_files(owner_id,report_id,file_id,role) VALUES (%s,%s,%s,'radiograph')", (owner,payload.report_id,payload.image_file_id))
+        now = current_hour(conn,owner)
+        for finding in findings:
+            row=conn.execute("""INSERT INTO cases(owner_id,report_id,finding,evidence,urgency,deadline_hours,confidence,current_target,deadline_at_sim,status)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,'notified') RETURNING id""", (owner,payload.report_id,finding["finding"],finding["evidence"],finding["urgency"],finding["deadline_hours"],finding["confidence"],payload.ordering_physician,now+finding["deadline_hours"])).fetchone()
+            conn.execute("INSERT INTO events(owner_id,case_id,type,detail,at_sim,actor_id) VALUES (%s,%s,'notified',%s,%s,%s)", (owner,row["id"],f"Notificação enviada a {payload.ordering_physician}",now,owner))
+    return {"report_id":payload.report_id,"classified":payload.classify,"findings_count":len(findings)}
 
 
 @app.post("/reports/analyze", summary="Extrai achados e compara com a radiografia", description="Protótipo de apoio à revisão humana. Aceita texto/PDF pesquisável como laudo e PNG/JPEG torácico em radiograph. Retorna probabilidades das 14 classes NIH, divergências exploratórias e metadados; nunca emite diagnóstico.")

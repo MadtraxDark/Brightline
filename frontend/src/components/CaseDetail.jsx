@@ -1,3 +1,5 @@
+import PhysicianAvatar from "./PhysicianAvatar.jsx";
+import { classificationConfidence } from "../lib/classificationConfidence.js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -12,7 +14,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { acknowledge, registerAction } from "../api.js";
-import { confidenceLabel, formatOffset, statusLabel } from "../format.js";
+import { formatOffset, statusLabel } from "../format.js";
 import { deadlinePill } from "../lib/deadlinePill.js";
 import { escalationPath } from "../lib/escalationPath.js";
 import { formatRemaining } from "../lib/formatRemaining.js";
@@ -42,6 +44,7 @@ export default function CaseDetail() {
     [cases, simNow, reports, id],
   );
   const [error, setError] = useState("");
+  const [reclassificationNotice, setReclassificationNotice] = useState(false);
   const [pending, setPending] = useState(false);
   const [actionOpen, setActionOpen] = useState(false);
   const [note, setNote] = useState("");
@@ -49,6 +52,7 @@ export default function CaseDetail() {
   const noteRef = useRef(null);
   const openActionRef = useRef(null);
   const status = detail?.case.status;
+  useEffect(() => setReclassificationNotice(false), [id]);
 
   useEffect(() => {
     if (status !== "read") setActionOpen(false);
@@ -70,6 +74,7 @@ export default function CaseDetail() {
   }
 
   const item = detail.case;
+  const confidence = classificationConfidence(item);
   const reportText = detail.report?.text ?? item.text ?? "";
   const evidence = splitEvidence(reportText, item.evidence);
   const pill = deadlinePill(item);
@@ -176,7 +181,11 @@ export default function CaseDetail() {
                   <span />
                 </span>
                 <span className="escalation-node">
-                  <Icon size={24} aria-hidden="true" />
+                  {step.level < 2 ? (
+                    <PhysicianAvatar name={step.name} />
+                  ) : (
+                    <Icon size={24} aria-hidden="true" />
+                  )}
                   {done && (
                     <Check
                       className="escalation-check"
@@ -187,7 +196,7 @@ export default function CaseDetail() {
                 </span>
                 <div className="escalation-copy">
                   <span className="escalation-role">{step.role}</span>
-                  <strong>{step.name}</strong>
+                  {step.name ? <strong>{step.name}</strong> : null}
                   <span className="escalation-state">{step.state}</span>
                 </div>
               </li>
@@ -336,11 +345,25 @@ export default function CaseDetail() {
           <dl className="report-document-meta">
             <div>
               <dt>Radiologista</dt>
-              <dd>{item.radiologist || "Não informado"}</dd>
+              <dd className="report-physician">
+                <PhysicianAvatar
+                  name={detail.report?.radiologist || item.radiologist}
+                />
+                <span>{detail.report?.radiologist || item.radiologist}</span>
+              </dd>
             </div>
             <div>
               <dt>Médico solicitante</dt>
-              <dd>{item.ordering_physician || "Não informado"}</dd>
+              <dd className="report-physician">
+                <PhysicianAvatar
+                  name={
+                    detail.report?.ordering_physician || item.ordering_physician
+                  }
+                />
+                <span>
+                  {detail.report?.ordering_physician || item.ordering_physician}
+                </span>
+              </dd>
             </div>
             {detail.report?.source_clinic ? (
               <div>
@@ -351,11 +374,31 @@ export default function CaseDetail() {
             <div className="report-luna-classification">
               <dt>Classificação da Luna</dt>
               <dd>
-                <span>{confidenceLabel(item.confidence)}</span>
+                <span
+                  className={`classification-confidence is-${confidence.tone}`}
+                >
+                  {confidence.label}
+                </span>
                 <span className="classification-status">
                   <CheckCircle2 size={16} aria-hidden="true" />
                   Classificado
                 </span>
+                <button
+                  className="reclassify-button"
+                  type="button"
+                  onClick={() => setReclassificationNotice(true)}
+                >
+                  Reclassificar
+                </button>
+                {item.confidence_is_example && (
+                  <small>Percentual simulado</small>
+                )}
+                {reclassificationNotice && (
+                  <small className="reclassification-notice" role="status">
+                    A reclassificação pela Luna ainda não está conectada. O
+                    resultado atual foi mantido.
+                  </small>
+                )}
               </dd>
             </div>
           </dl>

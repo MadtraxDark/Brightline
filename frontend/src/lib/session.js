@@ -155,6 +155,56 @@ export function validateSession(storage) {
   return validation;
 }
 
+export async function authorizedRequest(
+  path,
+  { method = "GET", body, timeoutMs = 15000 } = {},
+) {
+  const storage = sessionStorage;
+  let session = readSession(storage);
+  if (!session) throw new Error("Sessão expirada. Entre novamente.");
+  const send = (token) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    return fetch(`${AUTH_BASE}${path}`, {
+      method,
+      headers: {
+        Accept: "application/json",
+        ...(body
+          ? {
+              "Content-Type":
+                body instanceof Blob ? body.type : "application/json",
+            }
+          : {}),
+        Authorization: `Bearer ${token}`,
+      },
+      body:
+        body instanceof Blob ? body : body ? JSON.stringify(body) : undefined,
+      signal: controller.signal,
+      cache: "no-store",
+    }).finally(() => clearTimeout(timeout));
+  };
+  let response = await send(session.access_token);
+  if (response.status === 401 && session.refresh_token) {
+    session = await authRequest("refresh", {
+      body: { refresh_token: session.refresh_token },
+    });
+    saveSession(storage, session);
+    response = await send(session.access_token);
+  }
+  const data =
+    response.status === 204 ? null : await response.json().catch(() => null);
+  if (!response.ok) {
+    const message =
+      typeof data?.detail === "string"
+        ? data.detail
+        : "Não foi possível carregar os laudos.";
+    const error = new Error(message);
+    error.status = response.status;
+    throw error;
+  }
+  return data;
+}
+
 export async function logout(storage) {
   const session = readSession(storage);
   clearSession(storage);
