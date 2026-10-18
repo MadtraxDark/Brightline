@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator, m
 
 Urgency = Literal["critical", "urgent", "actionable"]
 Status = Literal["detected", "notified", "read", "action_taken", "closed", "escalated"]
-InstitutionId = Literal["brightline", "unifeso"]
+InstitutionId = Literal["hctco_unifeso", "hospital_sao_jose", "beneficencia_portuguesa", "outro_hospital"]
 
 
 class StrictModel(BaseModel):
@@ -17,6 +17,7 @@ class GroundTruth(StrictModel):
 
 class ReportInput(StrictModel):
     report_id: str = Field(min_length=1, max_length=100)
+    patient_ref: str | None = Field(default=None, min_length=1, max_length=100)
     modality: str = Field(min_length=1)
     radiologist: str = Field(min_length=1)
     ordering_physician: str = Field(min_length=1)
@@ -71,7 +72,7 @@ class ImportInput(StrictModel):
 class Credentials(StrictModel):
     email: str = Field(min_length=3, max_length=254, pattern=r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
     password: SecretStr = Field(min_length=1, max_length=256)
-    institution_id: InstitutionId | None = None
+    institution_id: InstitutionId
 
     @field_validator("email", mode="before")
     @classmethod
@@ -82,9 +83,7 @@ class Credentials(StrictModel):
 class SignupInput(Credentials):
     name: str = Field(min_length=2, max_length=80)
     password: SecretStr = Field(min_length=9, max_length=256)
-    institutions: list[InstitutionId] = Field(
-        default_factory=lambda: ["brightline"], min_length=1, max_length=2
-    )
+    institutions: list[InstitutionId] = Field(min_length=1, max_length=4)
 
     @field_validator("name", mode="before")
     @classmethod
@@ -93,7 +92,7 @@ class SignupInput(Credentials):
 
 
 class InstitutionMembershipInput(StrictModel):
-    institutions: list[InstitutionId] = Field(min_length=1, max_length=2)
+    institutions: list[InstitutionId] = Field(min_length=1, max_length=4)
 
 
 class RefreshInput(StrictModel):

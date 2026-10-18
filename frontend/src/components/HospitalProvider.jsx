@@ -11,8 +11,10 @@ const ACTIVE_HOSPITAL_KEY = "brightline:hospital";
 const HOSPITALS_KEY = "brightline:institutions:";
 
 export const HOSPITALS = [
-  { id: "brightline", name: "Brightline · padrão" },
-  { id: "unifeso", name: "UNIFESO · HCTCO" },
+  { id: "hctco_unifeso", name: "HCTCO · UNIFESO" },
+  { id: "hospital_sao_jose", name: "Hospital São José · Teresópolis" },
+  { id: "beneficencia_portuguesa", name: "Hospital Beneficência Portuguesa · Teresópolis" },
+  { id: "outro_hospital", name: "Outro hospital" },
 ];
 
 export function saveHospitalSelection(userId, ids, activeId, replace = false) {
@@ -52,9 +54,9 @@ function readHospital(userKey) {
     const saved = localStorage.getItem(`${ACTIVE_HOSPITAL_KEY}:${userKey}`);
     return HOSPITALS.some((hospital) => hospital.id === saved)
       ? saved
-      : "brightline";
+      : "hctco_unifeso";
   } catch {
-    return "brightline";
+    return "hctco_unifeso";
   }
 }
 
@@ -78,9 +80,9 @@ function readHospitals(userKey) {
     const valid = Array.isArray(saved)
       ? saved.filter((id) => HOSPITALS.some((hospital) => hospital.id === id))
       : [];
-    return valid.length ? [...new Set(valid)] : ["brightline"];
+    return valid.length ? [...new Set(valid)] : ["hctco_unifeso"];
   } catch {
-    return ["brightline"];
+    return ["hctco_unifeso"];
   }
 }
 
@@ -128,7 +130,7 @@ export function HospitalProvider({ children }) {
       // Os vínculos continuam disponíveis enquanto o painel estiver aberto.
     }
     if (!hospitalIds.includes(hospitalId)) {
-      setHospitalId(hospitalIds[0] || "brightline");
+      setHospitalId(hospitalIds[0] || "hctco_unifeso");
     }
   }, [hospitalIds, hospitalId, userKey]);
 

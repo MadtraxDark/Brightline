@@ -80,7 +80,7 @@ async function authRequest(path, { body, token, method = "POST" } = {}) {
     if (!response.ok) {
       const message =
         path === "login" && response.status === 401
-          ? "Não foi possível entrar. Confira o e-mail, a senha e se você já tem uma conta cadastrada."
+          ? "Não foi possível entrar: e-mail ou senha incorretos. Confira seus dados e tente novamente."
           : path === "login" && response.status === 403
             ? "A instituição selecionada não está vinculada ao seu perfil. Confira a instituição ou atualize seus vínculos."
             : typeof data?.detail === "string"
@@ -127,11 +127,27 @@ export async function updateInstitutions(storage, institutions) {
   const session = readSession(storage);
   if (!session)
     throw new Error("Entre novamente para editar suas instituições.");
-  return authRequest("institutions", {
+  const result = await authRequest("institutions", {
     method: "PUT",
     token: session.access_token,
     body: { institutions },
   });
+  const next = { ...session, user: { ...session.user, institutions, institution_id: result.institution_id } };
+  try { storage.setItem(SESSION_KEY, JSON.stringify(next)); } catch { memorySession = next; }
+  return result;
+}
+
+export async function switchInstitution(storage, institution_id) {
+  const session = readSession(storage);
+  if (!session) throw new Error("Entre novamente para trocar de instituição.");
+  const result = await authRequest("institution", {
+    method: "PUT",
+    token: session.access_token,
+    body: { institution_id },
+  });
+  const next = { ...session, user: { ...session.user, institution_id } };
+  try { storage.setItem(SESSION_KEY, JSON.stringify(next)); } catch { memorySession = next; }
+  return result;
 }
 
 async function verifyStoredSession(storage) {

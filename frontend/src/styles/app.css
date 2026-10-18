@@ -1935,6 +1935,10 @@ a.back-button {
   color: var(--text-muted);
   margin-top: 4px;
 }
+.institution-switch-error {
+  color: var(--critical);
+  font-size: 12px;
+}
 .profile-dropdown [role="menuitem"] {
   display: flex;
   align-items: center;

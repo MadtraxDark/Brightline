@@ -101,7 +101,7 @@ export default function ProfileMenu({ profile, onLogout }) {
         <div className="profile-dropdown">
           <div className="profile-menu-heading">
             <strong>{profile.name || "Meu perfil"}</strong>
-            <span>Ambiente de demonstração</span>
+            <span>Ambiente de trabalho</span>
           </div>
           <div ref={menu} role="menu" id={menuId} aria-label="Opções do perfil">
             <Link

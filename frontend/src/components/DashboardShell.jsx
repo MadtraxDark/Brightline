@@ -34,7 +34,7 @@ import Settings from "./Settings.jsx";
 import NavigationHighlight from "./NavigationHighlight.jsx";
 import Missed from "./Missed.jsx";
 import { readProfile, saveProfile } from "../lib/profile.js";
-import { logout, updateInstitutions } from "../lib/session.js";
+import { logout, updateInstitutions, switchInstitution } from "../lib/session.js";
 import { formatAverage } from "../format.js";
 import { selectMissed, selectStats } from "../store/selectors.js";
 import { useStore } from "../store/useStore.js";
@@ -195,23 +195,11 @@ export default function DashboardShell({ preview = false }) {
       )}
       <aside className="sidebar">
         <div className="sidebar-header">
-          {hospitalId === "unifeso" ? (
-            <div className="institution-brand" aria-label="UNIFESO HCTCO">
-              <span className="institution-brand-mark" aria-hidden="true">
-                <Building2 size={23} />
-              </span>
-              <span className="institution-brand-copy">
-                <strong>UNIFESO</strong>
-                <small>HCTCO · Brightline</small>
-              </span>
-            </div>
-          ) : (
-            <div className="brand" translate="no">
-              <span className="brand-image">
-                <img src={logo} alt="Brightline" width="156" height="59" />
-              </span>
-            </div>
-          )}
+          <Link className="brand" to="/home" aria-label="Brightline, página principal" translate="no">
+            <span className="brand-image">
+              <img src={logo} alt="Brightline" width="156" height="59" />
+            </span>
+          </Link>
           <button
             type="button"
             className="sidebar-menu-toggle"
@@ -304,11 +292,14 @@ export default function DashboardShell({ preview = false }) {
           {!preview ? (
             <label className="hospital-selector">
               <Building2 size={17} aria-hidden="true" />
-              <span className="hospital-selector-label">Hospital</span>
+              <span className="hospital-selector-label">Instituição</span>
               <select
                 aria-label="Selecionar hospital"
                 value={hospitalId}
-                onChange={(event) => setHospitalId(event.target.value)}
+                onChange={async (event) => {
+                  await switchInstitution(sessionStorage, event.target.value);
+                  setHospitalId(event.target.value);
+                }}
               >
                 {hospitals.map((item) => (
                   <option key={item.id} value={item.id}>
@@ -352,11 +343,12 @@ export default function DashboardShell({ preview = false }) {
                     hospitals={institutionOptions}
                     selectedHospitalIds={hospitalIds}
                     onSave={async (next) => {
-                      await updateInstitutions(
+                      const result = await updateInstitutions(
                         sessionStorage,
                         next.hospitalIds,
                       );
                       setHospitalIds(next.hospitalIds);
+                      setHospitalId(result.institution_id);
                       saveProfile(sessionStorage, next);
                       setProfile(next);
                     }}

@@ -1,7 +1,7 @@
 @layer theme, base, components, utilities;
 
 @import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
+@import "tailwindcss/utilities.css" source("../..") layer(utilities);
 
 @theme inline {
   --color-phone-shell: #1b272a;
@@ -1667,6 +1667,11 @@
     height: 16px;
     margin: 0;
     accent-color: var(--action-bg);
+    flex: 0 0 auto;
+  }
+  .login-institution-option span {
+    margin-left: 2px;
+    line-height: 1.4;
   }
   .login-institution-option svg {
     flex: 0 0 auto;
@@ -2267,6 +2272,10 @@
     width: 17px;
     height: 17px;
     accent-color: var(--action-bg);
+    flex: 0 0 auto;
+  }
+  .institution-option span {
+    margin-left: 2px;
   }
   .institution-option > svg {
     flex: 0 0 auto;

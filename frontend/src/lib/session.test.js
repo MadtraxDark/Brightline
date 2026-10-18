@@ -99,7 +99,7 @@ test("falha de login não cria sessão", async (t) => {
   ]);
   await assert.rejects(
     login(storage, credentials),
-    /Confira o e-mail, a senha e se você já tem uma conta cadastrada/,
+    /e-mail ou senha incorretos/,
   );
   assert.equal(isAuthenticated(storage), false);
 });

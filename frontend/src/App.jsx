@@ -21,6 +21,7 @@ import {
   X,
   PanelLeftClose,
   PanelLeftOpen,
+  Building2,
 } from "lucide-react";
 import LandingPage from "./LandingPage.jsx";
 import logo from "./public/logo/logo-text.svg";
@@ -42,7 +43,8 @@ import {
   writeSidebarCollapsed,
 } from "./lib/sidebarPref.js";
 import Missed from "./components/Missed.jsx";
-import { logout, validateSession } from "./lib/session.js";
+import { logout, validateSession, updateInstitutions, switchInstitution } from "./lib/session.js";
+import { useHospital, saveHospitalSelection, HOSPITALS } from "./components/HospitalProvider.jsx";
 import { formatRemaining } from "./lib/formatRemaining.js";
 import { buildSidebarItems } from "./lib/sidebarItems.js";
 import { buildSearch, parseView } from "./lib/viewState.js";
@@ -227,11 +229,23 @@ function RequireAuth({ children }) {
 function Shell() {
   const [profile, setProfile] = useState(() => readProfile(sessionStorage));
   const [menuOpen, setMenuOpen] = useState(false);
+  const [institutionError, setInstitutionError] = useState("");
   const [collapsed, setCollapsed] = useState(() =>
     readSidebarCollapsed(localStorage),
   );
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
+  const { hospitalId, hospitalIds, institutionOptions, userKey, setHospitalId, setHospitalIds } = useHospital();
+  async function changeInstitution(id) {
+    setInstitutionError("");
+    try {
+      await switchInstitution(sessionStorage, id);
+      setHospitalId(id);
+      saveHospitalSelection(userKey, hospitalIds, id);
+    } catch (error) {
+      setInstitutionError(error.message || "Não foi possível trocar de instituição.");
+    }
+  }
   const view = parseView(search);
   const activeSection =
     pathname === "/home" || pathname.startsWith("/caso/")
@@ -264,7 +278,7 @@ function Shell() {
         Ir para os laudos
       </a>
       <aside className="sidebar">
-        <div className="brand" translate="no">
+          <Link className="brand" to="/home" aria-label="Brightline, página principal" translate="no">
           <span className="brand-image">
             <img
               className="brand-full"
@@ -281,7 +295,7 @@ function Shell() {
               height="32"
             />
           </span>
-        </div>
+        </Link>
         <button
           type="button"
           className="sidebar-menu-toggle"
@@ -433,6 +447,17 @@ function Shell() {
             <span>{crumb(pathname)}</span>
           </div>
           <div className="topbar-end">
+            <label className="hospital-selector">
+              <Building2 size={17} aria-hidden="true" />
+              <span className="hospital-selector-label">Instituição</span>
+              <select aria-label="Instituição ativa" value={hospitalId} onChange={(event) => changeInstitution(event.target.value)}>
+                {hospitalIds.map((id) => {
+                  const institution = HOSPITALS.find((item) => item.id === id);
+                  return institution ? <option key={id} value={id}>{institution.name}</option> : null;
+                })}
+              </select>
+            </label>
+            {institutionError ? <span className="institution-switch-error" role="alert">{institutionError}</span> : null}
             <ProfileMenu
               profile={profile}
               onLogout={() => {
@@ -455,7 +480,12 @@ function Shell() {
                   element={
                     <Settings
                       profile={profile}
-                      onSave={(next) => {
+                      hospitals={institutionOptions}
+                      selectedHospitalIds={hospitalIds}
+                      onSave={async (next) => {
+                        const result = await updateInstitutions(sessionStorage, next.hospitalIds);
+                        setHospitalIds(next.hospitalIds);
+                        setHospitalId(result.institution_id);
                         saveProfile(sessionStorage, next);
                         setProfile(next);
                       }}

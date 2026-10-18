@@ -168,9 +168,8 @@ export default function Settings({
       >
         <h2 id="settings-hospitals-title">Instituições onde trabalho</h2>
         <p className="settings-description">
-          Selecione todos os hospitais em que você atua. Você poderá alternar
-          entre eles no menu superior; cada instituição aplica seu tema quando
-          disponível.
+          Selecione as instituições vinculadas ao seu perfil. Você poderá
+          alternar entre elas no menu superior.
         </p>
         <fieldset className="institution-options">
           <legend className="sr-only">Hospitais vinculados ao perfil</legend>
@@ -197,9 +196,7 @@ export default function Settings({
                 <span>
                   <strong>{hospital.name}</strong>
                   <small>
-                    {hospital.id === "unifeso"
-                      ? "Tema institucional UNIFESO / HCTCO"
-                      : "Tema padrão Brightline"}
+                    "Instituição vinculada ao seu perfil"
                   </small>
                 </span>
               </label>

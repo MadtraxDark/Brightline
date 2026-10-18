@@ -47,8 +47,8 @@ export default function Login({ mode = "login" }) {
   const [pending, setPending] = useState(false);
   const [serverError, setServerError] = useState("");
   const [registered, setRegistered] = useState(false);
-  const [institutionId, setInstitutionId] = useState("brightline");
-  const [institutionIds, setInstitutionIds] = useState(["brightline"]);
+  const [institutionId, setInstitutionId] = useState("hctco_unifeso");
+  const [institutionIds, setInstitutionIds] = useState(["hctco_unifeso"]);
   const [institutionError, setInstitutionError] = useState("");
   const successRef = useRef(null);
 
@@ -134,10 +134,10 @@ export default function Login({ mode = "login" }) {
         saveHospitalSelection(
           user.id,
           user.institutions || [institutionId],
-          institutionId,
+          user.institution_id || institutionId,
           true,
         );
-        setHospitalId(institutionId);
+        setHospitalId(user.institution_id || institutionId);
         navigate(safeRedirectPath(location.state?.from), { replace: true });
       }
     } catch (error) {

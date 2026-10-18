@@ -32,8 +32,13 @@ sys.path.insert(0, str(BACKEND_DIR))
 from extract import extract_one  # noqa: E402 - reuses Brightline's validated extraction pipeline
 
 
-def db():
-    return psycopg.connect(get_settings().database_url, row_factory=dict_row)
+def db(institution_id=None, user_id=None):
+    conn = psycopg.connect(get_settings().database_url, row_factory=dict_row)
+    if institution_id:
+        conn.execute("SELECT set_config('brightline.institution_id', %s, false)", (institution_id,))
+    if user_id:
+        conn.execute("SELECT set_config('brightline.user_id', %s, false)", (str(user_id),))
+    return conn
 
 
 def token_hash(value):
@@ -54,17 +59,17 @@ def verify_password(password, encoded):
         return False
 
 
-def issue_session(conn, user):
+def issue_session(conn, user, institution_id):
     access, refresh = secrets.token_urlsafe(40), secrets.token_urlsafe(48)
-    conn.execute("INSERT INTO sessions(user_id, access_hash, refresh_hash, expires_at) VALUES (%s,%s,%s,%s)",
-                 (user["id"], token_hash(access), token_hash(refresh), datetime.now(timezone.utc)+timedelta(hours=1)))
+    conn.execute("INSERT INTO sessions(user_id, institution_id, access_hash, refresh_hash, expires_at) VALUES (%s,%s,%s,%s,%s)",
+                 (user["id"], institution_id, token_hash(access), token_hash(refresh), datetime.now(timezone.utc)+timedelta(hours=1)))
     institutions = conn.execute(
         "SELECT institution_id FROM user_institutions WHERE user_id=%s ORDER BY institution_id",
         (user["id"],),
     ).fetchall()
     return {"access_token": access, "refresh_token": refresh, "token_type": "bearer", "expires_in": 3600,
             "user": {"id": str(user["id"]), "email": user["email"], "name": user["name"],
-                     "institutions": [row["institution_id"] for row in institutions]}}
+                     "institutions": [row["institution_id"] for row in institutions], "institution_id": institution_id}}
 
 
 bearer = HTTPBearer(auto_error=False)
@@ -75,7 +80,7 @@ def authenticated(credentials: Annotated[HTTPAuthorizationCredentials | None, De
         raise HTTPException(401, "Informe um access_token válido.", headers={
                             "WWW-Authenticate": "Bearer"})
     with db() as conn:
-        row = conn.execute("""SELECT u.id,u.email,u.name,s.access_hash FROM sessions s JOIN users u ON u.id=s.user_id
+        row = conn.execute("""SELECT u.id,u.email,u.name,s.access_hash,s.institution_id FROM sessions s JOIN users u ON u.id=s.user_id
             WHERE s.access_hash=%s AND s.expires_at>now()""", (token_hash(credentials.credentials),)).fetchone()
         institutions = conn.execute(
             "SELECT institution_id FROM user_institutions WHERE user_id=%s ORDER BY institution_id",
@@ -84,7 +89,7 @@ def authenticated(credentials: Annotated[HTTPAuthorizationCredentials | None, De
     if not row:
         raise HTTPException(401, "Sessão inválida ou expirada.")
     return {"token": credentials.credentials, "user": {"id": str(row["id"]), "email": row["email"], "name": row["name"],
-            "institutions": [item["institution_id"] for item in institutions]}}
+            "institutions": [item["institution_id"] for item in institutions], "institution_id": row["institution_id"]}}
 
 
 Session = Annotated[dict, Depends(authenticated)]
@@ -134,7 +139,7 @@ async def health():
 
 @app.get("/ready")
 async def ready(session: Session):
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         conn.execute("SELECT 1 FROM sim_state WHERE owner_id=%s",
                      (session["user"]["id"],)).fetchone()
     return {"status": "ok", "database": "postgresql"}
@@ -151,8 +156,12 @@ async def signup(body: SignupInput):
                     "INSERT INTO user_institutions(user_id,institution_id) VALUES (%s,%s)",
                     (user["id"], institution),
                 )
+            conn.execute("SELECT set_config('brightline.institution_id', %s, false)",
+                         (body.institutions[0],))
+            conn.execute("SELECT set_config('brightline.user_id', %s, false)",
+                         (str(user["id"]),))
             conn.execute(
-                "INSERT INTO sim_state(owner_id) VALUES (%s)", (user["id"],))
+                "INSERT INTO sim_state(owner_id) VALUES (%s) ON CONFLICT DO NOTHING", (user["id"],))
         return {"user": {"id": str(user["id"]), "email": user["email"], "name": user["name"],
                           "institutions": list(dict.fromkeys(body.institutions))}}
     except psycopg.errors.UniqueViolation:
@@ -166,24 +175,24 @@ async def login(body: Credentials):
             "SELECT id,email,name,password_hash FROM users WHERE email=%s", (body.email,)).fetchone()
         if not user or not verify_password(body.password.get_secret_value(), user["password_hash"]):
             raise HTTPException(401, "E-mail ou senha inválidos.")
-        if body.institution_id and not conn.execute(
+        if not conn.execute(
             "SELECT 1 FROM user_institutions WHERE user_id=%s AND institution_id=%s",
             (user["id"], body.institution_id),
         ).fetchone():
-            raise HTTPException(403, "Instituição não vinculada a este perfil.")
-        return issue_session(conn, user)
+            raise HTTPException(403, "A instituição selecionada não está vinculada ao seu perfil. Atualize seus vínculos ou escolha outra instituição.")
+        return issue_session(conn, user, body.institution_id)
 
 
 @app.post("/auth/refresh")
 async def refresh(body: RefreshInput):
     value = body.refresh_token.get_secret_value()
     with db() as conn:
-        row = conn.execute("SELECT u.id,u.email,u.name,s.id AS session_id FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.refresh_hash=%s AND s.refresh_expires_at>now() FOR UPDATE OF s",
+        row = conn.execute("SELECT u.id,u.email,u.name,s.id AS session_id,s.institution_id FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.refresh_hash=%s AND s.refresh_expires_at>now() FOR UPDATE OF s",
                            (token_hash(value),)).fetchone()
         if not row:
             raise HTTPException(401, "Sessão inválida.")
         conn.execute("DELETE FROM sessions WHERE id=%s", (row["session_id"],))
-        return issue_session(conn, row)
+        return issue_session(conn, row, row["institution_id"])
 
 
 @app.get("/auth/me")
@@ -202,7 +211,26 @@ async def update_institutions(body: InstitutionMembershipInput, session: Session
                 "INSERT INTO user_institutions(user_id,institution_id) VALUES (%s,%s)",
                 (user_id, institution),
             )
-    return {"institutions": institutions}
+        active = session["user"]["institution_id"]
+        if active not in institutions:
+            active = institutions[0]
+        conn.execute("UPDATE sessions SET institution_id=%s WHERE access_hash=%s",
+                     (active, token_hash(session["token"])))
+    return {"institutions": institutions, "institution_id": active}
+
+
+@app.put("/auth/institution")
+async def switch_institution(body: dict, session: Session):
+    institution_id = body.get("institution_id")
+    if institution_id not in {"hctco_unifeso", "hospital_sao_jose", "beneficencia_portuguesa", "outro_hospital"}:
+        raise HTTPException(422, "Selecione uma instituição válida.")
+    with db() as conn:
+        if not conn.execute("SELECT 1 FROM user_institutions WHERE user_id=%s AND institution_id=%s",
+                            (session["user"]["id"], institution_id)).fetchone():
+            raise HTTPException(403, "Esta instituição não está vinculada ao seu perfil.")
+        conn.execute("UPDATE sessions SET institution_id=%s WHERE access_hash=%s",
+                     (institution_id, token_hash(session["token"])))
+    return {"institution_id": institution_id}
 
 
 @app.post("/auth/logout", status_code=204)
@@ -249,14 +277,14 @@ def list_cases(conn, owner, urgency=None, status=None, missed=False):
 
 @app.get("/cases")
 async def cases(session: Session, urgency: Urgency | None = None, status: Status | None = None):
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         return list_cases(conn, session["user"]["id"], urgency, status)
 
 
 @app.get("/cases/{case_id}")
 async def case_detail(case_id: UUID, session: Session):
     owner = session["user"]["id"]
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         case = conn.execute(
             "SELECT * FROM cases WHERE owner_id=%s AND id=%s", (owner, case_id)).fetchone()
         if not case:
@@ -277,8 +305,11 @@ def command(conn, owner, op, payload):
     if op == "import":
         conn.execute("DELETE FROM reports WHERE owner_id=%s", (owner,))
         for r in payload["reports"]:
-            conn.execute("INSERT INTO reports(owner_id,report_id,modality,radiologist,ordering_physician,text,flagged_by_radiologist,ground_truth) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
-                         (owner, r["report_id"], r["modality"], r["radiologist"], r["ordering_physician"], r["text"], r["flagged_by_radiologist"], psycopg.types.json.Jsonb(r["ground_truth"])))
+            if r.get("patient_ref"):
+                conn.execute("INSERT INTO patients(patient_ref) VALUES (%s) ON CONFLICT DO NOTHING",
+                             (r["patient_ref"],))
+            conn.execute("INSERT INTO reports(owner_id,report_id,patient_ref,modality,radiologist,ordering_physician,text,flagged_by_radiologist,ground_truth) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                         (owner, r["report_id"], r.get("patient_ref"), r["modality"], r["radiologist"], r["ordering_physician"], r["text"], r["flagged_by_radiologist"], psycopg.types.json.Jsonb(r["ground_truth"])))
             findings = payload["extractions"][r["report_id"]]["findings"]
             conn.execute("INSERT INTO extractions(owner_id,report_id,findings) VALUES (%s,%s,%s)",
                          (owner, r["report_id"], psycopg.types.json.Jsonb(findings)))
@@ -350,43 +381,43 @@ def command(conn, owner, op, payload):
 
 @app.post("/cases/{case_id}/acknowledge")
 async def acknowledge(case_id: UUID, body: AcknowledgeInput, session: Session):
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         return command(conn, session["user"]["id"], "acknowledge", {"id": str(case_id), "by": body.by})
 
 
 @app.post("/cases/{case_id}/action")
 async def action(case_id: UUID, body: ActionInput, session: Session):
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         return command(conn, session["user"]["id"], "action", {"id": str(case_id), **body.model_dump()})
 
 
 @app.get("/simulate")
 async def clock(session: Session):
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         return {"sim_now": current_hour(conn, session["user"]["id"])}
 
 
 @app.post("/simulate/advance")
 async def advance(session: Session, hours: Annotated[float, Query(gt=0, le=8760, allow_inf_nan=False)]):
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         return command(conn, session["user"]["id"], "advance", {"hours": hours})
 
 
 @app.post("/simulate/reset")
 async def reset(session: Session):
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         return command(conn, session["user"]["id"], "reset", {})
 
 
 @app.get("/missed")
 async def missed(session: Session):
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         return list_cases(conn, session["user"]["id"], missed=True)
 
 
 @app.get("/stats")
 async def stats(session: Session):
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         rows = conn.execute(
             "SELECT urgency,status,notified_at_sim,acknowledged_at_sim FROM cases WHERE owner_id=%s", (session["user"]["id"],)).fetchall()
     urg = {k: 0 for k in ("critical", "urgent", "actionable")}
@@ -404,7 +435,7 @@ async def stats(session: Session):
 
 @app.post("/imports")
 async def import_data(body: ImportInput, session: Session):
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         return command(conn, session["user"]["id"], "import", body.model_dump())
 
 
@@ -451,6 +482,7 @@ async def analyze_report(
     report_file: Annotated[UploadFile | None, File(description="Laudo PDF pesquisável")] = None,
     radiograph: Annotated[UploadFile | None, File(description="Radiografia torácica PNG/JPEG para o modelo NIH")] = None,
     report_id: Annotated[str | None, Form(max_length=100)] = None,
+    patient_ref: Annotated[str | None, Form(max_length=100)] = None,
 ):
     if not report_text and not report_file:
         raise HTTPException(422, "Envie report_text ou report_file.")
@@ -469,6 +501,8 @@ async def analyze_report(
     rid = report_id or secrets.token_hex(16)
     if not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", rid):
         raise HTTPException(422, "report_id contém caracteres inválidos.")
+    if patient_ref is not None and not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", patient_ref):
+        raise HTTPException(422, "patient_ref contém caracteres inválidos.")
 
     findings_data = await run_in_threadpool(_extract_report, rid, text)
     findings = findings_data["findings"]
@@ -501,14 +535,16 @@ async def analyze_report(
                 "status": "review_required", "human_review_required": True}
 
     owner = session["user"]["id"]
-    with db() as conn:
-        conn.execute("""INSERT INTO reports(owner_id,report_id,modality,radiologist,ordering_physician,text,flagged_by_radiologist,ground_truth)
-            VALUES (%s,%s,'chest_xray','Não informado','Revisão radiológica',%s,false,'[]'::jsonb)
-            ON CONFLICT(owner_id,report_id) DO UPDATE SET text=EXCLUDED.text,modality=EXCLUDED.modality""", (owner, rid, text))
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
+        if patient_ref:
+            conn.execute("INSERT INTO patients(patient_ref) VALUES (%s) ON CONFLICT DO NOTHING", (patient_ref,))
+        conn.execute("""INSERT INTO reports(owner_id,report_id,patient_ref,modality,radiologist,ordering_physician,text,flagged_by_radiologist,ground_truth)
+            VALUES (%s,%s,%s,'chest_xray','Não informado','Revisão radiológica',%s,false,'[]'::jsonb)
+            ON CONFLICT(owner_id,institution_id,report_id) DO UPDATE SET text=EXCLUDED.text,modality=EXCLUDED.modality,patient_ref=EXCLUDED.patient_ref""", (owner, rid, patient_ref, text))
         conn.execute("""INSERT INTO extractions(owner_id,report_id,findings) VALUES (%s,%s,%s)
-            ON CONFLICT(owner_id,report_id) DO UPDATE SET findings=EXCLUDED.findings""", (owner, rid, psycopg.types.json.Jsonb(findings)))
+            ON CONFLICT(owner_id,institution_id,report_id) DO UPDATE SET findings=EXCLUDED.findings""", (owner, rid, psycopg.types.json.Jsonb(findings)))
         conn.execute("""INSERT INTO report_analyses(owner_id,report_id,analysis,model_version) VALUES (%s,%s,%s,%s)
-            ON CONFLICT(owner_id,report_id) DO UPDATE SET analysis=EXCLUDED.analysis,model_version=EXCLUDED.model_version,created_at=now()""",
+            ON CONFLICT(owner_id,institution_id,report_id) DO UPDATE SET analysis=EXCLUDED.analysis,model_version=EXCLUDED.model_version,created_at=now()""",
                      (owner, rid, psycopg.types.json.Jsonb(analysis), model_version))
         conn.execute("DELETE FROM files WHERE owner_id=%s AND file_id IN (SELECT file_id FROM report_files WHERE owner_id=%s AND report_id=%s)", (owner, owner, rid))
         conn.execute("DELETE FROM report_files WHERE owner_id=%s AND report_id=%s", (owner, rid))
@@ -575,7 +611,7 @@ async def upload_file(request: Request, session: Session):
     if len(content) > 10*1024*1024:
         raise HTTPException(413, "Arquivo deve ter até 10 MB.")
     file_id = f"{secrets.token_hex(16)}.{types[mime]}"
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         conn.execute("INSERT INTO files(owner_id,file_id,mime_type,content) VALUES (%s,%s,%s,%s)",
                      (session["user"]["id"], file_id, mime, content))
     return {"file_id": file_id, "path": f"{session['user']['id']}/{file_id}", "bucket": "brightline-files"}
@@ -587,21 +623,23 @@ async def signed_url(file_id: str, session: Session, request: Request):
         raise HTTPException(400, "Identificador de arquivo inválido.")
     expires = int(datetime.now(timezone.utc).timestamp())+60
     ticket = secrets.token_urlsafe(32)
-    with db() as conn:
+    with db(session["user"]["institution_id"], session["user"]["id"]) as conn:
         exists = conn.execute("SELECT 1 FROM files WHERE owner_id=%s AND file_id=%s",
                               (session["user"]["id"], file_id)).fetchone()
         if not exists:
             raise HTTPException(404, "Arquivo não encontrado.")
         conn.execute("INSERT INTO file_links(token_hash,owner_id,file_id,expires_at) VALUES (%s,%s,%s,to_timestamp(%s))",
                      (token_hash(ticket), session["user"]["id"], file_id, expires))
-    return {"url": f"{str(request.base_url).rstrip('/')}/files/{file_id}?token={ticket}", "expires_in": 60}
+    return {"url": f"{str(request.base_url).rstrip('/')}/files/{file_id}?token={ticket}&institution_id={session['user']['institution_id']}&user_id={session['user']['id']}", "expires_in": 60}
 
 
 @app.get("/files/{file_id}")
-async def download_file(file_id: str, token: str):
+async def download_file(file_id: str, token: str, institution_id: str, user_id: UUID):
     if not re.fullmatch(r"[0-9a-f]{32}\.(json|png|jpg|pdf)", file_id):
         raise HTTPException(404, "Arquivo não encontrado.")
-    with db() as conn:
+    if institution_id not in {"hctco_unifeso", "hospital_sao_jose", "beneficencia_portuguesa", "outro_hospital"}:
+        raise HTTPException(404, "Arquivo não encontrado.")
+    with db(institution_id, user_id) as conn:
         row = conn.execute("""SELECT f.mime_type,f.content FROM file_links l JOIN files f
           ON f.owner_id=l.owner_id AND f.file_id=l.file_id
           WHERE l.token_hash=%s AND l.file_id=%s AND l.expires_at>now()""", (token_hash(token), file_id)).fetchone()
