@@ -27,7 +27,7 @@ function ReportClassification({ report, cases, classified }) {
     <div className="report-confidence-summary">
       <span className="report-classified-label">
         <CheckCircle2 size={14} aria-hidden="true" />
-        Classificado pela Luna
+        Confiança da Luna
       </span>
       <div>
         {findings.map((item) => {
@@ -52,7 +52,7 @@ function ReportClassification({ report, cases, classified }) {
     <div className="report-unclassified-alert">
       <TriangleAlert size={17} aria-hidden="true" />
       <span>
-        Sem classificação<small>Análise da Luna não registrada</small>
+        Sem confiança<small>Confiança da Luna não registrada</small>
       </span>
     </div>
   );
@@ -185,8 +185,8 @@ export default function Reports() {
       }
       setNotice(
         result.classified
-          ? "Laudo salvo e classificação concluída."
-          : "Laudo salvo sem classificação da Luna.",
+          ? "Laudo salvo. Confiança da Luna registrada."
+          : "Laudo salvo sem confiança da Luna.",
       );
       dialog.current.close();
     } catch (reason) {
@@ -200,7 +200,7 @@ export default function Reports() {
       <header className="reports-heading">
         <div>
           <h1>Laudos</h1>
-          <p>Documentos, profissionais e classificações em um só lugar.</p>
+          <p>Documentos, profissionais e confiança da Luna em um só lugar.</p>
         </div>
         <button
           className="btn-primary"
@@ -223,11 +223,11 @@ export default function Reports() {
           <strong>{reports.length}</strong> documentos cadastrados
         </span>
         <span>
-          <strong>{reports.filter(classified).length}</strong> classificados
+          <strong>{reports.filter(classified).length}</strong> com confiança
         </span>
         <span>
           <strong>{reports.filter((r) => !classified(r)).length}</strong> sem
-          classificação
+          confiança
         </span>
       </div>
       <div className="reports-toolbar">
@@ -244,11 +244,11 @@ export default function Reports() {
         <select
           value={filter}
           onChange={(event) => setFilter(event.target.value)}
-          aria-label="Filtrar classificação"
+          aria-label="Filtrar confiança"
         >
           <option value="all">Todos os laudos</option>
-          <option value="classified">Classificados</option>
-          <option value="unclassified">Sem classificação</option>
+          <option value="classified">Com confiança</option>
+          <option value="unclassified">Sem confiança</option>
         </select>
       </div>
       {notice && (
@@ -310,7 +310,7 @@ export default function Reports() {
           </h2>
           <p>
             {reports.length
-              ? "Ajuste a busca ou o filtro de classificação."
+              ? "Ajuste a busca ou o filtro de confiança."
               : "Adicione o primeiro documento para organizar seus laudos."}
           </p>
         </div>
@@ -470,7 +470,7 @@ export default function Reports() {
           <label className="report-luna-option">
             <img src={luna} width={40} height={40} alt="" />
             <span>
-              <strong>Solicitar classificação da Luna</strong>
+              <strong>Solicitar confiança da Luna</strong>
               <small>
                 {form.classify
                   ? "A Luna analisará o texto antes de concluir o cadastro."
@@ -505,10 +505,10 @@ export default function Reports() {
             >
               {pending
                 ? form.classify
-                  ? "Classificando e salvando…"
+                  ? "Salvando a confiança…"
                   : "Salvando…"
                 : form.classify
-                  ? "Salvar e classificar"
+                  ? "Salvar com confiança"
                   : "Salvar laudo"}
             </button>
           </footer>

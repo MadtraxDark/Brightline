@@ -233,15 +233,16 @@
 }
 .pathology-score-list {
   display: grid;
-  gap: 5px;
+  align-content: start;
+  gap: 4px;
 }
 .pathology-score {
   display: grid;
-  grid-template-columns: 12px minmax(0, 1fr) auto;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1.15fr) minmax(88px, 1fr) 4.5rem;
+  gap: 10px;
   align-items: center;
-  min-height: 32px;
-  padding: 5px 8px;
+  min-height: 36px;
+  padding: 6px 8px;
   border: 1px solid transparent;
   border-radius: 6px;
   background: transparent;

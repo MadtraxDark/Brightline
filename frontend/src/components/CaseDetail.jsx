@@ -12,11 +12,11 @@ import {
   Eye,
   ClipboardCheck,
   Clock3,
-  LoaderCircle,
 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { acknowledge, registerAction } from "../api.js";
 import { authorizedRequest } from "../lib/session.js";
+import { hasLinkedRadiograph } from "../lib/reportImage.js";
 import { formatOffset, statusLabel } from "../format.js";
 import { deadlinePill } from "../lib/deadlinePill.js";
 import { escalationPath } from "../lib/escalationPath.js";
@@ -28,6 +28,7 @@ import { useStore } from "../store/useStore.js";
 import ExamViewer from "./ExamViewer.jsx";
 import PathologyScoreList from "./PathologyScoreList.jsx";
 import CaseChatModal from "./luna/CaseChatModal.jsx";
+import LunaReadingModal from "./LunaReadingModal.jsx";
 import UrgencyBadge from "./UrgencyBadge.jsx";
 
 const STEP_ICONS = [UserRound, Stethoscope, Building2];
@@ -51,8 +52,9 @@ export default function CaseDetail() {
   const [error, setError] = useState("");
   const [reclassificationNotice, setReclassificationNotice] = useState(false);
   const [reclassification, setReclassification] = useState(null);
-  const [reclassifying, setReclassifying] = useState(false);
   const [reclassificationError, setReclassificationError] = useState("");
+  const [reading, setReading] = useState(null);
+  const previousAnalysis = useRef(null);
   const [selectedPathology, setSelectedPathology] = useState(null);
   const [hoveredPathology, setHoveredPathology] = useState(null);
   const [pending, setPending] = useState(false);
@@ -68,10 +70,10 @@ export default function CaseDetail() {
   useEffect(() => {
     reclassificationRequest.current?.abort();
     reclassificationRequest.current = null;
-    setReclassifying(false);
     setReclassificationNotice(false);
     setReclassification(null);
     setReclassificationError("");
+    setReading(null);
     setSelectedPathology(null);
     setHoveredPathology(null);
     if (!reportId) return undefined;
@@ -134,16 +136,17 @@ export default function CaseDetail() {
     : item.status === "closed"
       ? "O caso já está fechado."
       : item.status === "action_taken"
-        ? "A aá§ão já foi registrada."
-        : "Confirme a leitura antes de registrar a aá§ão.";
+        ? "A ação já foi registrada."
+        : "Confirme a leitura antes de registrar a ação.";
 
   async function reclassify() {
     if (
       reclassificationRequest.current ||
       !reportId ||
-      !detail.report?.image_file_id
+      !hasLinkedRadiograph(detail.report)
     )
       return;
+    previousAnalysis.current = reclassification;
     const controller = new AbortController();
     reclassificationRequest.current = controller;
     analysisFetch.current += 1;
@@ -152,7 +155,7 @@ export default function CaseDetail() {
     setSelectedPathology(null);
     setHoveredPathology(null);
     setReclassification(null);
-    setReclassifying(true);
+    setReading({ status: "reading", result: null, error: "" });
     try {
       const result = await authorizedRequest(
         `/reports/${encodeURIComponent(reportId)}/reclassify`,
@@ -167,27 +170,35 @@ export default function CaseDetail() {
         !result?.probabilities ||
         !Object.values(result.probabilities).every(Number.isFinite)
       ) {
-        throw new Error("O servidor retornou scores invá¡lidos.");
+        throw new Error("O servidor retornou scores inválidos.");
       }
-      setReclassification(result);
-      setReclassificationNotice(true);
+      setReading({ status: "ready", result, error: "" });
     } catch (caught) {
       if (
         reclassificationRequest.current !== controller ||
         controller.signal.aborted
       )
         return;
-      setReclassificationError(
+      const message =
         caught instanceof Error
           ? caught.message
-          : "Não foi possá­vel reclassificar a radiografia.",
-      );
+          : "Não foi possível reclassificar a radiografia.";
+      setReading({ status: "error", result: null, error: message });
     } finally {
       if (reclassificationRequest.current === controller) {
         reclassificationRequest.current = null;
-        setReclassifying(false);
       }
     }
+  }
+
+  function closeReading() {
+    if (reading?.status === "reading") {
+      const active = reclassificationRequest.current;
+      reclassificationRequest.current = null;
+      active?.abort();
+      setReclassification(previousAnalysis.current);
+    }
+    setReading(null);
   }
 
   async function run(action) {
@@ -197,9 +208,7 @@ export default function CaseDetail() {
       await action();
     } catch (caught) {
       setError(
-        caught instanceof Error
-          ? caught.message
-          : "A aá§ão não foi registrada.",
+        caught instanceof Error ? caught.message : "A ação não foi registrada.",
       );
     } finally {
       setPending(false);
@@ -215,7 +224,7 @@ export default function CaseDetail() {
   function submitAction(event) {
     event.preventDefault();
     if (!note.trim()) {
-      setError("Descreva a aá§ão tomada.");
+      setError("Descreva a ação tomada.");
       return;
     }
     run(async () => {
@@ -253,7 +262,7 @@ export default function CaseDetail() {
       </header>
       <section className="communication" aria-labelledby="communication-title">
         <div className="communication-head">
-          <h3 id="communication-title">Comunicaá§ão</h3>
+          <h3 id="communication-title">Comunicação</h3>
           <span className={`deadline-pill is-${pill.kind}`}>{pill.text}</span>
         </div>
         <ol
@@ -328,7 +337,7 @@ export default function CaseDetail() {
               }
             >
               {pending && canConfirm
-                ? "ConfirmandoÃ¢â‚¬Â¦"
+                ? "Confirmando…"
                 : canConfirm
                   ? "Confirmar leitura"
                   : "Leitura confirmada"}
@@ -341,7 +350,7 @@ export default function CaseDetail() {
                   <ClipboardCheck size={19} aria-hidden="true" />
                 </span>
                 <div>
-                  <h4>Conduta clá­nica</h4>
+                  <h4>Conduta clínica</h4>
                   <p className="hint">
                     {registerReason ||
                       "Descreva a conduta adotada para este caso."}
@@ -355,7 +364,7 @@ export default function CaseDetail() {
                 disabled={!canRegister || pending}
                 onClick={openAction}
               >
-                Registrar aá§ão
+                Registrar ação
               </button>
             </div>
           )}
@@ -366,7 +375,7 @@ export default function CaseDetail() {
               onKeyDown={onActionKeyDown}
             >
               <label>
-                Aá§ão tomada
+                Ação tomada
                 <textarea
                   ref={noteRef}
                   name="clinical-action"
@@ -378,7 +387,7 @@ export default function CaseDetail() {
               </label>
 
               <button className="btn-primary" type="submit" disabled={pending}>
-                Registrar aá§ão
+                Registrar ação
               </button>
             </form>
           ) : null}
@@ -415,10 +424,10 @@ export default function CaseDetail() {
         )}
         <div className="communication-history-head">
           <h3>
-            Histá³rico de comunicaá§ão{" "}
+            Histórico de comunicação{" "}
             <span className="count">{detail.events.length}</span>
           </h3>
-          <span>Tempo da demonstraá§ão</span>
+          <span>Tempo da demonstração</span>
         </div>
         <ol className="timeline communication-history">
           {detail.events.map((event, index) => (
@@ -429,7 +438,7 @@ export default function CaseDetail() {
               <div className="communication-event-copy">
                 <span>{event.label}</span>
                 {index === detail.events.length - 1 ? (
-                  <small>Última atualizaá§ão</small>
+                  <small>Última atualização</small>
                 ) : null}
               </div>
               <time dateTime={`PT${event.at}H`}>{formatOffset(event.at)}</time>
@@ -447,7 +456,7 @@ export default function CaseDetail() {
         <section className="report-document" aria-label="Documento do laudo">
           <header className="report-document-heading">
             <div>
-              <h3>Laudo radiolá³gico</h3>
+              <h3>Laudo radiológico</h3>
               <p>{item.modality}</p>
             </div>
             <span>{item.report_id}</span>
@@ -463,7 +472,7 @@ export default function CaseDetail() {
               </dd>
             </div>
             <div>
-              <dt>Má©dico solicitante</dt>
+              <dt>Médico solicitante</dt>
               <dd className="report-physician">
                 <PhysicianAvatar
                   name={
@@ -477,12 +486,12 @@ export default function CaseDetail() {
             </div>
             {detail.report?.source_clinic ? (
               <div>
-                <dt>Clá­nica de origem</dt>
+                <dt>Clínica de origem</dt>
                 <dd>{detail.report.source_clinic}</dd>
               </div>
             ) : null}
             <div className="report-luna-classification">
-              <dt>Classificaá§ão da Luna</dt>
+              <dt>Confiança da Luna</dt>
               <dd>
                 <span
                   className={`classification-confidence is-${confidence.tone}`}
@@ -491,36 +500,27 @@ export default function CaseDetail() {
                 </span>
                 <span className="classification-status">
                   <CheckCircle2 size={16} aria-hidden="true" />
-                  Classificado
+                  Confiança registrada
                 </span>
                 <button
                   className="reclassify-button"
                   type="button"
-                  disabled={reclassifying || !detail.report?.image_file_id}
-                  aria-busy={reclassifying}
+                  disabled={
+                    Boolean(reading) || !hasLinkedRadiograph(detail.report)
+                  }
+                  aria-busy={Boolean(reading)}
                   onClick={reclassify}
                 >
-                  {reclassifying ? (
-                    <>
-                      <LoaderCircle
-                        size={15}
-                        className="reclassify-spinner"
-                        aria-hidden="true"
-                      />
-                      Reclassificando radiografiaÃ¢â‚¬Â¦
-                    </>
-                  ) : detail.report?.image_file_id ? (
-                    "Reclassificar"
-                  ) : (
-                    "Radiografia não vinculada"
-                  )}
+                  {hasLinkedRadiograph(detail.report)
+                    ? "Reclassificar"
+                    : "Radiografia não vinculada"}
                 </button>
-                {!detail.report?.image_file_id && (
+                {!hasLinkedRadiograph(detail.report) && (
                   <small>Este laudo não possui radiografia vinculada.</small>
                 )}
                 {reclassificationNotice && (
                   <small className="reclassification-notice" role="status">
-                    Reclassificaá§ão concluá­da e salva.
+                    Reclassificação concluída e salva.
                   </small>
                 )}
                 {reclassificationError && (
@@ -530,7 +530,7 @@ export default function CaseDetail() {
                 )}
                 {reclassification?.probabilities && (
                   <div className="reclassification-scores" aria-live="polite">
-                    <strong>Saá­das atuais do TorchXRayVision</strong>
+                    <strong>Maiores escores</strong>
                     <PathologyScoreList
                       probabilities={reclassification.probabilities}
                       markers={reclassification.markers}
@@ -543,8 +543,8 @@ export default function CaseDetail() {
                       onHoverPathology={setHoveredPathology}
                     />{" "}
                     <small>
-                      Escores exploratá³rios do modelo; não são probabilidades
-                      clá­nicas calibradas.
+                      Escores exploratórios do TorchXRayVision. Não são
+                      probabilidades clínicas calibradas.
                     </small>
                     {reclassification.localization_status === "unavailable" && (
                       <small>{reclassification.localization_note}</small>
@@ -571,16 +571,15 @@ export default function CaseDetail() {
           </p>
           {evidence.found ? null : (
             <p className="missing-evidence">
-              Trecho de evidáªncia não localizado no laudo
+              Trecho de evidência não localizado no laudo
             </p>
           )}
 
           <footer className="report-document-footer">
             <span>
-              O trecho destacado corresponde à evidáªncia identificada pela
-              Luna.
+              O trecho destacado corresponde à evidência identificada pela Luna.
             </span>
-            <strong>A IA sugere. O má©dico valida.</strong>
+            <strong>A IA sugere. O médico valida.</strong>
           </footer>
         </section>
         <ExamViewer
@@ -595,6 +594,20 @@ export default function CaseDetail() {
           onHoverPathology={setHoveredPathology}
         />
       </div>
+      <LunaReadingModal
+        open={Boolean(reading)}
+        report={detail.report}
+        modality={item.modality}
+        status={reading?.status}
+        result={reading?.result}
+        error={reading?.error}
+        onReveal={(value) => {
+          setReclassification(value);
+          setReclassificationNotice(true);
+        }}
+        onFail={setReclassificationError}
+        onClose={closeReading}
+      />
     </article>
   );
 }

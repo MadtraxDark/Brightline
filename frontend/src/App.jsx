@@ -201,7 +201,7 @@ function RequireAuth({ children }) {
           setStatus(
             !user
               ? "anonymous"
-              : user.active_institution_id
+              : user.view_all_reports || user.active_institution_id
                 ? "authenticated"
                 : "needs-institution",
           );
@@ -276,9 +276,13 @@ function Shell() {
       ? "0"
       : pathname.startsWith("/nao-sinalizados")
         ? "1"
-        : pathname.startsWith("/avaliacao")
+        : pathname.startsWith("/laudos")
           ? "2"
-          : "none";
+          : pathname.startsWith("/medicos")
+            ? "3"
+            : pathname.startsWith("/avaliacao")
+              ? "4"
+              : "none";
   const [workspaceError, setWorkspaceError] = useState("");
   useEffect(() => {
     const message = sessionStorage.getItem("brightline:notice");
@@ -417,6 +421,7 @@ function Shell() {
               <hr className="sidebar-divider" />
               <NavLink
                 to="/laudos"
+                data-section="2"
                 data-tip="Laudos"
                 onClick={() => setMenuOpen(false)}
               >
@@ -425,6 +430,7 @@ function Shell() {
               </NavLink>
               <NavLink
                 to="/medicos"
+                data-section="3"
                 data-tip="Médicos"
                 onClick={() => setMenuOpen(false)}
               >
