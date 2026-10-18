@@ -1,1 +1,1574 @@
-{".codex/hooks.json":{"size":234,"mtime_ns":1792283744026206800,"indexed_at_ns":1792283816642489400,"word_count":22,"hashes":{".codex/hooks.json":"53a2e415d206d533fadd869dc0fa4b64c8083326019a84afb0484cabbf408bd6"}},".vscode/settings.json":{"size":438,"mtime_ns":1792283744038206900,"indexed_at_ns":1792283816866518000,"word_count":51,"hashes":{".vscode/settings.json":"79d0ff5b494e47f76c2e4a31d80a38b9bb2d4491a96f8fd85918a236b45bc819"}},"AGENTS.md":{"size":3011,"mtime_ns":1792283744039207000,"indexed_at_ns":1792283815642251400,"word_count":419},"README.md":{"size":2860,"mtime_ns":1792283744040586400,"indexed_at_ns":1792283815661989700,"word_count":384},"backend/.github/commit-message-instructions.md":{"size":3448,"mtime_ns":1792283778925083800,"indexed_at_ns":1792283815778655100,"word_count":483},"backend/.vscode/settings.json":{"size":146,"mtime_ns":1792283742392875100,"indexed_at_ns":1792283816872518400,"word_count":9,"hashes":{"backend/.vscode/settings.json":"9bfe3adb5742eabe797355749c776692bf39e1a5ff544ab998af5fdf9fdb1171"}},"backend/README.md":{"size":2369,"mtime_ns":1792283744041040800,"indexed_at_ns":1792283815793810500,"word_count":324},"backend/app/__init__.py":{"size":0,"mtime_ns":1792283742397384700,"indexed_at_ns":1792283816875789400,"word_count":0,"hashes":{"backend/app/__init__.py":"61261ceb48b7496d0f846788518361958ab5b533d78246abff5ac5a3a6e615d8"}},"backend/app/config.py":{"size":844,"mtime_ns":1792283742398415600,"indexed_at_ns":1792283816881784500,"word_count":75,"hashes":{"backend/app/config.py":"09ca11fdcc706aa6c6b8d0f34796075cf4b60255f1ca605c86e97c91cdc84f0d"}},"backend/app/main.py":{"size":30773,"mtime_ns":1792283852580128000,"indexed_at_ns":1792283855319627700,"word_count":2462,"hashes":{"backend/app/main.py":"02654f9fc984d9abfd3284768863bb0f5be65116820e2b91a3b66d7e02ad8d33"}},"backend/app/models.py":{"size":3551,"mtime_ns":1792283744041040800,"indexed_at_ns":1792283816893975300,"word_count":282,"hashes":{"backend/app/models.py":"046d9fa41302cac79995e063fedce75872df793d619cb9edc7c1fef64bc6409a"}},"backend/requirements.txt":{"size":274,"mtime_ns":1792283742417326400,"indexed_at_ns":1792283815875628100,"word_count":12},"docker-compose.yml":{"size":1597,"mtime_ns":1792283742433126700,"indexed_at_ns":1792283815926634900,"word_count":86},"data/nih-chestxray14/sample_manifest.json":{"size":38944,"mtime_ns":1792283744051995400,"indexed_at_ns":1792283816998062600,"word_count":1502,"hashes":{"data/nih-chestxray14/sample_manifest.json":"31478b52aed247ad60d0beb58db33d1d5e931615947d0335841bdb833ee8618d"}},"data/nih-chestxray14/test_list.txt":{"size":5310,"mtime_ns":1792283742431516800,"indexed_at_ns":1792283815909032700,"word_count":295},"data/nih-chestxray14/train_val_list.txt":{"size":19656,"mtime_ns":1792283742432061500,"indexed_at_ns":1792283815909032700,"word_count":1092},"download_nih_sample.py":{"size":6485,"mtime_ns":1792283742442323100,"indexed_at_ns":1792283817001062900,"word_count":558,"hashes":{"download_nih_sample.py":"f68e2018762c987e27d476c0f2c4e20c91b7cd9fdc604362fa91a7217e603b68"}},"backend/init.sql":{"size":4687,"mtime_ns":1792283744041040800,"indexed_at_ns":1792283816949120500,"word_count":569,"hashes":{"backend/init.sql":"c332f7a9022ee6964d46642d14218346257e3fd6252688e038f10c008e95c573"}},"backend/import_nih_images.py":{"size":2465,"mtime_ns":1792283742409823800,"indexed_at_ns":1792283816945118100,"word_count":194,"hashes":{"backend/import_nih_images.py":"0be06a96164cc7978d550140ebbe8836f40fed2bb611fefa4d8859b85bc2cae0"}},"backend/migrate.py":{"size":1591,"mtime_ns":1792283742409823800,"indexed_at_ns":1792283816952642100,"word_count":129,"hashes":{"backend/migrate.py":"ec50de0034615e1f915220ee2c1ff448ce3b26ff0fa7355f2030900a51e530cc"}},"backend/migrations/002_dataset_images.sql":{"size":344,"mtime_ns":1792283742409823800,"indexed_at_ns":1792283816956650200,"word_count":44,"hashes":{"backend/migrations/002_dataset_images.sql":"f982946063042186189484641caf00a455554a8964573453fc820265a82d17a1"}},"backend/IA_DADOS.md":{"size":6625,"mtime_ns":1792283742395384500,"indexed_at_ns":1792283817146514200,"word_count":878,"hashes":{"backend/ia_dados.md":"314766944f7d7d6c9c6be370ac2467258e969cd09f6da24b85caec6a267bc50f"}},"backend/brightline_data.py":{"size":4402,"mtime_ns":1792283742404458700,"indexed_at_ns":1792283816904979600,"word_count":377,"hashes":{"backend/brightline_data.py":"25b3dc5aa1a78b96346e66e50965a15c725736e040f0bdc1d4d53dc6d412b4bb"}},"backend/data/finding_aliases.json":{"size":4,"mtime_ns":1792283742406423900,"indexed_at_ns":1792283816910903000,"word_count":1,"hashes":{"backend/data/finding_aliases.json":"58944ea123eda836ba3409c1461860da2940332baaa858cc0c8fdfb2f77362a3"}},"backend/data/revisao_laudos.md":{"size":11821,"mtime_ns":1792283744041040800,"indexed_at_ns":1792283817152404300,"word_count":1291,"hashes":{"backend/data/revisao_laudos.md":"7056c888efb34552fcb259699b7bf03598167551c52c5f35f30803d6ca24aa9e"}},"backend/docs/API.md":{"size":1426,"mtime_ns":1792283742409823800,"indexed_at_ns":1792283817155643800,"word_count":184,"hashes":{"backend/docs/api.md":"a190f8de90cb53de78585cd8a4e03af9b934cb3e91d57d77ce3bc8f54818eca0"}},"backend/evaluate.py":{"size":6180,"mtime_ns":1792283742409823800,"indexed_at_ns":1792283816918696200,"word_count":534,"hashes":{"backend/evaluate.py":"e74afee9fe64974d88f3a34d75855c6c7472ff0e46babfd5e16d0a404e3fc3ff"}},"backend/extract.py":{"size":6923,"mtime_ns":1792283742409823800,"indexed_at_ns":1792283816931326700,"word_count":562,"hashes":{"backend/extract.py":"092b99c28c37c9bbb1d363d7cc941a96ce59ea140fb572c90f9bce883673c08b"}},"backend/import_local.py":{"size":3481,"mtime_ns":1792283742409823800,"indexed_at_ns":1792283816938326400,"word_count":292,"hashes":{"backend/import_local.py":"a7b0797f689afaaa38eb164e61896d9a413f258a8ac62fbca5552931a3e3a080"}},"backend/prompts/extraction.txt":{"size":4942,"mtime_ns":1792283742417326400,"indexed_at_ns":1792283815875628100,"word_count":505},"backend/tests/test_ai_pipeline.py":{"size":7951,"mtime_ns":1792283742417326400,"indexed_at_ns":1792283816969218900,"word_count":482,"hashes":{"backend/tests/test_ai_pipeline.py":"dbf90cf7a9664661d9afd5d3b5d9924753c020648bff408177b0f2dab66f6bb0"}},"docs/design-references/README.md":{"size":525,"mtime_ns":1792283742439085500,"indexed_at_ns":1792283817168359500,"word_count":52,"hashes":{"docs/design-references/readme.md":"bcf8ede3a015adaf612aca8b34f0ddac8c9d6655bf05978c861f6e395ed03071"}},"docs/design-references/cal.DESIGN.md":{"size":34317,"mtime_ns":1792283744054000100,"indexed_at_ns":1792283817175357400,"word_count":4008,"hashes":{"docs/design-references/cal.design.md":"3ec67d1e74468e726a2029b23357d964f773bbbba7af0e0310c86d6ab0a23dc7"}},"docs/design-tools.md":{"size":2277,"mtime_ns":1792283744054000100,"indexed_at_ns":1792283817179884500,"word_count":169,"hashes":{"docs/design-tools.md":"b9dd5a373013a86e3fb7227c377259be7eec1e94b8dc21941cc521bf00ff0483"}},"frontend/README.md":{"size":1995,"mtime_ns":1792283744056005000,"indexed_at_ns":1792283817184123100,"word_count":283,"hashes":{"frontend/readme.md":"349caf8521f898937ee5406ce4b14745c4dabc2d51288927fde731b03f14d41b"}},"frontend/docs/DESIGN.md":{"size":5710,"mtime_ns":1792283744057349900,"indexed_at_ns":1792283817192151200,"word_count":818,"hashes":{"frontend/docs/design.md":"581c1cb19698ad490b3bd5e041aa1dbb5c9a76b70481adf75769ff6aeef2a3a0"}},"frontend/docs/PRODUCT.md":{"size":869,"mtime_ns":1792283742446943400,"indexed_at_ns":1792283817201995100,"word_count":118,"hashes":{"frontend/docs/product.md":"6ea2da299a5ec5f0dbc3cf98e87b2ae951b100dcb1fcf6c112520fcfb3a3f61f"}},"frontend/docs/regras-de-design.md":{"size":2318,"mtime_ns":1792283744059518700,"indexed_at_ns":1792283817206999200,"word_count":311,"hashes":{"frontend/docs/regras-de-design.md":"9eeec7d8eeda362572eff9683c9255011de64b6473658a1d4ae48fe9541ba2bf"}},"frontend/index.html":{"size":734,"mtime_ns":1792283744060518300,"indexed_at_ns":1792283815979691000,"word_count":62},"frontend/package.json":{"size":1450,"mtime_ns":1792283744062520800,"indexed_at_ns":1792283817004061800,"word_count":122,"hashes":{"frontend/package.json":"11e80de625bf501c3d56f55c2e9b33f58ee5a57bedf38f7bbeb7149db5c8258d"}},"frontend/scripts/capture-ui.js":{"size":342,"mtime_ns":1792283744063518500,"indexed_at_ns":1792283815979691000,"word_count":33},"frontend/scripts/verify-ui.js":{"size":4179,"mtime_ns":1792283744064518300,"indexed_at_ns":1792283815994608300,"word_count":405},"frontend/src/App.jsx":{"size":2201,"mtime_ns":1792283778991645300,"indexed_at_ns":1792283815997608900,"word_count":217},"frontend/src/LandingPage.jsx":{"size":19453,"mtime_ns":1792283744069486400,"indexed_at_ns":1792283816001608500,"word_count":1571},"frontend/src/api.js":{"size":1309,"mtime_ns":1792283744071023100,"indexed_at_ns":1792283816005608700,"word_count":126},"frontend/src/components/CaseDetail.jsx":{"size":7953,"mtime_ns":1792283744073028700,"indexed_at_ns":1792283816008947500,"word_count":654},"frontend/src/components/CaseList.jsx":{"size":9428,"mtime_ns":1792283744073954500,"indexed_at_ns":1792283816008947500,"word_count":665},"frontend/src/components/UrgencyBadge.jsx":{"size":533,"mtime_ns":1792283742473077900,"indexed_at_ns":1792283816071750200,"word_count":65},"frontend/src/dashboardApi.js":{"size":1633,"mtime_ns":1792283744083587600,"indexed_at_ns":1792283816075345200,"word_count":175},"frontend/src/data/evaluation.json":{"size":352,"mtime_ns":1792283742475713000,"indexed_at_ns":1792283817009049200,"word_count":44,"hashes":{"frontend/src/data/evaluation.json":"020ebb571758224c164e40975304f2c7d59011f9900b250b45930e6a4e91c66f"}},"frontend/src/data/extractions_cache.json":{"size":1955,"mtime_ns":1792283742477516600,"indexed_at_ns":1792283817009049200,"word_count":176,"hashes":{"frontend/src/data/extractions_cache.json":"59e199badfd7a30bd43b9e143a45becbbd4c7c1fd175371abd02bae066ee635c"}},"frontend/src/data/reports.json":{"size":3427,"mtime_ns":1792283744089291100,"indexed_at_ns":1792283817023982100,"word_count":373,"hashes":{"frontend/src/data/reports.json":"9fdd413d081f96bd8a9fdc0ab87b3fd511bc3037dcc772b61ecc0e043389656b"}},"frontend/src/engine/engine.js":{"size":6093,"mtime_ns":1792283744090640100,"indexed_at_ns":1792283816096459200,"word_count":635},"frontend/src/engine/engine.test.js":{"size":8501,"mtime_ns":1792283744091829700,"indexed_at_ns":1792283816100459600,"word_count":847},"frontend/src/format.js":{"size":1314,"mtime_ns":1792283742487175600,"indexed_at_ns":1792283816117459000,"word_count":145},"frontend/src/main.jsx":{"size":1288,"mtime_ns":1792283744099802900,"indexed_at_ns":1792283816162681000,"word_count":110},"frontend/src/public/logo/favicon-logo.svg":{"size":2152026,"mtime_ns":1792283742514254000,"indexed_at_ns":1792283816166192700,"word_count":115},"frontend/src/public/logo/logo-text.svg":{"size":1224957,"mtime_ns":1792283742522358900,"indexed_at_ns":1792283816173722600,"word_count":26},"frontend/src/store/store.js":{"size":5468,"mtime_ns":1792283744102802800,"indexed_at_ns":1792283816175610900,"word_count":547},"frontend/src/store/store.test.js":{"size":6268,"mtime_ns":1792283744103802700,"indexed_at_ns":1792283816190716900,"word_count":618},"frontend/src/store/useStore.js":{"size":695,"mtime_ns":1792283742527787600,"indexed_at_ns":1792283816194865000,"word_count":70},"frontend/src/useLenisScroll.js":{"size":2603,"mtime_ns":1792283744107743300,"indexed_at_ns":1792283816202864800,"word_count":235},"frontend/vite.config.js":{"size":452,"mtime_ns":1792283744112704800,"indexed_at_ns":1792283816213976500,"word_count":43},"package.json":{"size":643,"mtime_ns":1792283744241275900,"indexed_at_ns":1792283817052895800,"word_count":55,"hashes":{"package.json":"30d1d0633c8e7627f696331dce87f34977b0103472d6249ea4aa568d21d63cd2"}},"scripts/dev.mjs":{"size":3363,"mtime_ns":1792283744241275900,"indexed_at_ns":1792283816237483500,"word_count":354},"backend/app/report_analysis.py":{"size":8715,"mtime_ns":1792283742403457200,"indexed_at_ns":1792283816900978700,"word_count":765,"hashes":{"backend/app/report_analysis.py":"f987e6209d0143884355004f79a3d4703ebd55d4e56c4c1bfe77dc7695741adb"}},"backend/docs/REPORT_ANALYSIS.md":{"size":4970,"mtime_ns":1792283742409823800,"indexed_at_ns":1792283817159790800,"word_count":579,"hashes":{"backend/docs/report_analysis.md":"7cb95b7335447a0140fdc6033f6eabcb3fc985b425c96675adeec409d6e5a73e"}},"backend/migrations/003_report_analyses.sql":{"size":757,"mtime_ns":1792283742417326400,"indexed_at_ns":1792283816963701800,"word_count":83,"hashes":{"backend/migrations/003_report_analyses.sql":"2980e16a70ef65f934a1ed97d55e32b62742e4b5fe743af327cca4af2fbd61e0"}},"backend/tests/test_report_analysis.py":{"size":4335,"mtime_ns":1792283742425935300,"indexed_at_ns":1792283816983389300,"word_count":324,"hashes":{"backend/tests/test_report_analysis.py":"3dd0ef4776c35e7f319f9f78507d4a73b61110b5f968950514666f6b68f71314"}},"artifacts/ui/cadastro-1024.png":{"size":86297,"mtime_ns":1792283742356175800,"indexed_at_ns":1792283815664989300,"word_count":2711},"artifacts/ui/cadastro-1440.png":{"size":91660,"mtime_ns":1792283742357279800,"indexed_at_ns":1792283815671984100,"word_count":2779},"artifacts/ui/cadastro-390.png":{"size":56737,"mtime_ns":1792283742358536900,"indexed_at_ns":1792283815677988500,"word_count":1920},"artifacts/ui/login-1024.png":{"size":72665,"mtime_ns":1792283742360527400,"indexed_at_ns":1792283815683495900,"word_count":2126},"artifacts/ui/login-1440.png":{"size":76804,"mtime_ns":1792283742361527900,"indexed_at_ns":1792283815686287800,"word_count":2286},"artifacts/ui/login-390.png":{"size":43467,"mtime_ns":1792283742362529300,"indexed_at_ns":1792283815695215600,"word_count":1492},"artifacts/ui/login-before.png":{"size":46722,"mtime_ns":1792283742363528000,"indexed_at_ns":1792283815701222100,"word_count":1402},"artifacts/ui/navbar-desktop.png":{"size":128675,"mtime_ns":1792283742365528600,"indexed_at_ns":1792283815706269300,"word_count":3945},"artifacts/ui/navbar-mobile-open.png":{"size":92031,"mtime_ns":1792283742366528300,"indexed_at_ns":1792283815708990200,"word_count":3174},"artifacts/ui/navbar-sidebar.png":{"size":23567,"mtime_ns":1792283742367527100,"indexed_at_ns":1792283815718429200,"word_count":941},"artifacts/ui/navigation-merge-desktop.png":{"size":103651,"mtime_ns":1792283742368527100,"indexed_at_ns":1792283815723944600,"word_count":2995},"artifacts/ui/navigation-merge-mobile.png":{"size":79995,"mtime_ns":1792283742369527100,"indexed_at_ns":1792283815729378300,"word_count":2768},"artifacts/ui/profile-dropdown-desktop.png":{"size":139069,"mtime_ns":1792283742371527600,"indexed_at_ns":1792283815733379400,"word_count":4342},"artifacts/ui/profile-dropdown-mobile.png":{"size":87737,"mtime_ns":1792283742372527500,"indexed_at_ns":1792283815740897300,"word_count":2974},"artifacts/ui/scrollbar-styled.png":{"size":101334,"mtime_ns":1792283742374435300,"indexed_at_ns":1792283815747023700,"word_count":3087},"artifacts/ui/sidebar-motion-mobile.png":{"size":79095,"mtime_ns":1792283742374435300,"indexed_at_ns":1792283815747023700,"word_count":2684},"artifacts/ui/sidebar-motion-review.png":{"size":102880,"mtime_ns":1792283742374435300,"indexed_at_ns":1792283815760478300,"word_count":3033},"artifacts/ui/sidebar-no-horizontal-scroll.png":{"size":24061,"mtime_ns":1792283742382903200,"indexed_at_ns":1792283815768558100,"word_count":758},"backend/data/reports.json":{"size":28330,"mtime_ns":1792283742407309400,"indexed_at_ns":1792283816910903000,"word_count":2954,"hashes":{"backend/data/reports.json":"00f8f716b14e38cc2ce1e76233c4b159de112caeefc8b0ec1543ea9c8f7a340d"}},"frontend/docs/LANDING.md":{"size":3587,"mtime_ns":1792283744058521700,"indexed_at_ns":1792283817196424700,"word_count":572,"hashes":{"frontend/docs/landing.md":"44fa158f74a92b10fdb5ee5d0805ec007f37e7d4a5eb519cc1d796032b3339e7"}},"frontend/src/components/BenefitsCarousel.jsx":{"size":3313,"mtime_ns":1792283744072054600,"indexed_at_ns":1792283816008947500,"word_count":268},"frontend/src/components/DemoClock.jsx":{"size":2727,"mtime_ns":1792283744074399000,"indexed_at_ns":1792283816025132600,"word_count":244},"frontend/src/components/ErrorBoundary.jsx":{"size":1394,"mtime_ns":1792283744074399000,"indexed_at_ns":1792283816029371000,"word_count":126},"frontend/src/components/Evaluation.jsx":{"size":4345,"mtime_ns":1792283744074399000,"indexed_at_ns":1792283816032370600,"word_count":351},"frontend/src/components/LandingHeader.jsx":{"size":5879,"mtime_ns":1792283744081582500,"indexed_at_ns":1792283816040372000,"word_count":445},"frontend/src/components/Login.jsx":{"size":15187,"mtime_ns":1792283744081582500,"indexed_at_ns":1792283816042401100,"word_count":990},"frontend/src/components/Missed.jsx":{"size":1970,"mtime_ns":1792283744083587600,"indexed_at_ns":1792283816042401100,"word_count":190},"frontend/src/components/NavigationHighlight.jsx":{"size":3974,"mtime_ns":1792283744083587600,"indexed_at_ns":1792283816042401100,"word_count":374},"frontend/src/components/ProfileMenu.jsx":{"size":3648,"mtime_ns":1792283744083587600,"indexed_at_ns":1792283816042401100,"word_count":285},"frontend/src/components/Register.jsx":{"size":114,"mtime_ns":1792283742471430400,"indexed_at_ns":1792283816063732000,"word_count":14},"frontend/src/components/Settings.jsx":{"size":5239,"mtime_ns":1792283744083587600,"indexed_at_ns":1792283816067732400,"word_count":376},"frontend/src/fixtures/evaluation.json":{"size":352,"mtime_ns":1792283742483404500,"indexed_at_ns":1792283817028075200,"word_count":44,"hashes":{"frontend/src/fixtures/evaluation.json":"895f01bf3937dc834d26222a0628cb3cf4dba22ea1e2fcaf59a52503bf78abf3"}},"frontend/src/fixtures/extractions_cache.json":{"size":1955,"mtime_ns":1792283742485043200,"indexed_at_ns":1792283817034075100,"word_count":176,"hashes":{"frontend/src/fixtures/extractions_cache.json":"e60d81a217c7fd9a59836566537b17f23ea466952a9cc99c2f9b9b1e92aa8190"}},"frontend/src/fixtures/reports.json":{"size":3427,"mtime_ns":1792283744092830900,"indexed_at_ns":1792283817042072500,"word_count":373,"hashes":{"frontend/src/fixtures/reports.json":"12f654d9983b41ecb91abf7a466a1099382ac83b353af8b53e6cd1663ed8877d"}},"frontend/src/lib/evaluate.js":{"size":3154,"mtime_ns":1792283744093832400,"indexed_at_ns":1792283816119462000,"word_count":298},"frontend/src/lib/evaluate.test.js":{"size":5404,"mtime_ns":1792283744094804100,"indexed_at_ns":1792283816125124500,"word_count":465},"frontend/src/lib/formatRemaining.js":{"size":688,"mtime_ns":1792283742490721500,"indexed_at_ns":1792283816128370100,"word_count":94},"frontend/src/lib/formatRemaining.test.js":{"size":505,"mtime_ns":1792283742491848000,"indexed_at_ns":1792283816132370500,"word_count":66},"frontend/src/lib/metrics.js":{"size":524,"mtime_ns":1792283742492909300,"indexed_at_ns":1792283816135889200,"word_count":65},"frontend/src/lib/metrics.test.js":{"size":2326,"mtime_ns":1792283744095829000,"indexed_at_ns":1792283816138889600,"word_count":209},"frontend/src/lib/profile.js":{"size":606,"mtime_ns":1792283744096836300,"indexed_at_ns":1792283816142207200,"word_count":61},"frontend/src/lib/session.js":{"size":6370,"mtime_ns":1792283744097829200,"indexed_at_ns":1792283816145475900,"word_count":697},"frontend/src/lib/session.test.js":{"size":7122,"mtime_ns":1792283744098839400,"indexed_at_ns":1792283816147482600,"word_count":641},"frontend/src/lib/splitEvidence.js":{"size":591,"mtime_ns":1792283742496696600,"indexed_at_ns":1792283816147482600,"word_count":84},"frontend/src/lib/splitEvidence.test.js":{"size":3683,"mtime_ns":1792283742497761700,"indexed_at_ns":1792283816158445300,"word_count":377},"frontend/src/store/selectors.js":{"size":2379,"mtime_ns":1792283744100802800,"indexed_at_ns":1792283816175610900,"word_count":242},"frontend/src/store/selectors.test.js":{"size":6253,"mtime_ns":1792283744101804800,"indexed_at_ns":1792283816175610900,"word_count":615},"frontend/src/useTitleAnimation.js":{"size":3710,"mtime_ns":1792283744112704800,"indexed_at_ns":1792283816209859700,"word_count":295},"scripts/check-data.js":{"size":11763,"mtime_ns":1792283744241275900,"indexed_at_ns":1792283816233482900,"word_count":1119},"scripts/evaluate.js":{"size":2804,"mtime_ns":1792283744241275900,"indexed_at_ns":1792283816240482800,"word_count":239},"scripts/record-navigation-motion.js":{"size":539,"mtime_ns":1792283744241275900,"indexed_at_ns":1792283816242474500,"word_count":53},"scripts/verify-login.js":{"size":2515,"mtime_ns":1792283744241275900,"indexed_at_ns":1792283816242474500,"word_count":237},"scripts/verify-navigation-motion.js":{"size":4840,"mtime_ns":1792283744241275900,"indexed_at_ns":1792283816242474500,"word_count":466},"scripts/verify-profile.js":{"size":4812,"mtime_ns":1792283744241275900,"indexed_at_ns":1792283816242474500,"word_count":450},"scripts/verify-registration.js":{"size":3513,"mtime_ns":1792283744241275900,"indexed_at_ns":1792283816260737800,"word_count":331},"scripts/verify-sidebar.js":{"size":4096,"mtime_ns":1792283744241275900,"indexed_at_ns":1792283816263735500,"word_count":380},"backend/tests/test_report_endpoint.py":{"size":2515,"mtime_ns":1792283742426557900,"indexed_at_ns":1792283816994063500,"word_count":188,"hashes":{"backend/tests/test_report_endpoint.py":"20e4f8b9f1f58cb073da33881a219701710e87d26da90b75a2e5fa270f0ebba3"}},"frontend/src/components/RadiographClassifier.jsx":{"size":4587,"mtime_ns":1792283742470883300,"indexed_at_ns":1792283816059732600,"word_count":399},".codex/skills/clinical-decision-support/SKILL.md":{"size":14440,"mtime_ns":1792283742300990000,"indexed_at_ns":1792283817060699700,"word_count":1751,"hashes":{".codex/skills/clinical-decision-support/skill.md":"38df574fb03c10b0a2255bc1c21e309e6faf135871816ed49cb2cc7b9addd8e5"}},".codex/skills/clinical-decision-support/assets/aggregate_cohort_table_template.json":{"size":3254,"mtime_ns":1792283742301993200,"indexed_at_ns":1792283816802081400,"word_count":322,"hashes":{".codex/skills/clinical-decision-support/assets/aggregate_cohort_table_template.json":"3ebf71a446011bd4c57b60e6cd0524e9d9fe54ba4184ad7f6a8a391b615ee0c0"}},".codex/skills/clinical-decision-support/assets/aggregate_model_evaluation_template.json":{"size":3792,"mtime_ns":1792283742302986400,"indexed_at_ns":1792283816806089100,"word_count":337,"hashes":{".codex/skills/clinical-decision-support/assets/aggregate_model_evaluation_template.json":"ba2026bef60fcc844d58a585c94549b4957e9c1a67aa747bb7d0d88732942c23"}},".codex/skills/clinical-decision-support/assets/artifact_intended_use_template.json":{"size":3400,"mtime_ns":1792283742303991000,"indexed_at_ns":1792283816808932900,"word_count":301,"hashes":{".codex/skills/clinical-decision-support/assets/artifact_intended_use_template.json":"866b59264f7d4d7aa52ab4eabd9c8c46fa703f5610fb1028d56886bc2437b919"}},".codex/skills/clinical-decision-support/assets/decision_logic_traceability_template.json":{"size":4476,"mtime_ns":1792283742304987300,"indexed_at_ns":1792283816814756700,"word_count":411,"hashes":{".codex/skills/clinical-decision-support/assets/decision_logic_traceability_template.json":"7a5b87e0b9b2a9bf9053155b3ea361d4433f90552825fdacdd18d22549d3fd94"}},".codex/skills/clinical-decision-support/assets/deidentification_checklist_template.json":{"size":6332,"mtime_ns":1792283742305991000,"indexed_at_ns":1792283816818652600,"word_count":415,"hashes":{".codex/skills/clinical-decision-support/assets/deidentification_checklist_template.json":"cdabd267199bb62432bd7f94cec52aedebe96e8ec06d042d7b0cb19fff9139e8"}},".codex/skills/clinical-decision-support/assets/evidence_profile_template.json":{"size":4624,"mtime_ns":1792283742306986700,"indexed_at_ns":1792283816821648200,"word_count":302,"hashes":{".codex/skills/clinical-decision-support/assets/evidence_profile_template.json":"6b0cc7ca95db10ad0014bce26bee199d841fc99ed37b1c11951a1a244f183639"}},".codex/skills/clinical-decision-support/assets/survival_analysis_plan_template.json":{"size":7415,"mtime_ns":1792283742307956700,"indexed_at_ns":1792283816826417400,"word_count":713,"hashes":{".codex/skills/clinical-decision-support/assets/survival_analysis_plan_template.json":"3a0549b237893c190a2deced471f76ba0490ee4a1b1b86bf7808793db1d94fe4"}},".codex/skills/clinical-decision-support/references/README.md":{"size":3324,"mtime_ns":1792283742308957100,"indexed_at_ns":1792283817064700300,"word_count":372,"hashes":{".codex/skills/clinical-decision-support/references/readme.md":"2854956c95d9e1efb21349d7a32f47fedf8215183484984b3e8c5c292382a5ba"}},".codex/skills/clinical-decision-support/references/cohort_evaluation.md":{"size":5804,"mtime_ns":1792283742310463700,"indexed_at_ns":1792283817067701300,"word_count":763,"hashes":{".codex/skills/clinical-decision-support/references/cohort_evaluation.md":"ec7501aa3877467b0c0ad063380eef021cdbabd576fb1f34dc9760be61b404a0"}},".codex/skills/clinical-decision-support/references/decision_logic_traceability.md":{"size":3496,"mtime_ns":1792283742311621700,"indexed_at_ns":1792283817071801600,"word_count":463,"hashes":{".codex/skills/clinical-decision-support/references/decision_logic_traceability.md":"9cf4bb44d09e03ce50d8e97975bdf3c71451693f23efd75841d640258d78c353"}},".codex/skills/clinical-decision-support/references/evidence_profiles.md":{"size":5953,"mtime_ns":1792283742312627600,"indexed_at_ns":1792283817075474500,"word_count":796,"hashes":{".codex/skills/clinical-decision-support/references/evidence_profiles.md":"f1d67eac0a1d66e6eafbbed57c4c2c72f2b2b720638b3f62f7a128ed35d79632"}},".codex/skills/clinical-decision-support/references/model_biomarker_evaluation.md":{"size":6708,"mtime_ns":1792283742312627600,"indexed_at_ns":1792283817078979400,"word_count":834,"hashes":{".codex/skills/clinical-decision-support/references/model_biomarker_evaluation.md":"3da91c5fad0950a61e615b7b672cd5ff4e1c321570974eadbfea467659276f50"}},".codex/skills/clinical-decision-support/references/privacy_and_disclosure.md":{"size":4907,"mtime_ns":1792283742313628000,"indexed_at_ns":1792283817082989100,"word_count":628,"hashes":{".codex/skills/clinical-decision-support/references/privacy_and_disclosure.md":"afab5bb2e959aeb57e8b50392fcb9088b16cfee1ad276b64385c8237214da819"}},".codex/skills/clinical-decision-support/references/regulatory_and_governance.md":{"size":7811,"mtime_ns":1792283742314628200,"indexed_at_ns":1792283817085990600,"word_count":857,"hashes":{".codex/skills/clinical-decision-support/references/regulatory_and_governance.md":"377eae00074c33644eaf45711bf22de46281daf78c6be7ab470eeb8370897ad2"}},".codex/skills/clinical-decision-support/references/safety_and_scope.md":{"size":4737,"mtime_ns":1792283742315627800,"indexed_at_ns":1792283817090080800,"word_count":646,"hashes":{".codex/skills/clinical-decision-support/references/safety_and_scope.md":"0d5994368354335513fabc87446b0712029cd458bdb325fe4c9a8f88e28578e8"}},".codex/skills/clinical-decision-support/references/security_validation.md":{"size":3647,"mtime_ns":1792283742315627800,"indexed_at_ns":1792283817094084000,"word_count":454,"hashes":{".codex/skills/clinical-decision-support/references/security_validation.md":"71143344bc3107627fac3f321c7610b66d39d2fdbe7bc8a5dd02fd1407c0d853"}},".codex/skills/clinical-decision-support/references/sources.md":{"size":13511,"mtime_ns":1792283742316659600,"indexed_at_ns":1792283817098081300,"word_count":1295,"hashes":{".codex/skills/clinical-decision-support/references/sources.md":"57d34c124ce3ba997645aca762d4724d1a400d9b4da7863569879b62d31bfb81"}},".codex/skills/clinical-decision-support/references/study_reporting.md":{"size":7682,"mtime_ns":1792283742317660200,"indexed_at_ns":1792283817101080700,"word_count":916,"hashes":{".codex/skills/clinical-decision-support/references/study_reporting.md":"3753564549d7c4e6dbaac1517b6d3a34fa1474efd85894f7e73e1aa3a7524310"}},".codex/skills/clinical-decision-support/references/survival_analysis.md":{"size":5882,"mtime_ns":1792283742318660400,"indexed_at_ns":1792283817105081800,"word_count":720,"hashes":{".codex/skills/clinical-decision-support/references/survival_analysis.md":"15ab5e713e967abc8b4b9cf0d47d7f9534a85936e774a191e7031f80c12fd23b"}},".codex/skills/clinical-decision-support/scripts/_common.py":{"size":7964,"mtime_ns":1792283742319668400,"indexed_at_ns":1792283816830417200,"word_count":729,"hashes":{".codex/skills/clinical-decision-support/scripts/_common.py":"9e7871dc45bf75985b5790c1da5464877c7ee8e7865404c5141e995c14c4cb09"}},".codex/skills/clinical-decision-support/scripts/cohort_table_generator.py":{"size":12086,"mtime_ns":1792283742319668400,"indexed_at_ns":1792283816833416400,"word_count":1044,"hashes":{".codex/skills/clinical-decision-support/scripts/cohort_table_generator.py":"ba5acd4522aa9d427f641b2796ae7a1dd3d1a953eda87298c0f36ca37426e2f0"}},".codex/skills/clinical-decision-support/scripts/decision_logic_traceability.py":{"size":11466,"mtime_ns":1792283742321206200,"indexed_at_ns":1792283816837417200,"word_count":811,"hashes":{".codex/skills/clinical-decision-support/scripts/decision_logic_traceability.py":"9b462304b9d8cb9e77c027547f3d45a9d02709f009a57dc9302c317adabfef21"}},".codex/skills/clinical-decision-support/scripts/deidentification_checklist.py":{"size":10294,"mtime_ns":1792283742322243700,"indexed_at_ns":1792283816840416800,"word_count":679,"hashes":{".codex/skills/clinical-decision-support/scripts/deidentification_checklist.py":"fb7516eda480d28ab88b6081b5716e6398129792f4786ba34ec6b0c775e7e057"}},".codex/skills/clinical-decision-support/scripts/evidence_profile_check.py":{"size":11112,"mtime_ns":1792283742322856100,"indexed_at_ns":1792283816844415700,"word_count":736,"hashes":{".codex/skills/clinical-decision-support/scripts/evidence_profile_check.py":"e0757d3fdf5751a6953ad1686de7c967ee7c1df03374b35fae1afbcbdbac879b"}},".codex/skills/clinical-decision-support/scripts/model_biomarker_evaluation.py":{"size":14763,"mtime_ns":1792283742323898900,"indexed_at_ns":1792283816848413400,"word_count":1220,"hashes":{".codex/skills/clinical-decision-support/scripts/model_biomarker_evaluation.py":"04d2d24f59a86e14b91e0a5fbff4fd9dc9a115e8d391d23ea8015d8dde72e206"}},".codex/skills/clinical-decision-support/scripts/survival_plan_validator.py":{"size":11494,"mtime_ns":1792283742324895300,"indexed_at_ns":1792283816851417600,"word_count":744,"hashes":{".codex/skills/clinical-decision-support/scripts/survival_plan_validator.py":"2af577b40d5064684efe0ccfd2736632543d7b7e3cb04bc72cf7cb9eaa041a3c"}},".codex/skills/clinical-decision-support/scripts/validate_cds_artifact.py":{"size":10345,"mtime_ns":1792283742325897000,"indexed_at_ns":1792283816855518600,"word_count":747,"hashes":{".codex/skills/clinical-decision-support/scripts/validate_cds_artifact.py":"c4ee21dd9d1dc3d4fae0fc7cd97386c7e45f9803c2ef5ad24c1ae7229995c5fa"}},".codex/skills/experimental-design/SKILL.md":{"size":16614,"mtime_ns":1792283742326894100,"indexed_at_ns":1792283817110081400,"word_count":2114,"hashes":{".codex/skills/experimental-design/skill.md":"c26c9e1319a7ab890684290fcfc531ca2d1406060a66dcd08ca2691ee5cc3ece"}},".codex/skills/experimental-design/references/design_types.md":{"size":8109,"mtime_ns":1792283742327894700,"indexed_at_ns":1792283817116080200,"word_count":1134,"hashes":{".codex/skills/experimental-design/references/design_types.md":"e92c2f1f446b716365492e9045a45e0cd7bb575e4c57754103192efd83315d4d"}},".codex/skills/experimental-design/references/factorial_and_doe.md":{"size":9225,"mtime_ns":1792283742328895900,"indexed_at_ns":1792283817119082100,"word_count":1300,"hashes":{".codex/skills/experimental-design/references/factorial_and_doe.md":"928fc4750f416d5398caf1700d31b2dcbd4e456c668e2d2cb1826343179f440d"}},".codex/skills/experimental-design/references/randomization_and_blocking.md":{"size":7964,"mtime_ns":1792283742329896000,"indexed_at_ns":1792283817125171800,"word_count":1128,"hashes":{".codex/skills/experimental-design/references/randomization_and_blocking.md":"db43202a1d85328c466b186825aa3df7055bbfb11e143b01273b6a5ac9db8bd7"}},".codex/skills/experimental-design/references/sequential_and_adaptive.md":{"size":6639,"mtime_ns":1792283742330901600,"indexed_at_ns":1792283817131423700,"word_count":926,"hashes":{".codex/skills/experimental-design/references/sequential_and_adaptive.md":"28e5870cabe0aec0729e9bf59ccb2906dc29094ae8ce850c933b23c85c5fdd8c"}},".codex/skills/experimental-design/scripts/doe_designs.py":{"size":9802,"mtime_ns":1792283742330901600,"indexed_at_ns":1792283816859518200,"word_count":1137,"hashes":{".codex/skills/experimental-design/scripts/doe_designs.py":"4f0988f02a65534aeaa34bf5a13454282f48ff17deaf90a53bad92b0a56ed1b9"}},".codex/skills/experimental-design/scripts/randomization.py":{"size":9820,"mtime_ns":1792283742332444000,"indexed_at_ns":1792283816863518900,"word_count":1069,"hashes":{".codex/skills/experimental-design/scripts/randomization.py":"0d905aaa67e1df2df11bcf8c7512ae2f462df166cf307ae1398517190517f83e"}},".codex/skills/machine-learning-engineer/SKILL.md":{"size":1740,"mtime_ns":1792283742341261700,"indexed_at_ns":1792283817136939500,"word_count":209,"hashes":{".codex/skills/machine-learning-engineer/skill.md":"7a88372d25f979d3acfd839cd6212e76f4b362b8d4ef30a27a26eeef24bc56b4"}},".codex/skills/ml-engineer/SKILL.md":{"size":1963,"mtime_ns":1792283742341261700,"indexed_at_ns":1792283817141851300,"word_count":235,"hashes":{".codex/skills/ml-engineer/skill.md":"3b43527fb7e946a84447702ed0fcff63ff61a2782ab11c322e3be18d8c4ac24e"}},"backend/tests/test_classifier_torchxrayvision.py":{"size":2463,"mtime_ns":1792283742417326400,"indexed_at_ns":1792283816983389300,"word_count":184,"hashes":{"backend/tests/test_classifier_torchxrayvision.py":"3a47bcefcf0c8efcbd2af9677583b1c9a0b004aa50f6f7027bfd5eb1f1250668"}},"docs/classification-audit.md":{"size":3981,"mtime_ns":1792283742437307700,"indexed_at_ns":1792283817163557000,"word_count":549,"hashes":{"docs/classification-audit.md":"d3dadea22df075fde767806d22fa54e74ecefde38e9beccdf9b602f37e3a1fe0"}},"backend/migrations/002_real_auth.sql":{"size":286,"mtime_ns":1792283744041040800,"indexed_at_ns":1792283816959703000,"word_count":43,"hashes":{"backend/migrations/002_real_auth.sql":"98f7fc3758008520424ac70fac31e81a31cf2c51ea2348017bd333e8bc7330a3"}},"backend/tests/test_auth.py":{"size":4364,"mtime_ns":1792283744041040800,"indexed_at_ns":1792283816975622600,"word_count":246,"hashes":{"backend/tests/test_auth.py":"c72d839b3af886cd5f52825b8682f71001daeb6ee3d5a111216b6c134b5ddf3e"}},"frontend/src/components/DashboardShell.jsx":{"size":10680,"mtime_ns":1792283744074399000,"indexed_at_ns":1792283816019275100,"word_count":844},"frontend/src/components/FaqItem.jsx":{"size":2288,"mtime_ns":1792283744074399000,"indexed_at_ns":1792283816036370300,"word_count":209},"frontend/src/data/preview.js":{"size":337,"mtime_ns":1792283744083587600,"indexed_at_ns":1792283816087348500,"word_count":46},"frontend/src/useScrollReveal.js":{"size":2387,"mtime_ns":1792283744112704800,"indexed_at_ns":1792283816205863800,"word_count":199},"ml/experiment.py":{"size":19869,"mtime_ns":1792283742655035600,"indexed_at_ns":1792283817045893000,"word_count":1904,"hashes":{"ml/experiment.py":"7ce3efe062c337f9bb3556c56e72b60e965afa8e260a42eec7370e3cf377ef96"}},"ml/nih_download.py":{"size":7528,"mtime_ns":1792283742658030600,"indexed_at_ns":1792283817049895200,"word_count":699,"hashes":{"ml/nih_download.py":"ae4417cd434d5758de97ecd677743e713b1844612bd464cbd013edc64f6d441a"}},"run_full_training.ps1":{"size":1241,"mtime_ns":1792283742659779000,"indexed_at_ns":1792283817055893800,"word_count":130,"hashes":{"run_full_training.ps1":"455cc17d4b1a752da195de60d61bd26907f0c02641d787512c73befa2c240ea6"}}}
+{
+  ".codex/hooks.json": {
+    "size": 234,
+    "mtime_ns": 1792294962882189500,
+    "indexed_at_ns": 1792296109642539700,
+    "word_count": 22,
+    "hashes": {
+      ".codex/hooks.json": "53a2e415d206d533fadd869dc0fa4b64c8083326019a84afb0484cabbf408bd6"
+    }
+  },
+  ".vscode/settings.json": {
+    "size": 438,
+    "mtime_ns": 1792294962909256000,
+    "indexed_at_ns": 1792296109774662900,
+    "word_count": 51,
+    "hashes": {
+      ".vscode/settings.json": "79d0ff5b494e47f76c2e4a31d80a38b9bb2d4491a96f8fd85918a236b45bc819"
+    }
+  },
+  "AGENTS.md": {
+    "size": 4413,
+    "mtime_ns": 1792295997427651300,
+    "indexed_at_ns": 1792296108974652700,
+    "word_count": 604
+  },
+  "README.md": {
+    "size": 2915,
+    "mtime_ns": 1792295997429155300,
+    "indexed_at_ns": 1792296108974652700,
+    "word_count": 390
+  },
+  "backend/.github/commit-message-instructions.md": {
+    "size": 3448,
+    "mtime_ns": 1792294962935637100,
+    "indexed_at_ns": 1792296109045407800,
+    "word_count": 483
+  },
+  "backend/.vscode/settings.json": {
+    "size": 146,
+    "mtime_ns": 1792247436680487400,
+    "indexed_at_ns": 1792296109774662900,
+    "word_count": 9,
+    "hashes": {
+      "backend/.vscode/settings.json": "9bfe3adb5742eabe797355749c776692bf39e1a5ff544ab998af5fdf9fdb1171"
+    }
+  },
+  "backend/README.md": {
+    "size": 2369,
+    "mtime_ns": 1792294962940098900,
+    "indexed_at_ns": 1792296109052080500,
+    "word_count": 324
+  },
+  "backend/app/__init__.py": {
+    "size": 0,
+    "mtime_ns": 1792247436681486600,
+    "indexed_at_ns": 1792296109784765300,
+    "word_count": 0,
+    "hashes": {
+      "backend/app/__init__.py": "61261ceb48b7496d0f846788518361958ab5b533d78246abff5ac5a3a6e615d8"
+    }
+  },
+  "backend/app/config.py": {
+    "size": 844,
+    "mtime_ns": 1792294962940098900,
+    "indexed_at_ns": 1792296109784765300,
+    "word_count": 75,
+    "hashes": {
+      "backend/app/config.py": "09ca11fdcc706aa6c6b8d0f34796075cf4b60255f1ca605c86e97c91cdc84f0d"
+    }
+  },
+  "backend/app/main.py": {
+    "size": 42326,
+    "mtime_ns": 1792296138130141100,
+    "indexed_at_ns": 1792296159642499800,
+    "word_count": 3361,
+    "hashes": {
+      "backend/app/main.py": "9cec50ae8c03d79435ab0205f62b331b3de0ec02c17b1f58fd406667db8b0d37"
+    }
+  },
+  "backend/app/models.py": {
+    "size": 3551,
+    "mtime_ns": 1792294962940098900,
+    "indexed_at_ns": 1792296109791405200,
+    "word_count": 282,
+    "hashes": {
+      "backend/app/models.py": "046d9fa41302cac79995e063fedce75872df793d619cb9edc7c1fef64bc6409a"
+    }
+  },
+  "backend/requirements.txt": {
+    "size": 274,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109103516700,
+    "word_count": 12
+  },
+  "docker-compose.yml": {
+    "size": 1597,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109129382400,
+    "word_count": 86
+  },
+  "data/nih-chestxray14/sample_manifest.json": {
+    "size": 38944,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109857289100,
+    "word_count": 1502,
+    "hashes": {
+      "data/nih-chestxray14/sample_manifest.json": "31478b52aed247ad60d0beb58db33d1d5e931615947d0335841bdb833ee8618d"
+    }
+  },
+  "data/nih-chestxray14/test_list.txt": {
+    "size": 5310,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109124423000,
+    "word_count": 295
+  },
+  "data/nih-chestxray14/train_val_list.txt": {
+    "size": 19656,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109127383000,
+    "word_count": 1092
+  },
+  "download_nih_sample.py": {
+    "size": 6485,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109858019300,
+    "word_count": 558,
+    "hashes": {
+      "download_nih_sample.py": "f68e2018762c987e27d476c0f2c4e20c91b7cd9fdc604362fa91a7217e603b68"
+    }
+  },
+  "backend/init.sql": {
+    "size": 5438,
+    "mtime_ns": 1792295997431161000,
+    "indexed_at_ns": 1792296109824387200,
+    "word_count": 655,
+    "hashes": {
+      "backend/init.sql": "4be11a6f163eec2d905d17f6107bd097d84f5fdb91e30cbb68d6827cb6b234aa"
+    }
+  },
+  "backend/import_nih_images.py": {
+    "size": 2465,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109824387200,
+    "word_count": 194,
+    "hashes": {
+      "backend/import_nih_images.py": "0be06a96164cc7978d550140ebbe8836f40fed2bb611fefa4d8859b85bc2cae0"
+    }
+  },
+  "backend/migrate.py": {
+    "size": 1591,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109824387200,
+    "word_count": 129,
+    "hashes": {
+      "backend/migrate.py": "ec50de0034615e1f915220ee2c1ff448ce3b26ff0fa7355f2030900a51e530cc"
+    }
+  },
+  "backend/migrations/002_dataset_images.sql": {
+    "size": 344,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109824387200,
+    "word_count": 44,
+    "hashes": {
+      "backend/migrations/002_dataset_images.sql": "f982946063042186189484641caf00a455554a8964573453fc820265a82d17a1"
+    }
+  },
+  "backend/IA_DADOS.md": {
+    "size": 6625,
+    "mtime_ns": 1792294962940098900,
+    "indexed_at_ns": 1792296109919611700,
+    "word_count": 878,
+    "hashes": {
+      "backend/ia_dados.md": "314766944f7d7d6c9c6be370ac2467258e969cd09f6da24b85caec6a267bc50f"
+    }
+  },
+  "backend/brightline_data.py": {
+    "size": 4402,
+    "mtime_ns": 1792294962940098900,
+    "indexed_at_ns": 1792296109800663300,
+    "word_count": 377,
+    "hashes": {
+      "backend/brightline_data.py": "25b3dc5aa1a78b96346e66e50965a15c725736e040f0bdc1d4d53dc6d412b4bb"
+    }
+  },
+  "backend/data/finding_aliases.json": {
+    "size": 4,
+    "mtime_ns": 1792294962940098900,
+    "indexed_at_ns": 1792296109803890400,
+    "word_count": 1,
+    "hashes": {
+      "backend/data/finding_aliases.json": "58944ea123eda836ba3409c1461860da2940332baaa858cc0c8fdfb2f77362a3"
+    }
+  },
+  "backend/data/revisao_laudos.md": {
+    "size": 11821,
+    "mtime_ns": 1792294962940098900,
+    "indexed_at_ns": 1792296109925302400,
+    "word_count": 1291,
+    "hashes": {
+      "backend/data/revisao_laudos.md": "7056c888efb34552fcb259699b7bf03598167551c52c5f35f30803d6ca24aa9e"
+    }
+  },
+  "backend/docs/API.md": {
+    "size": 1573,
+    "mtime_ns": 1792295997431161000,
+    "indexed_at_ns": 1792296109925302400,
+    "word_count": 199,
+    "hashes": {
+      "backend/docs/api.md": "0e594a4e1960da632e3ffe8e0355bfd1309e9cc7aef7e73f36ca38d9268efeed"
+    }
+  },
+  "backend/evaluate.py": {
+    "size": 6180,
+    "mtime_ns": 1792294962946816200,
+    "indexed_at_ns": 1792296109808048800,
+    "word_count": 534,
+    "hashes": {
+      "backend/evaluate.py": "e74afee9fe64974d88f3a34d75855c6c7472ff0e46babfd5e16d0a404e3fc3ff"
+    }
+  },
+  "backend/extract.py": {
+    "size": 6923,
+    "mtime_ns": 1792294962947466800,
+    "indexed_at_ns": 1792296109814694500,
+    "word_count": 562,
+    "hashes": {
+      "backend/extract.py": "092b99c28c37c9bbb1d363d7cc941a96ce59ea140fb572c90f9bce883673c08b"
+    }
+  },
+  "backend/import_local.py": {
+    "size": 3481,
+    "mtime_ns": 1792294962948475000,
+    "indexed_at_ns": 1792296109818945900,
+    "word_count": 292,
+    "hashes": {
+      "backend/import_local.py": "a7b0797f689afaaa38eb164e61896d9a413f258a8ac62fbca5552931a3e3a080"
+    }
+  },
+  "backend/prompts/extraction.txt": {
+    "size": 4942,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109101517000,
+    "word_count": 505
+  },
+  "backend/tests/test_ai_pipeline.py": {
+    "size": 7951,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109837526900,
+    "word_count": 482,
+    "hashes": {
+      "backend/tests/test_ai_pipeline.py": "dbf90cf7a9664661d9afd5d3b5d9924753c020648bff408177b0f2dab66f6bb0"
+    }
+  },
+  "docs/design-references/README.md": {
+    "size": 525,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109940305400,
+    "word_count": 52,
+    "hashes": {
+      "docs/design-references/readme.md": "bcf8ede3a015adaf612aca8b34f0ddac8c9d6655bf05978c861f6e395ed03071"
+    }
+  },
+  "docs/design-references/cal.DESIGN.md": {
+    "size": 34317,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109941965500,
+    "word_count": 4008,
+    "hashes": {
+      "docs/design-references/cal.design.md": "3ec67d1e74468e726a2029b23357d964f773bbbba7af0e0310c86d6ab0a23dc7"
+    }
+  },
+  "docs/design-tools.md": {
+    "size": 2277,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109941965500,
+    "word_count": 169,
+    "hashes": {
+      "docs/design-tools.md": "b9dd5a373013a86e3fb7227c377259be7eec1e94b8dc21941cc521bf00ff0483"
+    }
+  },
+  "frontend/README.md": {
+    "size": 2283,
+    "mtime_ns": 1792296099776159200,
+    "indexed_at_ns": 1792296109941965500,
+    "word_count": 318,
+    "hashes": {
+      "frontend/readme.md": "7e8ae960a6227d70c8eb4ef4cbde968eb18aecaddb631845dba18207c36363dd"
+    }
+  },
+  "frontend/docs/DESIGN.md": {
+    "size": 5710,
+    "mtime_ns": 1792294962964110200,
+    "indexed_at_ns": 1792296109950627500,
+    "word_count": 818,
+    "hashes": {
+      "frontend/docs/design.md": "581c1cb19698ad490b3bd5e041aa1dbb5c9a76b70481adf75769ff6aeef2a3a0"
+    }
+  },
+  "frontend/docs/PRODUCT.md": {
+    "size": 869,
+    "mtime_ns": 1792294962965119000,
+    "indexed_at_ns": 1792296109954638200,
+    "word_count": 118,
+    "hashes": {
+      "frontend/docs/product.md": "6ea2da299a5ec5f0dbc3cf98e87b2ae951b100dcb1fcf6c112520fcfb3a3f61f"
+    }
+  },
+  "frontend/docs/regras-de-design.md": {
+    "size": 3983,
+    "mtime_ns": 1792294962965734900,
+    "indexed_at_ns": 1792296109959199200,
+    "word_count": 536,
+    "hashes": {
+      "frontend/docs/regras-de-design.md": "44c276b971a44d65dff60413f54c75dad1e38bc8f5a1afa5fc615b29398c77d2"
+    }
+  },
+  "frontend/index.html": {
+    "size": 734,
+    "mtime_ns": 1792294962965734900,
+    "indexed_at_ns": 1792296109163585100,
+    "word_count": 62
+  },
+  "frontend/package.json": {
+    "size": 1885,
+    "mtime_ns": 1792294962965734900,
+    "indexed_at_ns": 1792296109858019300,
+    "word_count": 132,
+    "hashes": {
+      "frontend/package.json": "f560d547a33d46542547076286e42d1d2a552556a41b27ea24de7004b4342cb7"
+    }
+  },
+  "frontend/scripts/capture-ui.js": {
+    "size": 342,
+    "mtime_ns": 1792294962969898600,
+    "indexed_at_ns": 1792296109174616300,
+    "word_count": 33
+  },
+  "frontend/scripts/verify-ui.js": {
+    "size": 4179,
+    "mtime_ns": 1792294962969898600,
+    "indexed_at_ns": 1792296109174616300,
+    "word_count": 405
+  },
+  "frontend/src/App.jsx": {
+    "size": 17128,
+    "mtime_ns": 1792295997432161700,
+    "indexed_at_ns": 1792296109183453400,
+    "word_count": 1210
+  },
+  "frontend/src/LandingPage.jsx": {
+    "size": 23966,
+    "mtime_ns": 1792295053530198600,
+    "indexed_at_ns": 1792296109184464500,
+    "word_count": 1702
+  },
+  "frontend/src/api.js": {
+    "size": 1309,
+    "mtime_ns": 1792294962969898600,
+    "indexed_at_ns": 1792296109184464500,
+    "word_count": 126
+  },
+  "frontend/src/components/CaseDetail.jsx": {
+    "size": 13518,
+    "mtime_ns": 1792294962975529100,
+    "indexed_at_ns": 1792296109205227400,
+    "word_count": 933
+  },
+  "frontend/src/components/CaseList.jsx": {
+    "size": 13077,
+    "mtime_ns": 1792294962975529100,
+    "indexed_at_ns": 1792296109207675200,
+    "word_count": 1176
+  },
+  "frontend/src/components/UrgencyBadge.jsx": {
+    "size": 727,
+    "mtime_ns": 1792294962987516400,
+    "indexed_at_ns": 1792296109241376600,
+    "word_count": 92
+  },
+  "frontend/src/dashboardApi.js": {
+    "size": 1633,
+    "mtime_ns": 1792294962989516100,
+    "indexed_at_ns": 1792296109251579400,
+    "word_count": 175
+  },
+  "frontend/src/data/evaluation.json": {
+    "size": 352,
+    "mtime_ns": 1792294962991460400,
+    "indexed_at_ns": 1792296109858019300,
+    "word_count": 44,
+    "hashes": {
+      "frontend/src/data/evaluation.json": "020ebb571758224c164e40975304f2c7d59011f9900b250b45930e6a4e91c66f"
+    }
+  },
+  "frontend/src/data/extractions_cache.json": {
+    "size": 2405,
+    "mtime_ns": 1792294962991460400,
+    "indexed_at_ns": 1792296109858019300,
+    "word_count": 200,
+    "hashes": {
+      "frontend/src/data/extractions_cache.json": "11ee97ce3e176c3129888adbc23d06ca7bf1d06216f76514e996ef2e5a52984f"
+    }
+  },
+  "frontend/src/data/reports.json": {
+    "size": 5221,
+    "mtime_ns": 1792294962992464800,
+    "indexed_at_ns": 1792296109858019300,
+    "word_count": 532,
+    "hashes": {
+      "frontend/src/data/reports.json": "a674fbbd5a24d564fe86a5d0e5d9d4bfca9aa6dd6ef36f5344a4654be3bae323"
+    }
+  },
+  "frontend/src/engine/engine.js": {
+    "size": 6347,
+    "mtime_ns": 1792294962993465600,
+    "indexed_at_ns": 1792296109262154300,
+    "word_count": 653
+  },
+  "frontend/src/engine/engine.test.js": {
+    "size": 8501,
+    "mtime_ns": 1792294962993465600,
+    "indexed_at_ns": 1792296109264154400,
+    "word_count": 847
+  },
+  "frontend/src/format.js": {
+    "size": 1314,
+    "mtime_ns": 1792294962995568800,
+    "indexed_at_ns": 1792296109272155800,
+    "word_count": 145
+  },
+  "frontend/src/main.jsx": {
+    "size": 1347,
+    "mtime_ns": 1792294963010090500,
+    "indexed_at_ns": 1792296109330561300,
+    "word_count": 114
+  },
+  "frontend/src/public/logo/favicon-logo.svg": {
+    "size": 2152026,
+    "mtime_ns": 1792294963022747400,
+    "indexed_at_ns": 1792296109332562200,
+    "word_count": 115
+  },
+  "frontend/src/public/logo/logo-text.svg": {
+    "size": 1224957,
+    "mtime_ns": 1792294963031170300,
+    "indexed_at_ns": 1792296109337108500,
+    "word_count": 26
+  },
+  "frontend/src/store/store.js": {
+    "size": 5468,
+    "mtime_ns": 1792294963031170300,
+    "indexed_at_ns": 1792296109341349700,
+    "word_count": 547
+  },
+  "frontend/src/store/store.test.js": {
+    "size": 6668,
+    "mtime_ns": 1792294963031170300,
+    "indexed_at_ns": 1792296109341349700,
+    "word_count": 654
+  },
+  "frontend/src/store/useStore.js": {
+    "size": 695,
+    "mtime_ns": 1792294963031170300,
+    "indexed_at_ns": 1792296109341349700,
+    "word_count": 70
+  },
+  "frontend/src/useLenisScroll.js": {
+    "size": 2603,
+    "mtime_ns": 1792294963031170300,
+    "indexed_at_ns": 1792296109341349700,
+    "word_count": 235
+  },
+  "frontend/vite.config.js": {
+    "size": 452,
+    "mtime_ns": 1792294963031170300,
+    "indexed_at_ns": 1792296109361768700,
+    "word_count": 43
+  },
+  "package.json": {
+    "size": 765,
+    "mtime_ns": 1792294963090849500,
+    "indexed_at_ns": 1792296109874709600,
+    "word_count": 67,
+    "hashes": {
+      "package.json": "d90bc856d5dc2a6cdf3c195e7fa2bd8285de395fcbd4b600101ecc23ff9944ac"
+    }
+  },
+  "scripts/dev.mjs": {
+    "size": 3363,
+    "mtime_ns": 1792294963100322500,
+    "indexed_at_ns": 1792296109375412100,
+    "word_count": 354
+  },
+  "backend/app/report_analysis.py": {
+    "size": 8715,
+    "mtime_ns": 1792294962940098900,
+    "indexed_at_ns": 1792296109791405200,
+    "word_count": 765,
+    "hashes": {
+      "backend/app/report_analysis.py": "f987e6209d0143884355004f79a3d4703ebd55d4e56c4c1bfe77dc7695741adb"
+    }
+  },
+  "backend/docs/REPORT_ANALYSIS.md": {
+    "size": 4970,
+    "mtime_ns": 1792294962946816200,
+    "indexed_at_ns": 1792296109925302400,
+    "word_count": 579,
+    "hashes": {
+      "backend/docs/report_analysis.md": "7cb95b7335447a0140fdc6033f6eabcb3fc985b425c96675adeec409d6e5a73e"
+    }
+  },
+  "backend/migrations/003_report_analyses.sql": {
+    "size": 757,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109824387200,
+    "word_count": 83,
+    "hashes": {
+      "backend/migrations/003_report_analyses.sql": "2980e16a70ef65f934a1ed97d55e32b62742e4b5fe743af327cca4af2fbd61e0"
+    }
+  },
+  "backend/tests/test_report_analysis.py": {
+    "size": 4335,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109841347000,
+    "word_count": 324,
+    "hashes": {
+      "backend/tests/test_report_analysis.py": "3dd0ef4776c35e7f319f9f78507d4a73b61110b5f968950514666f6b68f71314"
+    }
+  },
+  "artifacts/ui/cadastro-1024.png": {
+    "size": 86297,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296108974652700,
+    "word_count": 2711
+  },
+  "artifacts/ui/cadastro-1440.png": {
+    "size": 91660,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296108984581700,
+    "word_count": 2779
+  },
+  "artifacts/ui/cadastro-390.png": {
+    "size": 56737,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296108988214300,
+    "word_count": 1920
+  },
+  "artifacts/ui/login-1024.png": {
+    "size": 72665,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296108991038400,
+    "word_count": 2126
+  },
+  "artifacts/ui/login-1440.png": {
+    "size": 76804,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296108994064300,
+    "word_count": 2286
+  },
+  "artifacts/ui/login-390.png": {
+    "size": 43467,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296108997134600,
+    "word_count": 1492
+  },
+  "artifacts/ui/login-before.png": {
+    "size": 46722,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296109000302100,
+    "word_count": 1402
+  },
+  "artifacts/ui/navbar-desktop.png": {
+    "size": 128675,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296109002857800,
+    "word_count": 3945
+  },
+  "artifacts/ui/navbar-mobile-open.png": {
+    "size": 92031,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296109006858000,
+    "word_count": 3174
+  },
+  "artifacts/ui/navbar-sidebar.png": {
+    "size": 23567,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296109007991600,
+    "word_count": 941
+  },
+  "artifacts/ui/navigation-merge-desktop.png": {
+    "size": 103651,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296109007991600,
+    "word_count": 2995
+  },
+  "artifacts/ui/navigation-merge-mobile.png": {
+    "size": 79995,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296109015406300,
+    "word_count": 2768
+  },
+  "artifacts/ui/profile-dropdown-desktop.png": {
+    "size": 139069,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296109018949500,
+    "word_count": 4342
+  },
+  "artifacts/ui/profile-dropdown-mobile.png": {
+    "size": 87737,
+    "mtime_ns": 1792294962914447600,
+    "indexed_at_ns": 1792296109023659700,
+    "word_count": 2974
+  },
+  "artifacts/ui/scrollbar-styled.png": {
+    "size": 101334,
+    "mtime_ns": 1792294962927498600,
+    "indexed_at_ns": 1792296109026683500,
+    "word_count": 3087
+  },
+  "artifacts/ui/sidebar-motion-mobile.png": {
+    "size": 79095,
+    "mtime_ns": 1792294962931125800,
+    "indexed_at_ns": 1792296109031685500,
+    "word_count": 2684
+  },
+  "artifacts/ui/sidebar-motion-review.png": {
+    "size": 102880,
+    "mtime_ns": 1792294962931125800,
+    "indexed_at_ns": 1792296109035021800,
+    "word_count": 3033
+  },
+  "artifacts/ui/sidebar-no-horizontal-scroll.png": {
+    "size": 24061,
+    "mtime_ns": 1792294962935637100,
+    "indexed_at_ns": 1792296109039400800,
+    "word_count": 758
+  },
+  "backend/data/reports.json": {
+    "size": 28330,
+    "mtime_ns": 1792294962940098900,
+    "indexed_at_ns": 1792296109808048800,
+    "word_count": 2954,
+    "hashes": {
+      "backend/data/reports.json": "00f8f716b14e38cc2ce1e76233c4b159de112caeefc8b0ec1543ea9c8f7a340d"
+    }
+  },
+  "frontend/docs/LANDING.md": {
+    "size": 3587,
+    "mtime_ns": 1792294962964110200,
+    "indexed_at_ns": 1792296109952632500,
+    "word_count": 572,
+    "hashes": {
+      "frontend/docs/landing.md": "44fa158f74a92b10fdb5ee5d0805ec007f37e7d4a5eb519cc1d796032b3339e7"
+    }
+  },
+  "frontend/src/components/BenefitsCarousel.jsx": {
+    "size": 3313,
+    "mtime_ns": 1792294962975529100,
+    "indexed_at_ns": 1792296109203228700,
+    "word_count": 268
+  },
+  "frontend/src/components/DemoClock.jsx": {
+    "size": 2727,
+    "mtime_ns": 1792294962981872900,
+    "indexed_at_ns": 1792296109208077800,
+    "word_count": 244
+  },
+  "frontend/src/components/ErrorBoundary.jsx": {
+    "size": 1394,
+    "mtime_ns": 1792294962982871200,
+    "indexed_at_ns": 1792296109208077800,
+    "word_count": 126
+  },
+  "frontend/src/components/Evaluation.jsx": {
+    "size": 4345,
+    "mtime_ns": 1792294962982871200,
+    "indexed_at_ns": 1792296109208077800,
+    "word_count": 351
+  },
+  "frontend/src/components/LandingHeader.jsx": {
+    "size": 5879,
+    "mtime_ns": 1792294962983869600,
+    "indexed_at_ns": 1792296109223281700,
+    "word_count": 445
+  },
+  "frontend/src/components/Login.jsx": {
+    "size": 15052,
+    "mtime_ns": 1792295053531200900,
+    "indexed_at_ns": 1792296109224438600,
+    "word_count": 981
+  },
+  "frontend/src/components/Missed.jsx": {
+    "size": 1970,
+    "mtime_ns": 1792294962985511100,
+    "indexed_at_ns": 1792296109226630200,
+    "word_count": 190
+  },
+  "frontend/src/components/NavigationHighlight.jsx": {
+    "size": 3974,
+    "mtime_ns": 1792294962985511100,
+    "indexed_at_ns": 1792296109228630600,
+    "word_count": 374
+  },
+  "frontend/src/components/ProfileMenu.jsx": {
+    "size": 4175,
+    "mtime_ns": 1792294962985511100,
+    "indexed_at_ns": 1792296109230628100,
+    "word_count": 330
+  },
+  "frontend/src/components/Register.jsx": {
+    "size": 114,
+    "mtime_ns": 1792294962986516000,
+    "indexed_at_ns": 1792296109235748600,
+    "word_count": 14
+  },
+  "frontend/src/components/Settings.jsx": {
+    "size": 5239,
+    "mtime_ns": 1792294962987516400,
+    "indexed_at_ns": 1792296109240371300,
+    "word_count": 376
+  },
+  "frontend/src/fixtures/evaluation.json": {
+    "size": 352,
+    "mtime_ns": 1792294962994464700,
+    "indexed_at_ns": 1792296109858019300,
+    "word_count": 44,
+    "hashes": {
+      "frontend/src/fixtures/evaluation.json": "895f01bf3937dc834d26222a0628cb3cf4dba22ea1e2fcaf59a52503bf78abf3"
+    }
+  },
+  "frontend/src/fixtures/extractions_cache.json": {
+    "size": 1955,
+    "mtime_ns": 1792294962994464700,
+    "indexed_at_ns": 1792296109874355600,
+    "word_count": 176,
+    "hashes": {
+      "frontend/src/fixtures/extractions_cache.json": "e60d81a217c7fd9a59836566537b17f23ea466952a9cc99c2f9b9b1e92aa8190"
+    }
+  },
+  "frontend/src/fixtures/reports.json": {
+    "size": 5221,
+    "mtime_ns": 1792294962994464700,
+    "indexed_at_ns": 1792296109874709600,
+    "word_count": 532,
+    "hashes": {
+      "frontend/src/fixtures/reports.json": "51eebb093885305353078c0545cd44895aa100d76ecc5d94a2a26abd62d7fb08"
+    }
+  },
+  "frontend/src/lib/evaluate.js": {
+    "size": 3154,
+    "mtime_ns": 1792294963000569100,
+    "indexed_at_ns": 1792296109274666600,
+    "word_count": 298
+  },
+  "frontend/src/lib/evaluate.test.js": {
+    "size": 5404,
+    "mtime_ns": 1792294963002074900,
+    "indexed_at_ns": 1792296109290076100,
+    "word_count": 465
+  },
+  "frontend/src/lib/formatRemaining.js": {
+    "size": 688,
+    "mtime_ns": 1792294963002074900,
+    "indexed_at_ns": 1792296109292261000,
+    "word_count": 94
+  },
+  "frontend/src/lib/formatRemaining.test.js": {
+    "size": 505,
+    "mtime_ns": 1792294963002074900,
+    "indexed_at_ns": 1792296109294260500,
+    "word_count": 66
+  },
+  "frontend/src/lib/metrics.js": {
+    "size": 524,
+    "mtime_ns": 1792294963005084000,
+    "indexed_at_ns": 1792296109302836900,
+    "word_count": 65
+  },
+  "frontend/src/lib/metrics.test.js": {
+    "size": 2326,
+    "mtime_ns": 1792294963005084000,
+    "indexed_at_ns": 1792296109304837000,
+    "word_count": 209
+  },
+  "frontend/src/lib/profile.js": {
+    "size": 606,
+    "mtime_ns": 1792294963006082500,
+    "indexed_at_ns": 1792296109307950800,
+    "word_count": 61
+  },
+  "frontend/src/lib/session.js": {
+    "size": 6370,
+    "mtime_ns": 1792294963007080800,
+    "indexed_at_ns": 1792296109307950800,
+    "word_count": 697
+  },
+  "frontend/src/lib/session.test.js": {
+    "size": 7122,
+    "mtime_ns": 1792294963007080800,
+    "indexed_at_ns": 1792296109307950800,
+    "word_count": 641
+  },
+  "frontend/src/lib/splitEvidence.js": {
+    "size": 591,
+    "mtime_ns": 1792294963010090500,
+    "indexed_at_ns": 1792296109323310500,
+    "word_count": 84
+  },
+  "frontend/src/lib/splitEvidence.test.js": {
+    "size": 3683,
+    "mtime_ns": 1792294963010090500,
+    "indexed_at_ns": 1792296109325558700,
+    "word_count": 377
+  },
+  "frontend/src/store/selectors.js": {
+    "size": 5752,
+    "mtime_ns": 1792294963031170300,
+    "indexed_at_ns": 1792296109341349700,
+    "word_count": 622
+  },
+  "frontend/src/store/selectors.test.js": {
+    "size": 10760,
+    "mtime_ns": 1792294963031170300,
+    "indexed_at_ns": 1792296109341349700,
+    "word_count": 1045
+  },
+  "frontend/src/useTitleAnimation.js": {
+    "size": 3710,
+    "mtime_ns": 1792294963031170300,
+    "indexed_at_ns": 1792296109359768500,
+    "word_count": 295
+  },
+  "scripts/check-data.js": {
+    "size": 12618,
+    "mtime_ns": 1792294963097074400,
+    "indexed_at_ns": 1792296109375412100,
+    "word_count": 1215
+  },
+  "scripts/evaluate.js": {
+    "size": 2804,
+    "mtime_ns": 1792294963100322500,
+    "indexed_at_ns": 1792296109381822000,
+    "word_count": 239
+  },
+  "scripts/record-navigation-motion.js": {
+    "size": 539,
+    "mtime_ns": 1792294963101331700,
+    "indexed_at_ns": 1792296109383827500,
+    "word_count": 53
+  },
+  "scripts/verify-login.js": {
+    "size": 2515,
+    "mtime_ns": 1792294963102838900,
+    "indexed_at_ns": 1792296109387859100,
+    "word_count": 237
+  },
+  "scripts/verify-navigation-motion.js": {
+    "size": 4840,
+    "mtime_ns": 1792294963102838900,
+    "indexed_at_ns": 1792296109390067700,
+    "word_count": 466
+  },
+  "scripts/verify-profile.js": {
+    "size": 4812,
+    "mtime_ns": 1792294963102838900,
+    "indexed_at_ns": 1792296109391594500,
+    "word_count": 450
+  },
+  "scripts/verify-registration.js": {
+    "size": 3513,
+    "mtime_ns": 1792294963103848900,
+    "indexed_at_ns": 1792296109394074900,
+    "word_count": 331
+  },
+  "scripts/verify-sidebar.js": {
+    "size": 4096,
+    "mtime_ns": 1792294963103848900,
+    "indexed_at_ns": 1792296109396246600,
+    "word_count": 380
+  },
+  "backend/tests/test_report_endpoint.py": {
+    "size": 2515,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109853666100,
+    "word_count": 188,
+    "hashes": {
+      "backend/tests/test_report_endpoint.py": "20e4f8b9f1f58cb073da33881a219701710e87d26da90b75a2e5fa270f0ebba3"
+    }
+  },
+  "frontend/src/components/RadiographClassifier.jsx": {
+    "size": 4374,
+    "mtime_ns": 1792296096314079700,
+    "indexed_at_ns": 1792296109232629400,
+    "word_count": 377
+  },
+  ".codex/skills/clinical-decision-support/SKILL.md": {
+    "size": 14440,
+    "mtime_ns": 1792294962883777500,
+    "indexed_at_ns": 1792296109884755600,
+    "word_count": 1751,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/skill.md": "38df574fb03c10b0a2255bc1c21e309e6faf135871816ed49cb2cc7b9addd8e5"
+    }
+  },
+  ".codex/skills/clinical-decision-support/assets/aggregate_cohort_table_template.json": {
+    "size": 3254,
+    "mtime_ns": 1792294962884917500,
+    "indexed_at_ns": 1792296109747244600,
+    "word_count": 322,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/assets/aggregate_cohort_table_template.json": "3ebf71a446011bd4c57b60e6cd0524e9d9fe54ba4184ad7f6a8a391b615ee0c0"
+    }
+  },
+  ".codex/skills/clinical-decision-support/assets/aggregate_model_evaluation_template.json": {
+    "size": 3792,
+    "mtime_ns": 1792294962884917500,
+    "indexed_at_ns": 1792296109749249900,
+    "word_count": 337,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/assets/aggregate_model_evaluation_template.json": "ba2026bef60fcc844d58a585c94549b4957e9c1a67aa747bb7d0d88732942c23"
+    }
+  },
+  ".codex/skills/clinical-decision-support/assets/artifact_intended_use_template.json": {
+    "size": 3400,
+    "mtime_ns": 1792294962884917500,
+    "indexed_at_ns": 1792296109751254800,
+    "word_count": 301,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/assets/artifact_intended_use_template.json": "866b59264f7d4d7aa52ab4eabd9c8c46fa703f5610fb1028d56886bc2437b919"
+    }
+  },
+  ".codex/skills/clinical-decision-support/assets/decision_logic_traceability_template.json": {
+    "size": 4476,
+    "mtime_ns": 1792294962884917500,
+    "indexed_at_ns": 1792296109753258300,
+    "word_count": 411,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/assets/decision_logic_traceability_template.json": "7a5b87e0b9b2a9bf9053155b3ea361d4433f90552825fdacdd18d22549d3fd94"
+    }
+  },
+  ".codex/skills/clinical-decision-support/assets/deidentification_checklist_template.json": {
+    "size": 6332,
+    "mtime_ns": 1792294962884917500,
+    "indexed_at_ns": 1792296109755263400,
+    "word_count": 415,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/assets/deidentification_checklist_template.json": "cdabd267199bb62432bd7f94cec52aedebe96e8ec06d042d7b0cb19fff9139e8"
+    }
+  },
+  ".codex/skills/clinical-decision-support/assets/evidence_profile_template.json": {
+    "size": 4624,
+    "mtime_ns": 1792294962884917500,
+    "indexed_at_ns": 1792296109757860300,
+    "word_count": 302,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/assets/evidence_profile_template.json": "6b0cc7ca95db10ad0014bce26bee199d841fc99ed37b1c11951a1a244f183639"
+    }
+  },
+  ".codex/skills/clinical-decision-support/assets/survival_analysis_plan_template.json": {
+    "size": 7415,
+    "mtime_ns": 1792294962884917500,
+    "indexed_at_ns": 1792296109758403800,
+    "word_count": 713,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/assets/survival_analysis_plan_template.json": "3a0549b237893c190a2deced471f76ba0490ee4a1b1b86bf7808793db1d94fe4"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/README.md": {
+    "size": 3324,
+    "mtime_ns": 1792294962884917500,
+    "indexed_at_ns": 1792296109887769000,
+    "word_count": 372,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/readme.md": "2854956c95d9e1efb21349d7a32f47fedf8215183484984b3e8c5c292382a5ba"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/cohort_evaluation.md": {
+    "size": 5804,
+    "mtime_ns": 1792294962888536100,
+    "indexed_at_ns": 1792296109890280300,
+    "word_count": 763,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/cohort_evaluation.md": "ec7501aa3877467b0c0ad063380eef021cdbabd576fb1f34dc9760be61b404a0"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/decision_logic_traceability.md": {
+    "size": 3496,
+    "mtime_ns": 1792294962888536100,
+    "indexed_at_ns": 1792296109891967700,
+    "word_count": 463,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/decision_logic_traceability.md": "9cf4bb44d09e03ce50d8e97975bdf3c71451693f23efd75841d640258d78c353"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/evidence_profiles.md": {
+    "size": 5953,
+    "mtime_ns": 1792294962888536100,
+    "indexed_at_ns": 1792296109893964500,
+    "word_count": 796,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/evidence_profiles.md": "f1d67eac0a1d66e6eafbbed57c4c2c72f2b2b720638b3f62f7a128ed35d79632"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/model_biomarker_evaluation.md": {
+    "size": 6708,
+    "mtime_ns": 1792294962888536100,
+    "indexed_at_ns": 1792296109895472200,
+    "word_count": 834,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/model_biomarker_evaluation.md": "3da91c5fad0950a61e615b7b672cd5ff4e1c321570974eadbfea467659276f50"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/privacy_and_disclosure.md": {
+    "size": 4907,
+    "mtime_ns": 1792294962888536100,
+    "indexed_at_ns": 1792296109897479400,
+    "word_count": 628,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/privacy_and_disclosure.md": "afab5bb2e959aeb57e8b50392fcb9088b16cfee1ad276b64385c8237214da819"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/regulatory_and_governance.md": {
+    "size": 7811,
+    "mtime_ns": 1792294962888536100,
+    "indexed_at_ns": 1792296109899475500,
+    "word_count": 857,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/regulatory_and_governance.md": "377eae00074c33644eaf45711bf22de46281daf78c6be7ab470eeb8370897ad2"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/safety_and_scope.md": {
+    "size": 4737,
+    "mtime_ns": 1792294962888536100,
+    "indexed_at_ns": 1792296109900477800,
+    "word_count": 646,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/safety_and_scope.md": "0d5994368354335513fabc87446b0712029cd458bdb325fe4c9a8f88e28578e8"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/security_validation.md": {
+    "size": 3647,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109902475400,
+    "word_count": 454,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/security_validation.md": "71143344bc3107627fac3f321c7610b66d39d2fdbe7bc8a5dd02fd1407c0d853"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/sources.md": {
+    "size": 13511,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109904578900,
+    "word_count": 1295,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/sources.md": "57d34c124ce3ba997645aca762d4724d1a400d9b4da7863569879b62d31bfb81"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/study_reporting.md": {
+    "size": 7682,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109906578700,
+    "word_count": 916,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/study_reporting.md": "3753564549d7c4e6dbaac1517b6d3a34fa1474efd85894f7e73e1aa3a7524310"
+    }
+  },
+  ".codex/skills/clinical-decision-support/references/survival_analysis.md": {
+    "size": 5882,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109908578100,
+    "word_count": 720,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/references/survival_analysis.md": "15ab5e713e967abc8b4b9cf0d47d7f9534a85936e774a191e7031f80c12fd23b"
+    }
+  },
+  ".codex/skills/clinical-decision-support/scripts/_common.py": {
+    "size": 7964,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109761931300,
+    "word_count": 729,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/scripts/_common.py": "9e7871dc45bf75985b5790c1da5464877c7ee8e7865404c5141e995c14c4cb09"
+    }
+  },
+  ".codex/skills/clinical-decision-support/scripts/cohort_table_generator.py": {
+    "size": 12086,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109761931300,
+    "word_count": 1044,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/scripts/cohort_table_generator.py": "ba5acd4522aa9d427f641b2796ae7a1dd3d1a953eda87298c0f36ca37426e2f0"
+    }
+  },
+  ".codex/skills/clinical-decision-support/scripts/decision_logic_traceability.py": {
+    "size": 11466,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109761931300,
+    "word_count": 811,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/scripts/decision_logic_traceability.py": "9b462304b9d8cb9e77c027547f3d45a9d02709f009a57dc9302c317adabfef21"
+    }
+  },
+  ".codex/skills/clinical-decision-support/scripts/deidentification_checklist.py": {
+    "size": 10294,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109761931300,
+    "word_count": 679,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/scripts/deidentification_checklist.py": "fb7516eda480d28ab88b6081b5716e6398129792f4786ba34ec6b0c775e7e057"
+    }
+  },
+  ".codex/skills/clinical-decision-support/scripts/evidence_profile_check.py": {
+    "size": 11112,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109761931300,
+    "word_count": 736,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/scripts/evidence_profile_check.py": "e0757d3fdf5751a6953ad1686de7c967ee7c1df03374b35fae1afbcbdbac879b"
+    }
+  },
+  ".codex/skills/clinical-decision-support/scripts/model_biomarker_evaluation.py": {
+    "size": 14763,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109761931300,
+    "word_count": 1220,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/scripts/model_biomarker_evaluation.py": "04d2d24f59a86e14b91e0a5fbff4fd9dc9a115e8d391d23ea8015d8dde72e206"
+    }
+  },
+  ".codex/skills/clinical-decision-support/scripts/survival_plan_validator.py": {
+    "size": 11494,
+    "mtime_ns": 1792294962891181200,
+    "indexed_at_ns": 1792296109761931300,
+    "word_count": 744,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/scripts/survival_plan_validator.py": "2af577b40d5064684efe0ccfd2736632543d7b7e3cb04bc72cf7cb9eaa041a3c"
+    }
+  },
+  ".codex/skills/clinical-decision-support/scripts/validate_cds_artifact.py": {
+    "size": 10345,
+    "mtime_ns": 1792294962896495300,
+    "indexed_at_ns": 1792296109774662900,
+    "word_count": 747,
+    "hashes": {
+      ".codex/skills/clinical-decision-support/scripts/validate_cds_artifact.py": "c4ee21dd9d1dc3d4fae0fc7cd97386c7e45f9803c2ef5ad24c1ae7229995c5fa"
+    }
+  },
+  ".codex/skills/experimental-design/SKILL.md": {
+    "size": 16614,
+    "mtime_ns": 1792294962897508100,
+    "indexed_at_ns": 1792296109910578000,
+    "word_count": 2114,
+    "hashes": {
+      ".codex/skills/experimental-design/skill.md": "c26c9e1319a7ab890684290fcfc531ca2d1406060a66dcd08ca2691ee5cc3ece"
+    }
+  },
+  ".codex/skills/experimental-design/references/design_types.md": {
+    "size": 8109,
+    "mtime_ns": 1792294962897508100,
+    "indexed_at_ns": 1792296109911578400,
+    "word_count": 1134,
+    "hashes": {
+      ".codex/skills/experimental-design/references/design_types.md": "e92c2f1f446b716365492e9045a45e0cd7bb575e4c57754103192efd83315d4d"
+    }
+  },
+  ".codex/skills/experimental-design/references/factorial_and_doe.md": {
+    "size": 9225,
+    "mtime_ns": 1792294962897508100,
+    "indexed_at_ns": 1792296109913610300,
+    "word_count": 1300,
+    "hashes": {
+      ".codex/skills/experimental-design/references/factorial_and_doe.md": "928fc4750f416d5398caf1700d31b2dcbd4e456c668e2d2cb1826343179f440d"
+    }
+  },
+  ".codex/skills/experimental-design/references/randomization_and_blocking.md": {
+    "size": 7964,
+    "mtime_ns": 1792294962897508100,
+    "indexed_at_ns": 1792296109915613800,
+    "word_count": 1128,
+    "hashes": {
+      ".codex/skills/experimental-design/references/randomization_and_blocking.md": "db43202a1d85328c466b186825aa3df7055bbfb11e143b01273b6a5ac9db8bd7"
+    }
+  },
+  ".codex/skills/experimental-design/references/sequential_and_adaptive.md": {
+    "size": 6639,
+    "mtime_ns": 1792294962897508100,
+    "indexed_at_ns": 1792296109917619600,
+    "word_count": 926,
+    "hashes": {
+      ".codex/skills/experimental-design/references/sequential_and_adaptive.md": "28e5870cabe0aec0729e9bf59ccb2906dc29094ae8ce850c933b23c85c5fdd8c"
+    }
+  },
+  ".codex/skills/experimental-design/scripts/doe_designs.py": {
+    "size": 9802,
+    "mtime_ns": 1792294962897508100,
+    "indexed_at_ns": 1792296109774662900,
+    "word_count": 1137,
+    "hashes": {
+      ".codex/skills/experimental-design/scripts/doe_designs.py": "4f0988f02a65534aeaa34bf5a13454282f48ff17deaf90a53bad92b0a56ed1b9"
+    }
+  },
+  ".codex/skills/experimental-design/scripts/randomization.py": {
+    "size": 9820,
+    "mtime_ns": 1792294962897508100,
+    "indexed_at_ns": 1792296109774662900,
+    "word_count": 1069,
+    "hashes": {
+      ".codex/skills/experimental-design/scripts/randomization.py": "0d905aaa67e1df2df11bcf8c7512ae2f462df166cf307ae1398517190517f83e"
+    }
+  },
+  ".codex/skills/machine-learning-engineer/SKILL.md": {
+    "size": 1740,
+    "mtime_ns": 1792294962897508100,
+    "indexed_at_ns": 1792296109919611700,
+    "word_count": 209,
+    "hashes": {
+      ".codex/skills/machine-learning-engineer/skill.md": "7a88372d25f979d3acfd839cd6212e76f4b362b8d4ef30a27a26eeef24bc56b4"
+    }
+  },
+  ".codex/skills/ml-engineer/SKILL.md": {
+    "size": 1963,
+    "mtime_ns": 1792294962897508100,
+    "indexed_at_ns": 1792296109919611700,
+    "word_count": 235,
+    "hashes": {
+      ".codex/skills/ml-engineer/skill.md": "3b43527fb7e946a84447702ed0fcff63ff61a2782ab11c322e3be18d8c4ac24e"
+    }
+  },
+  "backend/tests/test_classifier_torchxrayvision.py": {
+    "size": 2714,
+    "mtime_ns": 1792296069113244200,
+    "indexed_at_ns": 1792296109841347000,
+    "word_count": 200,
+    "hashes": {
+      "backend/tests/test_classifier_torchxrayvision.py": "e8da52d67f635f53d4f1649f77a56e48228851164f276c85afaba8c095b5c5ec"
+    }
+  },
+  "docs/classification-audit.md": {
+    "size": 3981,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109938558900,
+    "word_count": 549,
+    "hashes": {
+      "docs/classification-audit.md": "d3dadea22df075fde767806d22fa54e74ecefde38e9beccdf9b602f37e3a1fe0"
+    }
+  },
+  "backend/migrations/002_real_auth.sql": {
+    "size": 286,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109824387200,
+    "word_count": 43,
+    "hashes": {
+      "backend/migrations/002_real_auth.sql": "98f7fc3758008520424ac70fac31e81a31cf2c51ea2348017bd333e8bc7330a3"
+    }
+  },
+  "backend/tests/test_auth.py": {
+    "size": 4364,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109841347000,
+    "word_count": 246,
+    "hashes": {
+      "backend/tests/test_auth.py": "c72d839b3af886cd5f52825b8682f71001daeb6ee3d5a111216b6c134b5ddf3e"
+    }
+  },
+  "frontend/src/components/DashboardShell.jsx": {
+    "size": 10680,
+    "mtime_ns": 1792294962981872900,
+    "indexed_at_ns": 1792296109208077800,
+    "word_count": 844
+  },
+  "frontend/src/components/FaqItem.jsx": {
+    "size": 2288,
+    "mtime_ns": 1792294962983869600,
+    "indexed_at_ns": 1792296109208077800,
+    "word_count": 209
+  },
+  "frontend/src/data/preview.js": {
+    "size": 337,
+    "mtime_ns": 1792294962992464800,
+    "indexed_at_ns": 1792296109258156100,
+    "word_count": 46
+  },
+  "frontend/src/useScrollReveal.js": {
+    "size": 2387,
+    "mtime_ns": 1792294963031170300,
+    "indexed_at_ns": 1792296109357697700,
+    "word_count": 199
+  },
+  "ml/experiment.py": {
+    "size": 19869,
+    "mtime_ns": 1792294963090849500,
+    "indexed_at_ns": 1792296109874709600,
+    "word_count": 1904,
+    "hashes": {
+      "ml/experiment.py": "7ce3efe062c337f9bb3556c56e72b60e965afa8e260a42eec7370e3cf377ef96"
+    }
+  },
+  "ml/nih_download.py": {
+    "size": 7528,
+    "mtime_ns": 1792294963090849500,
+    "indexed_at_ns": 1792296109874709600,
+    "word_count": 699,
+    "hashes": {
+      "ml/nih_download.py": "ae4417cd434d5758de97ecd677743e713b1844612bd464cbd013edc64f6d441a"
+    }
+  },
+  "run_full_training.ps1": {
+    "size": 1241,
+    "mtime_ns": 1792294963090849500,
+    "indexed_at_ns": 1792296109884755600,
+    "word_count": 130,
+    "hashes": {
+      "run_full_training.ps1": "455cc17d4b1a752da195de60d61bd26907f0c02641d787512c73befa2c240ea6"
+    }
+  },
+  "backend/migrations/004_dataset_image_api.sql": {
+    "size": 751,
+    "mtime_ns": 1792295754844724700,
+    "indexed_at_ns": 1792296109835522300,
+    "word_count": 88,
+    "hashes": {
+      "backend/migrations/004_dataset_image_api.sql": "30af1048cda2c540ebd2565635dbfd35fc14334ee1f736a57f2cc636a4820466"
+    }
+  },
+  "backend/tests/test_dataset_image_api.py": {
+    "size": 4650,
+    "mtime_ns": 1792296179752189600,
+    "indexed_at_ns": 1792296201775370900,
+    "word_count": 267,
+    "hashes": {
+      "backend/tests/test_dataset_image_api.py": "cb918dd7d7c4e1081340c1f505bf2640d65838abfc0f397504b29e335608ad48"
+    }
+  },
+  "brightline-design.md": {
+    "size": 9323,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109934548500,
+    "word_count": 1372,
+    "hashes": {
+      "brightline-design.md": "8e5848bd4b27b4923838933fc29dff670f2e846eb2ea57bd9a5f03a7c4d94857"
+    }
+  },
+  "docs/DATABASE_API.md": {
+    "size": 7104,
+    "mtime_ns": 1792295956552095900,
+    "indexed_at_ns": 1792296109936553900,
+    "word_count": 980,
+    "hashes": {
+      "docs/database_api.md": "1f41102100f4c80d9d99263f2ce73b9e8de399908018b1c91abad717fb4fe9eb"
+    }
+  },
+  "docs/report-image.md": {
+    "size": 514,
+    "mtime_ns": 1792294962949132500,
+    "indexed_at_ns": 1792296109941965500,
+    "word_count": 47,
+    "hashes": {
+      "docs/report-image.md": "4d479705b4534bdf87a1267c9036402f036480dd5421abbcd1d95ecee920dd30"
+    }
+  },
+  "frontend/public/images/chest-xray-demo.png": {
+    "size": 452225,
+    "mtime_ns": 1792294962969898600,
+    "indexed_at_ns": 1792296109167585100,
+    "word_count": 16332
+  },
+  "frontend/src/assets/luna.png": {
+    "size": 530947,
+    "mtime_ns": 1792294962975529100,
+    "indexed_at_ns": 1792296109189971500,
+    "word_count": 18637
+  },
+  "frontend/src/assets/luna.svg": {
+    "size": 424779,
+    "mtime_ns": 1792294962975529100,
+    "indexed_at_ns": 1792296109201227400,
+    "word_count": 95
+  },
+  "frontend/src/components/ClinicalQueue.jsx": {
+    "size": 7312,
+    "mtime_ns": 1792294962980806500,
+    "indexed_at_ns": 1792296109208077800,
+    "word_count": 412
+  },
+  "frontend/src/components/ExamViewer.jsx": {
+    "size": 15255,
+    "mtime_ns": 1792294962983869600,
+    "indexed_at_ns": 1792296109208077800,
+    "word_count": 1186
+  },
+  "frontend/src/components/RadiographLibrary.jsx": {
+    "size": 6379,
+    "mtime_ns": 1792295924803845200,
+    "indexed_at_ns": 1792296109234710100,
+    "word_count": 501
+  },
+  "frontend/src/components/SectionTransition.jsx": {
+    "size": 2655,
+    "mtime_ns": 1792294962987516400,
+    "indexed_at_ns": 1792296109237747800,
+    "word_count": 258
+  },
+  "frontend/src/components/luna/CaseChat.jsx": {
+    "size": 4218,
+    "mtime_ns": 1792294962988515500,
+    "indexed_at_ns": 1792296109243375900,
+    "word_count": 342
+  },
+  "frontend/src/components/luna/CaseChatModal.jsx": {
+    "size": 1861,
+    "mtime_ns": 1792294962988515500,
+    "indexed_at_ns": 1792296109245408900,
+    "word_count": 147
+  },
+  "frontend/src/components/luna/LunaPanel.jsx": {
+    "size": 393,
+    "mtime_ns": 1792294962989516100,
+    "indexed_at_ns": 1792296109247409500,
+    "word_count": 37
+  },
+  "frontend/src/components/luna/LunaWidget.jsx": {
+    "size": 3633,
+    "mtime_ns": 1792294962989516100,
+    "indexed_at_ns": 1792296109249578900,
+    "word_count": 325
+  },
+  "frontend/src/data/contacts.json": {
+    "size": 223,
+    "mtime_ns": 1792294962991020200,
+    "indexed_at_ns": 1792296109858019300,
+    "word_count": 37,
+    "hashes": {
+      "frontend/src/data/contacts.json": "a6b91b3b9d32460094f7502f519ead8ca1cde9157d58ca465d0f0d864dd52b8d"
+    }
+  },
+  "frontend/src/lib/caseChat.js": {
+    "size": 2687,
+    "mtime_ns": 1792294962995568800,
+    "indexed_at_ns": 1792296109273154500,
+    "word_count": 305
+  },
+  "frontend/src/lib/caseChat.test.js": {
+    "size": 1118,
+    "mtime_ns": 1792294962996569500,
+    "indexed_at_ns": 1792296109274666600,
+    "word_count": 127
+  },
+  "frontend/src/lib/classificationConfidence.js": {
+    "size": 804,
+    "mtime_ns": 1792294962996569500,
+    "indexed_at_ns": 1792296109274666600,
+    "word_count": 101
+  },
+  "frontend/src/lib/classificationConfidence.test.js": {
+    "size": 1083,
+    "mtime_ns": 1792294962997570900,
+    "indexed_at_ns": 1792296109274666600,
+    "word_count": 104
+  },
+  "frontend/src/lib/deadlinePill.js": {
+    "size": 349,
+    "mtime_ns": 1792294962998571300,
+    "indexed_at_ns": 1792296109274666600,
+    "word_count": 47
+  },
+  "frontend/src/lib/deadlinePill.test.js": {
+    "size": 1326,
+    "mtime_ns": 1792294962999570500,
+    "indexed_at_ns": 1792296109274666600,
+    "word_count": 108
+  },
+  "frontend/src/lib/escalationPath.js": {
+    "size": 1020,
+    "mtime_ns": 1792294962999570500,
+    "indexed_at_ns": 1792296109274666600,
+    "word_count": 133
+  },
+  "frontend/src/lib/escalationPath.test.js": {
+    "size": 2144,
+    "mtime_ns": 1792294963000569100,
+    "indexed_at_ns": 1792296109274666600,
+    "word_count": 244
+  },
+  "frontend/src/lib/groupByUrgency.js": {
+    "size": 647,
+    "mtime_ns": 1792294963003080600,
+    "indexed_at_ns": 1792296109296262500,
+    "word_count": 75
+  },
+  "frontend/src/lib/groupByUrgency.test.js": {
+    "size": 1262,
+    "mtime_ns": 1792294963003080600,
+    "indexed_at_ns": 1792296109297261600,
+    "word_count": 120
+  },
+  "frontend/src/lib/luna.js": {
+    "size": 213,
+    "mtime_ns": 1792294963004085100,
+    "indexed_at_ns": 1792296109299260300,
+    "word_count": 23
+  },
+  "frontend/src/lib/luna.test.js": {
+    "size": 498,
+    "mtime_ns": 1792294963004085100,
+    "indexed_at_ns": 1792296109300799400,
+    "word_count": 35
+  },
+  "frontend/src/lib/patientLabel.js": {
+    "size": 1123,
+    "mtime_ns": 1792294963005084000,
+    "indexed_at_ns": 1792296109306838800,
+    "word_count": 141
+  },
+  "frontend/src/lib/patientLabel.test.js": {
+    "size": 1172,
+    "mtime_ns": 1792294963006082500,
+    "indexed_at_ns": 1792296109307950800,
+    "word_count": 148
+  },
+  "frontend/src/lib/sidebarItems.js": {
+    "size": 1842,
+    "mtime_ns": 1792294963008090000,
+    "indexed_at_ns": 1792296109307950800,
+    "word_count": 196
+  },
+  "frontend/src/lib/sidebarItems.test.js": {
+    "size": 2911,
+    "mtime_ns": 1792294963008090000,
+    "indexed_at_ns": 1792296109307950800,
+    "word_count": 226
+  },
+  "frontend/src/lib/sidebarPref.js": {
+    "size": 822,
+    "mtime_ns": 1792294963009085100,
+    "indexed_at_ns": 1792296109307950800,
+    "word_count": 95
+  },
+  "frontend/src/lib/sidebarPref.test.js": {
+    "size": 2191,
+    "mtime_ns": 1792294963009085100,
+    "indexed_at_ns": 1792296109307950800,
+    "word_count": 224
+  },
+  "frontend/src/lib/viewState.js": {
+    "size": 930,
+    "mtime_ns": 1792294963010090500,
+    "indexed_at_ns": 1792296109327559700,
+    "word_count": 104
+  },
+  "frontend/src/lib/viewState.test.js": {
+    "size": 1681,
+    "mtime_ns": 1792294963010090500,
+    "indexed_at_ns": 1792296109329558100,
+    "word_count": 151
+  },
+  "frontend/src/radiographApi.js": {
+    "size": 2562,
+    "mtime_ns": 1792295920373115300,
+    "indexed_at_ns": 1792296109341349700,
+    "word_count": 244
+  },
+  "scripts/check-colors.js": {
+    "size": 1244,
+    "mtime_ns": 1792294963097074400,
+    "indexed_at_ns": 1792296109374329300,
+    "word_count": 130
+  },
+  "scripts/run-tests.js": {
+    "size": 1679,
+    "mtime_ns": 1792294963101331700,
+    "indexed_at_ns": 1792296109385341400,
+    "word_count": 185
+  }
+}

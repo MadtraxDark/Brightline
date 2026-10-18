@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 from fastapi.testclient import TestClient
 
-from app.main import app
+from app.main import app, authenticated
 from app import report_analysis as service
 
 
@@ -20,6 +20,13 @@ def _weights_available() -> bool:
 
 @unittest.skipUnless(_weights_available(), "TorchXRayVision runtime/weights not available")
 class TorchXRayVisionClassifierTests(unittest.TestCase):
+    def setUp(self):
+        app.dependency_overrides[authenticated] = lambda: {
+            "token": "test-token", "user": {"id": "test-user"}}
+
+    def tearDown(self):
+        app.dependency_overrides.pop(authenticated, None)
+
     def test_http_predictions_depend_on_pixels_and_match_direct_inference(self):
         vectors = []
         # Without a context manager the client bypasses database startup; inference

@@ -9,6 +9,7 @@ import secrets
 import sys
 from pathlib import Path
 from typing import Annotated
+from urllib.parse import quote
 from uuid import UUID
 
 import psycopg
@@ -128,6 +129,157 @@ async def ready(session: Session):
         conn.execute("SELECT 1 FROM sim_state WHERE owner_id=%s",
                      (session["user"]["id"],)).fetchone()
     return {"status": "ok", "database": "postgresql"}
+
+
+def _valid_dataset_filename(filename: str) -> bool:
+    return bool(re.fullmatch(r"[A-Za-z0-9_.-]{1,128}\.(?:png|jpe?g)", filename, re.IGNORECASE))
+
+
+@app.get("/dataset/images", summary="Lista radiografias NIH ChestX-ray14")
+async def list_dataset_images(
+    session: Session,
+    offset: Annotated[int, Query(ge=0, le=1_000_000)] = 0,
+    limit: Annotated[int, Query(ge=1, le=100)] = 24,
+    dataset: Annotated[str, Query(max_length=40)] = "nih-chestxray14",
+    pathology: Annotated[str | None, Query(max_length=80)] = None,
+    classification: Annotated[str | None, Query(max_length=80)] = None,
+    patient_id: Annotated[str | None, Query(max_length=32)] = None,
+):
+    """Browse metadata in PostgreSQL. NIH labels are dataset annotations; classification filters saved model outputs."""
+    if dataset != "nih-chestxray14":
+        raise HTTPException(422, "Dataset não suportado. Use nih-chestxray14.")
+    if pathology and classification:
+        raise HTTPException(422, "Use pathology ou classification, não ambos.")
+    if pathology is not None and pathology.strip() not in {*report_analysis.LABELS, "No Finding"}:
+        raise HTTPException(422, "Patologia NIH desconhecida.")
+    if classification is not None and classification.strip() not in report_analysis.LABELS:
+        raise HTTPException(422, "Classe de previsão desconhecida.")
+    if patient_id and not re.fullmatch(r"[A-Za-z0-9_-]{1,32}", patient_id):
+        raise HTTPException(422, "patient_id inválido.")
+    conditions, params = [], []
+    if pathology:
+        conditions.append("%s = ANY(d.finding_labels)")
+        params.append(pathology.strip())
+    if patient_id:
+        conditions.append("d.patient_id=%s")
+        params.append(patient_id)
+    if classification:
+        conditions.append("EXISTS (SELECT 1 FROM dataset_image_analyses a WHERE a.owner_id=%s AND a.filename=d.filename AND a.analysis->'predictions' ? %s)")
+        params.extend((session["user"]["id"], classification.strip()))
+    where = " WHERE " + " AND ".join(conditions) if conditions else ""
+    with db() as conn:
+        total = conn.execute("SELECT count(*) AS total FROM dataset_images d" + where, params).fetchone()["total"]
+        rows = conn.execute("""SELECT d.filename,d.patient_id,d.finding_labels,d.sha256,d.imported_at,
+            a.model_version,a.created_at AS analysis_created_at
+            FROM dataset_images d LEFT JOIN dataset_image_analyses a
+            ON a.filename=d.filename AND a.owner_id=%s""" + where +
+            " ORDER BY d.filename LIMIT %s OFFSET %s",
+            [session["user"]["id"], *params, limit, offset]).fetchall()
+    items = [{"id": row["filename"], "dataset": "nih-chestxray14", "patient_id": row["patient_id"],
+              "finding_labels": row["finding_labels"], "sha256": row["sha256"],
+              "imported_at": row["imported_at"].isoformat() if row["imported_at"] else None,
+              "has_analysis": row["model_version"] is not None,
+              "analysis_created_at": row["analysis_created_at"].isoformat() if row["analysis_created_at"] else None,
+              "image_url": f"/dataset/images/{quote(row['filename'], safe='')}/signed-url"} for row in rows]
+    return {"items": items, "pagination": {"offset": offset, "limit": limit, "total": total,
+            "next_offset": offset + limit if offset + limit < total else None}}
+
+
+@app.get("/dataset/images/{filename}", summary="Obtém metadados de uma radiografia NIH")
+async def get_dataset_image(filename: str, session: Session):
+    if not _valid_dataset_filename(filename):
+        raise HTTPException(404, "Imagem não encontrada.")
+    with db() as conn:
+        row = conn.execute("""SELECT filename,patient_id,finding_labels,sha256,imported_at
+            FROM dataset_images WHERE filename=%s""", (filename,)).fetchone()
+        analysis = conn.execute("""SELECT model_version,created_at FROM dataset_image_analyses
+            WHERE owner_id=%s AND filename=%s""", (session["user"]["id"], filename)).fetchone()
+    if not row:
+        raise HTTPException(404, "Imagem não encontrada.")
+    return {"id": row["filename"], "dataset": "nih-chestxray14", "patient_id": row["patient_id"],
+            "finding_labels": row["finding_labels"], "sha256": row["sha256"],
+            "imported_at": row["imported_at"].isoformat() if row["imported_at"] else None,
+            "has_analysis": bool(analysis),
+            "analysis_created_at": analysis["created_at"].isoformat() if analysis else None,
+            "image_url": f"/dataset/images/{quote(filename, safe='')}/signed-url"}
+
+
+@app.post("/dataset/images/{filename}/signed-url", summary="Emite URL temporária para uma imagem NIH")
+async def dataset_image_signed_url(filename: str, session: Session):
+    if not _valid_dataset_filename(filename):
+        raise HTTPException(404, "Imagem não encontrada.")
+    expires = int(datetime.now(timezone.utc).timestamp()) + 60
+    ticket = secrets.token_urlsafe(32)
+    with db() as conn:
+        conn.execute("DELETE FROM dataset_image_links WHERE expires_at<=now()")
+        exists = conn.execute("SELECT 1 FROM dataset_images WHERE filename=%s", (filename,)).fetchone()
+        if not exists:
+            raise HTTPException(404, "Imagem não encontrada.")
+        conn.execute("INSERT INTO dataset_image_links(token_hash,filename,expires_at) VALUES (%s,%s,to_timestamp(%s))",
+                     (token_hash(ticket), filename, expires))
+    url = f"/dataset/images/{quote(filename, safe='')}/content?token={quote(ticket)}"
+    return {"url": url, "expires_in": 60}
+
+
+@app.get("/dataset/images/{filename}/content", summary="Entrega conteúdo de uma URL temporária")
+async def dataset_image_content(filename: str, token: str):
+    if not _valid_dataset_filename(filename) or len(token) > 256:
+        raise HTTPException(404, "Imagem não encontrada.")
+    with db() as conn:
+        row = conn.execute("""SELECT d.content,d.filename FROM dataset_image_links l
+            JOIN dataset_images d USING(filename)
+            WHERE l.token_hash=%s AND l.filename=%s AND l.expires_at>now()""",
+            (token_hash(token), filename)).fetchone()
+    if not row:
+        raise HTTPException(404, "Imagem não encontrada ou link expirado.")
+    mime = "image/png" if filename.lower().endswith(".png") else "image/jpeg"
+    return Response(content=bytes(row["content"]), media_type=mime,
+                    headers={"Cache-Control": "private, max-age=60", "X-Content-Type-Options": "nosniff"})
+
+
+@app.post("/dataset/images/{filename}/classify", summary="Classifica e persiste análise de imagem NIH")
+async def classify_dataset_image(filename: str, session: Session):
+    if not _valid_dataset_filename(filename):
+        raise HTTPException(404, "Imagem não encontrada.")
+    with db() as conn:
+        row = conn.execute("SELECT content FROM dataset_images WHERE filename=%s", (filename,)).fetchone()
+    if not row:
+        raise HTTPException(404, "Imagem não encontrada.")
+    if len(row["content"]) > report_analysis.MAX_IMAGE_BYTES:
+        raise HTTPException(413, "Radiografia acima do limite de 10 MB.")
+    try:
+        probabilities, model_version = await run_in_threadpool(report_analysis.infer, bytes(row["content"]))
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from None
+    except (ImportError, OSError, RuntimeError):
+        raise HTTPException(503, "Serviço do modelo TorchXRayVision indisponível.") from None
+    threshold = report_analysis.EXPLORATORY_THRESHOLD
+    analysis = {"image_id": filename, "dataset": "nih-chestxray14", "probabilities": probabilities,
+                "predictions": sorted(label for label, score in probabilities.items() if score >= threshold),
+                "threshold": threshold, "threshold_status": "exploratory_unvalidated", "model_version": model_version,
+                "model_metadata": report_analysis.model_metadata(), "status": "review_required",
+                "human_review_required": True,
+                "limitations": ["Probabilidades e corte não foram validados nem calibrados para uso clínico.",
+                                "Resultado experimental; não é diagnóstico e requer revisão profissional."]}
+    with db() as conn:
+        conn.execute("""INSERT INTO dataset_image_analyses(owner_id,filename,analysis,model_version)
+            VALUES (%s,%s,%s,%s) ON CONFLICT(owner_id,filename) DO UPDATE SET
+            analysis=EXCLUDED.analysis,model_version=EXCLUDED.model_version,created_at=now()""",
+            (session["user"]["id"], filename, psycopg.types.json.Jsonb(analysis), model_version))
+    return analysis
+
+
+@app.get("/dataset/images/{filename}/analysis", summary="Consulta análise salva da radiografia NIH")
+async def get_dataset_image_analysis(filename: str, session: Session):
+    if not _valid_dataset_filename(filename):
+        raise HTTPException(404, "Imagem não encontrada.")
+    with db() as conn:
+        row = conn.execute("""SELECT a.analysis,a.created_at FROM dataset_image_analyses a
+            JOIN dataset_images d USING(filename) WHERE a.owner_id=%s AND a.filename=%s""",
+            (session["user"]["id"], filename)).fetchone()
+    if not row:
+        raise HTTPException(404, "Ainda não há análise salva para esta imagem.")
+    return {**row["analysis"], "created_at": row["created_at"].isoformat()}
 
 
 @app.post("/auth/signup", status_code=201)
@@ -497,6 +649,7 @@ async def analyze_report(
 @app.post("/radiographs/classify", summary="Classifica uma radiografia de tórax")
 async def classify_radiograph(
     radiograph: Annotated[UploadFile, File(description="Radiografia torácica PNG/JPEG para o modelo NIH")],
+    session: Session,
 ):
     """Return exploratory NIH class probabilities without persisting the uploaded image."""
     if radiograph.content_type not in {"image/png", "image/jpeg"}:
@@ -526,6 +679,40 @@ async def classify_radiograph(
             "O resultado não é diagnóstico e requer avaliação por profissional qualificado.",
         ],
     }
+
+
+@app.get("/reports/{report_id}/analysis", summary="Consulta análise salva de um laudo")
+async def get_report_analysis(report_id: str, session: Session):
+    if not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", report_id):
+        raise HTTPException(404, "Análise não encontrada.")
+    with db() as conn:
+        row = conn.execute("""SELECT a.analysis,a.model_version,a.created_at
+            FROM report_analyses a JOIN reports r USING(owner_id,report_id)
+            WHERE a.owner_id=%s AND a.report_id=%s""", (session["user"]["id"], report_id)).fetchone()
+    if not row:
+        raise HTTPException(404, "Análise não encontrada.")
+    return {**row["analysis"], "model_version": row["model_version"],
+            "created_at": row["created_at"].isoformat()}
+
+
+@app.post("/reports/{report_id}/radiograph-url", summary="Emite URL temporária da radiografia de um laudo")
+async def report_radiograph_url(report_id: str, request: Request, session: Session):
+    if not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", report_id):
+        raise HTTPException(404, "Radiografia não encontrada.")
+    expires = int(datetime.now(timezone.utc).timestamp()) + 60
+    ticket = secrets.token_urlsafe(32)
+    owner = session["user"]["id"]
+    with db() as conn:
+        row = conn.execute("""SELECT f.file_id FROM report_files rf JOIN files f
+            USING(owner_id,file_id) WHERE rf.owner_id=%s AND rf.report_id=%s
+            AND rf.role='radiograph' AND f.mime_type IN ('image/png','image/jpeg')
+            ORDER BY f.created_at DESC LIMIT 1""", (owner, report_id)).fetchone()
+        if not row:
+            raise HTTPException(404, "Radiografia não encontrada.")
+        conn.execute("INSERT INTO file_links(token_hash,owner_id,file_id,expires_at) VALUES (%s,%s,%s,to_timestamp(%s))",
+                     (token_hash(ticket), owner, row["file_id"], expires))
+    url = f"/files/{quote(row['file_id'], safe='')}?token={quote(ticket)}"
+    return {"url": url, "expires_in": 60}
 
 @app.post("/files", status_code=201)
 async def upload_file(request: Request, session: Session):

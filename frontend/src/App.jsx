@@ -30,6 +30,7 @@ import CaseList from "./components/CaseList.jsx";
 import Evaluation from "./components/Evaluation.jsx";
 import Login from "./components/Login.jsx";
 import RadiographClassifier from "./components/RadiographClassifier.jsx";
+import RadiographLibrary from "./components/RadiographLibrary.jsx";
 import Register from "./components/Register.jsx";
 import ProfileMenu from "./components/ProfileMenu.jsx";
 import Settings from "./components/Settings.jsx";
@@ -484,6 +485,12 @@ export default function App() {
     return (
       <RequireAuth>
         <RadiographClassifier />
+      </RequireAuth>
+    );
+  if (path === "/radiografias")
+    return (
+      <RequireAuth>
+        <RadiographLibrary />
       </RequireAuth>
     );
   if (path === "/") return <LandingPage />;

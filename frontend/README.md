@@ -1,5 +1,7 @@
 # Frontend Brightline
 
+O catálogo NIH em `/radiografias` usa a API autenticada para listar, filtrar, paginar, exibir imagens e consultar análises. O cliente está em `src/radiographApi.js`; nenhum componente acessa o PostgreSQL diretamente. Consulte [API de dados e radiografias](../docs/DATABASE_API.md).
+
 Landing page comercial e painel demonstrativo em React/Vite. Esta pasta contém o projeto Node completo: manifesto, lockfile, configuração, fontes e scripts de interface.
 
 Execute os comandos dentro de `frontend/`:
