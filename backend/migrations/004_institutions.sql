@@ -37,17 +37,27 @@ DO $$ BEGIN
   IF to_regclass('public.report_analyses') IS NOT NULL THEN
     ALTER TABLE report_analyses ADD COLUMN IF NOT EXISTS institution_id text NOT NULL DEFAULT '__legacy__';
     ALTER TABLE report_analyses DROP CONSTRAINT IF EXISTS report_analyses_owner_id_report_id_fkey;
+    ALTER TABLE report_analyses DROP CONSTRAINT IF EXISTS report_analyses_pkey;
   END IF;
   IF to_regclass('public.report_files') IS NOT NULL THEN
     ALTER TABLE report_files ADD COLUMN IF NOT EXISTS institution_id text NOT NULL DEFAULT '__legacy__';
     ALTER TABLE report_files DROP CONSTRAINT IF EXISTS report_files_owner_id_report_id_fkey;
     ALTER TABLE report_files DROP CONSTRAINT IF EXISTS report_files_owner_id_file_id_fkey;
+    ALTER TABLE report_files DROP CONSTRAINT IF EXISTS report_files_pkey;
   END IF;
   IF EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='reports'::regclass AND conname='reports_pkey') THEN
     ALTER TABLE reports DROP CONSTRAINT reports_pkey;
   END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='reports'::regclass AND conname='reports_pkey') THEN
     ALTER TABLE reports ADD CONSTRAINT reports_pkey PRIMARY KEY(owner_id,institution_id,report_id);
+  END IF;
+  IF to_regclass('public.report_analyses') IS NOT NULL
+     AND NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='report_analyses'::regclass AND conname='report_analyses_pkey') THEN
+    ALTER TABLE report_analyses ADD CONSTRAINT report_analyses_pkey PRIMARY KEY(owner_id,institution_id,report_id);
+  END IF;
+  IF to_regclass('public.report_files') IS NOT NULL
+     AND NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='report_files'::regclass AND conname='report_files_pkey') THEN
+    ALTER TABLE report_files ADD CONSTRAINT report_files_pkey PRIMARY KEY(owner_id,institution_id,report_id,file_id);
   END IF;
   IF to_regclass('public.report_analyses') IS NOT NULL
      AND NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='report_analyses'::regclass AND conname='report_analyses_report_institution_fkey') THEN
@@ -105,6 +115,11 @@ DO $$ BEGIN
   END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='files'::regclass AND conname='files_pkey') THEN
     ALTER TABLE files ADD CONSTRAINT files_pkey PRIMARY KEY(owner_id,institution_id,file_id);
+  END IF;
+  IF to_regclass('public.report_files') IS NOT NULL
+     AND NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='report_files'::regclass AND conname='report_files_file_institution_fkey') THEN
+    ALTER TABLE report_files ADD CONSTRAINT report_files_file_institution_fkey
+      FOREIGN KEY(owner_id,institution_id,file_id) REFERENCES files(owner_id,institution_id,file_id) ON DELETE CASCADE;
   END IF;
   IF to_regclass('public.report_files') IS NOT NULL
      AND NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='report_files'::regclass AND conname='report_files_file_institution_fkey') THEN

@@ -1,0 +1,16 @@
+.git/
+.codex/
+graphify-out/
+frontend/
+data/
+docs/
+scripts/
+artifacts/ui/
+artifacts/landing-hero.jpg
+artifacts/landing-page.jpg
+backend/tests/
+backend/data/
+backend/.env
+backend/.venv/
+**/__pycache__/
+**/*.pyc

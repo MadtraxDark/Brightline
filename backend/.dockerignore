@@ -17,3 +17,7 @@ data
 tests
 prompts
 *.md
+
+scratchvenv/
+artifacts/compare/
+scripts/compare/

@@ -30,13 +30,14 @@ A API fica em `http://localhost:8080`. O PostgreSQL é publicado em `localhost:5
 
 `docker compose down` preserva o banco. `docker compose down -v` remove o volume e os dados persistidos.
 
-O conjunto NIH ChestX-ray14 foi importado para `dataset_images` no PostgreSQL; os arquivos de imagem não precisam estar no repositório. Para importar novamente, consulte [NIH_TENSORFLOW.md](backend/NIH_TENSORFLOW.md).
+O conjunto NIH ChestX-ray14 foi importado para `dataset_images` no PostgreSQL; os arquivos de imagem não precisam estar no repositório.
 
 ## Documentação
 
 - [Guia do backend](backend/README.md)
 - [Extração e avaliação dos dados](backend/IA_DADOS.md)
 - [Documentação da API](backend/docs/API.md)
+- [API de dados e radiografias](docs/DATABASE_API.md)
 - [Frontend](frontend/README.md)
 
 A autenticação e os dados de laudos/casos do painel usam a API. A prévia da landing page e a avaliação da IA usam conteúdo sintético. O schema não tem uma entidade de pacientes. Não há integração PACS/HL7/FHIR nem envio real de mensagens.

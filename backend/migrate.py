@@ -11,7 +11,10 @@ MIGRATIONS = Path(__file__).resolve().parent / "migrations"
 
 
 def main():
-    with psycopg.connect(get_settings().database_url, row_factory=dict_row) as conn:
+    # Use top-level transactions for each migration. Leaving the connection in
+    # an implicit transaction makes conn.transaction() create a savepoint, which
+    # is not reliable through all supported PostgreSQL connection proxies.
+    with psycopg.connect(get_settings().database_url, row_factory=dict_row, autocommit=True) as conn:
         conn.execute("""CREATE TABLE IF NOT EXISTS schema_migrations (
             version text PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now())""")
         # The initial schema is created by the official Postgres entrypoint. If a

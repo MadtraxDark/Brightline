@@ -9,6 +9,8 @@
     "dev:backend": "node scripts/dev.mjs backend",
     "install:frontend": "npm --prefix frontend ci",
     "build": "npm --prefix frontend run build",
+    "check:data": "npm --prefix frontend run check:data",
+    "check:colors": "npm --prefix frontend run check:colors",
     "test": "npm --prefix frontend test"
   },
   "lint-staged": {

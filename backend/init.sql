@@ -32,6 +32,15 @@ CREATE TABLE IF NOT EXISTS extractions (
   PRIMARY KEY(owner_id,report_id),
   FOREIGN KEY(owner_id,report_id) REFERENCES reports(owner_id,report_id) ON DELETE CASCADE
 );
+CREATE TABLE IF NOT EXISTS report_analyses (
+  owner_id uuid NOT NULL,
+  report_id text NOT NULL,
+  analysis jsonb NOT NULL,
+  model_version text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY(owner_id, report_id),
+  FOREIGN KEY(owner_id,report_id) REFERENCES reports(owner_id,report_id) ON DELETE CASCADE
+);
 CREATE TABLE IF NOT EXISTS sim_state (
   owner_id uuid PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
   sim_now double precision NOT NULL DEFAULT 0 CHECK(sim_now>=0)
@@ -73,6 +82,15 @@ CREATE TABLE IF NOT EXISTS files (
   created_at timestamptz NOT NULL DEFAULT now(),
   PRIMARY KEY(owner_id,file_id)
 );
+CREATE TABLE IF NOT EXISTS report_files (
+  owner_id uuid NOT NULL,
+  report_id text NOT NULL,
+  file_id text NOT NULL,
+  role text NOT NULL CHECK(role IN ('report','radiograph')),
+  PRIMARY KEY(owner_id,report_id,file_id),
+  FOREIGN KEY(owner_id,report_id) REFERENCES reports(owner_id,report_id) ON DELETE CASCADE,
+  FOREIGN KEY(owner_id,file_id) REFERENCES files(owner_id,file_id) ON DELETE CASCADE
+);
 CREATE TABLE IF NOT EXISTS file_links (
   token_hash text PRIMARY KEY,
   owner_id uuid NOT NULL,
@@ -89,3 +107,18 @@ CREATE TABLE IF NOT EXISTS dataset_images (
   imported_at timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS dataset_images_labels_gin ON dataset_images USING gin(finding_labels);
+CREATE TABLE IF NOT EXISTS dataset_image_links (
+  token_hash text PRIMARY KEY,
+  filename text NOT NULL REFERENCES dataset_images(filename) ON DELETE CASCADE,
+  expires_at timestamptz NOT NULL
+);
+CREATE INDEX IF NOT EXISTS dataset_image_links_expiry ON dataset_image_links(expires_at);
+CREATE TABLE IF NOT EXISTS dataset_image_analyses (
+  owner_id uuid NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  filename text NOT NULL REFERENCES dataset_images(filename) ON DELETE CASCADE,
+  analysis jsonb NOT NULL,
+  model_version text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY(owner_id, filename)
+);
+CREATE INDEX IF NOT EXISTS dataset_image_analyses_result_gin ON dataset_image_analyses USING gin(analysis);
