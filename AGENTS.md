@@ -26,3 +26,16 @@ Use these project skills when the task matches their scope:
 - For research-only evaluation reporting, intended-use limits, subgroup analysis, calibration, uncertainty, privacy, or governance, read `.codex/skills/clinical-decision-support/SKILL.md`. Apply its data gate: use aggregate or synthetic inputs for its scripts and artifacts; do not feed individual radiographs or patient-level records to those helpers.
 - Use the clinical-decision-support skill only for research and aggregate documentation. Never use this project or its predictions to diagnose a person, recommend treatment, triage, or make a live clinical decision. Keep limitations and human-review requirements visible in outputs.
 - These skills guide relevant work; they do not authorize external data transfers, deployment, or changes to the model's intended use.
+
+## Dados, banco e API
+
+Para qualquer mudança em dados, imagens, classificações ou resultados:
+
+1. Antes de criar novas fontes, arquivos auxiliares, tabelas ou estruturas, verifique se os registros já existem no PostgreSQL e consulte `docs/DATABASE_API.md` e a documentação relacionada.
+2. Reutilize modelos, tabelas, repositórios, serviços e endpoints já existentes. Não replique registros nem crie consultas/endpoints desnecessários.
+3. O frontend acessa dados exclusivamente por endpoints do backend. Nunca inclua SQL, credenciais de banco ou conexão direta ao banco no frontend.
+4. Preserve IDs, chaves, relacionamentos, regras de propriedade e integridade existentes. Metadados e resultados estruturados pertencem ao banco; arquivos binários seguem o armazenamento já estabelecido, salvo justificativa documentada.
+5. Imagens privadas devem ser servidas por endpoints autenticados ou links temporários do backend. Não exponha caminhos absolutos do host nem aceite caminhos de arquivo arbitrários.
+6. Valide filtros, paginação, tipos e tamanho dos arquivos no backend; mantenha tratamento consistente de erros e isolamento por usuário.
+7. Atualize `docs/DATABASE_API.md` quando mudar contratos, persistência, configuração ou fluxo de acesso a dados.
+8. Não adicione Supabase, outra camada de banco ou novo armazenamento sem uma decisão explícita do usuário.

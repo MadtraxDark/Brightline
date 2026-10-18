@@ -147,6 +147,22 @@ export function createStore({ storage, timers = defaultTimers, data } = {}) {
     getState() {
       return state;
     },
+    hydrateRemote({ cases: remoteCases, reports: remoteReports, simNow }) {
+      cancelTimer();
+      try {
+        storage.removeItem(STORAGE_KEY);
+      } catch {
+        /* Clinical data stays in the API, not in browser storage. */
+      }
+      state = {
+        ...state,
+        simNow,
+        cases: remoteCases,
+        reports: remoteReports,
+        recentlyEscalated: [],
+      };
+      emit();
+    },
     subscribe(fn) {
       listeners.add(fn);
       return () => listeners.delete(fn);

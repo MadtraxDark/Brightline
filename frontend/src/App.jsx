@@ -35,6 +35,7 @@ import CaseList from "./components/CaseList.jsx";
 import Evaluation from "./components/Evaluation.jsx";
 import Login from "./components/Login.jsx";
 import RadiographClassifier from "./components/RadiographClassifier.jsx";
+import RadiographLibrary from "./components/RadiographLibrary.jsx";
 import Register from "./components/Register.jsx";
 import ProfileMenu from "./components/ProfileMenu.jsx";
 import Settings from "./components/Settings.jsx";
@@ -187,19 +188,34 @@ function RequireAuth({ children }) {
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
     let active = true;
-    setStatus("loading");
-    validateSession(sessionStorage)
-      .then((user) => {
-        if (active) setStatus(user ? "authenticated" : "anonymous");
-      })
-      .catch((reason) => {
+    async function checkSession() {
+      setStatus("loading");
+      try {
+        const user = await validateSession(sessionStorage);
+        if (active) {
+          setStatus(
+            !user
+              ? "anonymous"
+              : user.active_institution_id
+                ? "authenticated"
+                : "needs-institution",
+          );
+        }
+      } catch (reason) {
         if (active) {
           setError(reason.message);
           setStatus("error");
         }
-      });
+      }
+    }
+    checkSession();
+    window.addEventListener("brightline:institution-changed", checkSession);
     return () => {
       active = false;
+      window.removeEventListener(
+        "brightline:institution-changed",
+        checkSession,
+      );
     };
   }, [attempt]);
   if (status === "loading")
@@ -228,6 +244,12 @@ function RequireAuth({ children }) {
         state={{ from: `${location.pathname}${location.search}` }}
       />
     );
+  }
+  if (
+    status === "needs-institution" &&
+    location.pathname !== "/configuracoes"
+  ) {
+    return <Navigate to="/configuracoes" replace />;
   }
   return children;
 }
@@ -521,6 +543,12 @@ export default function App() {
     return (
       <RequireAuth>
         <RadiographClassifier />
+      </RequireAuth>
+    );
+  if (path === "/radiografias")
+    return (
+      <RequireAuth>
+        <RadiographLibrary />
       </RequireAuth>
     );
   if (path === "/") return <LandingPage />;

@@ -2,14 +2,14 @@
 
 ## Classificação de imagem independente
 
-`POST /radiographs/classify` não exige login e recebe `multipart/form-data` com o campo obrigatório `radiograph` (PNG/JPEG, até 10 MB). A rota usa o mesmo modelo TorchXRayVision (DenseNet121, pesos `densenet121-res224-nih`) carregado pelo serviço e retorna as 14 probabilidades, classes acima do corte exploratório, versão do modelo e limitações. A imagem é processada em memória e não é persistida por essa rota.
+`POST /radiographs/classify` exige sessão autenticada com instituição ativa e recebe `multipart/form-data` com o campo obrigatório `radiograph` (PNG/JPEG, até 10 MB). A rota usa o mesmo modelo TorchXRayVision (DenseNet121, pesos `densenet121-res224-nih`) carregado pelo serviço e retorna as 14 probabilidades, classes acima do corte exploratório, versão do modelo e limitações. A imagem é processada em memória e não é persistida por essa rota.
 
 ```bash
 curl -X POST http://localhost:8080/radiographs/classify \
   -F 'radiograph=@chest.png;type=image/png'
 ```
 
-O frontend oferece essa operação em `/classificar`; defina `VITE_BRIGHTLINE_API_URL` se a API não estiver em `http://localhost:8080`. A conta deve existir na API local. O modelo classifica apenas radiografias de tórax e serve para pesquisa; as pontuações não são diagnósticos nem decisões clínicas.
+O frontend oferece essa operação em `/classificar`; defina `VITE_BRIGHTLINE_API_URL` se a API não estiver em `http://localhost:8080`. A conta deve existir na API local e selecionar uma instituição vinculada. O modelo classifica apenas radiografias de tórax e serve para pesquisa; as pontuações não são diagnósticos nem decisões clínicas.
 
 `POST /reports/analyze` exige `Authorization: Bearer <access_token>` e recebe `multipart/form-data`:
 
@@ -36,10 +36,42 @@ Exemplo ilustrativo; o serviço retorna todas as 14 probabilidades:
 ```json
 {
   "report_id": "f1c9...",
-  "findings": [{"finding": "consolidação no lobo inferior direito", "evidence": "Opacidade focal no lobo inferior direito, podendo representar consolidação.", "urgency": "actionable", "deadline_hours": 720, "confidence": "medium"}],
+  "findings": [
+    {
+      "finding": "consolidação no lobo inferior direito",
+      "evidence": "Opacidade focal no lobo inferior direito, podendo representar consolidação.",
+      "urgency": "actionable",
+      "deadline_hours": 720,
+      "confidence": "medium"
+    }
+  ],
   "predictions": ["Consolidation"],
-  "probabilities": {"Atelectasis": 0.08, "Cardiomegaly": 0.06, "Effusion": 0.12, "Infiltration": 0.24, "Mass": 0.02, "Nodule": 0.04, "Pneumonia": 0.38, "Pneumothorax": 0.03, "Consolidation": 0.61, "Edema": 0.09, "Emphysema": 0.01, "Fibrosis": 0.02, "Pleural_Thickening": 0.04, "Hernia": 0.01},
-  "comparison": {"threshold": 0.5, "threshold_status": "exploratory_unvalidated", "text_classes": ["Consolidation"], "model_classes_above_threshold": ["Consolidation"], "disagreements": [], "limitations": ["Classes are lexical equivalents only; no validated clinical ontology is used."]},
+  "probabilities": {
+    "Atelectasis": 0.08,
+    "Cardiomegaly": 0.06,
+    "Effusion": 0.12,
+    "Infiltration": 0.24,
+    "Mass": 0.02,
+    "Nodule": 0.04,
+    "Pneumonia": 0.38,
+    "Pneumothorax": 0.03,
+    "Consolidation": 0.61,
+    "Edema": 0.09,
+    "Emphysema": 0.01,
+    "Fibrosis": 0.02,
+    "Pleural_Thickening": 0.04,
+    "Hernia": 0.01
+  },
+  "comparison": {
+    "threshold": 0.5,
+    "threshold_status": "exploratory_unvalidated",
+    "text_classes": ["Consolidation"],
+    "model_classes_above_threshold": ["Consolidation"],
+    "disagreements": [],
+    "limitations": [
+      "Classes are lexical equivalents only; no validated clinical ontology is used."
+    ]
+  },
   "disagreements": [],
   "model_version": "torchxrayvision-densenet121-res224-nih",
   "status": "review_required",
@@ -53,7 +85,7 @@ Exemplo ilustrativo; o serviço retorna todas as 14 probabilidades:
 
 A extracao reutiliza o prompt e o validador existentes em `backend/prompts/extraction.txt` e `backend/extract.py`, usando `generateContent` da Gemini Developer API. Configure `GEMINI_API_KEY`; `GEMINI_MODEL` e opcional e usa `gemini-3.5-flash-lite` por padrao. A API oficial exige a chave no cabecalho `x-goog-api-key` ([referencia](https://ai.google.dev/api/generate-content)). O Google lista atualmente esse modelo no nivel gratuito, sujeito a limites e disponibilidade que podem mudar. O Google informa que pode usar dados enviados no nivel gratuito para melhorar seus produtos. Nao envie laudos identificaveis ou dados sensiveis sem autorizacao e avaliacao de privacidade adequadas ([precos e uso dos dados](https://ai.google.dev/gemini-api/docs/pricing)). Sem `GEMINI_API_KEY`, a API responde 503 sem persistir a analise.
 
-Resultados são isolados pelo usuário autenticado e persistidos em `reports`, `extractions` e `report_analyses`; achados textuais também entram em `cases`/`events` com status `notified` na fila simulada já existente, podendo ser reconhecidos e acompanhados pela API atual. A análise visual não cria nem escalona casos por conta própria. Os arquivos enviados são armazenados em `files` e vinculados em `report_files`, sob `owner_id`. Reanalisar o mesmo `report_id` atualiza laudo e análise, e mantém os casos já existentes.
+Resultados são isolados pelo usuário autenticado e pela instituição ativa, persistidos em `reports`, `extractions` e `report_analyses`; achados textuais também entram em `cases`/`events` com status `notified` na fila simulada já existente, podendo ser reconhecidos e acompanhados pela API atual. A análise visual não cria nem escalona casos por conta própria. Os arquivos enviados são armazenados em `files` e vinculados em `report_files` sob `owner_id` e `institution_id`. Reanalisar o mesmo `report_id` na instituição ativa atualiza o laudo e a análise, mantendo os casos já existentes.
 
 Reinicie/aplique a migração após atualizar o backend:
 
