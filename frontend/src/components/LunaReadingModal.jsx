@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { X } from "lucide-react";
 import luna from "../assets/luna.png";
 import { loadReportImage } from "../lib/reportImage.js";
@@ -7,6 +7,7 @@ import {
   pathologyLabel,
   validLocalizationMarkers,
 } from "../lib/pathologyColors.js";
+import { markersInsideFilm } from "../lib/filmMarkers.js";
 import PathologyScoreList from "./PathologyScoreList.jsx";
 
 const LINE_MS = 1200;
@@ -33,6 +34,7 @@ export default function LunaReadingModal({
   const [beat, setBeat] = useState("line");
   const [imageSrc, setImageSrc] = useState("");
   const [ratio, setRatio] = useState(0);
+  const [shownMarkers, setShownMarkers] = useState(null);
   const fileId = report?.image_file_id;
   const datasetFilename = report?.dataset_filename;
 
@@ -104,7 +106,20 @@ export default function LunaReadingModal({
   );
 
   const scanning = beat === "line" || beat === "dots";
-  const markers = beat === "scores" ? validLocalizationMarkers(result) : [];
+  const frameImage = useRef(null);
+  const markers = useMemo(
+    () => (beat === "scores" ? validLocalizationMarkers(result) : []),
+    [beat, result],
+  );
+  const visibleMarkers = shownMarkers ?? markers;
+  useEffect(() => {
+    const image = frameImage.current;
+    if (!markers.length || !image?.complete || !image.naturalWidth) {
+      setShownMarkers(null);
+      return;
+    }
+    setShownMarkers(markersInsideFilm(image, markers));
+  }, [markers]);
 
   return (
     <dialog
@@ -135,6 +150,7 @@ export default function LunaReadingModal({
               style={ratio ? { aspectRatio: String(ratio) } : undefined}
             >
               <img
+                ref={frameImage}
                 src={imageSrc}
                 alt={
                   modality
@@ -146,9 +162,10 @@ export default function LunaReadingModal({
                   if (image.naturalWidth && image.naturalHeight) {
                     setRatio(image.naturalWidth / image.naturalHeight);
                   }
+                  setShownMarkers(markersInsideFilm(image, markers));
                 }}
               />
-              {markers.map((marker) => (
+              {visibleMarkers.map((marker) => (
                 <span
                   key={marker.pathology}
                   className="exam-preview-marker"
