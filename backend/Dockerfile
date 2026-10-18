@@ -18,6 +18,9 @@ RUN python -c "import torchxrayvision as xrv; xrv.models.DenseNet(weights='dense
 COPY backend/app ./app
 COPY backend/extract.py backend/brightline_data.py ./
 COPY backend/prompts ./prompts
+COPY backend/migrate.py ./backend/migrate.py
+COPY backend/app/__init__.py backend/app/config.py ./backend/app/
+COPY backend/migrations ./backend/migrations
 
 EXPOSE 8000
 
