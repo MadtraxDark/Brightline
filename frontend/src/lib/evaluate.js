@@ -35,14 +35,25 @@ export function computeEvaluation(reports, cache) {
 
   for (const report of source) {
     const reportId = report?.report_id;
-    const truths = Array.isArray(report?.ground_truth) ? report.ground_truth : [];
-    const found = Array.isArray(extractions[reportId]?.findings) ? extractions[reportId].findings : [];
+    const truths = Array.isArray(report?.ground_truth)
+      ? report.ground_truth
+      : [];
+    const found = Array.isArray(extractions[reportId]?.findings)
+      ? extractions[reportId].findings
+      : [];
     const used = new Set();
 
     truths.forEach((truth) => {
-      let match = found.findIndex((item, index) => !used.has(index) && sameFinding(truth, item) && item?.urgency === truth?.urgency);
+      let match = found.findIndex(
+        (item, index) =>
+          !used.has(index) &&
+          sameFinding(truth, item) &&
+          item?.urgency === truth?.urgency,
+      );
       if (match === -1) {
-        match = found.findIndex((item, index) => !used.has(index) && sameFinding(truth, item));
+        match = found.findIndex(
+          (item, index) => !used.has(index) && sameFinding(truth, item),
+        );
       }
       if (match === -1) {
         falseNegatives.push(listItem(reportId, truth?.finding, truth?.urgency));
@@ -58,7 +69,9 @@ export function computeEvaluation(reports, cache) {
       }
       wrongUrgency += 1;
       falseNegatives.push(listItem(reportId, truth?.finding, truth?.urgency));
-      falsePositives.push(listItem(reportId, extracted?.finding, extracted?.urgency));
+      falsePositives.push(
+        listItem(reportId, extracted?.finding, extracted?.urgency),
+      );
       if (truth?.urgency === "critical") criticalFn += 1;
       if (extracted?.urgency === "critical") criticalFp += 1;
     });

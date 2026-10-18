@@ -31,4 +31,3 @@ O repositório não trazia o contrato do backend. Os nomes abaixo são o mock at
 Campos de caso: `id`, `finding_name`, `urgency`, `current_target`, `time_remaining_hours`, `flagged_by_radiologist`, `status`, `times_escalated`. No detalhe, também `confidence` (`alta` | `media` | `baixa`), `modality`, `radiologist`, `requesting_physician`, `report_text`, `evidence`, `timeline[]` com `label` e `offset_hours`.
 
 `status`: `detected`, `notified`, `read`, `action_recorded`, `closed`, `escalated`.
-

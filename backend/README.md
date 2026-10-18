@@ -29,6 +29,8 @@ Copy-Item .env.example .env  # somente se .env ainda não existir
 
 Configure `DATABASE_URL` em `backend/.env` para apontar a um PostgreSQL acessível. Para importar laudos e extrações validadas, use `import_local.py`; os detalhes estão em [IA_DADOS.md](IA_DADOS.md).
 
+O cadastro recebe `name`, `email` e `password` (mínimo de 9 caracteres). As senhas usam PBKDF2 com salt individual; tokens de sessão são armazenados apenas como hash. O acesso expira em uma hora e a renovação em sete dias. Para bancos existentes, execute `migrations/002_real_auth.sql` antes de iniciar esta versão da API. Em produção, sirva frontend e `/api` por HTTPS, ou configure `VITE_AUTH_API_URL` no build e a origem permitida no backend.
+
 ## Dados e arquivos
 
 - Laudos, extrações, casos, eventos e relógio pertencem à conta autenticada local.

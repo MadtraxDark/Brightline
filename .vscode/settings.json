@@ -1,6 +1,9 @@
 {
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
+      "text": "Gere somente a mensagem de commit em português do Brasil, seguindo Conventional Commits. Preserve os tipos convencionais em inglês; escreva o resumo e o corpo em português. Descreva o efeito concreto do diff e não invente contexto ou validações."
+    },
+    {
       "file": "backend/.github/commit-message-instructions.md"
     }
   ]

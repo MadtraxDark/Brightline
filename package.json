@@ -3,11 +3,20 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prepare": "husky",
     "dev": "node scripts/dev.mjs",
     "dev:frontend": "node scripts/dev.mjs frontend",
     "dev:backend": "node scripts/dev.mjs backend",
     "install:frontend": "npm --prefix frontend ci",
     "build": "npm --prefix frontend run build",
     "test": "npm --prefix frontend test"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,cjs,mjs,ts,tsx,json,jsonc,css,scss,md,mdx,html,yml,yaml}": "prettier --write"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.10"
   }
 }

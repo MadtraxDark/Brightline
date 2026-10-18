@@ -12,7 +12,7 @@ import UrgencyBadge from "./UrgencyBadge.jsx";
 function goBack(navigate) {
   const idx = window.history.state?.idx;
   if (typeof idx === "number" && idx > 0) navigate(-1);
-  else navigate("/");
+  else navigate("/home");
 }
 
 export default function CaseDetail() {
@@ -47,7 +47,7 @@ export default function CaseDetail() {
     return (
       <article className="panel detail">
         <p>Caso não encontrado.</p>
-        <Link className="back-button" to="/">
+        <Link className="back-button" to="/home">
           <ArrowLeft size={17} aria-hidden="true" /> Voltar à fila
         </Link>
       </article>
@@ -79,7 +79,9 @@ export default function CaseDetail() {
     try {
       await action();
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "A ação não foi registrada.");
+      setError(
+        caught instanceof Error ? caught.message : "A ação não foi registrada.",
+      );
     } finally {
       setPending(false);
     }
@@ -114,21 +116,30 @@ export default function CaseDetail() {
 
   return (
     <article className="panel detail" aria-label="Detalhe do caso">
-      <button className="back-button" type="button" onClick={() => goBack(navigate)}>
+      <button
+        className="back-button"
+        type="button"
+        onClick={() => goBack(navigate)}
+      >
         <ArrowLeft size={17} aria-hidden="true" /> Voltar
       </button>
       <header className="detail-title">
         <h2>{item.finding}</h2>
         <UrgencyBadge level={item.urgency} />
-        <p className="confidence">Confiança da IA: {confidenceLabel(item.confidence)}</p>
+        <p className="confidence">
+          Confiança da IA: {confidenceLabel(item.confidence)}
+        </p>
       </header>
       <p className="detail-validate">A IA sugere. O médico valida.</p>
       <p className="detail-meta">
-        {item.modality} · {item.radiologist} · {item.ordering_physician} · {formatRemaining(item.time_remaining_hours)} · {statusLabel(item.status)}
+        {item.modality} · {item.radiologist} · {item.ordering_physician} ·{" "}
+        {formatRemaining(item.time_remaining_hours)} ·{" "}
+        {statusLabel(item.status)}
       </p>
       {item.flagged_by_radiologist ? null : (
         <p className="detail-flag">
-          <EyeOff size={16} aria-hidden="true" /> Não sinalizado pelo radiologista
+          <EyeOff size={16} aria-hidden="true" /> Não sinalizado pelo
+          radiologista
         </p>
       )}
 
@@ -145,7 +156,9 @@ export default function CaseDetail() {
         )}
       </p>
       {evidence.found ? null : (
-        <p className="missing-evidence">Trecho de evidência não localizado no laudo</p>
+        <p className="missing-evidence">
+          Trecho de evidência não localizado no laudo
+        </p>
       )}
 
       <h3 className="section-title">Linha do tempo</h3>
@@ -159,7 +172,11 @@ export default function CaseDetail() {
       </ol>
 
       <div className="detail-actions">
-        {error ? <p className="form-error" role="alert">{error}</p> : null}
+        {error ? (
+          <p className="form-error" role="alert">
+            {error}
+          </p>
+        ) : null}
         <div className="detail-action">
           <button
             className="btn-primary"
@@ -186,7 +203,11 @@ export default function CaseDetail() {
           </div>
         )}
         {actionOpen ? (
-          <form className="action-block" onSubmit={submitAction} onKeyDown={onActionKeyDown}>
+          <form
+            className="action-block"
+            onSubmit={submitAction}
+            onKeyDown={onActionKeyDown}
+          >
             <label>
               Ação tomada
               <textarea

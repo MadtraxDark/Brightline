@@ -52,7 +52,11 @@ function fakeTimers() {
 
 function openStore(storage = memoryStorage()) {
   const clock = fakeTimers();
-  return { storage, clock, store: createStore({ storage, timers: clock.timers, data: fixtureData }) };
+  return {
+    storage,
+    clock,
+    store: createStore({ storage, timers: clock.timers, data: fixtureData }),
+  };
 }
 
 test("estado inicial sem nada no storage tem 6 casos", () => {
@@ -64,25 +68,41 @@ test("estado inicial sem nada no storage tem 6 casos", () => {
 test("advance persiste simNow e casos para um store novo no mesmo storage", () => {
   const storage = memoryStorage();
   const clock = fakeTimers();
-  const first = createStore({ storage, timers: clock.timers, data: fixtureData });
+  const first = createStore({
+    storage,
+    timers: clock.timers,
+    data: fixtureData,
+  });
   first.advance(1);
   const saved = first.getState();
 
-  const second = createStore({ storage, timers: fakeTimers().timers, data: fixtureData });
+  const second = createStore({
+    storage,
+    timers: fakeTimers().timers,
+    data: fixtureData,
+  });
   assert.equal(second.getState().simNow, saved.simNow);
   assert.deepEqual(second.getState().cases, saved.cases);
 });
 
 test("texto inválido ou versão diferente cai no estado inicial sem lançar", () => {
   const invalid = memoryStorage([[STORAGE_KEY, "{não é json"]]);
-  const fromText = createStore({ storage: invalid, timers: fakeTimers().timers, data: fixtureData });
+  const fromText = createStore({
+    storage: invalid,
+    timers: fakeTimers().timers,
+    data: fixtureData,
+  });
   assert.equal(fromText.getState().cases.length, 6);
   assert.equal(fromText.getState().simNow, 0);
 
   const wrongVersion = memoryStorage([
     [STORAGE_KEY, JSON.stringify({ v: 2, simNow: 9, cases: [] })],
   ]);
-  const fromVersion = createStore({ storage: wrongVersion, timers: fakeTimers().timers, data: fixtureData });
+  const fromVersion = createStore({
+    storage: wrongVersion,
+    timers: fakeTimers().timers,
+    data: fixtureData,
+  });
   assert.equal(fromVersion.getState().cases.length, 6);
   assert.equal(fromVersion.getState().simNow, 0);
 });
@@ -94,7 +114,11 @@ test("sig diferente cai no estado inicial sem lançar", () => {
       JSON.stringify({ v: 1, sig: "outra", simNow: 9, cases: [], reports: [] }),
     ],
   ]);
-  const store = createStore({ storage, timers: fakeTimers().timers, data: fixtureData });
+  const store = createStore({
+    storage,
+    timers: fakeTimers().timers,
+    data: fixtureData,
+  });
   assert.equal(store.getState().cases.length, 6);
   assert.equal(store.getState().simNow, 0);
 });
@@ -108,7 +132,8 @@ test("acknowledge em caso fechado lança erro e mantém a mesma referência", ()
 
   assert.throws(
     () => store.acknowledge(id, "Dra. Ana Luz"),
-    (error) => error instanceof Error && error.message === "O caso já está fechado.",
+    (error) =>
+      error instanceof Error && error.message === "O caso já está fechado.",
   );
   assert.equal(store.getState(), closed);
 });
@@ -116,7 +141,10 @@ test("acknowledge em caso fechado lança erro e mantém a mesma referência", ()
 test("advance destaca ids escalados, o timer limpa a lista e o seguinte cancela o anterior", () => {
   const { store, clock } = openStore();
   const before = new Set(
-    store.getState().cases.filter((item) => item.status === "escalated").map((item) => item.id),
+    store
+      .getState()
+      .cases.filter((item) => item.status === "escalated")
+      .map((item) => item.id),
   );
   store.advance(1);
   const escalatedNow = store

@@ -1,4 +1,4 @@
-﻿# Instruções para mensagens de commit
+# Instruções para mensagens de commit
 
 Gere uma única mensagem de commit em português do Brasil, profissional, objetiva e tecnicamente precisa. Responda somente com a mensagem pronta para uso, sem aspas, explicações ou bloco de código.
 
