@@ -24,7 +24,7 @@ Abra [Swagger](http://localhost:8000/docs) ou [health check](http://localhost:80
 
 - Cada conta possui seus laudos, extrações, casos, eventos e relógio.
 - Arquivos JSON, PNG, JPEG e PDF são armazenados no PostgreSQL; links de leitura expiram em 60 segundos.
-- `dataset_images` armazena o conjunto NIH ChestX-ray14 usado pelo treinador TensorFlow.
+- `dataset_images` armazena o conjunto NIH ChestX-ray14 importado para avaliação.
 - `docker compose down` mantém os dados no volume; `docker compose down -v` remove o volume.
 - As notificações são eventos simulados. Nenhuma mensagem real é enviada.
 

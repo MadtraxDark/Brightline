@@ -1,11 +1,10 @@
-"""Report extraction, NIH chest X-ray inference and exploratory comparison."""
+"""Report extraction, TorchXRayVision chest X-ray inference and exploratory comparison."""
 from __future__ import annotations
 
-import json
 import os
 import re
+import math
 from functools import lru_cache
-from pathlib import Path
 from typing import Any
 
 
@@ -14,16 +13,12 @@ LABELS = [
     "Pneumonia", "Pneumothorax", "Consolidation", "Edema", "Emphysema",
     "Fibrosis", "Pleural_Thickening", "Hernia",
 ]
-APP_ROOT = Path(__file__).resolve().parents[1]
-MODEL_ROOT = APP_ROOT / "artifacts" / "nih-chestxray14"
-if not MODEL_ROOT.is_dir():
-    MODEL_ROOT = APP_ROOT.parent / "artifacts" / "nih-chestxray14"
-MODEL_PATH = Path(os.getenv("BRIGHTLINE_CXR_MODEL", str(MODEL_ROOT / "nih_chestxray14.keras")))
-METRICS_PATH = Path(os.getenv("BRIGHTLINE_CXR_METRICS", str(MODEL_PATH.parent / "metrics.json")))
+MODEL_WEIGHTS = os.getenv("BRIGHTLINE_CXR_WEIGHTS", "densenet121-res224-nih")
+IMAGE_SIZE = 224
 EXPLORATORY_THRESHOLD = float(os.getenv("BRIGHTLINE_CXR_THRESHOLD", "0.5"))
 MAX_REPORT_CHARS = 100_000
 MAX_IMAGE_BYTES = 10 * 1024 * 1024
-MODEL_VERSION = "nih-chestxray14-efficientnetb0-v1"
+MODEL_VERSION = f"torchxrayvision-{MODEL_WEIGHTS}"
 
 # The aliases intentionally map only the model's 14 labels. They are lexical
 # equivalences, not a clinical ontology; negation/uncertainty remain visible.
@@ -47,21 +42,19 @@ NEGATION = re.compile(r"\b(?:sem|ausencia de|ausência de|nao ha|não há|nao se
 UNCERTAINTY = re.compile(r"\b(?:possivel|possível|provavel|provável|suspeita de|sugestivo de|nao se pode excluir|não se pode excluir|questionavel|questionável)\b", re.I)
 
 
-def read_metrics(path: Path = METRICS_PATH) -> dict[str, Any]:
+def load_model():
+    """Load the pretrained TorchXRayVision DenseNet121 (NIH weights) for CPU inference."""
     try:
-        metrics = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return {}
-    return metrics if isinstance(metrics, dict) else {}
-
-
-def load_model(path: Path = MODEL_PATH):
-    if not path.is_file():
-        raise FileNotFoundError("Modelo EfficientNetB0 não encontrado")
-    import tensorflow as tf
-    model = tf.keras.models.load_model(path, compile=False)
-    if tuple(model.output_shape[-1:]) != (14,):
-        raise ValueError("O modelo precisa retornar 14 probabilidades")
+        import torch
+        import torchxrayvision as xrv
+    except ImportError:
+        raise RuntimeError("torch e torchxrayvision precisam estar instalados no serviço de inferência") from None
+    torch.set_num_threads(max(1, int(os.getenv("BRIGHTLINE_CXR_THREADS", "2"))))
+    model = xrv.models.DenseNet(weights=MODEL_WEIGHTS).eval()
+    pathologies = list(model.pathologies)
+    missing = [label for label in LABELS if label not in pathologies]
+    if missing:
+        raise RuntimeError(f"O modelo não fornece as classes: {', '.join(missing)}")
     return model
 
 
@@ -70,38 +63,67 @@ def _model():
     return load_model()
 
 
+@lru_cache(maxsize=1)
+def model_metadata() -> dict[str, Any]:
+    """Identify the loaded model; weights are reused until the service restarts."""
+    model = _model()
+    import torch
+    import torchxrayvision as xrv
+    return {"engine": "torchxrayvision", "torchxrayvision_version": xrv.__version__,
+            "torch_version": torch.__version__, "weights": MODEL_WEIGHTS,
+            "input_shape": [1, IMAGE_SIZE, IMAGE_SIZE], "labels": list(LABELS),
+            "model_pathologies": list(model.pathologies),
+            "preprocessing": "grayscale-center-crop-resize224-xrv-normalize-1024",
+            "output_activation": "sigmoid"}
+
+
 def initialize_model() -> bool:
-    """Load once during API startup. Missing artifacts leave text-only mode usable."""
-    if not MODEL_PATH.is_file():
-        return False
-    _model()
+    """Load once during API startup. Missing runtime/weights leave text-only mode usable."""
+    model_metadata()
     return True
+
+
+def preprocess(image_bytes: bytes):
+    """Decode PNG/JPEG into the (1, 1, 224, 224) tensor expected by TorchXRayVision."""
+    import io
+    import numpy as np
+    from PIL import Image, UnidentifiedImageError
+    try:
+        with Image.open(io.BytesIO(image_bytes)) as source:
+            if source.format not in {"PNG", "JPEG"}:
+                raise ValueError("A radiografia deve estar em PNG ou JPEG")
+            if source.width * source.height > 40_000_000:
+                raise ValueError("Resolução da radiografia excede o limite de 40 megapixels")
+            gray = np.asarray(source.convert("L"), dtype=np.float32)
+    except (UnidentifiedImageError, OSError):
+        raise ValueError("Arquivo de radiografia inválido") from None
+    import torch
+    import torchxrayvision as xrv
+    # xrv.datasets.normalize maps 0..255 to the [-1024, 1024] range the models were trained on.
+    img = xrv.datasets.normalize(gray, 255)[None, ...]
+    img = xrv.datasets.XRayCenterCrop()(img)
+    img = xrv.datasets.XRayResizer(IMAGE_SIZE)(img)
+    return torch.from_numpy(img).float()[None, ...]
 
 
 def infer(image_bytes: bytes) -> tuple[dict[str, float], str]:
     if not image_bytes or len(image_bytes) > MAX_IMAGE_BYTES:
         raise ValueError("Radiografia vazia ou acima do limite de 10 MB")
     try:
-        import io
-        import tensorflow as tf
-        from PIL import Image, UnidentifiedImageError
-        with Image.open(io.BytesIO(image_bytes)) as source:
-            if source.format not in {"PNG", "JPEG"}:
-                raise ValueError("A radiografia deve estar em PNG ou JPEG")
-            if source.width * source.height > 40_000_000:
-                raise ValueError("Resolução da radiografia excede o limite de 40 megapixels")
-            image_format = source.format
-        # Match train_nih.make_dataset: decode to RGB, resize with TensorFlow
-        # antialiasing, and preserve the raw 0..255 scale used in training.
-        decode = tf.io.decode_png if image_format == "PNG" else tf.io.decode_jpeg
-        pixels = tf.image.resize(decode(image_bytes, channels=3), (224, 224), antialias=True)
+        batch = preprocess(image_bytes)
+        import torch
     except ImportError:
-        raise RuntimeError("TensorFlow e Pillow precisam estar instalados no serviço de inferência") from None
-    except (UnidentifiedImageError, OSError):
-        raise ValueError("Arquivo de radiografia inválido") from None
-    probabilities = _model().predict(pixels[None, ...], verbose=0)[0].tolist()
-    if len(probabilities) != len(LABELS):
-        raise ValueError("Saída do modelo incompatível com as 14 classes")
+        raise RuntimeError("torch, torchxrayvision e Pillow precisam estar instalados no serviço de inferência") from None
+    model = _model()
+    with torch.inference_mode():
+        output = model(batch)
+    output = output.detach().cpu().numpy()
+    if output.ndim != 2 or output.shape[0] != 1 or output.shape[1] != len(model.pathologies):
+        raise RuntimeError("Saída do modelo incompatível com as classes esperadas")
+    by_name = dict(zip(model.pathologies, output[0].tolist()))
+    probabilities = [by_name[label] for label in LABELS]
+    if any(not math.isfinite(p) or not 0 <= p <= 1 for p in probabilities):
+        raise RuntimeError("O modelo retornou probabilidades inválidas")
     return dict(zip(LABELS, (float(p) for p in probabilities))), MODEL_VERSION
 
 

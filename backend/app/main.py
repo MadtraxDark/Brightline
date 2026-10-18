@@ -85,7 +85,7 @@ async def lifespan(app):
     try:
         report_analysis.initialize_model()
     except Exception:
-        # Health and text-only review remain available when the optional artifact is absent.
+        # Health and text-only review remain available when the optional model runtime/weights are unavailable.
         app.state.cxr_model_error = "model_unavailable"
     yield
 
@@ -381,16 +381,13 @@ async def analyze_report(
         image_bytes = await radiograph.read()
         try:
             probabilities, model_version = await run_in_threadpool(report_analysis.infer, image_bytes)
-        except FileNotFoundError:
-            raise HTTPException(503, "Modelo NIH EfficientNetB0 indisponível no servidor.") from None
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from None
         except (ImportError, OSError, RuntimeError):
-            raise HTTPException(503, "Serviço do modelo NIH indisponível.") from None
+            raise HTTPException(503, "Serviço do modelo TorchXRayVision indisponível.") from None
     comparison = report_analysis.compare(findings, probabilities) if probabilities else {
         "threshold": None, "threshold_status": "not_run_without_radiograph", "text_classes": [],
         "model_classes_above_threshold": [], "disagreements": [], "limitations": ["Radiografia não enviada; comparação textual e visual não executada."]}
-    metrics = report_analysis.read_metrics()
     stored_files = []
     if report_content:
         stored_files.append({"file_id": secrets.token_hex(16) + ".pdf", "role": "report", "mime_type": "application/pdf", "content": report_content})
@@ -400,7 +397,8 @@ async def analyze_report(
     analysis = {"report_id": rid, "findings": findings,
                 "predictions": comparison["model_classes_above_threshold"],
                 "probabilities": probabilities, "comparison": comparison, "disagreements": comparison["disagreements"],
-                "model_version": model_version, "metrics": metrics.get("test_metrics", {}),
+                "model_version": model_version,
+                "model_metadata": report_analysis.model_metadata() if probabilities else None,
                 "source_files": [{k: v for k, v in item.items() if k != "content"} for item in stored_files],
                 "status": "review_required", "human_review_required": True}
 
@@ -445,12 +443,10 @@ async def classify_radiograph(
         raise HTTPException(413, "Radiografia acima do limite de 10 MB.")
     try:
         probabilities, model_version = await run_in_threadpool(report_analysis.infer, image_bytes)
-    except FileNotFoundError:
-        raise HTTPException(503, "Modelo NIH EfficientNetB0 indisponível no servidor.") from None
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from None
     except (ImportError, OSError, RuntimeError):
-        raise HTTPException(503, "Serviço do modelo NIH indisponível.") from None
+        raise HTTPException(503, "Serviço do modelo TorchXRayVision indisponível.") from None
     threshold = report_analysis.EXPLORATORY_THRESHOLD
     return {
         "probabilities": probabilities,
@@ -458,10 +454,11 @@ async def classify_radiograph(
         "threshold": threshold,
         "threshold_status": "exploratory_unvalidated",
         "model_version": model_version,
+        "model_metadata": report_analysis.model_metadata(),
         "status": "review_required",
         "human_review_required": True,
         "limitations": [
-            "Modelo de pesquisa treinado apenas com radiografias de tórax NIH ChestX-ray14.",
+            "Modelo de pesquisa pré-treinado (TorchXRayVision, DenseNet121 NIH ChestX-ray14).",
             "Probabilidades e corte não foram validados nem calibrados para uso clínico.",
             "O resultado não é diagnóstico e requer avaliação por profissional qualificado.",
         ],

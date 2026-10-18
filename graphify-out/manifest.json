@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1792268583.2248,
-    "seen": 1792268593.748504,
-    "ast_hash": "513d4a64b18318363d24330bea824124",
+    "mtime": 1792276205.866799,
+    "seen": 1792276360.5146165,
+    "ast_hash": "c82f6232a97d0cf1afa0c884a23e43ee",
     "semantic_hash": ""
   },
   "backend/app/models.py": {
@@ -42,15 +42,15 @@
     "semantic_hash": "7d6155b14f20cd5bde78391dc4d2cbd7"
   },
   "AGENTS.md": {
-    "mtime": 1792262228.085562,
-    "seen": 1792262654.2735956,
-    "ast_hash": "3d63cac5b3e123b320d2cdc5faf404c6",
+    "mtime": 1792271117.793803,
+    "seen": 1792271339.4605794,
+    "ast_hash": "00d66a560fbf78b775e95f3d9bdb1616",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1792263048.3685985,
-    "seen": 1792264272.534118,
-    "ast_hash": "dc6c130add834107658042faa4839f6e",
+    "mtime": 1792276250.8383985,
+    "seen": 1792276360.5146165,
+    "ast_hash": "50c7b4db61045942664d16a394f6b42b",
     "semantic_hash": ""
   },
   "backend/.github/commit-message-instructions.md": {
@@ -60,39 +60,21 @@
     "semantic_hash": ""
   },
   "backend/README.md": {
-    "mtime": 1792265077.5621214,
-    "seen": 1792266673.3353362,
-    "ast_hash": "a10995e7341540eba08c600e373f21cd",
+    "mtime": 1792276250.8383985,
+    "seen": 1792276360.5146165,
+    "ast_hash": "85f350416795075e545b0682bc10b5e1",
     "semantic_hash": ""
   },
   "backend/requirements.txt": {
-    "mtime": 1792265077.5651228,
-    "seen": 1792266673.3353362,
-    "ast_hash": "b120e85e66dbdb23dced53340ccedb46",
+    "mtime": 1792276220.915876,
+    "seen": 1792276360.5146165,
+    "ast_hash": "f10aaa77aaf52855bd6f41cfed77f6ca",
     "semantic_hash": ""
   },
   "docker-compose.yml": {
     "mtime": 1792265077.5661223,
     "seen": 1792266673.3353362,
     "ast_hash": "69328941be852864258fde35d7f948c7",
-    "semantic_hash": ""
-  },
-  "train_nih.py": {
-    "mtime": 1792259076.8353395,
-    "seen": 1792259106.7157016,
-    "ast_hash": "27cebd19ea46ef06b1164594e96443a3",
-    "semantic_hash": ""
-  },
-  "NIH_TENSORFLOW.md": {
-    "mtime": 1792259090.4761386,
-    "seen": 1792259106.7157016,
-    "ast_hash": "cedd552e91d0e34e56c97d1b3cb278f0",
-    "semantic_hash": ""
-  },
-  "docker-compose.tensorflow.yml": {
-    "mtime": 1792258900.7402847,
-    "seen": 1792259004.668836,
-    "ast_hash": "72940a549bc9d6292e11815a487e3ce7",
     "semantic_hash": ""
   },
   "data/nih-chestxray14/sample_manifest.json": {
@@ -117,12 +99,6 @@
     "mtime": 1792257117.5089345,
     "seen": 1792257140.4381597,
     "ast_hash": "436ed3e4d0fc7ec68954b31e1d7aea5e",
-    "semantic_hash": ""
-  },
-  "artifacts/nih-chestxray14/metrics.json": {
-    "mtime": 1792257512.093114,
-    "seen": 1792258670.9971805,
-    "ast_hash": "577d9bd80c6069d3d6990ab6bffe3112",
     "semantic_hash": ""
   },
   "backend/init.sql": {
@@ -342,9 +318,9 @@
     "semantic_hash": ""
   },
   "backend/docs/API.md": {
-    "mtime": 1792260252.6309028,
-    "seen": 1792260273.7740126,
-    "ast_hash": "e7d2d3b5fc190ead9f24bc21441585ac",
+    "mtime": 1792276250.8393984,
+    "seen": 1792276360.5146165,
+    "ast_hash": "4af68dada9f00539c43e7aea1a16e661",
     "semantic_hash": ""
   },
   "backend/prompts/extraction.txt": {
@@ -414,9 +390,9 @@
     "semantic_hash": ""
   },
   "backend/app/report_analysis.py": {
-    "mtime": 1792266968.4301574,
-    "seen": 1792267018.3107326,
-    "ast_hash": "1e62032c7077810c0fd578ead62f2f76",
+    "mtime": 1792276220.8253741,
+    "seen": 1792276360.5146165,
+    "ast_hash": "3e7e3c75abf55e4c52980eeed28e9b68",
     "semantic_hash": ""
   },
   "backend/migrations/003_report_analyses.sql": {
@@ -426,15 +402,15 @@
     "semantic_hash": ""
   },
   "backend/tests/test_report_analysis.py": {
-    "mtime": 1792266593.767927,
-    "seen": 1792266673.3353362,
-    "ast_hash": "436c1eb67d09ca9b4dab162236a93bcc",
+    "mtime": 1792276270.150864,
+    "seen": 1792276360.5146165,
+    "ast_hash": "7a30861760b5e8749b3b05d42efc5c39",
     "semantic_hash": ""
   },
   "backend/docs/REPORT_ANALYSIS.md": {
-    "mtime": 1792268584.0680504,
-    "seen": 1792268593.748504,
-    "ast_hash": "92539d4d3a797b63cbc4dc88725c0c9d",
+    "mtime": 1792276258.0131986,
+    "seen": 1792276360.5146165,
+    "ast_hash": "0bbd452cda6e82737028fc91340edb78",
     "semantic_hash": ""
   },
   "backend/data/reports.json": {
@@ -792,9 +768,267 @@
     "semantic_hash": ""
   },
   "frontend/src/components/RadiographClassifier.jsx": {
-    "mtime": 1792268582.4463918,
-    "seen": 1792268593.748504,
-    "ast_hash": "890ca20c518cb1a8538868fe79c14477",
+    "mtime": 1792276240.300944,
+    "seen": 1792276360.5146165,
+    "ast_hash": "8b89c7024c12456e0c421b73e9218b54",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/assets/aggregate_cohort_table_template.json": {
+    "mtime": 1792271064.9381156,
+    "seen": 1792271339.4600046,
+    "ast_hash": "c6e3186c501e9631965fd62f38c319eb",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/assets/aggregate_model_evaluation_template.json": {
+    "mtime": 1792271064.9381156,
+    "seen": 1792271339.4600046,
+    "ast_hash": "05a20df87c5ff0aafbe7e3ca2a98666b",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/assets/artifact_intended_use_template.json": {
+    "mtime": 1792271064.9401083,
+    "seen": 1792271339.4600046,
+    "ast_hash": "d78e1876a123404874791ee7a4acb323",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/assets/decision_logic_traceability_template.json": {
+    "mtime": 1792271064.9401083,
+    "seen": 1792271339.4600046,
+    "ast_hash": "123b4c6cbfa5ac09cc10960fc0e9c219",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/assets/deidentification_checklist_template.json": {
+    "mtime": 1792271064.9401083,
+    "seen": 1792271339.4600046,
+    "ast_hash": "febae28b5e2c2ed1455069e9cce2a3e0",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/assets/evidence_profile_template.json": {
+    "mtime": 1792271064.942715,
+    "seen": 1792271339.4600046,
+    "ast_hash": "0d9c0535852845c601a4b21145f5ecfe",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/assets/survival_analysis_plan_template.json": {
+    "mtime": 1792271064.942715,
+    "seen": 1792271339.4600046,
+    "ast_hash": "2c703c488a6f4e7caf97beadc0439950",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/scripts/_common.py": {
+    "mtime": 1792271064.9532714,
+    "seen": 1792271339.4600046,
+    "ast_hash": "dd24e2b4334e0977359f1b33a78bb198",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/scripts/cohort_table_generator.py": {
+    "mtime": 1792271064.953792,
+    "seen": 1792271339.4600046,
+    "ast_hash": "ae1630e9472021b5162e21e59f460c0a",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/scripts/decision_logic_traceability.py": {
+    "mtime": 1792271064.9548962,
+    "seen": 1792271339.4600046,
+    "ast_hash": "0a5bd8383b76af179ce3094c87b8e314",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/scripts/deidentification_checklist.py": {
+    "mtime": 1792271064.9559915,
+    "seen": 1792271339.4600046,
+    "ast_hash": "19b183dd2e2ace7a67e2a16bc3dbf831",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/scripts/evidence_profile_check.py": {
+    "mtime": 1792271064.9571204,
+    "seen": 1792271339.4600046,
+    "ast_hash": "82585ab04f332830b1555ff39ab9a0b7",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/scripts/model_biomarker_evaluation.py": {
+    "mtime": 1792271064.9576533,
+    "seen": 1792271339.4600046,
+    "ast_hash": "0bca315fcab9c023ea0b79cba7637a62",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/scripts/survival_plan_validator.py": {
+    "mtime": 1792271064.9588726,
+    "seen": 1792271339.4600046,
+    "ast_hash": "427246b8d40a7206f33c24d24403e24a",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/scripts/validate_cds_artifact.py": {
+    "mtime": 1792271064.9594116,
+    "seen": 1792271339.4600046,
+    "ast_hash": "8991d8d574cf754911aa96ca1bc16108",
+    "semantic_hash": ""
+  },
+  ".codex/skills/experimental-design/scripts/doe_designs.py": {
+    "mtime": 1792271065.1481543,
+    "seen": 1792271339.4600046,
+    "ast_hash": "c114e1f0952f6e904c1334392069aed9",
+    "semantic_hash": ""
+  },
+  ".codex/skills/experimental-design/scripts/randomization.py": {
+    "mtime": 1792271065.1481543,
+    "seen": 1792271339.4600046,
+    "ast_hash": "3389bbc0a9e439805117ad3feebb349c",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/SKILL.md": {
+    "mtime": 1792271064.9371047,
+    "seen": 1792271339.4605794,
+    "ast_hash": "cee0060e0bfb90df51c1ef7671ec7413",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/README.md": {
+    "mtime": 1792271064.944835,
+    "seen": 1792271339.4605794,
+    "ast_hash": "0f9378c5fb5f95a0278d0d5531aa48df",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/cohort_evaluation.md": {
+    "mtime": 1792271064.9453604,
+    "seen": 1792271339.4605794,
+    "ast_hash": "d2e98d5ef7fb06234e69b2c62862eecf",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/decision_logic_traceability.md": {
+    "mtime": 1792271064.9458873,
+    "seen": 1792271339.4605794,
+    "ast_hash": "2204253ce69dfe3aa3b7c5ab189c11ba",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/evidence_profiles.md": {
+    "mtime": 1792271064.9469385,
+    "seen": 1792271339.4605794,
+    "ast_hash": "491fe8f49dda4a6b883bf192183fba3c",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/model_biomarker_evaluation.md": {
+    "mtime": 1792271064.9474604,
+    "seen": 1792271339.4605794,
+    "ast_hash": "476d75c73eaab844996ab1313a5f404c",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/privacy_and_disclosure.md": {
+    "mtime": 1792271064.948017,
+    "seen": 1792271339.4605794,
+    "ast_hash": "a35e710326fe4ae188046171794deb2c",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/regulatory_and_governance.md": {
+    "mtime": 1792271064.9490676,
+    "seen": 1792271339.4605794,
+    "ast_hash": "28d7763e4ba4a167953f073c9e8e4066",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/safety_and_scope.md": {
+    "mtime": 1792271064.9495785,
+    "seen": 1792271339.4605794,
+    "ast_hash": "7063c38b0aa8ece992dae257350d0ad5",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/security_validation.md": {
+    "mtime": 1792271064.9501054,
+    "seen": 1792271339.4605794,
+    "ast_hash": "c3c778028ad16d78f567c5c55eefcc28",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/sources.md": {
+    "mtime": 1792271064.9506347,
+    "seen": 1792271339.4605794,
+    "ast_hash": "1b180cd6bc25e3f400efd3b87b8e04f9",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/study_reporting.md": {
+    "mtime": 1792271064.9516969,
+    "seen": 1792271339.4605794,
+    "ast_hash": "d16400ae80589461c5a4347e0d5c28e6",
+    "semantic_hash": ""
+  },
+  ".codex/skills/clinical-decision-support/references/survival_analysis.md": {
+    "mtime": 1792271064.9522276,
+    "seen": 1792271339.4605794,
+    "ast_hash": "ec5474e47cb4837fc8ba0c7f4d853fa1",
+    "semantic_hash": ""
+  },
+  ".codex/skills/experimental-design/SKILL.md": {
+    "mtime": 1792271065.1481543,
+    "seen": 1792271339.4605794,
+    "ast_hash": "f7491e93fdbd8f2a7660dd5a45427719",
+    "semantic_hash": ""
+  },
+  ".codex/skills/experimental-design/references/design_types.md": {
+    "mtime": 1792271065.1481543,
+    "seen": 1792271339.4605794,
+    "ast_hash": "1dbab2e834f5322e890608239da6bdd5",
+    "semantic_hash": ""
+  },
+  ".codex/skills/experimental-design/references/factorial_and_doe.md": {
+    "mtime": 1792271065.1481543,
+    "seen": 1792271339.4605794,
+    "ast_hash": "b6a5ce5dcd8a3a94a0a8bda0d2ee7685",
+    "semantic_hash": ""
+  },
+  ".codex/skills/experimental-design/references/randomization_and_blocking.md": {
+    "mtime": 1792271065.1481543,
+    "seen": 1792271339.4605794,
+    "ast_hash": "03990b691e49b9d8810bc6400aaefab8",
+    "semantic_hash": ""
+  },
+  ".codex/skills/experimental-design/references/sequential_and_adaptive.md": {
+    "mtime": 1792271065.1481543,
+    "seen": 1792271339.4605794,
+    "ast_hash": "2e198877baa2b7843e74b2ea241d87fa",
+    "semantic_hash": ""
+  },
+  ".codex/skills/machine-learning-engineer/SKILL.md": {
+    "mtime": 1792271117.793803,
+    "seen": 1792271339.4605794,
+    "ast_hash": "b64cc6d8efc651620349c433277dde03",
+    "semantic_hash": ""
+  },
+  ".codex/skills/ml-engineer/SKILL.md": {
+    "mtime": 1792271117.793803,
+    "seen": 1792271339.4605794,
+    "ast_hash": "09f486b299c32c57617ca99f3c8abc5d",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_classifier_torchxrayvision.py": {
+    "mtime": 1792276306.4251912,
+    "seen": 1792276360.5146165,
+    "ast_hash": "f661c0a419f33f9b35af85c4f955dd14",
+    "semantic_hash": ""
+  },
+  "scratchvenv/Scripts/Activate.ps1": {
+    "mtime": 1792275718.0671897,
+    "seen": 1792276360.5146165,
+    "ast_hash": "59ab43232a6695753410181e4ee95535",
+    "semantic_hash": ""
+  },
+  "scripts/compare/predict.py": {
+    "mtime": 1792275737.0635538,
+    "seen": 1792276360.5146165,
+    "ast_hash": "66564505db3c4243488b58b93bb0cf36",
+    "semantic_hash": ""
+  },
+  "scripts/compare/score.py": {
+    "mtime": 1792275941.4468408,
+    "seen": 1792276360.5146165,
+    "ast_hash": "366a38c9e1f869b7d1249f8dd51f5b18",
+    "semantic_hash": ""
+  },
+  "artifacts/compare/resultado.txt": {
+    "mtime": 1792275945.7742283,
+    "seen": 1792276360.5146165,
+    "ast_hash": "b1d37853db3a419881a02352fee63ed1",
+    "semantic_hash": ""
+  },
+  "docs/classification-audit.md": {
+    "mtime": 1792276354.234185,
+    "seen": 1792276360.5146165,
+    "ast_hash": "4e4552ef4d7b678744e82dc53c08302e",
     "semantic_hash": ""
   }
 }
