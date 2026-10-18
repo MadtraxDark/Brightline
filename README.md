@@ -37,6 +37,7 @@ O conjunto NIH ChestX-ray14 foi importado para `dataset_images` no PostgreSQL; o
 - [Guia do backend](backend/README.md)
 - [Extração e avaliação dos dados](backend/IA_DADOS.md)
 - [Documentação da API](backend/docs/API.md)
+- [API de dados e radiografias](docs/DATABASE_API.md)
 - [Frontend](frontend/README.md)
 
 A autenticação do frontend está conectada à API. Os laudos e casos da demonstração continuam usando fixtures locais. Não há integração PACS/HL7/FHIR nem envio real de mensagens.

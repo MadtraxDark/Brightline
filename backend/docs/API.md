@@ -1,5 +1,7 @@
 # API Brightline
 
+O catálogo NIH, links temporários de imagem, análises salvas e filtros estão documentados em [DATABASE_API.md](../../docs/DATABASE_API.md).
+
 API FastAPI com PostgreSQL local. Configure `DATABASE_URL` em `backend/.env`; o Docker Compose cria o banco e aplica o esquema inicial. Execute `docker compose exec api python -m backend.migrate` para aplicar migrações pendentes.
 
 ## Executar
