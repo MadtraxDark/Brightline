@@ -123,7 +123,84 @@
   max-height: 380px;
   margin: 0 auto;
   object-fit: contain;
-  background: #111;
+  background: var(--text);
+}
+.radiograph-viewer {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+}
+.radiograph-viewer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.radiograph-viewer-controls label {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  cursor: pointer;
+}
+.radiograph-viewer-image {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  line-height: 0;
+}
+.radiograph-viewer-image .classifier-preview {
+  max-height: min(65vh, 680px);
+}
+.radiograph-heatmap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+.radiograph-marker {
+  position: absolute;
+  z-index: 1;
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--panel);
+  border-radius: 50%;
+  background: var(--pathology-color);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--pathology-color) 55%, transparent);
+  cursor: pointer;
+}
+.radiograph-marker.is-active {
+  transform: translate(-50%, -50%) scale(1.35);
+}
+.radiograph-marker span {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  display: none;
+  width: max-content;
+  max-width: 240px;
+  padding: 6px 8px;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  background: var(--text);
+  color: var(--panel);
+  font-size: 12px;
+  line-height: 1.35;
+}
+.radiograph-marker:hover span,
+.radiograph-marker:focus-visible span,
+.radiograph-marker span.is-open {
+  display: block;
+}
+.radiograph-viewer > small {
+  color: var(--text-muted);
+  line-height: 1.45;
 }
 .classifier-text-button {
   justify-self: start;
@@ -153,6 +230,39 @@
   margin: 0 0 20px;
   color: var(--text-muted);
   line-height: 1.5;
+}
+.pathology-score-list {
+  display: grid;
+  gap: 5px;
+}
+.pathology-score {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  min-height: 32px;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+}
+button.pathology-score {
+  cursor: pointer;
+}
+.pathology-score.is-selected {
+  border-color: var(--action-bg);
+  background: var(--action-tint);
+}
+.pathology-score strong {
+  font-variant-numeric: tabular-nums;
+}
+.pathology-color-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
 }
 .classifier-score {
   display: grid;

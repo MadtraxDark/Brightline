@@ -1,12 +1,14 @@
 ﻿"""Exercise the real pretrained TorchXRayVision weights over HTTP with synthetic inputs."""
 import io
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 from PIL import Image
 from fastapi.testclient import TestClient
 
 from app.main import app, authenticated
+from app import main
 from app import report_analysis as service
 
 
@@ -22,7 +24,8 @@ def _weights_available() -> bool:
 class TorchXRayVisionClassifierTests(unittest.TestCase):
     def setUp(self):
         app.dependency_overrides[authenticated] = lambda: {
-            "token": "test-token", "user": {"id": "test-user"}}
+            "token": "test-token", "user": {"id": "test-user",
+                "institutions": ["hctco-unifeso"], "active_institution_id": "hctco-unifeso"}}
 
     def tearDown(self):
         app.dependency_overrides.pop(authenticated, None)
@@ -57,3 +60,49 @@ class TorchXRayVisionClassifierTests(unittest.TestCase):
                 "radiograph": ("invalid.png", content, "image/png")})
             self.assertEqual(response.status_code, 422)
             self.assertNotIn("probabilities", response.json())
+
+    def test_reclassify_endpoint_runs_real_model_and_persists_for_linked_report(self):
+        from PIL import ImageDraw
+
+        stream = io.BytesIO()
+        image = Image.new("L", (256, 320), 18)
+        draw = ImageDraw.Draw(image)
+        draw.ellipse((28, 65, 118, 270), fill=105)
+        draw.ellipse((138, 65, 228, 270), fill=112)
+        draw.rectangle((111, 55, 145, 235), fill=65)
+        draw.line((0, 287, 256, 287), fill=34, width=5)
+        image.save(stream, format="PNG")
+        content = stream.getvalue()
+
+        class ReclassificationDb:
+            def __init__(self):
+                self.saved = None
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def execute(self, query, params=()):
+                if "SELECT f.content,f.mime_type,a.analysis" in query:
+                    return type("Result", (), {"fetchone": lambda _self: {
+                        "content": content, "mime_type": "image/png", "analysis": {"findings": []}}})()
+                if "INSERT INTO report_analyses" in query:
+                    self.saved = params[3].obj
+                return type("Result", (), {"fetchone": lambda _self: None})()
+
+        database = ReclassificationDb()
+        client = TestClient(app)
+        with patch.object(main, "db", return_value=database):
+            response = client.post("/reports/REAL-MODEL-TEST/reclassify")
+        self.assertEqual(response.status_code, 200, response.text)
+        body = response.json()
+        self.assertEqual(body["reclassification_status"], "completed")
+        self.assertEqual(body["model_version"], service.MODEL_VERSION)
+        self.assertEqual(list(body["probabilities"]), service.LABELS)
+        self.assertIn(body["localization_status"], {"estimated", "unavailable"})
+        self.assertTrue(body["human_review_required"])
+        self.assertIsNotNone(database.saved)
+        self.assertEqual(database.saved["probabilities"], body["probabilities"])
+        self.assertEqual(database.saved["markers"], body["markers"])

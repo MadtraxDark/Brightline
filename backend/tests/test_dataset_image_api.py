@@ -48,7 +48,7 @@ class DatasetImageApiTests(unittest.TestCase):
         ])
         with patch.object(main, "db", return_value=connection):
             result = asyncio.run(main.list_dataset_images(
-                {"user": {"id": "owner-1"}}, offset=2, limit=1,
+                {"user": {"id": "owner-1", "institutions": ["hctco-unifeso"], "active_institution_id": "hctco-unifeso"}}, offset=2, limit=1,
                 dataset="nih-chestxray14", pathology="Effusion", classification=None,
                 patient_id=None,
             ))
@@ -60,7 +60,7 @@ class DatasetImageApiTests(unittest.TestCase):
     def test_listing_rejects_conflicting_filters(self):
         with self.assertRaises(HTTPException) as caught:
             asyncio.run(main.list_dataset_images(
-                {"user": {"id": "owner-1"}}, offset=0, limit=24,
+                {"user": {"id": "owner-1", "institutions": ["hctco-unifeso"], "active_institution_id": "hctco-unifeso"}}, offset=0, limit=24,
                 dataset="nih-chestxray14", pathology="Effusion", classification="Edema",
                 patient_id=None,
             ))
@@ -70,13 +70,13 @@ class DatasetImageApiTests(unittest.TestCase):
         connection = Connection([Result({"total": 0}), Result(rows=[])])
         with patch.object(main, "db", return_value=connection):
             asyncio.run(main.list_dataset_images(
-                {"user": {"id": "owner-1"}}, offset=0, limit=24,
+                {"user": {"id": "owner-1", "institutions": ["hctco-unifeso"], "active_institution_id": "hctco-unifeso"}}, offset=0, limit=24,
                 dataset="nih-chestxray14", pathology=None, classification="Effusion",
                 patient_id=None,
             ))
         count_sql, count_params = connection.statements[0]
         self.assertIn("dataset_image_analyses", count_sql)
-        self.assertEqual(count_params, ["owner-1", "Effusion"])
+        self.assertEqual(count_params, ["owner-1", "hctco-unifeso", "Effusion"])
         self.assertNotIn("= ANY(d.finding_labels)", count_sql)
 
     def test_signed_url_is_short_lived_and_never_contains_a_disk_path(self):
@@ -85,7 +85,7 @@ class DatasetImageApiTests(unittest.TestCase):
             main.secrets, "token_urlsafe", return_value="temporary-token"
         ):
             result = asyncio.run(main.dataset_image_signed_url(
-                "00000001_000.png", {"user": {"id": "owner-1"}}
+                "00000001_000.png", {"user": {"id": "owner-1", "institutions": ["hctco-unifeso"], "active_institution_id": "hctco-unifeso"}}
             ))
         self.assertEqual(result["expires_in"], 60)
         self.assertIn("/dataset/images/00000001_000.png/content?token=", result["url"])

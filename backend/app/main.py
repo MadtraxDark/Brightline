@@ -7,6 +7,9 @@ import os
 import sys
 import re
 import secrets
+import logging
+import time
+from uuid import uuid4
 from pathlib import Path
 from typing import Annotated
 from urllib.parse import quote
@@ -24,6 +27,9 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from .config import get_settings
 from . import report_analysis
+from .reclassification import worker as reclassification_worker, WorkerBusy
+
+logger = logging.getLogger("uvicorn.error")
 
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BACKEND_DIR))
@@ -34,7 +40,8 @@ from .models import (AcknowledgeInput, ActionInput, ActiveInstitutionInput, Impo
 
 
 def db():
-    return psycopg.connect(get_settings().database_url, row_factory=dict_row)
+    return psycopg.connect(get_settings().database_url, row_factory=dict_row,
+                          connect_timeout=5, options="-c statement_timeout=10000 -c lock_timeout=3000")
 
 
 def token_hash(value):
@@ -120,9 +127,23 @@ async def validation_error(request, exc):
         {"loc": list(e["loc"]), "msg": e["msg"], "type": e["type"]} for e in exc.errors()]})
 
 
+@app.exception_handler(psycopg.Error)
+async def database_error(request, exc):
+    logger.error("[RECLASSIFY] stage=database_failed exception=%s elapsed=%.3f", type(exc).__name__,
+                 time.monotonic() - getattr(request.state, "started", time.monotonic()))
+    detail = ("Banco desatualizado: aplique as migrações do backend."
+              if isinstance(exc, psycopg.errors.InvalidColumnReference)
+              else "Banco temporariamente indisponível. Tente novamente.")
+    return JSONResponse(status_code=503, content={"detail": detail})
+
+
 @app.middleware("http")
 async def no_store_auth(request: Request, call_next):
+    request.state.started = time.monotonic()
     response = await call_next(request)
+    if request.url.path.endswith("/reclassify"):
+        logger.info("[RECLASSIFY] stage=response_sent status=%d elapsed=%.3f",
+                    response.status_code, time.monotonic() - request.state.started)
     if request.url.path.startswith("/auth") or request.headers.get("authorization"):
         response.headers["Cache-Control"] = "no-store"
     return response
@@ -263,7 +284,8 @@ async def classify_dataset_image(filename: str, session: Session):
     if len(row["content"]) > report_analysis.MAX_IMAGE_BYTES:
         raise HTTPException(413, "Radiografia acima do limite de 10 MB.")
     try:
-        probabilities, model_version = await run_in_threadpool(report_analysis.infer, bytes(row["content"]))
+        probabilities, model_version, localizations, heatmap = await run_in_threadpool(
+            report_analysis.infer, bytes(row["content"]), include_localizations=True)
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from None
     except (ImportError, OSError, RuntimeError):
@@ -273,6 +295,9 @@ async def classify_dataset_image(filename: str, session: Session):
                 "predictions": sorted(label for label, score in probabilities.items() if score >= threshold),
                 "threshold": threshold, "threshold_status": "exploratory_unvalidated", "model_version": model_version,
                 "model_metadata": report_analysis.model_metadata(), "status": "review_required",
+                "localization_method": "gradcam", "localization_status": "estimated" if localizations else "unavailable",
+                "markers": localizations, "heatmap": heatmap,
+                "localization_note": "Mapas Grad-CAM são estimativas de relevância do classificador, não detecções confirmadas.",
                 "human_review_required": True,
                 "limitations": ["Probabilidades e corte não foram validados nem calibrados para uso clínico.",
                                 "Resultado experimental; não é diagnóstico e requer revisão profissional."]}
@@ -546,28 +571,31 @@ async def delete_report(report_id: str, session: Session):
 
 @app.get("/workspace")
 async def workspace(session: Session):
+    scope = (session["user"]["id"], active_institution(session))
     with db() as conn:
         reports = conn.execute(
             """SELECT r.owner_id, r.institution_id, r.report_id, r.modality, r.text, r.flagged_by_radiologist,
                r.radiologist, r.ordering_physician,
-               (SELECT rf.file_id FROM report_files rf
+               (SELECT rf.file_id FROM report_files rf JOIN files f
+                 USING(owner_id,institution_id,file_id)
                  WHERE rf.owner_id=r.owner_id AND rf.institution_id=r.institution_id
                    AND rf.report_id=r.report_id AND rf.role='radiograph'
-                 LIMIT 1) AS image_file_id
-               FROM reports r ORDER BY r.report_id""",
+                 ORDER BY f.created_at DESC,f.file_id LIMIT 1) AS image_file_id
+               FROM reports r WHERE r.owner_id=%s AND r.institution_id=%s ORDER BY r.report_id""", scope,
         ).fetchall()
         cases = conn.execute(
             """SELECT c.id, c.owner_id, c.institution_id, c.report_id, c.finding, c.evidence, c.urgency, c.confidence, c.status,
                c.escalation_level, c.deadline_hours, c.deadline_at_sim, c.notified_at_sim,
                COALESCE(s.sim_now, 0) AS sim_now
                FROM cases c LEFT JOIN sim_state s
-                 ON s.owner_id=c.owner_id AND s.institution_id=c.institution_id""",
+                 ON s.owner_id=c.owner_id AND s.institution_id=c.institution_id
+               WHERE c.owner_id=%s AND c.institution_id=%s""", scope,
         ).fetchall()
         events = conn.execute(
-            "SELECT case_id, detail, at_sim FROM events ORDER BY at_sim, id",
+            "SELECT case_id, detail, at_sim FROM events WHERE owner_id=%s AND institution_id=%s ORDER BY at_sim, id", scope,
         ).fetchall()
         extractions = conn.execute(
-            "SELECT owner_id, institution_id, report_id, findings FROM extractions"
+            "SELECT owner_id, institution_id, report_id, findings FROM extractions WHERE owner_id=%s AND institution_id=%s", scope,
         ).fetchall()
     by_case = {}
     for event in events:
@@ -855,13 +883,14 @@ async def analyze_report(
 
     findings_data = await run_in_threadpool(_extract_report, rid, text)
     findings = findings_data["findings"]
-    probabilities, model_version = {}, "unavailable"
+    probabilities, model_version, localizations, heatmap = {}, "unavailable", [], None
     if radiograph:
         if radiograph.content_type not in {"image/png", "image/jpeg"}:
             raise HTTPException(415, "radiograph aceita apenas PNG ou JPEG.")
         image_bytes = await radiograph.read()
         try:
-            probabilities, model_version = await run_in_threadpool(report_analysis.infer, image_bytes)
+            probabilities, model_version, localizations, heatmap = await run_in_threadpool(
+                report_analysis.infer, image_bytes, include_localizations=True)
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from None
         except (ImportError, OSError, RuntimeError):
@@ -880,6 +909,10 @@ async def analyze_report(
                 "probabilities": probabilities, "comparison": comparison, "disagreements": comparison["disagreements"],
                 "model_version": model_version,
                 "model_metadata": report_analysis.model_metadata() if probabilities else None,
+                "localization_method": "gradcam" if probabilities else None,
+                "localization_status": "estimated" if localizations else "unavailable",
+                "markers": localizations, "heatmap": heatmap,
+                "localization_note": "Mapas Grad-CAM são estimativas de relevância do classificador, não detecções confirmadas." if probabilities else None,
                 "source_files": [{k: v for k, v in item.items() if k != "content"} for item in stored_files],
                 "status": "review_required", "human_review_required": True}
 
@@ -925,7 +958,8 @@ async def classify_radiograph(
     if len(image_bytes) > report_analysis.MAX_IMAGE_BYTES:
         raise HTTPException(413, "Radiografia acima do limite de 10 MB.")
     try:
-        probabilities, model_version = await run_in_threadpool(report_analysis.infer, image_bytes)
+        probabilities, model_version, localizations, heatmap = await run_in_threadpool(
+            report_analysis.infer, image_bytes, include_localizations=True)
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from None
     except (ImportError, OSError, RuntimeError):
@@ -937,6 +971,11 @@ async def classify_radiograph(
         "threshold": threshold,
         "threshold_status": "exploratory_unvalidated",
         "model_version": model_version,
+        "localization_method": "gradcam",
+        "localization_status": "estimated" if localizations else "unavailable",
+        "markers": localizations,
+        "heatmap": heatmap,
+        "localization_note": "Mapas Grad-CAM são estimativas de relevância do classificador, não detecções confirmadas.",
         "model_metadata": report_analysis.model_metadata(),
         "status": "review_required",
         "human_review_required": True,
@@ -961,6 +1000,79 @@ async def get_report_analysis(report_id: str, session: Session):
         raise HTTPException(404, "Análise não encontrada.")
     return {**row["analysis"], "model_version": row["model_version"],
             "created_at": row["created_at"].isoformat()}
+
+
+@app.post("/reports/{report_id}/reclassify", summary="Reclassifica a radiografia já vinculada ao laudo")
+async def reclassify_report(report_id: str, session: Session):
+    started = time.monotonic()
+    request_id = uuid4().hex
+    logger.info("[RECLASSIFY] stage=received request_id=%s", request_id)
+    if not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", report_id):
+        raise HTTPException(404, "Laudo não encontrado.")
+    institution = active_institution(session)
+    owner = session["user"]["id"]
+    with db() as conn:
+        row = conn.execute("""SELECT f.content,f.mime_type,a.analysis
+            FROM report_files rf JOIN files f
+              ON f.owner_id=rf.owner_id AND f.institution_id=rf.institution_id AND f.file_id=rf.file_id
+            LEFT JOIN report_analyses a
+              ON a.owner_id=rf.owner_id AND a.institution_id=rf.institution_id AND a.report_id=rf.report_id
+            WHERE rf.owner_id=%s AND rf.institution_id=%s AND rf.report_id=%s AND rf.role='radiograph'
+            ORDER BY f.created_at DESC,f.file_id LIMIT 1""", (owner, institution, report_id)).fetchone()
+    if not row:
+        raise HTTPException(404, "Este laudo não possui radiografia vinculada para reclassificar.")
+    image_bytes = bytes(row["content"])
+    if not image_bytes or len(image_bytes) > report_analysis.MAX_IMAGE_BYTES:
+        raise HTTPException(413, "Radiografia vazia ou acima do limite de 10 MB.")
+    if row["mime_type"] not in {"image/png", "image/jpeg"}:
+        raise HTTPException(415, "A radiografia vinculada não está em PNG ou JPEG.")
+    logger.info("[RECLASSIFY] stage=image_found request_id=%s elapsed=%.3f", request_id, time.monotonic() - started)
+    try:
+        probabilities, model_version, localizations, heatmap, metadata = await run_in_threadpool(
+            reclassification_worker.run, image_bytes)
+    except WorkerBusy as exc:
+        raise HTTPException(409, str(exc)) from None
+    except TimeoutError as exc:
+        logger.error("[RECLASSIFY] stage=inference_timeout request_id=%s elapsed=%.3f", request_id, time.monotonic() - started)
+        raise HTTPException(504, str(exc)) from None
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from None
+    except (ImportError, OSError, RuntimeError) as exc:
+        logger.error("[RECLASSIFY] stage=inference_failed request_id=%s exception=%s elapsed=%.3f",
+                     request_id, type(exc).__name__, time.monotonic() - started)
+        raise HTTPException(503, "Serviço do modelo TorchXRayVision indisponível.") from None
+
+    analysis = dict(row["analysis"] or {})
+    findings = analysis.get("findings", [])
+    comparison = report_analysis.compare(findings, probabilities)
+    analysis.update({
+        "report_id": report_id,
+        "probabilities": probabilities,
+        "predictions": comparison["model_classes_above_threshold"],
+        "threshold": comparison["threshold"],
+        "threshold_status": comparison["threshold_status"],
+        "comparison": comparison,
+        "disagreements": comparison["disagreements"],
+        "model_version": model_version,
+        "model_metadata": metadata,
+        "localization_method": "gradcam",
+        "localization_status": "estimated" if localizations else "unavailable",
+        "markers": localizations,
+        "heatmap": heatmap,
+        "localization_note": ("Mapas Grad-CAM são estimativas de relevância do classificador, não detecções confirmadas."
+                              if localizations else "Localização indisponível ou inconclusiva. Os scores de classificação foram preservados."),
+        "status": "review_required",
+        "human_review_required": True,
+        "reclassification_status": "completed",
+    })
+    with db() as conn:
+        conn.execute("""INSERT INTO report_analyses(owner_id,institution_id,report_id,analysis,model_version)
+            VALUES (%s,%s,%s,%s,%s) ON CONFLICT(owner_id,institution_id,report_id) DO UPDATE SET
+            analysis=EXCLUDED.analysis,model_version=EXCLUDED.model_version,created_at=now()""",
+            (owner, institution, report_id, psycopg.types.json.Jsonb(analysis), model_version))
+    logger.info("[RECLASSIFY] stage=persisted request_id=%s elapsed=%.3f", request_id, time.monotonic() - started)
+    logger.info("[RECLASSIFY] stage=response_ready request_id=%s elapsed=%.3f", request_id, time.monotonic() - started)
+    return analysis
 
 
 @app.post("/reports/{report_id}/radiograph-url", summary="Emite URL temporária da radiografia de um laudo")

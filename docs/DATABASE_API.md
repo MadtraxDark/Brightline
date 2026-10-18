@@ -70,6 +70,8 @@ Entrega os bytes associados ao link temporário, com MIME derivado da extensão 
 
 ### Análises de imagem do catálogo
 
+As respostas de classificação incluem estimativas Grad-CAM (`markers`) e heatmap opcional. Na análise do catálogo, esses campos ficam no JSONB existente `dataset_image_analyses.analysis` e são recuperados pela mesma rota autenticada. Coordenadas normalizadas referem-se ao quadro original; mapas inconclusivos não geram marcadores. Consulte [`RADIOGRAPH_LOCALIZATION.md`](RADIOGRAPH_LOCALIZATION.md) para o algoritmo e limites. Grad-CAM indica relevância estimada, sem confirmação anatômica ou clínica.
+
 - `POST /dataset/images/{filename}/classify` executa o modelo NIH sobre os bytes já presentes no banco e salva a última análise para a conta autenticada.
 - `GET /dataset/images/{filename}/analysis` retorna a análise salva dessa conta; retorna `404` quando ainda não há resultado.
 - Cada resultado informa probabilidades, previsões, versão/metadados do modelo, estado `review_required` e limitações. É uma saída experimental, não um diagnóstico.
@@ -77,6 +79,12 @@ Entrega os bytes associados ao link temporário, com MIME derivado da extensão 
 ## Laudos e uploads existentes
 
 - `POST /reports/analyze` continua aceitando laudo e radiografia, persistindo metadados, análise e arquivos no PostgreSQL.
+- `POST /reports/{report_id}/reclassify` busca a radiografia PNG/JPEG já vinculada ao laudo, executa nova inferência TorchXRayVision e atualiza scores, metadados do modelo, marcadores Grad-CAM e heatmap no registro existente `report_analyses`. A rota valida proprietário, instituição ativa e vínculo do arquivo; não aceita IDs de arquivo enviados pelo frontend.
+  - Requer a migração `005_institutional_dataset_analyses` aplicada por `python -m backend.migrate`; a chave de conflito é `(owner_id,institution_id,report_id)`.
+  - Um processo CPU reutilizável atende uma reclassificação por vez por processo da API. Pedidos concorrentes recebem `409`; não entram em fila sem limite.
+  - `BRIGHTLINE_RECLASSIFY_TIMEOUT` limita classificação e carregamento a 60 s; `BRIGHTLINE_LOCALIZATION_TIMEOUT` limita Grad-CAM a 20 s. Um processo que excede o limite é encerrado e recriado na próxima tentativa. Timeout da classificação retorna `504`; timeout/falha da localização preserva scores, retorna `200` com `markers: []`, `heatmap: null`, `localization_status: unavailable` e explicação em `localization_note`.
+  - O cliente mantém limite total de 120 s, incluindo leitura do JSON e renovação da sessão. Navegar para outro caso cancela a espera no navegador e impede atualização do caso errado; a execução já recebida pelo servidor pode concluir e persistir dentro dos limites descritos.
+  - Conexões PostgreSQL têm limite de 5 s para conectar, 10 s por comando e 3 s para obter locks. Falhas do banco retornam `503`, sem sobrescrever a análise anterior em transações abortadas.
 - `GET /reports/{report_id}/analysis` recupera a análise já salva pertencente à conta autenticada.
 - `POST /reports/{report_id}/radiograph-url` emite link temporário apenas para uma radiografia vinculada ao laudo daquela conta.
 - `POST /radiographs/classify` classifica upload PNG/JPEG de até 10 MB e agora requer bearer token. Essa rota não persiste o arquivo nem a saída.
@@ -102,3 +110,4 @@ Execute `python -m backend.migrate` para aplicar migrações pendentes, incluind
 - `dataset_images` permanece a fonte canônica de labels e arquivo; frontend não replica metadados como fonte operacional.
 - Links temporários de conteúdo são emitidos somente após a sessão e a existência do arquivo serem verificadas. O endpoint de conteúdo aceita token aleatório com validade de 60 segundos e não aceita caminho fornecido pelo usuário.
 - Respostas de classificação mantêm `human_review_required: true`; resultados e labels do ChestX-ray14 não devem ser usados para diagnóstico, triagem ou tratamento.
+- `GET /workspace` filtra laudos, casos, eventos e extrações pelo proprietário e instituição ativa, incluindo o vínculo da radiografia utilizado pela reclassificação.

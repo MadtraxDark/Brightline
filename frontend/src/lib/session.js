@@ -64,7 +64,7 @@ export function currentUser(storage) {
   return readSession(storage)?.user ?? null;
 }
 
-async function request(path, { body, token, method = "POST" } = {}) {
+async function request(path, { body, token, method = "POST", signal } = {}) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {
@@ -76,7 +76,9 @@ async function request(path, { body, token, method = "POST" } = {}) {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
-      signal: controller.signal,
+      signal: signal
+        ? AbortSignal.any([controller.signal, signal])
+        : controller.signal,
       cache: "no-store",
     });
     const data =
@@ -238,15 +240,22 @@ export function validateSession(storage) {
 
 export async function authorizedRequest(
   path,
-  { method = "GET", body, timeoutMs = 15000 } = {},
+  { method = "GET", body, timeoutMs = 15000, signal } = {},
 ) {
   const storage = sessionStorage;
   let session = readSession(storage);
   if (!session) throw new Error("Sessão expirada. Entre novamente.");
-  const send = (token) => {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), timeoutMs);
-    return fetch(`${AUTH_BASE}${path}`, {
+  const controller = new AbortController();
+  const cancel = () => controller.abort(signal?.reason);
+  signal?.addEventListener("abort", cancel, { once: true });
+  if (signal?.aborted) cancel();
+  let timedOut = false;
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, timeoutMs);
+  const send = (token) =>
+    fetch(`${AUTH_BASE}${path}`, {
       method,
       headers: {
         Accept: "application/json",
@@ -262,28 +271,42 @@ export async function authorizedRequest(
         body instanceof Blob ? body : body ? JSON.stringify(body) : undefined,
       signal: controller.signal,
       cache: "no-store",
-    }).finally(() => clearTimeout(timeout));
-  };
-  let response = await send(session.access_token);
-  if (response.status === 401 && session.refresh_token) {
-    session = await authRequest("refresh", {
-      body: { refresh_token: session.refresh_token },
     });
-    saveSession(storage, session);
-    response = await send(session.access_token);
-  }
-  const data =
-    response.status === 204 ? null : await response.json().catch(() => null);
-  if (!response.ok) {
-    const message =
-      typeof data?.detail === "string"
-        ? data.detail
-        : "Não foi possível carregar os laudos.";
-    const error = new Error(message);
-    error.status = response.status;
+  try {
+    let response = await send(session.access_token);
+    if (response.status === 401 && session.refresh_token) {
+      session = await authRequest("refresh", {
+        body: { refresh_token: session.refresh_token },
+        signal: controller.signal,
+      });
+      saveSession(storage, session);
+      response = await send(session.access_token);
+    }
+    const data = response.status === 204 ? null : await response.json();
+    if (!response.ok) {
+      const error = new Error(
+        typeof data?.detail === "string"
+          ? data.detail
+          : "Não foi possível carregar os laudos.",
+      );
+      error.status = response.status;
+      throw error;
+    }
+    return data;
+  } catch (error) {
+    if (timedOut)
+      throw new Error(
+        "O servidor excedeu o tempo de resposta. Tente novamente.",
+      );
+    if (controller.signal.aborted)
+      throw new DOMException("Solicitação cancelada.", "AbortError");
+    if (error instanceof SyntaxError)
+      throw new Error("O servidor retornou uma resposta inválida.");
     throw error;
+  } finally {
+    clearTimeout(timeout);
+    signal?.removeEventListener("abort", cancel);
   }
-  return data;
 }
 
 export async function logout(storage) {

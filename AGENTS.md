@@ -39,3 +39,11 @@ Para qualquer mudança em dados, imagens, classificações ou resultados:
 6. Valide filtros, paginação, tipos e tamanho dos arquivos no backend; mantenha tratamento consistente de erros e isolamento por usuário.
 7. Atualize `docs/DATABASE_API.md` quando mudar contratos, persistência, configuração ou fluxo de acesso a dados.
 8. Não adicione Supabase, outra camada de banco ou novo armazenamento sem uma decisão explícita do usuário.
+
+## Localização visual de radiografias
+
+- Reutilize `backend/app/report_analysis.py` e os campos de análise já persistidos no PostgreSQL; não crie marcadores mockados nem uma tabela/endpoint paralelo sem necessidade documentada.
+- Localizações Grad-CAM são estimativas de relevância do classificador, nunca detecções confirmadas. Preserve o escore como saída exploratória do modelo e mantenha limitações e revisão humana visíveis.
+- Coordenadas devem ser normalizadas no quadro original e considerar crop e redimensionamento. Quando o mapa for inconclusivo, não emita marcador e mantenha os resultados de classificação.
+- Consulte `docs/RADIOGRAPH_LOCALIZATION.md` e atualize `docs/DATABASE_API.md` se o contrato ou persistência mudar.
+- Não use a localização para diagnóstico, tratamento, triagem ou decisões clínicas ao vivo.
