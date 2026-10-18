@@ -105,14 +105,14 @@ export default function LandingPage() {
         <section className="lp-hero" id="produto">
           <div className="lp-hero-copy">
             <h1>
-              Um achado importante
+              Achados importantes podem se perder
               <br />
-              merece um <em>próximo passo.</em>
+              <em>no caminho.</em>
             </h1>
             <p>
-              Revise achados críticos, urgentes e acionáveis com a evidência do
-              laudo. Acompanhe responsáveis, prazos, leitura e conduta até o
-              encerramento de cada caso.
+              O Brightline destaca achados críticos e urgentes com a evidência
+              do laudo e organiza responsáveis, prazos, leitura e conduta em
+              cada caso.
             </p>
             <div className="lp-hero-actions">
               <a className="lp-button lp-button-primary" href="/login">
