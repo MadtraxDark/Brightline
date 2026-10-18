@@ -51,10 +51,160 @@ export default function ExamViewer({
     remoteSrc ||
     (!fileId && (report?.image_url || "/images/chest-xray-demo.png"));
   const illustrative = !fileId;
+  const [mobile, setMobile] = useState(
+    () => matchMedia("(max-width:700px)").matches,
+  );
+  const touches = useRef(new Map());
+  const gesture = useRef(null);
+  useEffect(() => {
+    const media = matchMedia("(max-width:700px)");
+    const change = () => {
+      setMobile(media.matches);
+      touches.current.clear();
+      gesture.current = null;
+    };
+    media.addEventListener("change", change);
+    return () => media.removeEventListener("change", change);
+  }, []);
   const [pointMode, setPointMode] = useState(false);
   const [areaMode, setAreaMode] = useState(false);
   const [drawing, setDrawing] = useState(null);
   const areaStart = useRef(null);
+  function mobileDown(event) {
+    if (!mobile) return false;
+    if (event.button !== 0) return true;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    touches.current.set(event.pointerId, {
+      x: event.clientX,
+      y: event.clientY,
+    });
+    const list = [...touches.current.values()];
+    if (list.length >= 2) {
+      const [a, b] = list;
+      const rect = stage.current.getBoundingClientRect();
+      gesture.current = {
+        kind: "pinch",
+        distance: Math.hypot(a.x - b.x, a.y - b.y),
+        zoom,
+        pan: { ...pan },
+        mid: {
+          x: (a.x + b.x) / 2 - rect.left - rect.width / 2,
+          y: (a.y + b.y) / 2 - rect.top - rect.height / 2,
+        },
+      };
+      areaStart.current = null;
+      setDrawing(null);
+    } else {
+      const rect = plane.current.getBoundingClientRect();
+      const inside =
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom;
+      gesture.current = {
+        kind:
+          areaMode && inside ? "area" : pointMode && inside ? "point" : "pan",
+        start: { x: event.clientX, y: event.clientY },
+        pan: { ...pan },
+      };
+      if (gesture.current.kind === "area") {
+        areaStart.current = imagePosition(event);
+        setDrawing({ ...areaStart.current, width: 0, height: 0 });
+      }
+    }
+    return true;
+  }
+  function mobileMove(event) {
+    if (!mobile) return false;
+    if (!touches.current.has(event.pointerId) || !gesture.current) return true;
+    touches.current.set(event.pointerId, {
+      x: event.clientX,
+      y: event.clientY,
+    });
+    const g = gesture.current,
+      list = [...touches.current.values()];
+    if (g.kind === "pinch" && list.length >= 2) {
+      const [a, b] = list,
+        rect = stage.current.getBoundingClientRect();
+      const next = Math.min(
+          4,
+          Math.max(
+            0.25,
+            (g.zoom * Math.hypot(a.x - b.x, a.y - b.y)) /
+              Math.max(1, g.distance),
+          ),
+        ),
+        factor = next / g.zoom;
+      setZoom(next);
+      setPan({
+        x:
+          (a.x + b.x) / 2 -
+          rect.left -
+          rect.width / 2 -
+          (g.mid.x - g.pan.x) * factor,
+        y:
+          (a.y + b.y) / 2 -
+          rect.top -
+          rect.height / 2 -
+          (g.mid.y - g.pan.y) * factor,
+      });
+    } else if (g.kind === "pan")
+      setPan({
+        x: g.pan.x + event.clientX - g.start.x,
+        y: g.pan.y + event.clientY - g.start.y,
+      });
+    else if (g.kind === "area" && areaStart.current) {
+      const p = imagePosition(event),
+        a = areaStart.current;
+      setDrawing({
+        x: Math.min(p.x, a.x),
+        y: Math.min(p.y, a.y),
+        width: Math.abs(p.x - a.x),
+        height: Math.abs(p.y - a.y),
+      });
+    }
+    return true;
+  }
+  function mobileUp(event, cancelled = false) {
+    if (!mobile) return false;
+    const g = gesture.current;
+    if (
+      !cancelled &&
+      g?.kind === "point" &&
+      Math.hypot(event.clientX - g.start.x, event.clientY - g.start.y) < 10
+    ) {
+      const p = imagePosition(event);
+      addPoint(p.x, p.y);
+      setPointMode(false);
+    }
+    if (!cancelled && g?.kind === "area" && areaStart.current) {
+      const p = imagePosition(event),
+        a = areaStart.current;
+      const region = {
+        id: points.length + 1,
+        kind: "area",
+        x: Math.min(p.x, a.x),
+        y: Math.min(p.y, a.y),
+        width: Math.abs(p.x - a.x),
+        height: Math.abs(p.y - a.y),
+      };
+      if (region.width > 0.02 && region.height > 0.02) {
+        setPoints((list) => [...list, region]);
+        setSelected(region);
+        setChatOpen(true);
+        setQuestion("");
+        setAreaMode(false);
+      }
+    }
+    touches.current.delete(event.pointerId);
+    areaStart.current = null;
+    setDrawing(null);
+    const remaining = [...touches.current.values()][0];
+    gesture.current = remaining
+      ? { kind: "pan", start: remaining, pan: { ...pan } }
+      : null;
+    return true;
+  }
   function imagePosition(event) {
     const rect = plane.current.getBoundingClientRect();
     return {
@@ -291,6 +441,7 @@ export default function ExamViewer({
         aria-labelledby="exam-dialog-title"
         onKeyDown={(event) => {
           if (
+            !mobile &&
             event.key.toLowerCase() === "c" &&
             !event.repeat &&
             !event.ctrlKey &&
@@ -347,6 +498,7 @@ export default function ExamViewer({
                 width="30"
                 height="30"
               />
+              <span className="exam-touch-label">Ponto</span>
             </button>
             <button
               type="button"
@@ -360,9 +512,10 @@ export default function ExamViewer({
               }}
             >
               <Scan size={20} />
+              <span className="exam-touch-label">Área</span>
             </button>
             <button
-              className="exam-mode-toggle"
+              className="exam-mode-toggle exam-desktop-control"
               type="button"
               aria-label="Navegar no plano (atalho C)"
               aria-pressed={canvasMode}
@@ -372,15 +525,19 @@ export default function ExamViewer({
             </button>
             <button
               type="button"
+              className="exam-desktop-control"
               aria-label="Diminuir zoom"
               disabled={zoom <= 0.25}
               onClick={() => setZoom((z) => Math.max(0.25, z - 0.25))}
             >
               <ZoomOut size={19} />
             </button>
-            <output aria-label="Zoom">{Math.round(zoom * 100)}%</output>
+            <output className="exam-desktop-control" aria-label="Zoom">
+              {Math.round(zoom * 100)}%
+            </output>
             <button
               type="button"
+              className="exam-desktop-control"
               aria-label="Aumentar zoom"
               disabled={zoom >= 4}
               onClick={() => setZoom((z) => Math.min(4, z + 0.25))}
@@ -393,6 +550,7 @@ export default function ExamViewer({
               onClick={reset}
             >
               <RotateCcw size={18} />
+              <span className="exam-touch-label">Centralizar</span>
             </button>
             {annotations.length > 0 && (
               <button
@@ -460,6 +618,7 @@ export default function ExamViewer({
                 }
               }}
               onPointerDown={(event) => {
+                if (mobileDown(event)) return;
                 if (event.button !== 0) return;
                 if (areaMode) {
                   const rect = plane.current.getBoundingClientRect();
@@ -490,6 +649,7 @@ export default function ExamViewer({
                 };
               }}
               onPointerMove={(event) => {
+                if (mobileMove(event)) return;
                 if (areaStart.current) {
                   const pos = imagePosition(event),
                     start = areaStart.current;
@@ -515,6 +675,7 @@ export default function ExamViewer({
                   });
               }}
               onPointerUp={(event) => {
+                if (mobileUp(event)) return;
                 if (areaStart.current) {
                   const pos = imagePosition(event),
                     start = areaStart.current;
@@ -537,7 +698,8 @@ export default function ExamViewer({
                 }
                 drag.current = null;
               }}
-              onPointerCancel={() => {
+              onPointerCancel={(event) => {
+                if (mobileUp(event, true)) return;
                 areaStart.current = null;
                 setDrawing(null);
                 drag.current = null;
@@ -703,12 +865,20 @@ export default function ExamViewer({
           </div>
           <footer>
             <span role="status">
-              {pointMode
-                ? "Clique na imagem para marcar um ponto e perguntar à Luna"
-                : canvasMode
-                  ? "Navegar no plano · Roda: zoom · Arraste: mover visualização"
-                  : "Posicionar imagem · Roda e arraste: mover imagem"}{" "}
-              · C alterna o modo
+              {mobile
+                ? areaMode
+                  ? "Arraste para selecionar uma área"
+                  : pointMode
+                    ? "Toque na imagem para marcar um ponto"
+                    : "Arraste para mover · Use dois dedos para ampliar"
+                : areaMode
+                  ? "Arraste para selecionar uma área"
+                  : pointMode
+                    ? "Clique na imagem para marcar um ponto"
+                    : canvasMode
+                      ? "Navegar no plano · Roda: zoom · Arraste: mover visualização"
+                      : "Posicionar imagem · Roda e arraste: mover imagem"}
+              {!mobile && " · C alterna o modo"}
             </span>
             {!annotations.length && !localizations.length && (
               <span>

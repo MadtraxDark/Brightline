@@ -7,6 +7,7 @@ export default function SectionTransition({ children }) {
   const [displayed, setDisplayed] = useState(location);
   const surface = useRef(null);
   const first = useRef(true);
+  const previousPath = useRef(location.pathname);
   const direction = navigationType === "POP" ? -1 : 1;
 
   useEffect(() => {
@@ -17,6 +18,7 @@ export default function SectionTransition({ children }) {
       setDisplayed(location);
       return;
     }
+    const distance = matchMedia("(max-width:700px)").matches ? 8 : 16;
     let active = true;
     node.inert = true;
     const exit = node.animate(
@@ -26,7 +28,7 @@ export default function SectionTransition({ children }) {
           clipPath: "inset(0 0 0 0 round 8px)",
         },
         {
-          transform: `translateX(${-direction * 16}px) scale(.99)`,
+          transform: `translateX(${-direction * distance}px) scale(.99)`,
           clipPath: "inset(0 0 6% 0 round 8px)",
         },
       ],
@@ -50,6 +52,10 @@ export default function SectionTransition({ children }) {
 
   useLayoutEffect(() => {
     const node = surface.current;
+    if (previousPath.current !== displayed.pathname) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      previousPath.current = displayed.pathname;
+    }
     if (first.current) {
       first.current = false;
       return;
@@ -57,10 +63,11 @@ export default function SectionTransition({ children }) {
     node.inert = false;
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     if (media.matches || !node.animate) return;
+    const distance = matchMedia("(max-width:700px)").matches ? 10 : 18;
     const entry = node.animate(
       [
         {
-          transform: `translateX(${direction * 18}px) scale(.99)`,
+          transform: `translateX(${direction * distance}px) scale(.99)`,
           clipPath: "inset(0 0 8% 0 round 8px)",
         },
         {

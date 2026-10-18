@@ -43,3 +43,9 @@ Abertura de laudos: documento com acomodação de escala e recorte, imagem com r
 Transições entre seções internas: saída de 120ms e entrada de 240ms, com deslocamento e recorte discretos; navegação de retorno inverte a direção. Aplicar também nas mudanças de prioridade. A camada central substitui animações locais duplicadas, respeita movimento reduzido e aceita seleção rápida de outro destino.
 
 Campos de texto: desabilitar redimensionamento manual (resize:none) em toda a interface. Compositores de chat podem crescer automaticamente até uma altura máxima e então usar rolagem interna.
+
+### Mobile clínico
+
+Até 700px: resumo de prioridades em faixa segmentada, com aviso clínico abaixo; comunicação em três etapas horizontais; documento com médicos em duas colunas e classificação destacada; imagem em prévia compacta e visualizador de toque em tela inteira. Chat geral da Luna ocupa toda a tela, bloqueia a página de fundo e mantém foco nos seus controles. Navegação de seção retorna ao topo; mudanças de filtro preservam a posição. Transições e indicadores respeitam movimento reduzido.
+
+Visualizador mobile: gestos diretos (arraste para mover e pinça para zoom), sem alternância C ou botões de zoom de desktop. Ferramentas com rótulos Ponto, Área e Centralizar. Marcação de ponto exige toque sem deslocamento; área exige arraste mínimo. Pinça cancela o desenho em andamento. Ao terminar uma seleção, voltar à navegação por gestos.

@@ -35,7 +35,7 @@ test("escalado no nível 1 deixa o solicitante como já notificado", () => {
   );
 });
 
-test("escalado no nível 2 deixa a coordenação como atual", () => {
+test("escalado no nível 2 destaca a terceira etapa", () => {
   const steps = path("escalated", 2);
   assert.deepEqual(
     steps.map((step) => step.state),
@@ -55,7 +55,7 @@ test("fechado confirma quem leu e dispensa os passos seguintes", () => {
   const steps = path("closed", 0);
   assert.deepEqual(
     steps.map((step) => step.state),
-    ["Leitura confirmada", "Não necessário", "Não necessário"],
+    ["Leitura confirmada", "Não necessário", "Envio pendente"],
   );
 });
 
@@ -63,13 +63,21 @@ test("name vem dos campos reais do laudo", () => {
   const steps = path("notified", 0);
   assert.equal(steps[0].name, "Dr. Paulo Mendes");
   assert.equal(steps[1].name, "Dra. Ana Luz");
-  assert.equal(steps[2].name, "Coordenação de Radiologia");
+  assert.equal(steps[2].name, "Dr. Paulo Mendes");
   assert.deepEqual(
     steps.map((step) => step.role),
-    [
-      "Médico solicitante",
-      "Radiologista que assinou",
-      "Coordenação de Radiologia",
-    ],
+    ["Médico solicitante", "Radiologista que assinou", "Médico solicitante"],
   );
+});
+
+test("envio concluído marca a etapa final como laudo fechado", () => {
+  const steps = escalationPath(
+    {
+      status: "closed",
+      escalation_level: 0,
+      requester_sent_at: "2026-10-18T12:00:00Z",
+    },
+    report,
+  );
+  assert.equal(steps[2].state, "Laudo fechado");
 });

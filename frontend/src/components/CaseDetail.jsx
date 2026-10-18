@@ -1,3 +1,4 @@
+import RequesterDispatch from "./RequesterDispatch.jsx";
 import PhysicianAvatar from "./PhysicianAvatar.jsx";
 import { classificationConfidence } from "../lib/classificationConfidence.js";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -57,7 +58,7 @@ export default function CaseDetail() {
   const [pending, setPending] = useState(false);
   const [actionOpen, setActionOpen] = useState(false);
   const [note, setNote] = useState("");
-  const [closeCase, setCloseCase] = useState(true);
+  const [dispatchPrompt, setDispatchPrompt] = useState({ id: null, count: 0 });
   const noteRef = useRef(null);
   const openActionRef = useRef(null);
   const analysisFetch = useRef(0);
@@ -90,6 +91,9 @@ export default function CaseDetail() {
       reclassificationRequest.current?.abort();
     };
   }, [id, reportId]);
+  useEffect(() => {
+    setDispatchPrompt({ id: null, count: 0 });
+  }, [id]);
 
   useEffect(() => {
     if (status !== "read") setActionOpen(false);
@@ -204,7 +208,6 @@ export default function CaseDetail() {
 
   function openAction() {
     setNote("");
-    setCloseCase(true);
     setError("");
     setActionOpen(true);
   }
@@ -216,7 +219,8 @@ export default function CaseDetail() {
       return;
     }
     run(async () => {
-      await registerAction(item.id, note, closeCase);
+      await registerAction(item.id, note, true);
+      setDispatchPrompt((value) => ({ id: item.id, count: value.count + 1 }));
       setNote("");
       setActionOpen(false);
     });
@@ -252,11 +256,14 @@ export default function CaseDetail() {
           <h3 id="communication-title">Comunicaá§ão</h3>
           <span className={`deadline-pill is-${pill.kind}`}>{pill.text}</span>
         </div>
-        <ol className="escalation-path">
+        <ol
+          className={`escalation-path${item.status === "closed" && item.requester_sent_at ? " is-delivered" : ""}`}
+        >
           {steps.map((step) => {
             const done =
-              step.state === "Já¡ notificado" ||
-              step.state === "Leitura confirmada";
+              step.state === "Já notificado" ||
+              step.state === "Leitura confirmada" ||
+              step.state === "Laudo fechado";
             const Icon = STEP_ICONS[step.level];
             return (
               <li
@@ -274,7 +281,7 @@ export default function CaseDetail() {
                   <span />
                 </span>
                 <span className="escalation-node">
-                  {step.level < 2 ? (
+                  {step.name ? (
                     <PhysicianAvatar name={step.name} />
                   ) : (
                     <Icon size={24} aria-hidden="true" />
@@ -369,15 +376,7 @@ export default function CaseDetail() {
                   onChange={(event) => setNote(event.target.value)}
                 />
               </label>
-              <label className="detail-check">
-                <input
-                  type="checkbox"
-                  checked={closeCase}
-                  disabled={pending}
-                  onChange={(event) => setCloseCase(event.target.checked)}
-                />
-                Fechar caso
-              </label>
+
               <button className="btn-primary" type="submit" disabled={pending}>
                 Registrar aá§ão
               </button>
@@ -389,13 +388,31 @@ export default function CaseDetail() {
                 className="btn-secondary"
                 type="button"
                 disabled={pending}
-                onClick={() => run(() => registerAction(item.id, "", true))}
+                onClick={() =>
+                  run(() =>
+                    registerAction(item.id, "Caso encerrado", true).then(() =>
+                      setDispatchPrompt((value) => ({
+                        id: item.id,
+                        count: value.count + 1,
+                      })),
+                    ),
+                  )
+                }
               >
                 Fechar caso
               </button>
             </div>
           ) : null}
         </div>
+        {item.status === "closed" && (
+          <RequesterDispatch
+            key={item.id}
+            item={item}
+            autoOpenToken={
+              dispatchPrompt.id === item.id ? dispatchPrompt.count : 0
+            }
+          />
+        )}
         <div className="communication-history-head">
           <h3>
             Histá³rico de comunicaá§ão{" "}

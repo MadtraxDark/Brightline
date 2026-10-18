@@ -143,7 +143,7 @@ export default function DashboardShell({ preview = false }) {
         setDataStatus("ready");
         return;
       }
-      setDataStatus("loading");
+      setDataStatus((current) => (current === "ready" ? current : "loading"));
       setDataError("");
       try {
         await refreshDashboard();

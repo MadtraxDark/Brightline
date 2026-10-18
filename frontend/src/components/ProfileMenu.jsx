@@ -97,34 +97,32 @@ export default function ProfileMenu({ profile, onLogout }) {
         </span>
         <ChevronDown className="profile-chevron" size={15} aria-hidden="true" />
       </button>
-      {open ? (
-        <div className="profile-dropdown">
-          <div className="profile-menu-heading">
-            <strong>{profile.name || "Meu perfil"}</strong>
-            <span>Conta Brightline</span>
-          </div>
-          <div ref={menu} role="menu" id={menuId} aria-label="Opções do perfil">
-            <Link
-              role="menuitem"
-              tabIndex={-1}
-              to="/configuracoes"
-              onClick={() => setOpen(false)}
-            >
-              <Settings size={17} aria-hidden="true" />
-              Configurações
-            </Link>
-            <button
-              type="button"
-              role="menuitem"
-              tabIndex={-1}
-              onClick={onLogout}
-            >
-              <LogOut size={17} aria-hidden="true" />
-              Sair
-            </button>
-          </div>
+      <div className="profile-dropdown" hidden={!open}>
+        <div className="profile-menu-heading">
+          <strong>{profile.name || "Meu perfil"}</strong>
+          <span>Conta Brightline</span>
         </div>
-      ) : null}
+        <div ref={menu} role="menu" id={menuId} aria-label="Opções do perfil">
+          <Link
+            role="menuitem"
+            tabIndex={-1}
+            to="/configuracoes"
+            onClick={() => setOpen(false)}
+          >
+            <Settings size={17} aria-hidden="true" />
+            Configurações
+          </Link>
+          <button
+            type="button"
+            role="menuitem"
+            tabIndex={-1}
+            onClick={onLogout}
+          >
+            <LogOut size={17} aria-hidden="true" />
+            Sair
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
