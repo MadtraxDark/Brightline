@@ -38,6 +38,12 @@ export function loadCases(reports, cache) {
         evidence: finding.evidence,
         urgency: finding.urgency,
         confidence: finding.confidence,
+        ...(Number.isFinite(finding.confidence_percent)
+          ? { confidence_percent: finding.confidence_percent }
+          : {}),
+        ...(finding.confidence_is_example === true
+          ? { confidence_is_example: true }
+          : {}),
         deadline_hours: finding.deadline_hours,
         deadline_at: finding.deadline_hours,
         escalation_level: 0,

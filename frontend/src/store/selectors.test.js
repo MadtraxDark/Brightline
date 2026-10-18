@@ -2,8 +2,21 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import cache from "../fixtures/extractions_cache.json" with { type: "json" };
 import reports from "../fixtures/reports.json" with { type: "json" };
-import { acknowledge, advance, loadCases, registerAction } from "../engine/engine.js";
-import { selectCase, selectCases, selectLanes, selectMissed, selectNextDeadline, selectReportsWithoutAlert, selectStats } from "./selectors.js";
+import {
+  acknowledge,
+  advance,
+  loadCases,
+  registerAction,
+} from "../engine/engine.js";
+import {
+  selectCase,
+  selectCases,
+  selectLanes,
+  selectMissed,
+  selectNextDeadline,
+  selectReportsWithoutAlert,
+  selectStats,
+} from "./selectors.js";
 
 function caso(overrides) {
   return {
@@ -193,6 +206,29 @@ test("selectCases inclui radiologista e solicitante sem perder os campos atuais"
   assert.equal(item.id, "c1");
   assert.equal(item.finding, "Achado");
   assert.equal(item.current_target, "Dr. Paulo Mendes");
+  assert.equal(item.patient, null);
+  assert.equal(item.contact.ramal, "4101");
+});
+
+test("selectCases e selectCase acrescentam paciente, local e ramal", () => {
+  const report = {
+    report_id: "R-001",
+    patient: { name: "M. S. Andrade", age: 54, sex: "F", record: "PR-10441" },
+    location: "Pronto-socorro",
+    indication: "Dor torácica súbita",
+  };
+  const state = {
+    ...estado([caso({ id: "c1" })]),
+    reports: [report],
+  };
+  const [item] = selectCases(state);
+  assert.equal(item.patient.name, "M. S. Andrade");
+  assert.equal(item.location, "Pronto-socorro");
+  assert.equal(item.indication, "Dor torácica súbita");
+  assert.deepEqual(item.contact, { ramal: "4101" });
+  const detail = selectCase(state, "c1");
+  assert.equal(detail.case.patient.record, "PR-10441");
+  assert.equal(detail.report.location, "Pronto-socorro");
 });
 
 test("selectStats acrescenta sem leitura e críticos em aberto", () => {
@@ -274,7 +310,10 @@ test("selectors novos aceitam estado sem reports", () => {
   });
   assert.deepEqual(selectReportsWithoutAlert(empty), []);
   assert.equal(selectNextDeadline(empty), null);
-  assert.deepEqual(selectReportsWithoutAlert(exampleState()).map((item) => item.id), ["R-007", "R-008"]);
+  assert.deepEqual(
+    selectReportsWithoutAlert(exampleState()).map((item) => item.id),
+    ["R-007", "R-008"],
+  );
 });
 
 test("selectCase de id inexistente devolve null", () => {

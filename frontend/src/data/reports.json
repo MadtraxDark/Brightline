@@ -7,8 +7,19 @@
     "text": "Radiografia de tórax em inspiração. Há pneumotórax hipertensivo à direita, com desvio do mediastino para a esquerda. O pulmão esquerdo está expandido.",
     "flagged_by_radiologist": false,
     "ground_truth": [
-      { "finding": "Pneumotórax hipertensivo", "urgency": "critical" }
-    ]
+      {
+        "finding": "Pneumotórax hipertensivo",
+        "urgency": "critical"
+      }
+    ],
+    "patient": {
+      "name": "M. S. Andrade",
+      "age": 54,
+      "sex": "F",
+      "record": "PR-10441"
+    },
+    "location": "Pronto-socorro",
+    "indication": "Dor torácica súbita e falta de ar"
   },
   {
     "report_id": "R-002",
@@ -18,8 +29,19 @@
     "text": "TC de crânio sem contraste. Hiperdensidade nos sulcos da convexidade, compatível com hemorragia subaracnóidea aguda. Ventrículos de tamanho habitual.",
     "flagged_by_radiologist": false,
     "ground_truth": [
-      { "finding": "Hemorragia subaracnóidea aguda", "urgency": "critical" }
-    ]
+      {
+        "finding": "Hemorragia subaracnóidea aguda",
+        "urgency": "critical"
+      }
+    ],
+    "patient": {
+      "name": "A. P. Nogueira",
+      "age": 67,
+      "sex": "M",
+      "record": "PR-20817"
+    },
+    "location": "Pronto-socorro",
+    "indication": "Cefaleia súbita intensa"
   },
   {
     "report_id": "R-003",
@@ -28,7 +50,20 @@
     "ordering_physician": "Dra. Helena Costa",
     "text": "TC de abdome com contraste. Apêndice dilatado, com borramento da gordura adjacente, compatível com apendicite aguda. Não há coleção organizada.",
     "flagged_by_radiologist": false,
-    "ground_truth": [{ "finding": "Apendicite aguda", "urgency": "urgent" }]
+    "ground_truth": [
+      {
+        "finding": "Apendicite aguda",
+        "urgency": "urgent"
+      }
+    ],
+    "patient": {
+      "name": "L. F. Carvalho",
+      "age": 19,
+      "sex": "M",
+      "record": "PR-33002"
+    },
+    "location": "Pronto-socorro",
+    "indication": "Dor abdominal aguda"
   },
   {
     "report_id": "R-004",
@@ -38,8 +73,19 @@
     "text": "Radiografia de tórax. Derrame pleural volumoso à esquerda, com opacificação da base. O mediastino está centrado.",
     "flagged_by_radiologist": true,
     "ground_truth": [
-      { "finding": "Derrame pleural volumoso", "urgency": "urgent" }
-    ]
+      {
+        "finding": "Derrame pleural volumoso",
+        "urgency": "urgent"
+      }
+    ],
+    "patient": {
+      "name": "C. R. Bittencourt",
+      "age": 72,
+      "sex": "F",
+      "record": "PR-44190"
+    },
+    "location": "Internado",
+    "indication": "Dispneia progressiva"
   },
   {
     "report_id": "R-005",
@@ -49,8 +95,19 @@
     "text": "TC de tórax. Nódulo pulmonar suspeito no lobo superior direito, de contornos espiculados, medindo 1,8 cm. Sem linfonodomegalia.",
     "flagged_by_radiologist": true,
     "ground_truth": [
-      { "finding": "Nódulo pulmonar suspeito", "urgency": "actionable" }
-    ]
+      {
+        "finding": "Nódulo pulmonar suspeito",
+        "urgency": "actionable"
+      }
+    ],
+    "patient": {
+      "name": "E. V. Martins",
+      "age": 61,
+      "sex": "M",
+      "record": "PR-55214"
+    },
+    "location": "Ambulatório",
+    "indication": "Tosse persistente"
   },
   {
     "report_id": "R-006",
@@ -60,8 +117,19 @@
     "text": "TC de abdome. Massa renal indeterminada no polo superior do rim esquerdo, medindo 3,2 cm. A via excretora não está dilatada.",
     "flagged_by_radiologist": true,
     "ground_truth": [
-      { "finding": "Massa renal indeterminada", "urgency": "actionable" }
-    ]
+      {
+        "finding": "Massa renal indeterminada",
+        "urgency": "actionable"
+      }
+    ],
+    "patient": {
+      "name": "S. D. Pacheco",
+      "age": 58,
+      "sex": "F",
+      "record": "PR-66308"
+    },
+    "location": "Ambulatório",
+    "indication": "Achado incidental em exame de abdome"
   },
   {
     "report_id": "R-007",
@@ -70,7 +138,15 @@
     "ordering_physician": "Dr. Paulo Mendes",
     "text": "Ultrassom de abdome total. Fígado, vias biliares, pâncreas, baço e rins sem alterações. Não há líquido livre.",
     "flagged_by_radiologist": true,
-    "ground_truth": []
+    "ground_truth": [],
+    "patient": {
+      "name": "I. G. Teles",
+      "age": 34,
+      "sex": "F",
+      "record": "PR-77421"
+    },
+    "location": "Ambulatório",
+    "indication": "Dor abdominal leve"
   },
   {
     "report_id": "R-008",
@@ -79,6 +155,14 @@
     "ordering_physician": "Dra. Marina Lopes",
     "text": "TC de crânio sem contraste. Exame sem sinais de hemorragia, sem efeito de massa e sem desvio da linha média.",
     "flagged_by_radiologist": true,
-    "ground_truth": []
+    "ground_truth": [],
+    "patient": {
+      "name": "R. H. Queiroz",
+      "age": 45,
+      "sex": "M",
+      "record": "PR-88563"
+    },
+    "location": "Pronto-socorro",
+    "indication": "Trauma craniano leve"
   }
 ]

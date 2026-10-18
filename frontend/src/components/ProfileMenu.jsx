@@ -9,6 +9,15 @@ export default function ProfileMenu({ profile, onLogout }) {
   const menu = useRef(null);
   const menuId = useId();
   const { pathname } = useLocation();
+  const displayName = profile.name?.trim() || "Meu perfil";
+  const initials = profile.name
+    ?.trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .filter((_, index, names) => index === 0 || index === names.length - 1)
+    .map((name) => name[0])
+    .join("")
+    .toLocaleUpperCase("pt-BR");
 
   useEffect(() => setOpen(false), [pathname]);
   useEffect(() => {
@@ -77,11 +86,16 @@ export default function ProfileMenu({ profile, onLogout }) {
         <span className="profile-avatar">
           {profile.photo ? (
             <img src={profile.photo} alt="" width="36" height="36" />
+          ) : initials ? (
+            <span aria-hidden="true">{initials}</span>
           ) : (
             <UserRound size={20} aria-hidden="true" />
           )}
         </span>
-        <ChevronDown size={14} aria-hidden="true" />
+        <span className="profile-trigger-name" title={displayName}>
+          {displayName}
+        </span>
+        <ChevronDown className="profile-chevron" size={15} aria-hidden="true" />
       </button>
       {open ? (
         <div className="profile-dropdown">
