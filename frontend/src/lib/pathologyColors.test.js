@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   PATHOLOGY_COLORS,
   pathologyColor,
+  pathologyLabel,
   validLocalizationMarkers,
   visiblePathologyScores,
 } from "./pathologyColors.js";
@@ -12,6 +13,8 @@ test("every model pathology has one stable color", () => {
   assert.equal(Object.keys(PATHOLOGY_COLORS).length, 14);
   assert.equal(pathologyColor("Fibrosis"), "#d946ef");
   assert.equal(pathologyColor("Unknown"), "#94a3b8");
+  assert.equal(pathologyLabel("Pleural_Thickening"), "Espessamento pleural");
+  assert.equal(pathologyLabel("Outra_Classe"), "Outra Classe");
 });
 
 test("only valid Grad-CAM estimates can be displayed as pins", () => {

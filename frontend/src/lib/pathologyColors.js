@@ -15,8 +15,31 @@ export const PATHOLOGY_COLORS = Object.freeze({
   Hernia: "#60a5fa",
 });
 
+export const PATHOLOGY_LABELS = Object.freeze({
+  Atelectasis: "Atelectasia",
+  Cardiomegaly: "Cardiomegalia",
+  Effusion: "Derrame pleural",
+  Infiltration: "Infiltração",
+  Mass: "Massa",
+  Nodule: "Nódulo",
+  Pneumonia: "Pneumonia",
+  Pneumothorax: "Pneumotórax",
+  Consolidation: "Consolidação",
+  Edema: "Edema",
+  Emphysema: "Enfisema",
+  Fibrosis: "Fibrose",
+  Pleural_Thickening: "Espessamento pleural",
+  Hernia: "Hérnia",
+});
+
 export function pathologyColor(pathology) {
   return PATHOLOGY_COLORS[pathology] ?? "#94a3b8";
+}
+
+export function pathologyLabel(pathology) {
+  return (
+    PATHOLOGY_LABELS[pathology] ?? String(pathology ?? "").replaceAll("_", " ")
+  );
 }
 
 export function validLocalizationMarkers(analysis) {

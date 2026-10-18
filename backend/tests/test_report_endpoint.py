@@ -85,6 +85,38 @@ class ReportEndpointTests(unittest.TestCase):
         self.assertTrue(result["human_review_required"])
         self.assertTrue(any("INSERT INTO report_analyses" in query for query, _ in connection.statements))
 
+    def test_view_all_reclassifies_the_report_file_instead_of_the_session_owner(self):
+        class SharedReport(FakeConnection):
+            def execute(self, query, params=()):
+                self.statements.append((query, params))
+                if "SELECT f.owner_id,f.institution_id,f.content" in query:
+                    return FakeResult({
+                        "owner_id": "report-owner",
+                        "institution_id": "hospital-sao-jose-teresopolis",
+                        "content": b"original-radiograph-bytes",
+                        "mime_type": "image/png",
+                        "analysis": {"findings": []},
+                    })
+                return FakeResult()
+
+        connection = SharedReport()
+        probabilities = {label: 0.1 for label in main.report_analysis.LABELS}
+        session = {"user": {"id": "viewer", "view_all_reports": True,
+                            "institutions": ["asl-softhouse"],
+                            "active_institution_id": "asl-softhouse"}}
+        with patch.object(main, "db", return_value=connection), patch.object(
+            main, "run_in_threadpool", new=AsyncMock(return_value=(
+                probabilities, "model-test", [], None, {"weights": "test"}))
+        ):
+            asyncio.run(main.reclassify_report("R-001", session))
+
+        select = next(params for query, params in connection.statements if "SELECT f.owner_id" in query)
+        self.assertEqual(select, ("R-001",))
+        insert = next(params for query, params in connection.statements if "INSERT INTO report_analyses" in query)
+        self.assertEqual(insert[0], "report-owner")
+        self.assertEqual(insert[1], "hospital-sao-jose-teresopolis")
+        self.assertEqual(insert[2], "R-001")
+
     def test_analysis_is_persisted_for_authenticated_owner_and_requires_review(self):
         connection = FakeConnection()
         findings = [{

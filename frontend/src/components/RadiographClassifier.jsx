@@ -5,6 +5,7 @@ import "../styles/classifier.css";
 import { classifyUploadedRadiograph } from "../radiographApi.js";
 import RadiographViewer from "./RadiographViewer.jsx";
 import PathologyScoreList from "./PathologyScoreList.jsx";
+import { pathologyLabel } from "../lib/pathologyColors.js";
 
 const LABELS = [
   "Atelectasis",
@@ -22,22 +23,6 @@ const LABELS = [
   "Pleural_Thickening",
   "Hernia",
 ];
-const PT = {
-  Atelectasis: "Atelectasia",
-  Cardiomegaly: "Cardiomegalia",
-  Effusion: "Derrame pleural",
-  Infiltration: "Infiltração",
-  Mass: "Massa",
-  Nodule: "Nódulo",
-  Pneumonia: "Pneumonia",
-  Pneumothorax: "Pneumotórax",
-  Consolidation: "Consolidação",
-  Edema: "Edema",
-  Emphysema: "Enfisema",
-  Fibrosis: "Fibrose",
-  Pleural_Thickening: "Espessamento pleural",
-  Hernia: "Hérnia",
-};
 
 async function readError(response) {
   const payload = await response.json().catch(() => ({}));
@@ -163,7 +148,7 @@ export default function RadiographClassifier() {
               probabilities={result.probabilities}
               markers={result.markers}
               labels={LABELS}
-              formatLabel={(label) => PT[label]}
+              formatLabel={pathologyLabel}
               activePathology={hoveredPathology ?? selectedPathology}
               onSelectPathology={(label) =>
                 setSelectedPathology((current) =>
@@ -187,7 +172,11 @@ export default function RadiographClassifier() {
             )}
             <p>
               {result.predictions.length
-                ? `Classes acima do corte exploratório: ${result.predictions.map((label) => PT[label] || label).join(", ")}.`
+                ? "Classes acima do corte exploratório: " +
+                  result.predictions
+                    .map((label) => pathologyLabel(label))
+                    .join(", ") +
+                  "."
                 : "Nenhuma classe atingiu o corte exploratório. Isso não significa ausência de alterações."}
             </p>
           </section>

@@ -36,11 +36,17 @@ function presentCase(item, simNow, report) {
   return copy;
 }
 
+function sameReport(entry, item) {
+  if (!entry || entry.report_id !== item?.report_id) return false;
+  if (item.institution_id && entry.institution_id) {
+    return entry.institution_id === item.institution_id;
+  }
+  return true;
+}
+
 function reportFor(state, item) {
   return (
-    listOf(state?.reports).find(
-      (entry) => entry?.report_id === item?.report_id,
-    ) ?? null
+    listOf(state?.reports).find((entry) => sameReport(entry, item)) ?? null
   );
 }
 
@@ -147,8 +153,7 @@ export function selectCase(state, id) {
   const item = state.cases.find((entry) => entry.id === id);
   if (!item) return null;
   const presented = presentCase(item, state.simNow, reportFor(state, item));
-  const report =
-    state.reports.find((entry) => entry.report_id === item.report_id) ?? null;
+  const report = reportFor(state, item);
   return {
     case: presented,
     report: report ? structuredClone(report) : null,
