@@ -14,7 +14,7 @@ O único método implementado é `gradcam`. As 14 classes do modelo são elegív
 
 ## Coordenadas e heatmap
 
-O pré-processamento converte para escala de cinza, normaliza com TorchXRayVision, aplica center crop e redimensiona para 224 × 224. A geometria do recorte é preservada e usada para converter o centro de suporte do CAM ao quadro da imagem original. `x` e `y` são normalizados entre 0 e 1 em relação à largura e altura originais. O marcador é o centro do suporte do mapa acima de 60% do máximo, uma referência de relevância estimada; não é o pixel máximo nem uma coordenada exata de doença.
+O pré-processamento converte para escala de cinza, normaliza com TorchXRayVision, aplica center crop e redimensiona para 224 × 224. A geometria do recorte é preservada e usada para converter o centro de suporte do CAM ao quadro da imagem original. `x` e `y` são normalizados entre 0 e 1 em relação à largura e altura originais. O marcador é o centro do suporte do mapa acima de 60% do máximo, uma referência de relevância estimada; não é o pixel máximo nem uma coordenada exata de doença. Se esse centro cai na borda preta não exposta da radiografia, o marcador não é emitido e o frontend também o omite ao ler os pixels da imagem já salva.
 
 O heatmap PNG com transparência mantém a proporção e posição do recorte sobre o quadro original, com lado maior limitado a 1024 pixels. A imagem original não é alterada; o frontend compõe o heatmap e os marcadores em camadas independentes.
 
