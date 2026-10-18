@@ -9,4 +9,6 @@ test("isLunaVisible só nas páginas autenticadas", () => {
   assert.equal(isLunaVisible("/caso/R-001-1"), true);
   assert.equal(isLunaVisible("/nao-sinalizados"), true);
   assert.equal(isLunaVisible("/avaliacao"), true);
+  assert.equal(isLunaVisible("/comunicacao"), false);
+  assert.equal(isLunaVisible("/comunicacao/"), false);
 });

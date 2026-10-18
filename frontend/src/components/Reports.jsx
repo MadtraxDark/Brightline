@@ -76,6 +76,26 @@ export default function Reports() {
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [preview, setPreview] = useState(null);
+  const [previewAnalysis, setPreviewAnalysis] = useState(null);
+  useEffect(() => {
+    if (!preview?.report_id) {
+      setPreviewAnalysis(null);
+      return undefined;
+    }
+    let active = true;
+    authorizedRequest(
+      `/reports/${encodeURIComponent(preview.report_id)}/analysis`,
+    )
+      .then((saved) => {
+        if (active) setPreviewAnalysis(saved);
+      })
+      .catch(() => {
+        if (active) setPreviewAnalysis(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, [preview?.report_id]);
   const [radiograph, setRadiograph] = useState(null),
     [imagePreview, setImagePreview] = useState(""),
     [fileError, setFileError] = useState("");
@@ -586,6 +606,7 @@ export default function Reports() {
                 key={preview.report_id}
                 report={preview}
                 modality={preview.modality}
+                analysis={previewAnalysis}
                 item={cases.find(
                   (item) => item.report_id === preview.report_id,
                 )}

@@ -3,6 +3,7 @@ import {
   EyeOff,
   Files,
   Stethoscope,
+  MessageSquare,
   Building2,
   ChevronRight,
   TriangleAlert,
@@ -60,6 +61,10 @@ export default function ProductDashboardPreview() {
           <div>
             <Stethoscope size={21} />
             Médicos
+          </div>
+          <div>
+            <MessageSquare size={21} />
+            Comunicação
           </div>
           <div>
             <Building2 size={21} />

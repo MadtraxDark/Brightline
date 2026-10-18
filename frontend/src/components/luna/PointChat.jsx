@@ -2,6 +2,13 @@ import { useEffect, useRef } from "react";
 import { Send, X } from "lucide-react";
 import lunaIcon from "../../assets/luna.png";
 
+function markName(kind, point) {
+  const name = String(point ?? "").replaceAll("_", " ");
+  if (kind === "area") return `Área ${name}`;
+  if (kind === "classificacao") return `Classificação ${name}`;
+  return `Ponto ${name}`;
+}
+
 export default function PointChat({
   selected,
   question,
@@ -65,18 +72,12 @@ export default function PointChat({
         {discussion.map((message, index) => (
           <div className="point-exchange" key={index}>
             <div className="point-bubble is-user">
-              <span>
-                Você · {message.kind === "area" ? "Área" : "Ponto"}{" "}
-                {message.point}
-              </span>
+              <span>Você · {markName(message.kind, message.point)}</span>
               <p>{message.question}</p>
             </div>
             {message.answer && (
               <div className="point-bubble is-assistant">
-                <span>
-                  Luna · {message.kind === "area" ? "Área" : "Ponto"}{" "}
-                  {message.point}
-                </span>
+                <span>Luna · {markName(message.kind, message.point)}</span>
                 <p>{message.answer}</p>
               </div>
             )}
@@ -136,7 +137,7 @@ export default function PointChat({
             <Send size={19} />
           </button>
         </form>
-        <small>Marcações manuais · Conversa demonstrativa</small>
+        <small>Marcações manuais · A IA sugere. O médico valida.</small>
       </div>
     </aside>
   );

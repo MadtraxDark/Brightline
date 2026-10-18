@@ -157,3 +157,11 @@ class AcknowledgeInput(StrictModel):
 class ActionInput(StrictModel):
     action: str = Field(min_length=1, max_length=5000)
     close: bool = False
+
+
+class CommunicationInput(StrictModel):
+    peer_name: str = Field(min_length=1, max_length=200)
+    body: str = Field(min_length=1, max_length=2000)
+    channel: Literal["chat", "email"]
+    report_id: str | None = Field(default=None, max_length=100)
+    email_to: str | None = Field(default=None, max_length=200)

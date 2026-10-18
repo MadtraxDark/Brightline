@@ -38,7 +38,7 @@ A rota /cadastro compartilha o layout de acesso e inclui nome, e-mail, senha com
 
 ## Navegação lateral
 
-Navegação principal em um único grupo: Visão geral, Não sinalizados e Avaliação da IA. Ícones com mesmo tamanho e peso, contador alinhado à direita e seleção pelo fundo. Logo separada do menu por uma linha discreta. Demonstração usa disclosure nativo, fechado inicialmente; seus controles mantêm avanço e confirmação de reset. Sair fica no rodapé com ícone. Em telas até 700px, um botão de menu controla a navegação; selecionar um destino recolhe o menu. Rodapé e demonstração também ficam acessíveis no celular. Fluxo verificado com scripts/verify-sidebar.js.
+Navegação principal: Visão geral, Não sinalizados, Laudos, Médicos e Comunicação. Avaliação da IA permanece em rota própria. Clínicas continua marcada como em breve. Ícones com mesmo tamanho e peso, contador alinhado à direita e seleção pelo fundo. Logo separada do menu por uma linha discreta. Demonstração usa disclosure nativo, fechado inicialmente; seus controles mantêm avanço e confirmação de reset. Sair fica no rodapé com ícone. Em telas até 700px, um botão de menu controla a navegação; selecionar um destino recolhe o menu. Rodapé e demonstração também ficam acessíveis no celular. Fluxo verificado com scripts/verify-sidebar.js.
 
 ## Menu de perfil e configurações
 
