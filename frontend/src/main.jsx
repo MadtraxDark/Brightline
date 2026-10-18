@@ -11,6 +11,8 @@ import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import { HospitalProvider } from "./components/HospitalProvider.jsx";
 import { store } from "./store/store.js";
 import "./styles/tailwind.css";
+import "./styles/tokens.css";
+import "./styles/app.css";
 
 // The public site owns reload behavior; dashboard routes keep their history.
 if (window.location.pathname === "/") {

@@ -6,6 +6,13 @@ const LEVELS = {
   actionable: { label: "Acionável", icon: CalendarClock },
 };
 
+export function UrgencyIcon({ level, size = 20 }) {
+  const item = LEVELS[level];
+  if (!item) return null;
+  const Icon = item.icon;
+  return <Icon size={size} aria-hidden="true" />;
+}
+
 export default function UrgencyBadge({ level }) {
   const item = LEVELS[level];
   if (!item) return null;
