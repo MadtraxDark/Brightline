@@ -1,4 +1,4 @@
-"""Extração offline via Claude Messages API, com cache e retomada."""
+"""Extração offline via Gemini API, com cache e retomada."""
 import argparse
 import hashlib
 import json
@@ -11,28 +11,32 @@ from pathlib import Path
 from brightline_data import ROOT, load_reports, read_json, write_json, validate_extraction
 
 
-def call_claude(report, prompt, model, api_key, correction=""):
+def call_gemini(report, prompt, model, api_key, correction=""):
     # Deliberadamente não envia ground_truth nem flagged_by_radiologist.
     content = json.dumps(
         {"report_id": report["report_id"], "text": report["text"]}, ensure_ascii=False)
     if correction:
         content += "\nA tentativa anterior foi rejeitada: " + \
             correction + ". Gere novamente o JSON completo."
-    payload = {"model": model, "max_tokens": 4096, "system": prompt,
-               "messages": [{"role": "user", "content": content}]}
-    request = urllib.request.Request("https://api.anthropic.com/v1/messages",
+    payload = {
+        "systemInstruction": {"parts": [{"text": prompt}]},
+        "contents": [{"role": "user", "parts": [{"text": content}]}],
+        "generationConfig": {"maxOutputTokens": 4096, "responseMimeType": "application/json"},
+    }
+    model_path = model if model.startswith("models/") else f"models/{model}"
+    request = urllib.request.Request(f"https://generativelanguage.googleapis.com/v1beta/{model_path}:generateContent",
                                      data=json.dumps(payload).encode("utf-8"), method="POST",
-                                     headers={"x-api-key": api_key, "anthropic-version": "2023-06-01", "content-type": "application/json"})
+                                     headers={"x-goog-api-key": api_key, "content-type": "application/json"})
     try:
         with urllib.request.urlopen(request, timeout=90) as response:
             result = json.load(response)
     except urllib.error.HTTPError as exc:
         # Não registra cabeçalhos, credenciais ou corpo remoto em logs.
         raise RuntimeError(f"API retornou HTTP {exc.code}") from None
-    if result.get("stop_reason") != "end_turn":
+    candidates = result.get("candidates", [])
+    if not candidates or candidates[0].get("finishReason") != "STOP":
         raise ValueError("Resposta incompleta ou recusada pela API")
-    text = "".join(block["text"] for block in result.get(
-        "content", []) if block.get("type") == "text")
+    text = "".join(part["text"] for part in candidates[0].get("content", {}).get("parts", []) if "text" in part)
     return json.loads(text)
 
 
@@ -42,7 +46,7 @@ def fingerprint(report, prompt, model):
     return hashlib.sha256(raw.encode()).hexdigest()
 
 
-def extract_one(report, prompt, model, key, retries=2, caller=call_claude):
+def extract_one(report, prompt, model, key, retries=2, caller=call_gemini):
     correction = ""
     for attempt in range(retries + 1):
         try:
@@ -64,7 +68,7 @@ def main(argv=None):
                         default=ROOT / "data/extractions_cache.json")
     parser.add_argument("--prompt", type=Path,
                         default=ROOT / "prompts/extraction.txt")
-    parser.add_argument("--model", default=os.environ.get("ANTHROPIC_MODEL"))
+    parser.add_argument("--model", default=os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite"))
     parser.add_argument("--retry-failed", action="store_true",
                         help="Executa somente IDs registrados como falhos")
     parser.add_argument("--force", action="store_true",
@@ -87,10 +91,9 @@ def main(argv=None):
         print(
             f"Laudos válidos: {len(reports)}. Extrações válidas: {len(cache)}. Pendentes: {len(reports)-len(cache)}.")
         return 0 if len(cache) == len(reports) else 2
-    key = os.environ.get("ANTHROPIC_API_KEY")
+    key = os.environ.get("GEMINI_API_KEY")
     if not key or not args.model:
-        raise ValueError(
-            "Configure ANTHROPIC_API_KEY e ANTHROPIC_MODEL (ou --model).")
+        raise ValueError("Configure GEMINI_API_KEY; GEMINI_MODEL é opcional (padrão: gemini-3.5-flash-lite).")
     prompt = args.prompt.read_text(encoding="utf-8-sig")
     meta_path = args.cache.with_suffix(".meta.json")
     error_path = args.cache.with_suffix(".errors.json")
