@@ -7,7 +7,9 @@
         "evidence": "pneumotórax hipertensivo à direita, com desvio do mediastino",
         "urgency": "critical",
         "deadline_hours": 1,
-        "confidence": "high"
+        "confidence": "high",
+        "confidence_percent": 96,
+        "confidence_is_example": true
       }
     ]
   },
@@ -19,7 +21,9 @@
         "evidence": "hemorragia subaracnóidea aguda",
         "urgency": "critical",
         "deadline_hours": 1,
-        "confidence": "high"
+        "confidence": "high",
+        "confidence_percent": 94,
+        "confidence_is_example": true
       }
     ]
   },
@@ -31,7 +35,9 @@
         "evidence": "compatível com apendicite aguda",
         "urgency": "urgent",
         "deadline_hours": 24,
-        "confidence": "medium"
+        "confidence": "medium",
+        "confidence_percent": 76,
+        "confidence_is_example": true
       }
     ]
   },
@@ -43,7 +49,9 @@
         "evidence": "Derrame pleural volumoso à esquerda",
         "urgency": "urgent",
         "deadline_hours": 24,
-        "confidence": "high"
+        "confidence": "high",
+        "confidence_percent": 91,
+        "confidence_is_example": true
       }
     ]
   },
@@ -55,7 +63,9 @@
         "evidence": "Nódulo pulmonar suspeito no lobo superior direito",
         "urgency": "actionable",
         "deadline_hours": 720,
-        "confidence": "medium"
+        "confidence": "medium",
+        "confidence_percent": 68,
+        "confidence_is_example": true
       }
     ]
   },
@@ -67,7 +77,9 @@
         "evidence": "Massa renal indeterminada no polo superior do rim esquerdo",
         "urgency": "actionable",
         "deadline_hours": 720,
-        "confidence": "low"
+        "confidence": "low",
+        "confidence_percent": 58,
+        "confidence_is_example": true
       }
     ]
   },
