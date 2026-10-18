@@ -1,6 +1,8 @@
 from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator, model_validator
 
+from .institutions import validate_institutions
+
 Urgency = Literal["critical", "urgent", "actionable"]
 Status = Literal["detected", "notified", "read", "action_taken", "closed", "escalated"]
 
@@ -35,6 +37,22 @@ class FindingInput(StrictModel):
     def deadline_matches(self):
         if self.deadline_hours != {"critical": 1, "urgent": 24, "actionable": 720}[self.urgency]:
             raise ValueError("Prazo incompatível com a urgência")
+        return self
+
+
+class ReportRecordInput(ReportInput):
+    findings: list[FindingInput] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_findings(self):
+        names = set()
+        for finding in self.findings:
+            if not finding.evidence.strip() or finding.evidence not in self.text:
+                raise ValueError("Evidência deve aparecer literalmente no laudo")
+            name = finding.finding.strip().casefold()
+            if not name or name in names:
+                raise ValueError("Achado vazio ou duplicado")
+            names.add(name)
         return self
 
 
@@ -80,11 +98,47 @@ class Credentials(StrictModel):
 class SignupInput(Credentials):
     name: str = Field(min_length=2, max_length=80)
     password: SecretStr = Field(min_length=9, max_length=256)
+    institutions: list[str] = Field(min_length=1)
 
     @field_validator("name", mode="before")
     @classmethod
     def normalize_name(cls, value):
         return value.strip() if isinstance(value, str) else value
+
+    @field_validator("institutions")
+    @classmethod
+    def valid_institutions(cls, value):
+        return validate_institutions(value)
+
+
+class LoginInput(Credentials):
+    institution_id: str | None = None
+
+
+class InstitutionSelection(StrictModel):
+    institutions: list[str] = Field(min_length=1)
+    active_institution_id: str
+
+    @field_validator("institutions")
+    @classmethod
+    def valid_institutions(cls, value):
+        return validate_institutions(value)
+
+    @field_validator("active_institution_id")
+    @classmethod
+    def valid_active_institution(cls, value):
+        validate_institutions([value])
+        return value
+
+
+class ActiveInstitutionInput(StrictModel):
+    institution_id: str
+
+    @field_validator("institution_id")
+    @classmethod
+    def valid_institution(cls, value):
+        validate_institutions([value])
+        return value
 
 
 class RefreshInput(StrictModel):

@@ -60,11 +60,15 @@ export function isAuthenticated(storage) {
   return Boolean(readSession(storage));
 }
 
-async function authRequest(path, { body, token, method = "POST" } = {}) {
+export function currentUser(storage) {
+  return readSession(storage)?.user ?? null;
+}
+
+async function request(path, { body, token, method = "POST" } = {}) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {
-    const response = await fetch(`${AUTH_BASE}/auth/${path}`, {
+    const response = await fetch(`${AUTH_BASE}${path}`, {
       method,
       headers: {
         Accept: "application/json",
@@ -84,7 +88,7 @@ async function authRequest(path, { body, token, method = "POST" } = {}) {
           : response.status === 422
             ? "Confira os dados. A senha do cadastro deve ter pelo menos 9 caracteres."
             : response.status === 401
-              ? "E-mail ou senha inválidos."
+              ? "Usuário ou senha inválidos. Verifique seus dados e tente novamente."
               : "Não foi possível acessar o serviço de autenticação. Tente novamente.";
       const error = new Error(message);
       error.status = response.status;
@@ -101,17 +105,94 @@ async function authRequest(path, { body, token, method = "POST" } = {}) {
   }
 }
 
-export async function login(storage, { email, password }) {
+function authRequest(path, options) {
+  return request(`/auth/${path}`, options);
+}
+
+export async function getInstitutions() {
+  const data = await request("/institutions", { method: "GET" });
+  return data.institutions;
+}
+
+export async function login(storage, { email, password, institution_id }) {
   const session = await authRequest("login", {
-    body: { email: email.trim().toLowerCase(), password },
+    body: {
+      email: email.trim().toLowerCase(),
+      password,
+      ...(institution_id ? { institution_id } : {}),
+    },
   });
   return saveSession(storage, session);
 }
 
-export async function register({ name, email, password }) {
+export async function register({ name, email, password, institutions }) {
   return authRequest("signup", {
-    body: { name: name.trim(), email: email.trim().toLowerCase(), password },
+    body: {
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      password,
+      institutions,
+    },
   });
+}
+
+export async function switchInstitution(storage, institution_id) {
+  const session = readSession(storage);
+  if (!session) throw new Error("Sua sessão expirou. Entre novamente.");
+  const result = await authRequest("active-institution", {
+    body: { institution_id },
+    token: session.access_token,
+  });
+  const next = {
+    ...session,
+    user: {
+      ...session.user,
+      active_institution_id: institution_id,
+      active_institution_name: result.active_institution_name,
+    },
+  };
+  saveSession(storage, next);
+  window.dispatchEvent(new CustomEvent("brightline:institution-changed"));
+  return next.user;
+}
+
+export async function updateInstitutions(
+  storage,
+  institutions,
+  active_institution_id,
+) {
+  const session = readSession(storage);
+  if (!session) throw new Error("Sua sessão expirou. Entre novamente.");
+  const result = await authRequest("institutions", {
+    body: { institutions, active_institution_id },
+    token: session.access_token,
+  });
+  const next = {
+    ...session,
+    user: {
+      ...session.user,
+      institutions: result.institutions,
+      active_institution_id: result.active_institution_id,
+      active_institution_name: result.active_institution_name,
+    },
+  };
+  saveSession(storage, next);
+  window.dispatchEvent(new CustomEvent("brightline:institution-changed"));
+  return next.user;
+}
+
+export async function authenticatedRequest(storage, path, options = {}) {
+  let session = readSession(storage);
+  if (!session) throw new Error("Entre novamente para acessar os dados.");
+  try {
+    return await request(path, { ...options, token: session.access_token });
+  } catch (error) {
+    if (error.status !== 401) throw error;
+    await validateSession(storage);
+    session = readSession(storage);
+    if (!session) throw error;
+    return request(path, { ...options, token: session.access_token });
+  }
 }
 
 async function verifyStoredSession(storage) {

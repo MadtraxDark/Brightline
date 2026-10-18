@@ -4,7 +4,7 @@
 
 O frontend conversa com o backend FastAPI por HTTP em `/api` (proxy Vite no desenvolvimento). O backend autentica as rotas privadas com `Authorization: Bearer <access_token>` e consulta o PostgreSQL por meio de `psycopg`. O navegador nunca recebe credenciais do banco nem executa SQL.
 
-O PostgreSQL é a fonte dos metadados e dos registros estruturados. A tabela `dataset_images` guarda o identificador do arquivo, paciente do dataset, rótulos NIH, SHA-256, data de importação e os bytes da radiografia. Os arquivos enviados durante uma análise ficam em `files`, vinculados ao laudo em `report_files`. Análises persistidas ficam em `report_analyses`; análises iniciadas a partir de uma imagem do catálogo ficam em `dataset_image_analyses`, isoladas por conta. O backend atual não serve caminhos de disco: os arquivos NIH são lidos da pasta de importação e copiados para o banco.
+O PostgreSQL é a fonte dos metadados e dos registros estruturados. A tabela `dataset_images` guarda o identificador do arquivo, paciente do dataset, rótulos NIH, SHA-256, data de importação e os bytes da radiografia. Os arquivos enviados durante uma análise ficam em `files`, vinculados ao laudo em `report_files`. Análises persistidas ficam em `report_analyses`; análises iniciadas a partir de uma imagem do catálogo ficam em `dataset_image_analyses`, isoladas pela conta e pela instituição ativa. Laudos, casos, eventos, arquivos e análises pertencem à instituição selecionada na sessão autenticada. O backend atual não serve caminhos de disco: os arquivos NIH são lidos da pasta de importação e copiados para o banco.
 
 ## Catálogo NIH
 
@@ -93,11 +93,11 @@ Configure `DATABASE_URL` no `.env` da raiz ou em `backend/.env`, por exemplo `po
 
 Para importar NIH a partir de um diretório local (inclusive `D:\...` no Windows), execute `python -m backend.import_nih_images --data-dir "D:\\dados\\nih"` na raiz do projeto. A pasta deve conter `Data_Entry_2017_v2020.csv` e `images/`. Em container, monte o conjunto no container e passe o caminho montado, por exemplo `/data/nih`. A importação valida a presença das imagens antes de gravar e usa `filename` como chave para evitar duplicação. Não armazene caminhos absolutos no banco.
 
-Execute `python -m backend.migrate` para aplicar migrações pendentes, incluindo `004_dataset_image_api.sql`. O SQL inicial também cria as tabelas necessárias em instalações novas.
+Execute `python -m backend.migrate` para aplicar migrações pendentes, incluindo `004_dataset_image_api.sql` e `005_institutional_dataset_analyses.sql`. O SQL inicial também cria as tabelas necessárias em instalações novas.
 
 ## Segurança, consistência e operação
 
-- Rotas do catálogo e análises verificam a sessão antes de consultar dados; análises de uploads e relatórios são limitadas ao proprietário.
+- Rotas do catálogo e análises verificam a sessão antes de consultar dados; análises salvas e dados clínicos são limitados ao proprietário e à instituição ativa.
 - A lista lê metadados do PostgreSQL e devolve no máximo 100 itens por página. As consultas usam parâmetros SQL, ordenação estável e limites validados.
 - `dataset_images` permanece a fonte canônica de labels e arquivo; frontend não replica metadados como fonte operacional.
 - Links temporários de conteúdo são emitidos somente após a sessão e a existência do arquivo serem verificadas. O endpoint de conteúdo aceita token aleatório com validade de 60 segundos e não aceita caminho fornecido pelo usuário.
