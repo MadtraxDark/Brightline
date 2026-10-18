@@ -33,7 +33,7 @@ Configure `DATABASE_URL` em `backend/.env` para apontar a um PostgreSQL acessív
 
 - Laudos, extrações, casos, eventos e relógio pertencem à conta autenticada local.
 - Arquivos JSON, PNG, JPEG e PDF ficam no PostgreSQL; links de leitura expiram em 60 segundos.
-- `dataset_images` contém as imagens NIH ChestX-ray14 usadas pelo treinador TensorFlow.
+- `dataset_images` contém as imagens NIH ChestX-ray14 do NIH ChestX-ray14 importadas para avaliação.
 - Notificações são eventos simulados. Nenhuma mensagem real é enviada.
 
 Consulte a [documentação da API](docs/API.md) e o [README principal](../README.md).

@@ -38,7 +38,7 @@ export default function RadiographClassifier() {
     <section className="classifier-card">
       <div className="classifier-heading"><span className="classifier-icon"><Activity size={22} /></span><div><p className="classifier-eyebrow">MODELO NIH CHESTX-RAY14</p><h1>Classificar radiografia</h1><p>Envie uma radiografia de tórax em PNG ou JPEG para obter probabilidades exploratórias.</p></div></div>
       <form className="classifier-form" onSubmit={classify}>
-        <label className="classifier-upload"><Upload size={20} /><span>{file ? file.name : "Escolha uma radiografia PNG ou JPEG"}</span><input type="file" accept="image/png,image/jpeg" onChange={e => { setFile(e.target.files?.[0] || null); setResult(null); setError(""); }} /></label>
+        <label className="classifier-upload"><Upload size={20} /><span>{file ? file.name : "Escolha uma radiografia PNG ou JPEG"}</span><input type="file" accept="image/png,image/jpeg" disabled={busy} onChange={e => { setFile(e.target.files?.[0] || null); setResult(null); setError(""); }} /></label>
         {file && <img className="classifier-preview" src={preview} alt="Prévia da radiografia selecionada" />}
         <button className="classifier-button" disabled={busy || !file}>{busy ? "Analisando…" : "Classificar imagem"}</button>
       </form>
@@ -46,6 +46,8 @@ export default function RadiographClassifier() {
       {result && <section className="classifier-results" aria-live="polite"><h2>Probabilidades do modelo</h2><p>As probabilidades não são diagnósticos. Todas as imagens e classes precisam de revisão profissional.</p>
         {LABELS.map(label => <div className="classifier-score" key={label}><span>{PT[label]}</span><div><i style={{ width: `${Math.max(0, Math.min(100, result.probabilities[label] * 100))}%` }} /></div><strong>{(result.probabilities[label] * 100).toFixed(1)}%</strong></div>)}
         <small>Modelo: {result.model_version} · Corte exploratório: {(result.threshold * 100).toFixed(0)}%</small>
+        {result.model_metadata && <p><small>TorchXRayVision {result.model_metadata.torchxrayvision_version} · Pesos: {result.model_metadata.weights}</small></p>}
+        <p>{result.predictions.length ? `Classes acima do corte exploratório: ${result.predictions.map(label => PT[label] || label).join(", ")}.` : "Nenhuma classe atingiu o corte exploratório. Isso não significa ausência de alterações."}</p>
       </section>}
     </section>
     <p className="classifier-disclaimer">Ferramenta experimental treinada em ChestX-ray14. Não substitui avaliação médica nem deve orientar decisões clínicas.</p>

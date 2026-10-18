@@ -1,8 +1,9 @@
 import io
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import numpy as np
+import torch
 try:
     from PIL import Image
 except ImportError:
@@ -40,32 +41,52 @@ class ReportAnalysisTests(unittest.TestCase):
         mismatch = next(item for item in negated["disagreements"] if item["class"] == "Effusion")
         self.assertTrue(mismatch["negated_or_uncertain"])
 
-    def test_metrics_do_not_claim_class_thresholds(self):
-        metrics = service.read_metrics()
-        self.assertEqual(metrics["test_metrics"]["macro_auc"], 0.6130061745643616)
-        self.assertNotIn("thresholds", metrics)
+    @unittest.skipIf(Image is None, "Pillow não está instalado no ambiente local")
+    def test_preprocessing_matches_torchxrayvision_input(self):
+        stream = io.BytesIO()
+        Image.new("RGB", (31, 45), (128, 128, 128)).save(stream, format="PNG")
+        batch = service.preprocess(stream.getvalue())
+        self.assertEqual(tuple(batch.shape), (1, 1, 224, 224))
+        self.assertTrue(-1024 <= float(batch.min()) and float(batch.max()) <= 1024)
 
     @unittest.skipIf(Image is None, "Pillow não está instalado no ambiente local")
-    def test_inference_uses_rgb_224_and_returns_all_labels(self):
+    def test_inference_maps_outputs_by_pathology_name(self):
         stream = io.BytesIO()
         Image.new("L", (31, 45), 128).save(stream, format="PNG")
+        pathologies = list(reversed(service.LABELS)) + ["Lung Lesion"]
 
         class Model:
-            def predict(self, batch, verbose=0):
-                self.assert_shape = batch.shape
-                return np.full((1, 14), 0.25, dtype=np.float32)
+            def __init__(self):
+                self.pathologies = pathologies
+
+            def __call__(self, batch):
+                self.shape = tuple(batch.shape)
+                return torch.tensor([[i / 100 for i in range(len(pathologies))]])
 
         model = Model()
         with patch.object(service, "_model", return_value=model):
             result, version = service.infer(stream.getvalue())
-        self.assertEqual(model.assert_shape, (1, 224, 224, 3))
-        self.assertEqual(set(result), set(service.LABELS))
+        self.assertEqual(model.shape, (1, 1, 224, 224))
+        self.assertEqual(list(result), service.LABELS)
+        self.assertAlmostEqual(result["Hernia"], 0.0)
+        self.assertAlmostEqual(result["Atelectasis"], 0.13)
         self.assertEqual(version, service.MODEL_VERSION)
 
     @unittest.skipIf(Image is None, "Pillow não está instalado no ambiente local")
     def test_non_image_input_is_rejected(self):
         with self.assertRaises(ValueError):
             service.infer(b"not an image")
+
+    def test_invalid_model_outputs_are_rejected(self):
+        stream = io.BytesIO()
+        Image.new("RGB", (24, 24)).save(stream, format="PNG")
+        for output in (np.zeros((2, 14)), np.zeros((1, 13)),
+                       np.full((1, 14), np.nan), np.full((1, 14), np.inf),
+                       np.full((1, 14), -0.1), np.full((1, 14), 1.1)):
+            model = Mock(pathologies=list(service.LABELS), return_value=torch.tensor(output, dtype=torch.float32))
+            with self.subTest(output=output), patch.object(service, "_model", return_value=model):
+                with self.assertRaises(RuntimeError):
+                    service.infer(stream.getvalue())
 
 
 if __name__ == "__main__":

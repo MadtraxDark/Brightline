@@ -2,7 +2,7 @@
 
 ## Classificação de imagem independente
 
-`POST /radiographs/classify` não exige login e recebe `multipart/form-data` com o campo obrigatório `radiograph` (PNG/JPEG, até 10 MB). A rota usa o mesmo modelo NIH carregado pelo serviço e retorna as 14 probabilidades, classes acima do corte exploratório, versão do modelo e limitações. A imagem é processada em memória e não é persistida por essa rota.
+`POST /radiographs/classify` não exige login e recebe `multipart/form-data` com o campo obrigatório `radiograph` (PNG/JPEG, até 10 MB). A rota usa o mesmo modelo TorchXRayVision (DenseNet121, pesos `densenet121-res224-nih`) carregado pelo serviço e retorna as 14 probabilidades, classes acima do corte exploratório, versão do modelo e limitações. A imagem é processada em memória e não é persistida por essa rota.
 
 ```bash
 curl -X POST http://localhost:8080/radiographs/classify \
@@ -15,7 +15,7 @@ O frontend oferece essa operação em `/classificar`; defina `VITE_BRIGHTLINE_AP
 
 - `report_text`: texto do laudo, opcional quando `report_file` foi enviado; máximo 100.000 caracteres.
 - `report_file`: PDF pesquisável do laudo, opcional quando `report_text` foi enviado; máximo 10 MB. PDF digitalizado sem camada textual não tem OCR habilitado.
-- `radiograph`: radiografia torácica PNG ou JPEG, opcional. Não envie TC, RM ou outra modalidade: o modelo foi treinado apenas com radiografias NIH ChestX-ray14.
+- `radiograph`: radiografia torácica PNG ou JPEG, opcional. Não envie TC, RM ou outra modalidade: o modelo pré-treinado (TorchXRayVision) foi treinado com radiografias de tórax.
 - `report_id`: identificador opcional para atualização/reanálise do laudo.
 
 ## Requisição
@@ -41,14 +41,13 @@ Exemplo ilustrativo; o serviço retorna todas as 14 probabilidades:
   "probabilities": {"Atelectasis": 0.08, "Cardiomegaly": 0.06, "Effusion": 0.12, "Infiltration": 0.24, "Mass": 0.02, "Nodule": 0.04, "Pneumonia": 0.38, "Pneumothorax": 0.03, "Consolidation": 0.61, "Edema": 0.09, "Emphysema": 0.01, "Fibrosis": 0.02, "Pleural_Thickening": 0.04, "Hernia": 0.01},
   "comparison": {"threshold": 0.5, "threshold_status": "exploratory_unvalidated", "text_classes": ["Consolidation"], "model_classes_above_threshold": ["Consolidation"], "disagreements": [], "limitations": ["Classes are lexical equivalents only; no validated clinical ontology is used."]},
   "disagreements": [],
-  "model_version": "nih-chestxray14-efficientnetb0-v1",
-  "metrics": {"loss": 0.3916, "macro_auc": 0.6130},
+  "model_version": "torchxrayvision-densenet121-res224-nih",
   "status": "review_required",
   "human_review_required": true
 }
 ```
 
-`predictions` lista as classes acima do corte exploratório 0,5; `probabilities` contém sempre as 14 classes. `disagreements` pode conter `text_not_signaled` ou `model_without_text_match`. O corte não foi validado nem calibrado: o `metrics.json` disponível informa 295 imagens de teste e macro AUC 0,613, mas não limiares nem métricas por classe. Nenhum valor representa diagnóstico.
+`predictions` lista as classes acima do corte exploratório 0,5; `probabilities` contém sempre as 14 classes. `disagreements` pode conter `text_not_signaled` ou `model_without_text_match`. O corte não foi validado nem calibrado e não há limiares nem métricas por classe neste projeto. Nenhum valor representa diagnóstico.
 
 ## Extração, privacidade e fila
 
