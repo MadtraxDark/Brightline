@@ -1,4 +1,5 @@
 import Reports from "./components/Reports.jsx";
+import Communication from "./components/Communication.jsx";
 import Physicians from "./components/Physicians.jsx";
 import SectionTransition from "./components/SectionTransition.jsx";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -16,6 +17,7 @@ import {
   ArrowRight,
   FileCheck,
   Files,
+  MessageSquare,
   Stethoscope,
   Building2,
   ShieldCheck,
@@ -70,6 +72,7 @@ const LANES = [
 function crumb(pathname) {
   if (pathname.startsWith("/laudos")) return "Laudos";
   if (pathname.startsWith("/medicos")) return "Médicos";
+  if (pathname.startsWith("/comunicacao")) return "Comunicação";
   if (pathname.startsWith("/configuracoes")) return "Configurações";
   if (pathname.startsWith("/caso/")) return "Caso";
   if (pathname.startsWith("/nao-sinalizados")) return "Não sinalizados";
@@ -280,9 +283,11 @@ function Shell() {
           ? "2"
           : pathname.startsWith("/medicos")
             ? "3"
-            : pathname.startsWith("/avaliacao")
+            : pathname.startsWith("/comunicacao")
               ? "4"
-              : "none";
+              : pathname.startsWith("/avaliacao")
+                ? "5"
+                : "none";
   const [workspaceError, setWorkspaceError] = useState("");
   useEffect(() => {
     const message = sessionStorage.getItem("brightline:notice");
@@ -437,6 +442,15 @@ function Shell() {
                 <Stethoscope size={21} aria-hidden="true" />
                 <span className="sidebar-label">Médicos</span>
               </NavLink>
+              <NavLink
+                to="/comunicacao"
+                data-section="4"
+                data-tip="Comunicação"
+                onClick={() => setMenuOpen(false)}
+              >
+                <MessageSquare size={21} aria-hidden="true" />
+                <span className="sidebar-label">Comunicação</span>
+              </NavLink>
               {[["Clínicas", Building2]].map(([label, Icon]) => (
                 <button
                   key={label}
@@ -526,7 +540,15 @@ function Shell() {
             />
           </div>
         </header>
-        <main className="workspace" id="workspace" tabIndex={-1}>
+        <main
+          className={
+            pathname.startsWith("/comunicacao")
+              ? "workspace is-desk"
+              : "workspace"
+          }
+          id="workspace"
+          tabIndex={-1}
+        >
           {notice ? (
             <p className="save-notice" role="status">
               {notice}
@@ -538,6 +560,7 @@ function Shell() {
               <Routes location={displayedLocation}>
                 <Route path="/home" element={<Overview />} />
                 <Route path="/medicos" element={<Physicians />} />
+                <Route path="/comunicacao" element={<Communication />} />
                 <Route path="/laudos" element={<Reports />} />
                 <Route path="/caso/:id" element={<CaseDetail />} />
                 <Route path="/nao-sinalizados" element={<Missed />} />

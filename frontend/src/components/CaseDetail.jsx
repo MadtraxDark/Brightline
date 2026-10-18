@@ -1,11 +1,15 @@
 import RequesterDispatch from "./RequesterDispatch.jsx";
 import PhysicianAvatar from "./PhysicianAvatar.jsx";
-import { classificationConfidence } from "../lib/classificationConfidence.js";
+import {
+  classificationConfidence,
+  topProbabilityPercent,
+} from "../lib/classificationConfidence.js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   CheckCircle2,
   Check,
+  Eraser,
   UserRound,
   Stethoscope,
   Building2,
@@ -29,6 +33,7 @@ import ExamViewer from "./ExamViewer.jsx";
 import PathologyScoreList from "./PathologyScoreList.jsx";
 import CaseChatModal from "./luna/CaseChatModal.jsx";
 import LunaReadingModal from "./LunaReadingModal.jsx";
+import RollingPercent from "./RollingPercent.jsx";
 import UrgencyBadge from "./UrgencyBadge.jsx";
 
 const STEP_ICONS = [UserRound, Stethoscope, Building2];
@@ -54,6 +59,7 @@ export default function CaseDetail() {
   const [reclassification, setReclassification] = useState(null);
   const [reclassificationError, setReclassificationError] = useState("");
   const [reading, setReading] = useState(null);
+  const [clearToken, setClearToken] = useState(0);
   const previousAnalysis = useRef(null);
   const [selectedPathology, setSelectedPathology] = useState(null);
   const [hoveredPathology, setHoveredPathology] = useState(null);
@@ -65,6 +71,10 @@ export default function CaseDetail() {
   const openActionRef = useRef(null);
   const analysisFetch = useRef(0);
   const reclassificationRequest = useRef(null);
+  const pendingConfidence = useRef(null);
+  const animateConfidence = useRef(false);
+  const [confidenceTarget, setConfidenceTarget] = useState(null);
+  const [confidenceRoll, setConfidenceRoll] = useState(0);
   const status = detail?.case.status;
   const reportId = detail?.case.report_id;
   useEffect(() => {
@@ -74,6 +84,9 @@ export default function CaseDetail() {
     setReclassification(null);
     setReclassificationError("");
     setReading(null);
+    setClearToken(0);
+    pendingConfidence.current = null;
+    animateConfidence.current = false;
     setSelectedPathology(null);
     setHoveredPathology(null);
     if (!reportId) return undefined;
@@ -93,6 +106,19 @@ export default function CaseDetail() {
       reclassificationRequest.current?.abort();
     };
   }, [id, reportId]);
+  const casePercent = detail?.case?.confidence_percent;
+  useEffect(() => {
+    if (pendingConfidence.current != null) return;
+    if (reading && !reclassification) return;
+    const modelPercent = topProbabilityPercent(reclassification?.probabilities);
+    const next =
+      modelPercent ?? (Number.isFinite(casePercent) ? casePercent : null);
+    setConfidenceTarget(next);
+    if (animateConfidence.current) {
+      animateConfidence.current = false;
+      setConfidenceRoll((value) => value + 1);
+    }
+  }, [id, reading, reclassification, casePercent]);
   useEffect(() => {
     setDispatchPrompt({ id: null, count: 0 });
   }, [id]);
@@ -139,6 +165,19 @@ export default function CaseDetail() {
         ? "A ação já foi registrada."
         : "Confirme a leitura antes de registrar a ação.";
 
+  function clearPoints() {
+    if (reading) return;
+    analysisFetch.current += 1;
+    animateConfidence.current = true;
+    pendingConfidence.current = null;
+    setSelectedPathology(null);
+    setHoveredPathology(null);
+    setReclassification(null);
+    setReclassificationNotice(false);
+    setReclassificationError("");
+    setClearToken((value) => value + 1);
+  }
+
   async function reclassify() {
     if (
       reclassificationRequest.current ||
@@ -155,6 +194,7 @@ export default function CaseDetail() {
     setSelectedPathology(null);
     setHoveredPathology(null);
     setReclassification(null);
+    setClearToken(0);
     setReading({ status: "reading", result: null, error: "" });
     try {
       const result = await authorizedRequest(
@@ -493,28 +533,47 @@ export default function CaseDetail() {
             <div className="report-luna-classification">
               <dt>Confiança da Luna</dt>
               <dd>
-                <span
-                  className={`classification-confidence is-${confidence.tone}`}
-                >
-                  {confidence.label}
-                </span>
+                {Number.isFinite(confidenceTarget) ? (
+                  <RollingPercent
+                    className="classification-confidence"
+                    value={confidenceTarget}
+                    rollId={confidenceRoll}
+                  />
+                ) : (
+                  <span
+                    className={`classification-confidence is-${confidence.tone}`}
+                  >
+                    {confidence.label}
+                  </span>
+                )}
                 <span className="classification-status">
                   <CheckCircle2 size={16} aria-hidden="true" />
                   Confiança registrada
                 </span>
-                <button
-                  className="reclassify-button"
-                  type="button"
-                  disabled={
-                    Boolean(reading) || !hasLinkedRadiograph(detail.report)
-                  }
-                  aria-busy={Boolean(reading)}
-                  onClick={reclassify}
-                >
-                  {hasLinkedRadiograph(detail.report)
-                    ? "Reclassificar"
-                    : "Radiografia não vinculada"}
-                </button>
+                <span className="report-luna-actions">
+                  <button
+                    className="reclassify-button"
+                    type="button"
+                    disabled={
+                      Boolean(reading) || !hasLinkedRadiograph(detail.report)
+                    }
+                    aria-busy={Boolean(reading)}
+                    onClick={reclassify}
+                  >
+                    {hasLinkedRadiograph(detail.report)
+                      ? "Reclassificar"
+                      : "Radiografia não vinculada"}
+                  </button>
+                  <button
+                    className="reclassify-button"
+                    type="button"
+                    disabled={Boolean(reading)}
+                    onClick={clearPoints}
+                  >
+                    <Eraser size={16} aria-hidden="true" />
+                    Limpar
+                  </button>
+                </span>
                 {!hasLinkedRadiograph(detail.report) && (
                   <small>Este laudo não possui radiografia vinculada.</small>
                 )}
@@ -574,7 +633,6 @@ export default function CaseDetail() {
               Trecho de evidência não localizado no laudo
             </p>
           )}
-
           <footer className="report-document-footer">
             <span>
               O trecho destacado corresponde à evidência identificada pela Luna.
@@ -592,6 +650,7 @@ export default function CaseDetail() {
           focusPathology={selectedPathology}
           onSelectPathology={setSelectedPathology}
           onHoverPathology={setHoveredPathology}
+          clearToken={clearToken}
         />
       </div>
       <LunaReadingModal
@@ -602,11 +661,22 @@ export default function CaseDetail() {
         result={reading?.result}
         error={reading?.error}
         onReveal={(value) => {
+          pendingConfidence.current = topProbabilityPercent(
+            value?.probabilities,
+          );
           setReclassification(value);
           setReclassificationNotice(true);
         }}
         onFail={setReclassificationError}
-        onClose={closeReading}
+        onClose={() => {
+          const arriving = pendingConfidence.current;
+          pendingConfidence.current = null;
+          const cancelled = reading?.status === "reading";
+          closeReading();
+          if (!cancelled && Number.isFinite(arriving))
+            animateConfidence.current = true;
+        }}
+        fromConfidence={confidenceTarget}
       />
     </article>
   );

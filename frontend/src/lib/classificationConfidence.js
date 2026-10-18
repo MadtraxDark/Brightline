@@ -21,3 +21,19 @@ export function classificationConfidence(item) {
     numeric: false,
   };
 }
+
+export function topProbabilityPercent(probabilities) {
+  if (!probabilities || typeof probabilities !== "object") return null;
+  let best = null;
+  for (const value of Object.values(probabilities)) {
+    if (
+      typeof value !== "number" ||
+      !Number.isFinite(value) ||
+      value < 0 ||
+      value > 1
+    )
+      continue;
+    if (best === null || value > best) best = value;
+  }
+  return best === null ? null : best * 100;
+}
