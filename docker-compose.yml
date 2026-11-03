@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-brightline}
       POSTGRES_USER: ${POSTGRES_USER:-brightline}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-REMOVED_CREDENTIAL}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no ambiente ou no arquivo .env}
     ports:
       - "${POSTGRES_PORT:-5433}:5432"
     volumes:
@@ -23,7 +23,7 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-brightline}:${POSTGRES_PASSWORD:-REMOVED_CREDENTIAL}@db:5432/${POSTGRES_DB:-brightline}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-brightline}:${POSTGRES_PASSWORD:?Defina POSTGRES_PASSWORD no ambiente ou no arquivo .env}@db:5432/${POSTGRES_DB:-brightline}
       BRIGHTLINE_CORS_ORIGINS: ${BRIGHTLINE_CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash-lite}

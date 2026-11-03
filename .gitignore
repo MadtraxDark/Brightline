@@ -47,3 +47,6 @@ scratchvenv/
 artifacts/compare/
 scripts/compare/
 graphify-out/cache/ast/
+
+# Legacy environment file
+/backend/env

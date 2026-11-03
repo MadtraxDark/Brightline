@@ -97,6 +97,8 @@ Uploads enviados ao backend usam `FormData`; não definir manualmente `Content-T
 
 ## Configuração e importação
 
+O Compose exige `POSTGRES_PASSWORD` no ambiente ou no `.env` da raiz. Em bancos existentes, alterar essa vari?vel n?o altera a senha armazenada no PostgreSQL: atualize a senha da conta no banco e configure o mesmo valor nos servi?os.
+
 Configure `DATABASE_URL` no `.env` da raiz ou em `backend/.env`, por exemplo `postgresql://brightline:senha@localhost:5433/brightline`. O Compose expõe PostgreSQL na porta 5433 e a API em 8080; o desenvolvimento local usa a API na porta 8000. A API não precisa de um diretório de imagens em runtime, porque a tabela `dataset_images` contém os bytes.
 
 Para importar NIH a partir de um diretório local (inclusive `D:\...` no Windows), execute `python -m backend.import_nih_images --data-dir "D:\\dados\\nih"` na raiz do projeto. A pasta deve conter `Data_Entry_2017_v2020.csv` e `images/`. Em container, monte o conjunto no container e passe o caminho montado, por exemplo `/data/nih`. A importação valida a presença das imagens antes de gravar e usa `filename` como chave para evitar duplicação. Não armazene caminhos absolutos no banco.
